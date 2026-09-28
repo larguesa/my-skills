@@ -54,6 +54,27 @@ class RenderTests(unittest.TestCase):
         r = self.run_cli('--duration', '11', '--samples-only', '--overwrite')
         self.assertEqual(r.returncode, 1, r.stderr)
 
+    def test_portrait_and_square_video(self):
+        for width,height in [(1080,1920),(1080,1080)]:
+            with self.subTest(size=(width,height)):
+                self.html.write_text(HTML.replace('width="1920" height="1080"',f'width="{width}" height="{height}"'))
+                r=self.run_cli('--duration','.4','--fps','5','--overwrite')
+                self.assertEqual(r.returncode,0,r.stderr)
+                qa=json.loads(self.out.with_suffix('.qa.json').read_text())
+                self.assertEqual((qa['probe']['width'],qa['probe']['height']),(width,height))
+                self.assertEqual(qa['canvas'],dict(width=width,height=height))
+                self.assertEqual(qa['probe']['frames'],2)
+                self.assertTrue(all(s['deterministic'] for s in qa['samples']))
+
+    def test_unsafe_canvas_dimensions_rejected(self):
+        for width,height in [(0,1080),(1,2),(1081,1920),(1920,1079),(8194,2),(4096,4096)]:
+            with self.subTest(size=(width,height)):
+                self.html.write_text(HTML.replace('width="1920" height="1080"',f'width="{width}" height="{height}"'))
+                r=self.run_cli('--samples-only')
+                self.assertEqual(r.returncode,1,r.stderr)
+                self.assertIn('canvas dimensions',r.stderr)
+                self.assertFalse(self.out.exists())
+
     def test_invalid_cli(self):
         for flags in [('--fps','0'),('--fps','-1'),('--fps','121'),('--fps','nan'),
                       ('--duration','nan'),('--duration','inf'),('--duration','0'),

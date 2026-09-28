@@ -54,7 +54,7 @@ def arguments():
     return a
 
 
-def probe(path, frames, fps):
+def probe(path, frames, fps, width=1920, height=1080):
     r = subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0',
         '-count_frames', '-show_entries', 'stream=width,height,nb_read_frames,duration,r_frame_rate',
         '-of', 'json', str(path)], check=True, capture_output=True, text=True, timeout=120)
@@ -62,7 +62,7 @@ def probe(path, frames, fps):
     result = dict(width=int(s['width']), height=int(s['height']),
                   frames=int(s['nb_read_frames']), duration=float(s['duration']), fps=s['r_frame_rate'])
     numerator, denominator = map(int, result['fps'].split('/'))
-    if (result['width'], result['height'], result['frames']) != (1920, 1080, frames):
+    if (result['width'], result['height'], result['frames']) != (width, height, frames):
         raise RuntimeError(f'ffprobe geometry/frame mismatch: {result}')
     if abs(result['duration'] - frames/fps) > .002 or numerator/denominator != fps:
         raise RuntimeError(f'ffprobe duration/fps mismatch: {result}')
@@ -104,16 +104,20 @@ def render(a):
                 page.on('console', lambda msg: qa['console_errors'].append(msg.text) if msg.type == 'error' else None)
                 page.on('pageerror', lambda error: qa['js_errors'].append(str(error)))
                 page.goto(a.input.as_uri()+'?render=1', wait_until='load', timeout=30000)
-                declared_duration = page.evaluate('''async requested => {
+                contract = page.evaluate('''async requested => {
                     if (!window.ready || typeof window.ready.then !== 'function') throw Error('window.ready Promise missing');
                     await Promise.race([window.ready, new Promise((_, reject) => setTimeout(()=>reject(Error('ready timeout')),30000))]);
                     await document.fonts.ready;
                     const c=document.getElementById('canvas');
-                    if (!c || c.width!==1920 || c.height!==1080) throw Error('canvas must be 1920x1080');
+                    if (!c || c.tagName!=='CANVAS' || c.width<2 || c.height<2 || c.width>8192 || c.height>8192 || c.width%2 || c.height%2 || c.width*c.height>8294400) throw Error('canvas dimensions must be even, 2..8192 per side and at most 8294400 pixels');
                     if (typeof window.renderFrame!=='function' || typeof window.draw!=='function') throw Error('renderFrame/draw missing');
                     if (!Number.isFinite(window.DURATION) || window.DURATION <= 0 || window.DURATION > 600 || window.DURATION < requested) throw Error('DURATION must be finite, positive, at most 600 and cover requested duration');
-                    return window.DURATION;
+                    return {duration:window.DURATION,width:c.width,height:c.height};
                 }''', a.duration)
+                declared_duration = contract['duration']
+                width, height = contract['width'], contract['height']
+                qa['canvas'] = dict(width=width, height=height)
+                page.set_viewport_size(qa['canvas'])
                 def png(t):
                     return base64.b64decode(page.evaluate('''async t => {
                         await window.renderFrame(t);
@@ -152,7 +156,7 @@ def render(a):
                                 proc.wait()
                             if proc.stdin and not proc.stdin.closed:
                                 proc.stdin.close()
-                    qa['probe'] = probe(movie, a.frames, a.fps)
+                    qa['probe'] = probe(movie, a.frames, a.fps, width, height)
                 if qa['console_errors'] or qa['js_errors']:
                     raise RuntimeError('browser console/JavaScript errors; see QA JSON')
                 context.close()

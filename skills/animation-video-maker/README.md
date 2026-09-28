@@ -1,18 +1,22 @@
 # Animation Video Maker
 
-**20 visual styles. 20 original T2S Tech service examples. One reusable production workflow.**
+**22 visual styles, original creative recipes, motion techniques and a reproducible code-animation path.**
 
-An English-language skill package for agents that can read files, write JavaScript and run local tools. Create editable Canvas animations and export checked MP4s without a video-generation API, a framework or a required model provider.
+An English-language skill package for agents that can read files, write JavaScript and run local tools. Use AI to direct and author editable code animation, plan generative footage, or combine both. The bundled Canvas-to-MP4 path needs no video-generation API or framework. Generative/hybrid routes provide briefs and quality gates, not preconfigured provider adapters.
 
-**Start here:** [Agent skill](SKILL.md) · [Local interactive gallery](gallery.html) · [Runtime/setup](references/runtime.md) · [Style selection and optional Jev](references/style-selection.md) · [Validation](references/validation.md)
+**Start here:** [Agent skill](SKILL.md) · [Creative brief](templates/creative-brief.md) · [Recipe library](recipes/README.md) · [Creative demos](demos/index.html) · [Runtime/setup](references/runtime.md) · [Source library](references/creative-sources.md)
+
+[Creative direction](references/creative-direction.md) · [Style selection and optional Jev](references/style-selection.md) · [Legacy gallery](gallery.html) · [Original validation](references/validation.md) · [Expansion validation](references/validation-0.2.md)
 
 The HTML gallery runs after downloading/cloning the package. GitHub's source viewer does not execute HTML. Each row in the gallery below links to the video file, editable player and style instructions.
 
 ## What is included
 
-- One operational root skill and 20 style-specific `SKILL.md` guides.
+- One operational root skill and 22 style-specific `SKILL.md` guides.
+- Original recipe templates and technique/backend guidance, with source attribution and licensing caveats.
+- Brand-neutral creative demos with editable scenes, local previews and real MP4 exports.
 - 20 original examples featuring five verified [T2S Tech services](https://t2stech.com/#services), four treatments per service.
-- MP4s at 1920×1080, 30 fps, 20 seconds; intentionally no audio.
+- Legacy MP4s at 1920×1080, 30 fps, 20 seconds; intentionally no audio. New demos explore other durations, aspect ratios and an explicit optional audio finishing step.
 - Editable scenes, official example brand assets, embedded fonts, local playback controls and accessible transcripts.
 - Shared native Canvas runtime, Python/Playwright/FFmpeg renderer and regression checks.
 - Optional Jev-assisted style retrieval, with an ordinary manual-selection fallback.
@@ -21,7 +25,7 @@ The examples demonstrate the library and introduce T2S. The skills themselves ar
 
 ## Use with an agent
 
-Copy this whole `animation-video-maker` directory into the agent's documented skill location, or point the agent at `SKILL.md` in your checkout. Do not assume all agents discover nested skills: the root explicitly loads the chosen style guide by relative path. Keep the shared `assets`, `scripts`, `references` and `examples` alongside `styles`.
+Copy this whole `animation-video-maker` directory into the agent's documented skill location, or point the agent at `SKILL.md` in your checkout. Do not assume all agents discover nested skills: the root explicitly loads the chosen style guide by relative path. Keep the complete package together, including shared assets, scripts, templates, references, recipes, techniques, backends, demos, examples and styles.
 
 Example request:
 
@@ -30,6 +34,18 @@ Example request:
 No Jev setup is required. A configured Jev installation may shortlist descriptions for an ambiguous request, but an explicit user choice takes precedence. See the selection guide for privacy, setup and fallback rules.
 
 Some agents recursively discover the nested guides as separate skills. If you already installed earlier standalone `animation-*` skills, check for duplicate names before installing this bundle. Migrating or removing those older installations is an explicit local decision; cloning this repository does not modify them.
+
+## Choose the right route
+
+- **AI-authored code animation:** exact text, diagrams, repeatable UI motion, procedural geometry. Runs locally with the bundled tools.
+- **Generative footage:** organic environments, character motion or imagery that is costly to draw. Use the backend guide with a separately configured and authorized provider; outputs are stochastic and require selection and review.
+- **Hybrid:** generated or real footage plus precise graphics, typography, logos and editing. Source footage rights and continuity are part of the brief.
+
+For a new creative request, start with the [brief template](templates/creative-brief.md), [direction matrix](references/creative-direction.md) and [recipe library](recipes/README.md). For example:
+
+> Create a short brand-neutral film in which a thought becomes an interface and returns to its starting form. Choose a primary visual style and a motion recipe. Label any fictional UI, keep the message understandable without sound, and deliver editable source plus a verified looping MP4. Use local code unless there is a clear need for paid generation.
+
+The catalogs are references, not commands to execute. Borrow concepts, write original direction, and check licenses before using external code, footage, music or brands.
 
 ## Preview and export
 
@@ -76,7 +92,7 @@ Use `--samples-only` for still-frame QA first. Existing outputs are protected un
 - A single shared runtime/renderer avoids 20 duplicate dependencies.
 - A reliable result includes real export, visual inspection, metadata checks and editable files.
 
-`ponytail:` release 0.1.0 deliberately targets silent, horizontal Full HD. Clay/film/pencil/print appearances are procedural Canvas interpretations, not physical media or photorealistic footage. Vertical output, sound and true 3D require a new brief and corresponding validation, rather than stretching the existing assets.
+`ponytail:` local rendering remains native Canvas plus Playwright/FFmpeg. The renderer exports silent frames; audio is a separate, explicitly validated finishing step. Recompose for portrait/square rather than stretching legacy scenes. True 3D and generative providers remain external options, not dependencies. Clay/film/pencil/print appearances are procedural interpretations, not physical capture.
 
 ## Rights and attribution
 

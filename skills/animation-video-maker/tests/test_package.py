@@ -52,7 +52,7 @@ class PackageTests(unittest.TestCase):
                 self.assertNotIn(chr(8212),text,'Use a colon or comma in example copy.')
 
     def test_candidate_file_covers_exact_catalog(self):
-        rows=json.loads((ROOT/'references/catalog.json').read_text())
+        rows=json.loads((ROOT/'references/style-catalog.json').read_text())
         p=ROOT/'references/style-candidates.txt';lines=p.read_text().splitlines()
         self.assertEqual([r['id'] for r in rows],[line.split(' | ')[0] for line in lines])
         self.assertLessEqual(p.stat().st_size,16384);self.assertLessEqual(len(lines),64)

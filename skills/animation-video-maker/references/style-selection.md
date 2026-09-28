@@ -5,7 +5,7 @@
 1. Honor the user's explicit style or reference. Do not call a model to override it.
 2. Identify the communication job: explain a system, teach a process, highlight a message, tell a story, or show evidence.
 3. Filter for audience, brand tone, available evidence and production constraints.
-4. Shortlist at most three styles from `catalog.json`; explain the tradeoff in one sentence and pick one primary style.
+4. Shortlist at most three styles from `style-catalog.json`; explain the tradeoff in one sentence and pick one primary style.
 5. Use optional Jev only when semantic matching would help an ambiguous brief. No result, API failure or absent configuration means use the manual matrix, not an automatic retry or fabricated recommendation.
 
 ## Manual matrix
@@ -26,7 +26,7 @@ Jev may help retrieve relevant style descriptions. This package uses the existin
 
 Prerequisites: a reviewed installation with `--rank` / `--top-k` support, authorized provider use and a protected inference key. Confirm `jev-search --help`. Set `JEV_SEARCH_API_KEY` through approved secret storage and `JEV_SEARCH_PROVIDER=openrouter`; never put key values in Git, prompts or CLI arguments. Do not provision keys automatically or require Jev for ordinary use. Consult that project's installation instructions and local policy, not machine-specific paths copied from another agent.
 
-The bundled `style-candidates.txt` contains 20 concise public lines, one per style. It fits the reviewed CLI limits: 1–8 explicit UTF-8 files, <=64 physical lines and <=16,384 bytes total, <=2,048 bytes/line, query <=512 bytes. The actual request also has a serialized-size limit. Do not send all SKILL.md files or recursively scan a repository.
+The bundled `style-candidates.txt` contains 22 concise public lines, one per style. It fits the reviewed CLI limits: 1–8 explicit UTF-8 files, <=64 physical lines and <=16,384 bytes total, <=2,048 bytes/line, query <=512 bytes. The actual request also has a serialized-size limit. Do not send all SKILL.md files or recursively scan a repository.
 
 From this package directory, using an agent terminal tool:
 
