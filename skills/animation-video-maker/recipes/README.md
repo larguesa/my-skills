@@ -10,6 +10,7 @@ Choose a communication job here, then a visual language from the existing style 
 | Connect different images through a shared relationship | [Match cut and occlusion](match-cut-occlusion.md) | Code, edit or hybrid |
 | Make recurrence the story | [Seamless loop](seamless-loop.md) | Code first |
 | Demonstrate a product claim with actual evidence | [Product proof](product-proof.md) | Real capture plus editorial overlays |
+| Launch through problem, real demo, transformation, proof and CTA | [Product launch](product-launch.md) | Real capture plus code/edit |
 | Let music, speech or visible actions determine time | [Cue-led miniature](cue-led-miniature.md) | Code or cleared-media hybrid |
 
 ## Fill before production

@@ -97,6 +97,8 @@ A.start({title: 'A clear idea', description: window.TRANSCRIPT, duration: 8, end
 python scripts/render.py path/to/index.html video.mp4 --duration 8 --fps 30
 ```
 
+For a short export, deterministic seeks, transition review and an optional advisory native FFmpeg scene scan, follow the [minimum smoke test](smoke-test.md).
+
 ## Tests
 
 ```sh

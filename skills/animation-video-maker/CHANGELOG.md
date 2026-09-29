@@ -12,6 +12,12 @@ This release keeps the original 20 T2S examples and adds original creative recip
 - A complete style catalog at `references/style-catalog.json`. `references/catalog.json` retains its original role as the 20-entry T2S example manifest; consumers must not confuse the two.
 - Generative and hybrid planning guidance is distinguished from the tested local Canvas export path. No paid video provider is silently installed or invoked.
 
+### Incremental production checks
+
+- Added a reusable LOOK visual card and a minimum smoke-test procedure using existing tools.
+- Added an optional product-launch narrative linked to the existing product-proof safeguards.
+- Documented native FFmpeg scene-change triage as advisory, not defect detection. No renderer behavior, dependency or framework changed.
+
 ### Compatibility
 
 - Keep the whole directory when installing. Nested skill auto-discovery is not required; the root uses relative document paths.

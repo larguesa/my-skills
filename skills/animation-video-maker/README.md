@@ -4,7 +4,7 @@
 
 An English-language skill package for agents that can read files, write JavaScript and run local tools. Use AI to direct and author editable code animation, plan generative footage, or combine both. The bundled Canvas-to-MP4 path needs no video-generation API or framework. Generative/hybrid routes provide briefs and quality gates, not preconfigured provider adapters.
 
-**Start here:** [Agent skill](SKILL.md) · [Creative brief](templates/creative-brief.md) · [Recipe library](recipes/README.md) · [Creative demos](demos/index.html) · [Runtime/setup](references/runtime.md) · [Source library](references/creative-sources.md)
+**Start here:** [Agent skill](SKILL.md) · [Creative brief](templates/creative-brief.md) · [Visual direction card](templates/LOOK.md) · [Minimum smoke test](references/smoke-test.md) · [Recipe library](recipes/README.md) · [Creative demos](demos/index.html) · [Runtime/setup](references/runtime.md) · [Source library](references/creative-sources.md)
 
 [Creative direction](references/creative-direction.md) · [Style selection and optional Jev](references/style-selection.md) · [Legacy gallery](gallery.html) · [Original validation](references/validation.md) · [Expansion validation](references/validation-0.2.md)
 

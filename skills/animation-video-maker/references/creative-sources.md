@@ -29,6 +29,12 @@ The URLs below were checked by direct public HTTP on 2026-09-28 UTC (2026-09-27 
 
 No stock media or paid provider was acquired as part of this review. Pexels license and terms endpoints returned HTTP 403 during verification, so Pexels is not a rights-verified recommendation here. Google Fonts' glossary URL was reachable but did not expose substantive licensing text in the retrieved page; use the actual font's license file rather than that shell as evidence.
 
+## Additional workflow inspiration
+
+The [socialwithaayan post](https://x.com/socialwithaayan/status/2104519430814482644) was consulted through an X Search summary, not independently inspected as a complete article or reproduced video. The summary describes a reusable LOOK card, one deterministic picture/sound timeline, an early smoke render, contact sheets, a local-average frame-jump scan and a five-part launch sequence. These are discovery notes, not independently verified results. No reported costs, model promises, timing precision or defect-capture rates are adopted as package claims.
+
+The new card, smoke procedure and launch recipe are original adaptations of those general workflow ideas. The optional FFmpeg scene score is a simpler advisory alternative, not an implementation or validation of the described local-average scanner. No source prompts, media or executable code were copied. Attribution does not grant asset rights or imply endorsement.
+
 ## Asset ledger to retain
 
 For each asset record: source URL, creator/owner, retrieval date, exact file hash, license or written permission, permitted channels, alteration/redistribution constraints, required credit, releases for identifiable people, and redactions. Separate rights to the composition, recording, performance, lyrics, voice, logo and font where applicable. Royalty-free does not mean public domain or unrestricted.

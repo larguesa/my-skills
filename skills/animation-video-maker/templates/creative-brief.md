@@ -17,6 +17,8 @@ Fill the brackets before implementation. This is an original production template
 - **Execution route:** [AI-authored code / generative footage / hybrid; reason].
 - **Unknowns:** [which must be resolved before any paid render].
 
+Complete the shared [visual direction card](LOOK.md) before scene authoring.
+
 ## Timed storyboard
 
 | Time | Message or action | Composition and focal point | Entry/exit continuity | Audio cue | Readability hold |

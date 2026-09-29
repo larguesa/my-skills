@@ -54,6 +54,20 @@ Replace the illustrative browser path with the installed executable. `RENDER_BRO
 
 Browser-dependent tests skip when Playwright is absent; a skipped suite is not evidence of a successful render. Rendering tests require FFmpeg/ffprobe. Keep private machine paths, raw QA logs and credentials outside the distributable.
 
+## Incremental workflow validation
+
+The visual direction card, minimum smoke procedure and optional product-launch recipe were added without changing production code or dependencies. The source post was consulted via an X Search summary only; its performance, cost and model claims were not independently verified. The launch recipe is documentation, not a newly captured product demonstration.
+
+A fresh Linux run used the existing Playwright environment and Chrome browser: all 15 package/runtime/demo tests and all 12 renderer integration tests passed with no skips. The demo verifier passed for all three existing demos. No new audio was generated or muxed for this smoke test.
+
+The documented UI-morph prefix was actually exported as H.264/yuv420p, 1280 x 720, 30 fps, 60 frames and 2.000 seconds, with no audio. A separate full nine-second export contained 270 frames. Both QA reports recorded successful reverse-seek equality for all six source samples, with no JavaScript, console or blocked-request entries. Source sampling covered the declared nine-second scene, not only the encoded two-second prefix.
+
+The full export was decoded into an 18-frame overview and a nine-frame adjacent-transition sheet around frames 110-112, 128-130 and 146-148. Those sheets were visually inspected: no obvious text collisions or clipping appeared at those samples; the intermediate overlapping colored carriers were intentional and their incoming text remained hidden until the handoff. Small body copy in the overview is not evidence of mobile readability. No normal-speed human playback review or frame-by-frame visual certification is claimed.
+
+The native FFmpeg scene scan ran successfully at threshold 0.10 on the full export and selected zero frames. Its empty-output warning was expected. This result is advisory, not proof of defect absence; localized glitches can be missed. Audio sync was not applicable to these silent exports. Existing portal audio stream checks do not establish newly measured sync or listening quality.
+
+The refreshed distributable includes an updated SHA256 manifest and is verified by extraction and exact member/hash comparison. Raw logs, sample PNGs, decoded sheets, probe JSON and the source-retrieval note are retained separately from the portable package.
+
 ## Boundaries
 
 - Generative footage, provider selection, reference-image conditioning and hybrid compositing are documented production routes, not newly tested provider adapters.
