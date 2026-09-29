@@ -12,6 +12,12 @@ This release keeps the original 20 T2S examples and adds original creative recip
 - A complete style catalog at `references/style-catalog.json`. `references/catalog.json` retains its original role as the 20-entry T2S example manifest; consumers must not confuse the two.
 - Generative and hybrid planning guidance is distinguished from the tested local Canvas export path. No paid video provider is silently installed or invoked.
 
+### Complementary discovery source
+
+- Added a revision-pinned Awesome AI Motion reference with selective case comparison, provenance and rights boundaries.
+- Kept UI morphing as a reference to existing guidance; identified simulation-led explanation as a candidate requiring model and export validation, not a new supported style or tested recipe.
+- No upstream prompts/media imported, dependencies added or renderer behavior changed.
+
 ### Incremental production checks
 
 - Added a reusable LOOK visual card and a minimum smoke-test procedure using existing tools.

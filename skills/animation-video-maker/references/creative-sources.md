@@ -35,6 +35,19 @@ The [socialwithaayan post](https://x.com/socialwithaayan/status/2104519430814482
 
 The new card, smoke procedure and launch recipe are original adaptations of those general workflow ideas. The optional FFmpeg scene score is a simpler advisory alternative, not an implementation or validation of the described local-average scanner. No source prompts, media or executable code were copied. Attribution does not grant asset rights or imply endorsement.
 
+## Complementary discovery: Awesome AI Motion
+
+Use [guanmo-ai/awesome-ai-motion](https://github.com/guanmo-ai/awesome-ai-motion) as a complementary discovery source, not an installed tool or a second style catalog. Review anchor: revision `1166b402e9778e0d2072735319355a8716b77289`. The README and the two case records below were inspected; this was a selective document review, not an exhaustive catalog audit, video review or execution test. Its [resource index](https://github.com/guanmo-ai/awesome-ai-motion/blob/1166b402e9778e0d2072735319355a8716b77289/browse/resources.md) is a starting point for locating author pages and code, not a list of dependencies to install.
+
+| Selected case | Comparison with this package | Decision |
+|---|---|---|
+| [One shape, a seamless UI morph loop](https://github.com/guanmo-ai/awesome-ai-motion/blob/1166b402e9778e0d2072735319355a8716b77289/cases/2103273003555402193.md), credited to @twoclipping | UI continuity, absolute-time springs, cue-led timing and seamless loops already have local guidance and a UI demo. | Reference only; no duplicate style, recipe or imported prompt. Keep the local temporal-sampling safeguards rather than treating rolling frame mixing as verified motion blur. |
+| [Interactive camera lens lab](https://github.com/guanmo-ai/awesome-ai-motion/blob/1166b402e9778e0d2072735319355a8716b77289/cases/2102591147927654847.en.md), credited to @RyanSael | A controlled-variable educational simulation is distinct from the existing product-proof recipe: it explains a model rather than proving a shipped product feature. | Candidate for a future simulation-led explainer recipe, not a supported backend or validated demo. The record supplies an author brief, not a complete reproducible prompt. |
+
+For the simulation candidate, first choose a sourced relationship and its validity limits. Vary one input while preserving a comparison baseline; label units, assumptions and illustrative simplifications. Distinguish simulated output from measured evidence. Before promotion to a recipe, verify the model against independently known cases and boundary conditions, create an original deterministic timeline or approved capture, inspect readable cause/effect sequences, and validate an actual export. A linked interactive web page alone does not satisfy these gates.
+
+When researching a new brief, compare candidates against the existing styles, recipes and techniques before adding anything. Retain only a demonstrable communication gap; classify it explicitly as inspiration, documented instructions or locally tested implementation. Recheck author sources, attachments and per-asset rights before use. Popularity and creator model attributions are not quality or capability evidence. The upstream MIT license applies to original repository scripts, not blanket reuse of linked posts, prompts or media. No upstream code, prompts or media were copied or executed for this addition. The earlier research ledger remains scoped to its original corpus.
+
 ## Asset ledger to retain
 
 For each asset record: source URL, creator/owner, retrieval date, exact file hash, license or written permission, permitted channels, alteration/redistribution constraints, required credit, releases for identifiable people, and redactions. Separate rights to the composition, recording, performance, lyrics, voice, logo and font where applicable. Royalty-free does not mean public domain or unrestricted.
