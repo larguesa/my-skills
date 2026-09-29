@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-SCRIPT = Path(__file__).resolve().parents[1] / 'skills/humanizador-pt-br/scripts/humanizar.py'
+SCRIPT = Path(__file__).resolve().parents[1] / 'scripts/humanizar.py'
 
 
 def module():

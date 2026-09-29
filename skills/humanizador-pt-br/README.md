@@ -53,7 +53,7 @@ Em Linux/macOS, via `terminal`:
 python3 skills/humanizador-pt-br/scripts/benchmark.py plan --availability resultados/disponibilidade --budget 10 --max-tokens 4096 --out resultados/plano.json
 python3 skills/humanizador-pt-br/scripts/benchmark.py run --plan resultados/plano.json --state resultados/estado.json --execute-paid
 python3 skills/humanizador-pt-br/scripts/benchmark.py report --plan resultados/plano.json --state resultados/estado.json --out resultados/comparacao.html
-python3 -m unittest discover -s tests -v
+python3 -m unittest discover -s skills/humanizador-pt-br/tests -v
 ```
 
 `OPENROUTER_API_KEY` deve estar no ambiente, nunca no comando ou no repositório. Usar chave exclusiva com limite no provedor, conferir saldo e reservar no teto total os custos dos testes de disponibilidade. `plan` e `report` não fazem inferência paga. `--availability` lê registros reais de sondagens por modelo e rota; sem evidência, o modo desligado não é presumido. `--probe` permite solicitar modos ainda não verificados, não os certifica. IDs e preços em modelos.json são um snapshot, não disponibilidade permanente.
@@ -65,6 +65,14 @@ A página principal mostra pedido, original, revisão e telemetria. A página `c
 Os casos padrão são sintéticos e públicos; o runner permite coleta de dados pelo provedor. Não usar esse fluxo para material confidencial sem autorização e revisão explícita da política. Nenhuma nota humana ou conclusão de superioridade é criada automaticamente.
 
 ## Evidência disponível
+
+### Resumo dos resultados
+
+- 31 testes automatizados aprovados, sem falhas ou skips, após mover a suíte para [tests/](tests/).
+- Piloto parcial: 72 revisões concluídas em 14 modelos, 1 chamada com falha e 155 combinações elegíveis não tentadas. Outras 108 posições foram excluídas por indisponibilidade.
+- Consumo histórico total, incluindo sondagens: US$ 1,013765632. Esta reorganização não executou novas chamadas pagas.
+- Inspeção editorial por assistente de 12 saídas: uma omissão factual crítica. Não houve avaliação humana cega nem resultado que permita declarar vencedor.
+- [Apresentação completa dos resultados](RESULTADOS.md), com custos por modelo, evidências e limitações. O repositório é a fonte da entrega.
 
 A amostra registrada contém apenas material `real` de `c4_pt`. O registro preserva hashes e contagens, sem republicar o texto. O grupo sintético não foi obtido nessa exploração. As observações não demonstram sobre-representação, autoria, eficácia editorial ou generalização a outros gêneros. Direitos das fontes continuam por auditar; ODC-By não é licença indiscriminada de todo conteúdo web.
 

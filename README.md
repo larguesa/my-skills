@@ -8,6 +8,10 @@ Gerenciador de skills pessoais de Ricardo Pupo Larguesa. Compartilhamento multi-
 
 Code/documentation licensing and brand/font exclusions are scoped to that package; see its [license and notices](skills/animation-video-maker/NOTICE.md).
 
+## Humanizador PT-BR
+
+[Skill e uso](skills/humanizador-pt-br/README.md): 31 testes automatizados aprovados; piloto parcial com 72 revisões em 14 modelos e consumo histórico de US$ 1,013765632, incluindo sondagens. Sem avaliação humana cega ou ranking de superioridade. [Resultados, evidências e limitações](skills/humanizador-pt-br/RESULTADOS.md). Testes dentro da pasta da skill.
+
 ## Estrutura
 
 - **skills/**: Pasta raiz de skills.
