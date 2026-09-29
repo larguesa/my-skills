@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "provenance": "synthetic_authored",
+  "warning": "Quatro casos artificiais, redigidos para teste. Não são corpus humano, amostra representativa nem evidência de autoria. Fatos, pessoas e instituições fictícios. Os originais não foram produzidos pelos modelos avaliados. Geração de novos originais exige etapa e orçamento separados.",
+  "cases": [
+    {
+      "id": "comunicado",
+      "genre": "comunicado interno",
+      "provenance": "synthetic_authored",
+      "original": "É importante ressaltar que, no dia 14 de maio, a equipe Aurora realizará uma manutenção no portal interno das 8h às 9h30. Nesse contexto, o acesso aos relatórios ficará indisponível. Não se trata apenas de uma atualização, mas de um passo fundamental para otimizar nossa jornada digital. Os dados já salvos não serão alterados. Em caso de dúvida, escreva para suporte@example.invalid.",
+      "must_preserve": [
+        "14 de maio",
+        "8h",
+        "9h30",
+        "Aurora",
+        "suporte@example.invalid",
+        "Os dados já salvos não serão alterados."
+      ],
+      "prompt": "Reescreva este comunicado interno para que a equipe encontre rapidamente data, horário, indisponibilidade e contato. Preserve os fatos e as ressalvas; não invente o objetivo técnico da manutenção. Preserve literalmente estes identificadores: 14 de maio, Aurora, 8h, 9h30, suporte@example.invalid. Retorne somente o texto final.",
+      "literal_invariants": [
+        "14 de maio",
+        "Aurora",
+        "8h",
+        "9h30",
+        "suporte@example.invalid"
+      ],
+      "semantic_invariants": [
+        "Somente o acesso aos relatórios ficará indisponível no intervalo informado.",
+        "Os dados já salvos não serão alterados."
+      ]
+    },
+    {
+      "id": "nota-tecnica",
+      "genre": "nota técnica com ressalva",
+      "provenance": "synthetic_authored",
+      "original": "No cenário atual, a solução apresenta resultados robustos e inovadores. Em um teste fictício com 120 documentos, o tempo mediano caiu de 18 para 12 segundos. Vale destacar que o ensaio ocorreu em uma única máquina, sem usuários simultâneos. Portanto, os dados sugerem uma melhoria nesse ambiente, mas não demonstram ganho em produção. A versão usada foi a 2.4.1. O parâmetro timeout_ms permaneceu em 3000.",
+      "must_preserve": [
+        "120",
+        "18",
+        "12",
+        "única máquina",
+        "não demonstram ganho em produção",
+        "2.4.1",
+        "timeout_ms",
+        "3000"
+      ],
+      "prompt": "Revise a nota técnica, mantendo a terminologia, a natureza fictícia do teste e os limites da evidência. Não converter observação em garantia de desempenho. Preserve literalmente estes identificadores: 120, 18, 12, 2.4.1, timeout_ms, 3000. Retorne somente o texto final.",
+      "literal_invariants": [
+        "120",
+        "18",
+        "12",
+        "2.4.1",
+        "timeout_ms",
+        "3000"
+      ],
+      "semantic_invariants": [
+        "O teste é fictício, realizado em uma única máquina e sem usuários simultâneos.",
+        "A queda é de tempo mediano, de 18 para 12 segundos; não é taxa de sucesso.",
+        "Os resultados não demonstram ganho em produção."
+      ]
+    },
+    {
+      "id": "ensaio",
+      "genre": "opinião com citação",
+      "provenance": "synthetic_authored",
+      "original": "Em um mundo em constante transformação, ouvir as pessoas é essencial. A pesquisadora fictícia Lina declarou: \"A pressa não substitui a conversa.\" A frase não prova que toda decisão deva esperar consenso. Ela propõe uma pausa antes de impor mudanças. Por outro lado, escutar sem responder também pode virar uma forma de adiar responsabilidades. Precisamos de diálogo, mas de um diálogo que produza decisões claras.",
+      "must_preserve": [
+        "Lina",
+        "\"A pressa não substitui a conversa.\"",
+        "não prova",
+        "pode"
+      ],
+      "prompt": "Revise o pequeno texto de opinião com sobriedade, sem inventar experiências ou transformar a fala citada em prova. Preserve a citação literalmente e o caráter fictício da pesquisadora. Preserve literalmente estes identificadores: Lina, \"A pressa não substitui a conversa.\". Retorne somente o texto final.",
+      "literal_invariants": [
+        "Lina",
+        "\"A pressa não substitui a conversa.\""
+      ],
+      "semantic_invariants": [
+        "A pesquisadora é fictícia.",
+        "A frase não prova que toda decisão deva esperar consenso.",
+        "Escutar sem responder pode adiar responsabilidades; não é uma afirmação universal."
+      ]
+    },
+    {
+      "id": "mensagem",
+      "genre": "mensagem informal",
+      "provenance": "synthetic_authored",
+      "original": "Oi, Bia! Passando aqui para compartilhar uma novidade incrível: conseguimos reservar a sala 3 para sexta, às 15h. A ideia é alinhar os próximos passos de forma colaborativa e estratégica. Você consegue levar o rascunho? Não precisa estar pronto. Se o horário apertar, me avisa até quinta, por favor. Ah, o café fica por minha conta.",
+      "must_preserve": [
+        "Bia",
+        "sala 3",
+        "sexta",
+        "15h",
+        "rascunho",
+        "Não precisa estar pronto",
+        "quinta"
+      ],
+      "prompt": "Revise a mensagem pessoal preservando o tratamento, a cordialidade e os compromissos já fornecidos. Não tornar o texto burocrático nem acrescentar gírias ou intimidade. Preserve literalmente estes identificadores: Bia, sala 3, sexta, 15h, quinta. Retorne somente o texto final.",
+      "literal_invariants": [
+        "Bia",
+        "sala 3",
+        "sexta",
+        "15h",
+        "quinta"
+      ],
+      "semantic_invariants": [
+        "O rascunho não precisa estar pronto.",
+        "Se o horário apertar, avisar até quinta.",
+        "O remetente se responsabiliza pelo café."
+      ]
+    }
+  ],
+  "rubric": {
+    "fidelidade": 20,
+    "adequacao": 20,
+    "selecao": 20,
+    "economia": 20,
+    "naturalidade": 20,
+    "critical_rule": "Invenção ou alteração material de sentido reprova, independentemente das notas. Avaliação humana pendente; retenção literal é apenas triagem."
+  }
+}

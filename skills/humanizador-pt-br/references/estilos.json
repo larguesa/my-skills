@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Variações discretas dentro da voz fornecida, não personas.",
+  "voice_invariants": [
+    "Fatos e grau de certeza",
+    "Registro do autor",
+    "Vocabulário técnico necessário",
+    "Posição e experiências explicitamente fornecidas"
+  ],
+  "seed_policy": {
+    "scope": "Selecionar com seed uma ênfase opcional entre os ajustes do perfil, sem alterar invariantes nem aplicar reescrita.",
+    "record": [
+      "seed",
+      "profile_id",
+      "catalog_version",
+      "voice_sample_id"
+    ],
+    "limits": "Mesma seed não garante texto idêntico de um modelo. Não sortear fatos, opiniões, persona ou nível de certeza. Preferência explícita do autor prevalece."
+  },
+  "forbidden": [
+    "Falsa experiência pessoal",
+    "Erros deliberados",
+    "Regionalismo presumido",
+    "Mudança de opinião para criar personalidade",
+    "Alternância aleatória de sinônimos técnicos"
+  ],
+  "profiles": [
+    {
+      "id": "neutro-claro",
+      "genres": [
+        "artigo",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Manter formalidade original",
+        "Variar extensão de frases só quando ajudar a leitura",
+        "Preferir informação a comentários sobre importância"
+      ],
+      "avoid": [
+        "Impor conversa íntima",
+        "Trocar toda repetição lexical"
+      ]
+    },
+    {
+      "id": "tecnico-preciso",
+      "genres": [
+        "tecnico",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Conservar terminologia e qualificadores",
+        "Deixar condições junto da afirmação",
+        "Usar listas quando facilitam consulta"
+      ],
+      "avoid": [
+        "Metáforas decorativas",
+        "Simplificação que apaga hipótese ou método"
+      ]
+    },
+    {
+      "id": "conversacional-contido",
+      "genres": [
+        "email",
+        "post"
+      ],
+      "adjustments": [
+        "Preservar a forma de tratamento do autor",
+        "Usar transições simples sem eliminar lógica",
+        "Permitir contrações somente se presentes na voz"
+      ],
+      "avoid": [
+        "Gírias sorteadas",
+        "Humor não pedido",
+        "Primeira pessoa sem respaldo"
+      ]
+    },
+    {
+      "id": "argumentativo-sobrio",
+      "genres": [
+        "artigo",
+        "post"
+      ],
+      "adjustments": [
+        "Explicitar a tese já presente",
+        "Aproximar razões e ressalvas",
+        "Encerrar quando o argumento estiver completo"
+      ],
+      "avoid": [
+        "Contrastes inventados",
+        "Frase de efeito obrigatória",
+        "Tom de certeza maior que a fonte"
+      ]
+    }
+  ],
+  "implementation_status": "humanizar.py suggest carrega os perfis e retorna style_focus reproduzível com seed. É orientação editorial, não reescrita automática."
+}
