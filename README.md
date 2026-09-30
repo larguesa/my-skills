@@ -12,6 +12,10 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 [Skill e uso](skills/humanizador-pt-br/README.md): 31 testes automatizados aprovados; piloto parcial com 72 revisões em 14 modelos e consumo histórico de US$ 1,013765632, incluindo sondagens. Sem avaliação humana cega ou ranking de superioridade. [Resultados, evidências e limitações](skills/humanizador-pt-br/RESULTADOS.md). Testes dentro da pasta da skill.
 
+## Telegraphist
+
+[Telegraphist](skills/telegraphist/SKILL.md): prompt direto para respostas ultracurtas, com abreviações e símbolos. A pasta contém somente `SKILL.md` e `tests/`. [Relatório](skills/telegraphist/tests/REPORT.md): versão reescrita; nova bateria de fronteira pendente de confirmação de dois modelos e do orçamento. Evidências anteriores preservadas como histórico, não como resultados do novo prompt.
+
 ## Estrutura
 
 - **skills/**: Pasta raiz de skills.

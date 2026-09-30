@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Isolated, standard-library OpenRouter pilot. No agent-context discovery."""
+"""Historical v1 two-model pilot. Not the new frontier/judge benchmark."""
 import random
 import re
 import json

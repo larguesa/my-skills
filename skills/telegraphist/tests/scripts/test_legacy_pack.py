@@ -4,7 +4,7 @@ import subprocess
 import sys
 import unittest
 
-SCRIPT = pathlib.Path(__file__).resolve().parents[1] / "scripts" / "pack.py"
+SCRIPT = pathlib.Path(__file__).resolve().with_name("legacy_pack.py")
 
 
 class PackTests(unittest.TestCase):

@@ -2,7 +2,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 
-SCRIPT = Path(__file__).resolve().parents[1] / 'scripts' / 'bench.py'
+SCRIPT = Path(__file__).resolve().with_name('legacy_bench.py')
 
 class BenchTests(unittest.TestCase):
     def test_schedule_is_frozen_balanced_and_blocked(self):
@@ -160,7 +160,7 @@ class ProtocolTests(unittest.TestCase):
             self.assertFalse(self.b.can_spend(used, reserve, '10'))
 
     def test_actual_fixtures_are_balanced_and_validators_reject_empty(self):
-        tasks = self.b.rows(SCRIPT.parent.parent/'tests'/'cases.jsonl')
+        tasks = self.b.rows(SCRIPT.with_name('legacy_cases.jsonl'))
         self.assertEqual(len(tasks), 12)
         self.assertEqual(len({t['id'] for t in tasks}), 12)
         self.assertEqual(sum(t['language']=='pt' for t in tasks), 6)

@@ -1,0 +1,44 @@
+test_skill_root_contains_only_skill_and_tests (test_skill.SkillTests.test_skill_root_contains_only_skill_and_tests) ... FAIL
+test_skill_uses_supplied_prompt_without_extra_instructions (test_skill.SkillTests.test_skill_uses_supplied_prompt_without_extra_instructions) ... FAIL
+test_tests_root_contains_only_scripts_results_report (test_skill.SkillTests.test_tests_root_contains_only_scripts_results_report) ... FAIL
+
+======================================================================
+FAIL: test_skill_root_contains_only_skill_and_tests (test_skill.SkillTests.test_skill_root_contains_only_skill_and_tests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/skills/telegraphist/tests/scripts/test_skill.py", line 39, in test_skill_root_contains_only_skill_and_tests
+    self.assertEqual({p.name for p in ROOT.iterdir()}, {'SKILL.md', 'tests'})
+AssertionError: Items in the first set but not the second:
+'.gitignore'
+'.gitattributes'
+'TESTS.md'
+'scripts'
+'results'
+
+======================================================================
+FAIL: test_skill_uses_supplied_prompt_without_extra_instructions (test_skill.SkillTests.test_skill_uses_supplied_prompt_without_extra_instructions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/skills/telegraphist/tests/scripts/test_skill.py", line 36, in test_skill_uses_supplied_prompt_without_extra_instructions
+    self.assertEqual(body.lstrip('\n'), PROMPT)
+AssertionError: '# Telegraphist\n\nCut filler. Keep meanin[1685 chars]s.\n' != 'You are a 19th-century telegraph operator[888 chars]E.\n'
+Diff is 2722 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_tests_root_contains_only_scripts_results_report (test_skill.SkillTests.test_tests_root_contains_only_scripts_results_report)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/skills/telegraphist/tests/scripts/test_skill.py", line 42, in test_tests_root_contains_only_scripts_results_report
+    self.assertEqual({p.name for p in (ROOT / 'tests').iterdir()},
+AssertionError: Items in the first set but not the second:
+'test_bench.py'
+'__pycache__'
+'cases.jsonl'
+'test_pack.py'
+Items in the second set but not the first:
+'REPORT.md'
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+FAILED (failures=3)
