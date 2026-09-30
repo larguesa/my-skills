@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Skill e uso](skills/humanizador-pt-br/README.md): 31 testes automatizados aprovados; piloto parcial com 72 revisões em 14 modelos e consumo histórico de US$ 1,013765632, incluindo sondagens. Sem avaliação humana cega ou ranking de superioridade. [Resultados, evidências e limitações](skills/humanizador-pt-br/RESULTADOS.md). Testes dentro da pasta da skill.
+[Apresentação e uso](skills/humanizador-pt-br/README.me): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O primeiro teste prático compara pequenos contos sem e com a skill em 14 modelos, com Jev, Astra e Opus 5.5 como juízes. [Leia os contos lado a lado](skills/humanizador-pt-br/tests/README.md) ou o [relatório](skills/humanizador-pt-br/tests/REPORT.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
 
 ## Telegraphist
 

@@ -12,10 +12,10 @@ Implementação validada com 31 testes locais. Catálogo de 20 heurísticas e qu
 - A execução parou após falha externa. Não houve repetição automática. A causa específica não foi preservada pelo runner, portanto não se atribui a saldo, modelo ou provedor. Chave desativada, estado confirmado.
 
 ## Evidências no repositório
-- [comparacao.html](results/comparacao.html): abrir no navegador. Pedido, original e revisão; metadados, mensagens completas, tokens, custo, tempo e diferenças em seções expansíveis. Resultados ausentes estão identificados.
-- [comparacao-blind.html](results/comparacao-blind.html): formulário de avaliação sem identidades; exporta JSON local. Entregar apenas esse arquivo ao avaliador que não tenha visto a comparação identificada. A chave de identificação foi preservada separadamente, não publicada nesta pasta.
-- [editorial-audit.md](results/editorial-audit.md) e [JSON](results/editorial-audit.json): inspeção por assistente, não humana nem cega, de 12 saídas do corte inicial. Uma omitiu a equipe Aurora e deve ser rejeitada; não se infere vencedor.
-- [resumo.json](results/resumo.json): cobertura, custos por modelo e triagem literal final. Ausência/presença lexical não prova equivalência semântica.
+- [comparacao.md](comparacao.md): comparação histórica em Markdown, com pedido, original, revisão e custo das saídas concluídas. Prompts completos, metadados, tempos, tokens, erros e posições não executadas permanecem nos JSON originais.
+- [comparacao-blind.md](comparacao-blind.md): textos sem identificação de modelo, convertidos para Markdown. O formulário HTML anterior deixou de ser publicado; não há exportação interativa nesta versão. A chave de identificação histórica continua separada e não foi publicada.
+- [editorial-audit.md](editorial-audit.md) e [JSON](editorial-audit.json): inspeção por assistente, não humana nem cega, de 12 saídas do corte inicial. Uma omitiu a equipe Aurora e deve ser rejeitada; não se infere vencedor.
+- [resumo.json](resumo.json): cobertura, custos por modelo e triagem literal final. Ausência/presença lexical não prova equivalência semântica.
 
 ## Cobertura e consumo por modelo
 Cobertura desigual: custos totais não comparam eficiência ou qualidade diretamente. Latência inclui a duração observada de cada chamada, não apenas geração de tokens.
@@ -67,4 +67,4 @@ python3 -m unittest discover -s tests -v
 
 A suíte é offline e usa respostas sintéticas apenas nos testes de software. Não confundir essas fixtures com o piloto real. Esta mudança limita-se à localização da suíte e à documentação/evidência; o código de produção não foi alterado.
 
-[Plano histórico](results/pilot-plan.json), [estado com respostas reais](results/pilot-state.json) e [reconciliação](results/reconciliation-final.json) preservados sem regeneração. Os prompts completos estão no plano/estado. Somente caminhos locais na auditoria editorial foram convertidos em referências relativas para publicação. A existência desses arquivos não autoriza retomar chamadas pagas.
+[Plano histórico](pilot-plan.json), [estado com respostas reais](pilot-state.json) e [reconciliação](reconciliation-final.json) preservados sem regeneração. Os prompts completos estão no plano/estado. Somente caminhos locais na auditoria editorial foram convertidos em referências relativas para publicação. A existência desses arquivos não autoriza retomar chamadas pagas.

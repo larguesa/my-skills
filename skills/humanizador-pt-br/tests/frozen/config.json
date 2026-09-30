@@ -1,0 +1,2002 @@
+{
+  "schema": 1,
+  "frozen_at": "2026-09-30T14:42:05.323412+00:00",
+  "budget_usd": "8.986234368",
+  "cumulative_pilot_cap_usd": "10",
+  "prior_usage_usd": "1.013765632",
+  "max_tokens": 4096,
+  "judge_max_tokens": 8192,
+  "blind_seed": "20260930",
+  "cases": [
+    {
+      "id": "chave",
+      "title": "A chave no ônibus",
+      "prompt": "Escreva um pequeno conto de 80 a 120 palavras em português brasileiro. Uma motorista de ônibus encontra uma chave sem identificação no último banco, depois do fim do expediente. Ela precisa decidir o que fazer com a chave antes de ir embora. Conte em terceira pessoa."
+    },
+    {
+      "id": "bolo",
+      "title": "O bolo na portaria",
+      "prompt": "Escreva um pequeno conto de 80 a 120 palavras em português brasileiro. Um morador chega à portaria com um bolo preparado para um vizinho com quem não fala há meses. O porteiro avisa que o vizinho está de mudança naquele momento. Conte em terceira pessoa."
+    }
+  ],
+  "routes": [
+    {
+      "model": "anthropic/claude-opus-5.5",
+      "mode": "on",
+      "endpoint": {
+        "name": "Amazon Bedrock | anthropic/claude-opus-5.5-20260921",
+        "model_id": "anthropic/claude-opus-5.5",
+        "model_name": "Anthropic: Claude Opus 5.5",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.000004",
+          "completion": "0.00002",
+          "web_search": "0.01",
+          "input_cache_read": "0.0000002",
+          "input_cache_write": "0.000005",
+          "input_cache_write_1h": "0.000008",
+          "discount": 0
+        },
+        "provider_name": "Amazon Bedrock",
+        "tag": "amazon-bedrock",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "stop",
+          "tool_choice",
+          "tools",
+          "response_format",
+          "verbosity",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.85293087751243,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.88986657794807,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:bash": {
+            "type": "bash_20250124"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:18.739513+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 35,
+            "generation_id": "gen-1790688318-EBYdmc51c4tMZ4wrk4bJ",
+            "observed_at": "2026-09-29T13:25:18.950015+00:00",
+            "model_returned": "anthropic/claude-opus-5.5",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "openai/gpt-6-astra",
+      "mode": "on",
+      "endpoint": {
+        "name": "OpenAI | openai/gpt-6-astra-20260903",
+        "model_id": "openai/gpt-6-astra",
+        "model_name": "OpenAI: GPT-6 Astra",
+        "context_length": 1050000,
+        "pricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "web_search": "0.01",
+          "input_cache_read": "0.000001",
+          "input_cache_write": "0.0000125",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 272000,
+              "prompt": "0.00002",
+              "completion": "0.000075",
+              "input_cache_read": "0.000002",
+              "input_cache_write": "0.000025"
+            }
+          ]
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": 922000,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.67682056163731,
+        "uptime_last_5m": 99.10836762688614,
+        "uptime_last_1d": 99.92667697909154,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          },
+          "openrouter:apply_patch": {
+            "type": "apply_patch"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false,
+              "effort": "none"
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:22.585506+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 37,
+            "generation_id": "gen-1790688322-kxC4DWR0dOO7nbqTEeFj",
+            "observed_at": "2026-09-29T13:25:22.646839+00:00",
+            "model_returned": "openai/gpt-6-astra",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "x-ai/grok-4.7",
+      "mode": "on",
+      "endpoint": {
+        "name": "xAI | x-ai/grok-4.7-20260916",
+        "model_id": "x-ai/grok-4.7",
+        "model_name": "SpaceXAI: Grok 4.7",
+        "context_length": 500000,
+        "pricing": {
+          "prompt": "0.000002",
+          "completion": "0.000006",
+          "web_search": "0.005",
+          "input_cache_read": "0.0000005",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 200000,
+              "prompt": "0.000004",
+              "completion": "0.000012",
+              "input_cache_read": "0.000001"
+            }
+          ]
+        },
+        "provider_name": "xAI",
+        "tag": "xai/zdr",
+        "quantization": "unknown",
+        "max_completion_tokens": 450000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "structured_outputs",
+          "response_format",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "logprobs",
+          "top_logprobs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 96.71069025666583,
+        "uptime_last_5m": 98.12734082397003,
+        "uptime_last_1d": 97.4559637854858,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:26.088928+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 154,
+            "generation_id": "gen-1790688326-MIADSYmdZkNUk8XppD4E",
+            "observed_at": "2026-09-29T13:25:26.140038+00:00",
+            "model_returned": "x-ai/grok-4.7",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "mode": "on",
+      "endpoint": {
+        "name": "Google AI Studio | google/gemini-3.8-flash-20260902",
+        "model_id": "google/gemini-3.8-flash",
+        "model_name": "Google: Gemini 3.8 Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000075",
+          "completion": "0.00000375",
+          "image": "0.00000075",
+          "audio": "0.00000075",
+          "input_audio_cache": "0.000000075",
+          "web_search": "0.014",
+          "internal_reasoning": "0.00000375",
+          "input_cache_read": "0.000000075",
+          "input_cache_write": "0.0000000416666666666667",
+          "discount": 0.5
+        },
+        "provider_name": "Google AI Studio",
+        "tag": "google-ai-studio",
+        "quantization": "unknown",
+        "max_completion_tokens": 65536,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "response_format",
+          "structured_outputs",
+          "tool_choice",
+          "tools",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.83123816084036,
+        "uptime_last_5m": 99.86297957149975,
+        "uptime_last_1d": 99.77817540197321,
+        "supports_implicit_caching": true,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "google_search"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:29.415318+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 445,
+            "generation_id": "gen-1790688329-YNERrP1B4LXVFTuQwG8x",
+            "observed_at": "2026-09-29T13:25:29.487691+00:00",
+            "model_returned": "google/gemini-3.8-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "meta/muse-spark-1.3",
+      "mode": "on",
+      "endpoint": {
+        "name": "Meta | meta/muse-spark-1.3-20260902",
+        "model_id": "meta/muse-spark-1.3",
+        "model_name": "Meta: Muse Spark 1.3",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000125",
+          "completion": "0.00000425",
+          "web_search": "0.0025",
+          "input_cache_read": "0.00000015",
+          "discount": 0
+        },
+        "provider_name": "Meta",
+        "tag": "meta",
+        "quantization": "unknown",
+        "max_completion_tokens": 943718,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "repetition_penalty",
+          "top_k",
+          "temperature",
+          "top_p",
+          "tools",
+          "tool_choice",
+          "structured_outputs",
+          "response_format",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.90689013035382,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.71463267310877,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:32.643424+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 454,
+            "generation_id": "gen-1790688332-gASR89c1MamGLnjj9EUS",
+            "observed_at": "2026-09-29T13:25:32.689721+00:00",
+            "model_returned": "meta/muse-spark-1.3",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "mode": "off",
+      "endpoint": {
+        "name": "DeepInfra | xiaomi/mimo-v2.6-pro-20260921",
+        "model_id": "xiaomi/mimo-v2.6-pro",
+        "model_name": "Xiaomi: MiMo-V2.6-Pro",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000043",
+          "completion": "0.00000087",
+          "input_cache_read": "0.0000000036",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 943718,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.7376858058875,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.79487797247081,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688340-wegSwQ0DJey0Qgc19S2d",
+            "observed_at": "2026-09-29T13:25:40.084823+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-pro",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 221,
+            "generation_id": "gen-1790688341-HcSGSIH3jI6qmzvmZMLG",
+            "observed_at": "2026-09-29T13:25:41.275586+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-pro",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": false
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "mode": "on",
+      "endpoint": {
+        "name": "DeepInfra | xiaomi/mimo-v2.6-pro-20260921",
+        "model_id": "xiaomi/mimo-v2.6-pro",
+        "model_name": "Xiaomi: MiMo-V2.6-Pro",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000043",
+          "completion": "0.00000087",
+          "input_cache_read": "0.0000000036",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 943718,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.7376858058875,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.79487797247081,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688340-wegSwQ0DJey0Qgc19S2d",
+            "observed_at": "2026-09-29T13:25:40.084823+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-pro",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 221,
+            "generation_id": "gen-1790688341-HcSGSIH3jI6qmzvmZMLG",
+            "observed_at": "2026-09-29T13:25:41.275586+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-pro",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "max_tokens": 1024
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3-prime",
+      "mode": "on",
+      "endpoint": {
+        "name": "Alibaba | z-ai/glm-5.3-prime-20260921",
+        "model_id": "z-ai/glm-5.3-prime",
+        "model_name": "Z.ai: GLM 5.3 Prime",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.0000028",
+          "completion": "0.0000088",
+          "input_cache_read": "0.00000056",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "top_k",
+          "frequency_penalty",
+          "stop",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.55257270693512,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.04740535248042,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:47.526939+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688347-d61uCYZss4EF081RtYul",
+            "observed_at": "2026-09-29T13:25:47.578461+00:00",
+            "model_returned": "z-ai/glm-5.3-prime",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "qwen/qwen3.8-max-prime",
+      "mode": "on",
+      "endpoint": {
+        "name": "Alibaba | qwen/qwen3.8-max-prime-20260923",
+        "model_id": "qwen/qwen3.8-max-prime",
+        "model_name": "Qwen: Qwen3.8 Max Prime",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.000004",
+          "completion": "0.000012",
+          "input_cache_read": "0.0000005",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": 983616,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "tool_choice",
+          "structured_outputs",
+          "logprobs",
+          "top_logprobs",
+          "top_k",
+          "frequency_penalty",
+          "stop",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.40564635958395,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.41078641007365,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:49.025812+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 170,
+            "generation_id": "gen-1790688349-O0X9clZdzNhrTn7LcNB3",
+            "observed_at": "2026-09-29T13:25:49.078154+00:00",
+            "model_returned": "qwen/qwen3.8-max-prime",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "mode": "off",
+      "endpoint": {
+        "name": "OpenAI | openai/gpt-6-luna-20260922",
+        "model_id": "openai/gpt-6-luna",
+        "model_name": "OpenAI: GPT-6 Luna",
+        "context_length": 1050000,
+        "pricing": {
+          "prompt": "0.0000001",
+          "completion": "0.0000005",
+          "web_search": "0.01",
+          "input_cache_read": "0.00000001",
+          "input_cache_write": "0.000000125",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 272000,
+              "prompt": "0.0000002",
+              "completion": "0.00000075",
+              "input_cache_read": "0.00000002",
+              "input_cache_write": "0.00000025"
+            }
+          ]
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": 922000,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.95744414365946,
+        "uptime_last_5m": 99.96945603983673,
+        "uptime_last_1d": 99.95532377742276,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          },
+          "openrouter:apply_patch": {
+            "type": "apply_patch"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false,
+              "effort": "none"
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688165-x67PgzPVOH0oGRbzSrZv",
+            "observed_at": "2026-09-29T13:22:45.319092+00:00",
+            "model_returned": "openai/gpt-6-luna",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 52,
+            "generation_id": "gen-1790688167-9MaSW53KRseISQfGWKRY",
+            "observed_at": "2026-09-29T13:22:47.038544+00:00",
+            "model_returned": "openai/gpt-6-luna",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": false,
+        "effort": "none"
+      }
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "mode": "on",
+      "endpoint": {
+        "name": "OpenAI | openai/gpt-6-luna-20260922",
+        "model_id": "openai/gpt-6-luna",
+        "model_name": "OpenAI: GPT-6 Luna",
+        "context_length": 1050000,
+        "pricing": {
+          "prompt": "0.0000001",
+          "completion": "0.0000005",
+          "web_search": "0.01",
+          "input_cache_read": "0.00000001",
+          "input_cache_write": "0.000000125",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 272000,
+              "prompt": "0.0000002",
+              "completion": "0.00000075",
+              "input_cache_read": "0.00000002",
+              "input_cache_write": "0.00000025"
+            }
+          ]
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": 922000,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.95744414365946,
+        "uptime_last_5m": 99.96945603983673,
+        "uptime_last_1d": 99.95532377742276,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          },
+          "openrouter:apply_patch": {
+            "type": "apply_patch"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false,
+              "effort": "none"
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688165-x67PgzPVOH0oGRbzSrZv",
+            "observed_at": "2026-09-29T13:22:45.319092+00:00",
+            "model_returned": "openai/gpt-6-luna",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 52,
+            "generation_id": "gen-1790688167-9MaSW53KRseISQfGWKRY",
+            "observed_at": "2026-09-29T13:22:47.038544+00:00",
+            "model_returned": "openai/gpt-6-luna",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-flash",
+      "mode": "off",
+      "endpoint": {
+        "name": "DeepInfra | xiaomi/mimo-v2.6-flash-20260921",
+        "model_id": "xiaomi/mimo-v2.6-flash",
+        "model_name": "Xiaomi: MiMo-V2.6-Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000014",
+          "completion": "0.00000028",
+          "input_cache_read": "0.0000000028",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 943718,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": -2,
+        "uptime_last_30m": 94.90784129959387,
+        "uptime_last_5m": 96.02272727272727,
+        "uptime_last_1d": 97.56066989125246,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688352-GwWzNgnmrIu8R89D8xkr",
+            "observed_at": "2026-09-29T13:25:52.172464+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 21,
+            "generation_id": "gen-1790688353-DNRN78rAYmvm8yCvERkd",
+            "observed_at": "2026-09-29T13:25:52.980369+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": false
+      }
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-flash",
+      "mode": "on",
+      "endpoint": {
+        "name": "DeepInfra | xiaomi/mimo-v2.6-flash-20260921",
+        "model_id": "xiaomi/mimo-v2.6-flash",
+        "model_name": "Xiaomi: MiMo-V2.6-Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000014",
+          "completion": "0.00000028",
+          "input_cache_read": "0.0000000028",
+          "discount": 0
+        },
+        "provider_name": "DeepInfra",
+        "tag": "deepinfra/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 943718,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "stop",
+          "frequency_penalty",
+          "presence_penalty",
+          "repetition_penalty",
+          "top_k",
+          "seed",
+          "min_p",
+          "logit_bias",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": -2,
+        "uptime_last_30m": 94.90784129959387,
+        "uptime_last_5m": 96.02272727272727,
+        "uptime_last_1d": 97.56066989125246,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688352-GwWzNgnmrIu8R89D8xkr",
+            "observed_at": "2026-09-29T13:25:52.172464+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 21,
+            "generation_id": "gen-1790688353-DNRN78rAYmvm8yCvERkd",
+            "observed_at": "2026-09-29T13:25:52.980369+00:00",
+            "model_returned": "xiaomi/mimo-v2.6-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "max_tokens": 1024
+      }
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "mode": "on",
+      "endpoint": {
+        "name": "Z.AI | z-ai/glm-5.3-flash-20260826",
+        "model_id": "z-ai/glm-5.3-flash",
+        "model_name": "Z.ai: GLM 5.3 Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.0000005",
+          "input_cache_read": "0.00000003",
+          "discount": 0
+        },
+        "provider_name": "Z.AI",
+        "tag": "z-ai/fp8",
+        "quantization": "fp8",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "tools",
+          "tool_choice",
+          "top_k",
+          "response_format",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": false,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.80815898209484,
+        "uptime_last_5m": 99.83971148066519,
+        "uptime_last_1d": 99.42073404064081,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:33:56.778529+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 10,
+            "generation_id": "gen-1790688837-dJDA4DYLvljH5dD9xUyx",
+            "observed_at": "2026-09-29T13:33:57.048801+00:00",
+            "model_returned": "z-ai/glm-5.3-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "anthropic/claude-sonnet-5.5",
+      "mode": "on",
+      "endpoint": {
+        "name": "Google | anthropic/claude-sonnet-5.5-20260928",
+        "model_id": "anthropic/claude-sonnet-5.5",
+        "model_name": "Anthropic: Claude Sonnet 5.5",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.000002",
+          "completion": "0.00001",
+          "web_search": "0.01",
+          "input_cache_read": "0.0000002",
+          "input_cache_write": "0.0000025",
+          "input_cache_write_1h": "0.000004",
+          "discount": 0
+        },
+        "provider_name": "Google",
+        "tag": "google-vertex/global",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "max_tokens",
+          "stop",
+          "reasoning",
+          "include_reasoning",
+          "tool_choice",
+          "tools",
+          "response_format",
+          "verbosity",
+          "structured_outputs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 100,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.9809371171979,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:bash": {
+            "type": "bash_20250124"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:26:45.438309+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688405-hDB3XXSHEmcBOLkhvrVP",
+            "observed_at": "2026-09-29T13:26:45.658359+00:00",
+            "model_returned": "anthropic/claude-sonnet-5.5",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "mode": "off",
+      "endpoint": {
+        "name": "Alibaba | qwen/qwen3.8-flash-20260826",
+        "model_id": "qwen/qwen3.8-flash",
+        "model_name": "Qwen: Qwen3.8 Flash",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.00000047",
+          "input_cache_read": "0.000000016",
+          "input_cache_write": "0.0000002",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": 983616,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "structured_outputs",
+          "top_k",
+          "frequency_penalty",
+          "stop",
+          "logprobs",
+          "top_logprobs",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.5375640295959,
+        "uptime_last_5m": 98.39665388637155,
+        "uptime_last_1d": 99.83400471936015,
+        "supports_implicit_caching": true,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688407-nBKWxh36Bo0a0uobY1y0",
+            "observed_at": "2026-09-29T13:26:47.123427+00:00",
+            "model_returned": "qwen/qwen3.8-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 226,
+            "generation_id": "gen-1790688408-FKav0Nkkp98aUQiPuPVd",
+            "observed_at": "2026-09-29T13:26:48.807530+00:00",
+            "model_returned": "qwen/qwen3.8-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": false
+      }
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "mode": "on",
+      "endpoint": {
+        "name": "Alibaba | qwen/qwen3.8-flash-20260826",
+        "model_id": "qwen/qwen3.8-flash",
+        "model_name": "Qwen: Qwen3.8 Flash",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.00000015",
+          "completion": "0.00000047",
+          "input_cache_read": "0.000000016",
+          "input_cache_write": "0.0000002",
+          "discount": 0
+        },
+        "provider_name": "Alibaba",
+        "tag": "alibaba",
+        "quantization": "unknown",
+        "max_completion_tokens": 131072,
+        "max_prompt_tokens": 983616,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "temperature",
+          "top_p",
+          "seed",
+          "presence_penalty",
+          "response_format",
+          "tools",
+          "structured_outputs",
+          "top_k",
+          "frequency_penalty",
+          "stop",
+          "logprobs",
+          "top_logprobs",
+          "tool_choice"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.5375640295959,
+        "uptime_last_5m": 98.39665388637155,
+        "uptime_last_1d": 99.83400471936015,
+        "supports_implicit_caching": true,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688407-nBKWxh36Bo0a0uobY1y0",
+            "observed_at": "2026-09-29T13:26:47.123427+00:00",
+            "model_returned": "qwen/qwen3.8-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "max_tokens": 1024
+            },
+            "reasoning_tokens": 226,
+            "generation_id": "gen-1790688408-FKav0Nkkp98aUQiPuPVd",
+            "observed_at": "2026-09-29T13:26:48.807530+00:00",
+            "model_returned": "qwen/qwen3.8-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "max_tokens": 1024
+      }
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash",
+      "mode": "off",
+      "endpoint": {
+        "name": "Sail Research | deepseek/deepseek-v4.1-flash-20260910",
+        "model_id": "deepseek/deepseek-v4.1-flash",
+        "model_name": "DeepSeek: DeepSeek V4.1 Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000008",
+          "completion": "0.0000004",
+          "input_cache_read": "0.00000001",
+          "discount": 0
+        },
+        "provider_name": "Sail Research",
+        "tag": "sail-research/fp4",
+        "quantization": "fp4",
+        "max_completion_tokens": 384000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "frequency_penalty",
+          "max_tokens",
+          "presence_penalty",
+          "seed",
+          "stop",
+          "temperature",
+          "top_k",
+          "top_p",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.80705935762116,
+        "uptime_last_5m": 99.91262560069899,
+        "uptime_last_1d": 97.2340448692131,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688414-jqnK6VpgUxdtUlDrInnh",
+            "observed_at": "2026-09-29T13:26:54.030513+00:00",
+            "model_returned": "deepseek/deepseek-v4.1-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 483,
+            "generation_id": "gen-1790688415-FfAjkCt3aKRdADtm6KzH",
+            "observed_at": "2026-09-29T13:26:55.073199+00:00",
+            "model_returned": "deepseek/deepseek-v4.1-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": false
+      }
+    },
+    {
+      "model": "deepseek/deepseek-v4.1-flash",
+      "mode": "on",
+      "endpoint": {
+        "name": "Sail Research | deepseek/deepseek-v4.1-flash-20260910",
+        "model_id": "deepseek/deepseek-v4.1-flash",
+        "model_name": "DeepSeek: DeepSeek V4.1 Flash",
+        "context_length": 1048576,
+        "pricing": {
+          "prompt": "0.00000008",
+          "completion": "0.0000004",
+          "input_cache_read": "0.00000001",
+          "discount": 0
+        },
+        "provider_name": "Sail Research",
+        "tag": "sail-research/fp4",
+        "quantization": "fp4",
+        "max_completion_tokens": 384000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "frequency_penalty",
+          "max_tokens",
+          "presence_penalty",
+          "seed",
+          "stop",
+          "temperature",
+          "top_k",
+          "top_p",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "logprobs",
+          "top_logprobs",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 99.80705935762116,
+        "uptime_last_5m": 99.91262560069899,
+        "uptime_last_1d": 97.2340448692131,
+        "supports_implicit_caching": false,
+        "native_tools": {},
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": 0,
+            "generation_id": "gen-1790688414-jqnK6VpgUxdtUlDrInnh",
+            "observed_at": "2026-09-29T13:26:54.030513+00:00",
+            "model_returned": "deepseek/deepseek-v4.1-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 483,
+            "generation_id": "gen-1790688415-FfAjkCt3aKRdADtm6KzH",
+            "observed_at": "2026-09-29T13:26:55.073199+00:00",
+            "model_returned": "deepseek/deepseek-v4.1-flash",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    }
+  ],
+  "judges": [
+    {
+      "name": "astra",
+      "model": "openai/gpt-6-astra",
+      "mode": "on",
+      "endpoint": {
+        "name": "OpenAI | openai/gpt-6-astra-20260903",
+        "model_id": "openai/gpt-6-astra",
+        "model_name": "OpenAI: GPT-6 Astra",
+        "context_length": 1050000,
+        "pricing": {
+          "prompt": "0.00001",
+          "completion": "0.00005",
+          "web_search": "0.01",
+          "input_cache_read": "0.000001",
+          "input_cache_write": "0.0000125",
+          "discount": 0,
+          "overrides": [
+            {
+              "min_prompt_tokens": 272000,
+              "prompt": "0.00002",
+              "completion": "0.000075",
+              "input_cache_read": "0.000002",
+              "input_cache_write": "0.000025"
+            }
+          ]
+        },
+        "provider_name": "OpenAI",
+        "tag": "openai",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": 922000,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "seed",
+          "max_tokens",
+          "response_format",
+          "structured_outputs",
+          "tools",
+          "tool_choice",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": true,
+          "function": true
+        },
+        "status": 0,
+        "uptime_last_30m": 98.67682056163731,
+        "uptime_last_5m": 99.10836762688614,
+        "uptime_last_1d": 99.92667697909154,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:web_search": {
+            "type": "web_search"
+          },
+          "openrouter:apply_patch": {
+            "type": "apply_patch"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false,
+              "effort": "none"
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:22.585506+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 37,
+            "generation_id": "gen-1790688322-kxC4DWR0dOO7nbqTEeFj",
+            "observed_at": "2026-09-29T13:25:22.646839+00:00",
+            "model_returned": "openai/gpt-6-astra",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    },
+    {
+      "name": "opus",
+      "model": "anthropic/claude-opus-5.5",
+      "mode": "on",
+      "endpoint": {
+        "name": "Amazon Bedrock | anthropic/claude-opus-5.5-20260921",
+        "model_id": "anthropic/claude-opus-5.5",
+        "model_name": "Anthropic: Claude Opus 5.5",
+        "context_length": 1000000,
+        "pricing": {
+          "prompt": "0.000004",
+          "completion": "0.00002",
+          "web_search": "0.01",
+          "input_cache_read": "0.0000002",
+          "input_cache_write": "0.000005",
+          "input_cache_write_1h": "0.000008",
+          "discount": 0
+        },
+        "provider_name": "Amazon Bedrock",
+        "tag": "amazon-bedrock",
+        "quantization": "unknown",
+        "max_completion_tokens": 128000,
+        "max_prompt_tokens": null,
+        "supported_parameters": [
+          "reasoning",
+          "include_reasoning",
+          "max_tokens",
+          "stop",
+          "tool_choice",
+          "tools",
+          "response_format",
+          "verbosity",
+          "reasoning_effort"
+        ],
+        "supports_tool_choice": {
+          "none": true,
+          "auto": true,
+          "required": false,
+          "function": false
+        },
+        "status": 0,
+        "uptime_last_30m": 99.85293087751243,
+        "uptime_last_5m": 100,
+        "uptime_last_1d": 99.88986657794807,
+        "supports_implicit_caching": false,
+        "native_tools": {
+          "openrouter:bash": {
+            "type": "bash_20250124"
+          }
+        },
+        "supports_voice_cloning": false,
+        "supports_multiple_audio_references": false,
+        "supports_image_reference": false,
+        "latency_last_30m": null,
+        "throughput_last_30m": null,
+        "availability": {
+          "off": {
+            "status": "rejected",
+            "reasoning": {
+              "enabled": false
+            },
+            "reasoning_tokens": null,
+            "generation_id": null,
+            "observed_at": "2026-09-29T13:25:18.739513+00:00",
+            "model_returned": null,
+            "error": {
+              "message": "Reasoning is mandatory for this endpoint and cannot be disabled.",
+              "code": 400,
+              "metadata": {
+                "provider_name": null
+              }
+            },
+            "note": "API observation, not proof of hidden compute."
+          },
+          "on": {
+            "status": "accepted",
+            "reasoning": {
+              "enabled": true,
+              "effort": "medium"
+            },
+            "reasoning_tokens": 35,
+            "generation_id": "gen-1790688318-EBYdmc51c4tMZ4wrk4bJ",
+            "observed_at": "2026-09-29T13:25:18.950015+00:00",
+            "model_returned": "anthropic/claude-opus-5.5",
+            "error": null,
+            "note": "API observation, not proof of hidden compute."
+          }
+        }
+      },
+      "reasoning": {
+        "enabled": true,
+        "effort": "medium"
+      }
+    }
+  ],
+  "jev_model": "typesafe/jev-1.13",
+  "limitations": [
+    "First outputs only; no judge-driven optimization.",
+    "Two independent generations, not rewriting the baseline.",
+    "One output per case/model/mode/condition.",
+    "Off only on historically accepted routes; not proof of hidden compute.",
+    "Moonlight/Kimi unresolved, not substituted.",
+    "AI-impression scores are not calibrated authorship probabilities."
+  ],
+  "sha256": {
+    "skill-bundle.txt": "c7318b10ebc29cf7049a3d20fdaee47e6ac54e173b2bd015747ffbb7362f05f4",
+    "../scripts/contos.py": "e4ab1b6181b2e4acb0897654fff550eb7cf912844249ce8b1af7cf2da8893823",
+    "../scripts/benchmark.py": "80b9449a22565f1e2082998f1584a1b738425b0c7c9c41c0c75dacaff6e4a176",
+    "../../SKILL.md": "b1c21ab876e9147c1e775b057cdabc5fa82a247728a5c56a93e8ba11726f00d9",
+    "../../references/catalogo.json": "097a48f93e517bc764130e5b38168a34ea07fa7d3686cae1c40c9a4cbb453666",
+    "../../references/estilos.json": "06a333fc319a538464fd977b0476ae1936b4f2c5382eaf016fa1e6ab3f8e591d"
+  }
+}

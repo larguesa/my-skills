@@ -4,7 +4,7 @@ import pathlib
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / 'scripts/benchmark.py'
+SCRIPT = ROOT / 'tests/scripts/benchmark.py'
 
 def load():
     spec = importlib.util.spec_from_file_location('benchmark', SCRIPT)

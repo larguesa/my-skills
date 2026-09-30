@@ -349,7 +349,7 @@ def resolve_models(requested, catalog):
 
 def local_auditor():
     import importlib.util
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parents[2]
     spec = importlib.util.spec_from_file_location('humanizar_benchmark', root / 'scripts/humanizar.py')
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -365,7 +365,7 @@ def compact_audit(result):
 
 
 def skill_bundle(path):
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parents[2]
     text = path.read_text(encoding='utf-8')
     for filename, title in [('catalogo.json', 'CATALOGO EDITORIAL'), ('estilos.json', 'ESTILOS')]:
         data = json.loads((root / 'references' / filename).read_text(encoding='utf-8'))
@@ -464,13 +464,13 @@ def render_comparison(plan, state):
 def main(argv=None):
     import argparse
     from collections import Counter
-    root = Path(__file__).resolve().parent.parent
+    root = Path(__file__).resolve().parents[2]
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     p = sub.add_parser('plan', help='Offline planning, never posts completions')
     p.add_argument('--out', required=True)
-    p.add_argument('--models', type=Path, default=root / 'references/modelos.json')
-    p.add_argument('--cases', type=Path, default=root / 'references/casos.json')
+    p.add_argument('--models', type=Path, default=root / 'tests/fixtures/modelos-20260929.json')
+    p.add_argument('--cases', type=Path, default=root / 'tests/fixtures/casos-20260929.json')
     p.add_argument('--skill', type=Path, default=root / 'SKILL.md')
     p.add_argument('--availability', type=Path, help='Directory of actual route probe JSON records')
     p.add_argument('--budget', default='10')

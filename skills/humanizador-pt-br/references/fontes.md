@@ -46,7 +46,7 @@ A card relata filtragem SBERT orientada por rótulos de juiz LLM no material rea
 
 Licença declarada: ODC-By 1.0. Trata-se de licença de base de dados, não de cessão indiscriminada dos direitos autorais de páginas web incorporadas. Conferir atribuição, termos upstream, finalidade, privacidade e direitos de redistribuição antes de publicar amostras. Acesso público não equivale a domínio público.
 
-Não baixar o corpus inteiro como pré-requisito. Usar preview ou streaming estritamente limitado por linhas e bytes, registrando revisão, seleção e falhas. A consulta inicial ao endpoint `/rows` com cinco linhas retornou HTTP 500; isso não prova indisponibilidade permanente. A exploração limitada foi registrada em [exploracao-amostral.json](exploracao-amostral.json): amostra de conveniência apenas de `real`/`c4_pt`, sem grupo sintético comparável. Não republica texto original. Seus valores são descritivos e não calibram o catálogo.
+Não baixar o corpus inteiro como pré-requisito. Usar preview ou streaming estritamente limitado por linhas e bytes, registrando revisão, seleção e falhas. A consulta inicial ao endpoint `/rows` com cinco linhas retornou HTTP 500; isso não prova indisponibilidade permanente. A exploração limitada foi registrada em [exploracao-amostral.json](../tests/historico-20260929/exploracao-amostral.json): amostra de conveniência apenas de `real`/`c4_pt`, sem grupo sintético comparável. Não republica texto original. Seus valores são descritivos e não calibram o catálogo.
 
 ## Decisões de adaptação
 

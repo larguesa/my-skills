@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
-description: Revise textos em PT-BR preservando fatos e voz.
-version: 0.1.0
+description: Melhore naturalidade em PT-BR sem perder a voz.
+version: 0.2.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
@@ -12,66 +12,64 @@ metadata:
 
 # Humanizador PT-BR
 
-Revisão editorial contextual de clareza, ritmo e adequação ao leitor. Não detecta autoria, não promete escapar de detectores e não transforma frequências em probabilidade de IA.
+Melhore o texto para quem vai ler: clareza, ritmo, precisão e voz. Cortar sinais de escrita genérica é um meio, não o objetivo. Um texto sem palavras sinalizadas ainda pode ser ruim.
 
 ## Quando usar
 
-- Revisar prosa em português brasileiro percebida como genérica, repetitiva ou distante da voz do autor.
-- Auditar um rascunho antes de propor alterações ou comparar versões autorizadas.
-- Variar discretamente a forma de uma série, dentro da mesma voz.
-- Não usar para julgar autoria acadêmica, remover atribuições ou fabricar experiência pessoal.
+- Reescrever textos genéricos, repetitivos ou com formalidade deslocada.
+- Revisar artigos, mensagens, conteúdo técnico e pequenos contos.
+- Escrever do zero quando o pedido autorizar criação, inclusive ficção.
+- Auditar sem reescrever quando o usuário pedir apenas diagnóstico.
 
-## Pré-requisitos
+Não usar para esconder atribuições, fabricar depoimentos ou comprovar autoria. Esta skill não é um detector de IA.
 
-Texto original, finalidade e público. Amostra de voz é opcional. Se ausente, conservar registro e escolhas reconhecíveis do original, sem impor uma personalidade.
+## Antes de escrever
 
-O procedimento textual funciona com leitura e revisão. Utilitários locais são auxiliares: consultar o README e o `--help` da versão presente antes de executá-los. Não pressupor APIs, dependências ou flags não documentadas. Não enviar material confidencial a serviços externos sem autorização.
+Leia o pedido e o material disponível. Identifique gênero, leitor, intenção, registro e restrições. Use a amostra de voz quando houver; sem amostra, preserve o registro do original ou o indicado no pedido. Pergunte só se faltar informação que altere o resultado.
 
-## Procedimento
+Distinga as duas tarefas:
 
-1. **Delimitar a autorização.** Auditoria é o padrão. Pedido explícito de reescrita autoriza uma proposta revisada, não publicação ou sobrescrita do arquivo de origem. Registrar público, gênero e restrições.
-2. **Fixar invariantes.** Inventariar fatos, nomes, números, datas, unidades, URLs, citações, comandos, negações, condições, grau de certeza, agente e causalidade. Preservar códigos, tabelas de dados e trechos literais. Resolver ambiguidades relevantes antes de alterar sentido.
-3. **Ler a voz.** Anotar formalidade, distância do leitor, ritmo e vocabulário técnico a partir do original ou de amostras autorizadas. Não inferir biografia, região, sentimentos ou opinião.
-4. **Auditar contexto.** Ler [catálogo](references/catalogo.json). Cada regex localiza candidatos; não decide se há defeito. Conferir gênero, entorno, exceções e risco. Aceitar como legítima uma ocorrência que cumpre função.
-5. **Propor por trecho.** Informar problema observável, alternativa e possível perda. Nunca fazer substituição global de palavras. Fontes comerciais e skills inspiram candidatos, não autorizam alterações.
-6. **Reescrever apenas no escopo aprovado.** Usar fatos já disponíveis. Se faltar detalhe, preservar a formulação sustentada ou marcar uma pergunta fora do texto final. Não preencher lacunas com números, depoimentos ou exemplos apresentados como reais.
-7. **Variar com discrição, se solicitado.** Consultar [estilos](references/estilos.json), manter a voz fixa e registrar perfil e seed. Seed organiza escolhas editoriais; não garante reprodução literal de saída de modelo.
-8. **Revisar semântica antes de fluência.** Comparar cada afirmação com o original. Conferir especialmente negações, obrigação versus possibilidade, correlação versus causa, intervalo e denominador. Uma checagem lexical não prova equivalência.
-9. **Entregar resultado verificável.** Mostrar auditoria ou versão revisada, mudanças relevantes, preservações deliberadas e dúvidas. Se houver autorização de gravação, usar destino separado ou diff aprovado. Não publicar.
+- **Revisão:** conserve os acontecimentos, fatos, nomes, números, citações, negações, condições e grau de certeza. Não acrescente experiências, fontes ou detalhes apresentados como reais.
+- **Criação:** desenvolva o conteúdo dentro do que o pedido permite. Em ficção, pode inventar personagens, cenas, ações e sensações; não apresente isso como biografia, depoimento ou fato real. Ao revisar uma ficção existente, preserve seu enredo e ponto de vista, salvo autorização para mudá-los.
 
-## Ferramentas locais
+## Como melhorar a leitura
 
-Usar `terminal` na raiz do pacote: `python3 scripts/humanizar.py audit entrada.txt` para achados; `python3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17` para recomendações e ênfase de estilo. O catálogo padrão não fornece trocas automáticas; `edits: []` pode ser o resultado correto.
+1. **Comece pelo que acontece ou pelo que importa.** Remova aberturas que apenas anunciam o assunto. Em um conto, a cena pode começar com uma ação, um objeto ou uma fala, se isso servir à história.
+2. **Troque abstração vazia por informação sustentada.** Em não ficção, use somente detalhes disponíveis. Na criação ficcional, escolha detalhes concretos que participem da cena, sem preencher cada frase com decoração.
+3. **Ajuste o ritmo ao trecho.** Combine comprimentos e construções quando a leitura pedir. Não transforme todos os parágrafos em frases curtas, fragmentos dramáticos ou uma sequência de frases igualmente polidas.
+4. **Conserve palavras que têm função.** Repetição pode sustentar uma ideia, uma voz ou um efeito literário. Não alterne sinônimos só para evitar repetir um nome ou termo técnico.
+5. **Reduza explicações que o texto já resolve.** Corte moral da história, resumo final e interpretação de emoções quando ações e contexto já comunicarem isso. Mantenha explicações necessárias ao leitor.
+6. **Prefira uma voz coerente a uma personalidade fabricada.** Humor, coloquialidade, opinião e primeira pessoa dependem do pedido e da voz. Gírias, erros deliberados e falsa intimidade não tornam o texto melhor.
+7. **Leia o resultado como texto, não como checklist.** Retire a alteração que piora precisão, continuidade, ritmo ou intenção. Não editar um trecho bom também é uma decisão válida.
 
-Aplicar apenas um plano aprovado: `python3 scripts/humanizar.py apply entrada.txt --plan plano.json --output revisado.txt`. Comparar com `python3 scripts/humanizar.py verify entrada.txt revisado.txt`. Acrescentar `--protect "termo"` para termos invariantes. Ver [formato do plano](README.md) antes de preenchê-lo.
+Consulte o [catálogo](references/catalogo.json) para localizar candidatos à revisão. Uma regex não decide se há defeito: considere contexto, gênero, exceções e risco de sentido. As palavras “robusto”, “significativo” e “além disso” não são proibidas. Consulte os [estilos](references/estilos.json) quando precisar variar discretamente a forma, sem sortear fatos ou personalidade.
 
-O segundo utilitário, [benchmark.py](scripts/benchmark.py), executa comparação externa somente com autorização e teto explícito. Verificar `--help` e o protocolo antes de chamadas pagas. Não instalar classificador, serviço permanente ou biblioteca linguística pesada.
+## Entrega
 
-## Contrato do catálogo
+Em pedido de criação ou reescrita, entregue o texto pronto. Acrescente observações ou mudanças somente quando forem solicitadas ou quando uma dúvida relevante impedir a revisão fiel. Em auditoria, mostre problemas concretos, trechos e sugestões, sem reescrever por conta própria.
 
-- Raiz JSON: lista de regras. `pattern`: regex Python com flags explícitas; `source`: IDs do [registro](references/fontes.md).
-- `positive_example`: exemplo inventado de ocorrência candidata; não significa texto ruim nem autoria de IA.
-- `negative_example`: exemplo inventado sem o gatilho. Não é reescrita factual automaticamente autorizada do positivo.
-- `context`, `exceptions`, `genres` e `meaning_risk` exigem avaliação humana ou editorial; regex não os interpreta.
-- `allowed_action` restringe as regras a `audit` e `suggest`. Aplicar edição exige autorização explícita fora do catálogo.
-- `evidence: heuristica_editorial` significa hipótese editorial sem calibração estatística demonstrada.
+Não publique nem sobrescreva o original sem autorização. Não introduza travessão longo na prosa nova; preserve um trecho literal protegido e sinalize conflito se houver. Não remova ressalvas técnicas, científicas, jurídicas ou de segurança para deixar o texto mais leve.
 
-## Salvaguardas
+## Scripts opcionais
 
-- Não há palavras proibidas. Manter robusto, significativo, além disso e termos semelhantes quando precisos. Significância estatística não é sinônimo de importância prática.
-- Preservar qualificadores científicos, legais e de segurança. Clareza não justifica aumentar certeza.
-- Não inserir erros, gírias aleatórias, regionalismos presumidos, falsa intimidade ou depoimentos inventados.
-- Não remover listas úteis, conectivos lógicos ou terminologia para reduzir uma contagem.
-- Não introduzir travessão longo na nova prosa. Em citação literal ou dado protegido, preservar o original e sinalizar conflito de formato.
-- Ritmo variado é uma escolha de leitura, não um sinal obrigatório de humanidade.
-- Frequência normalizada descreve apenas a amostra, tokenização e regra usadas. Zero ocorrências não comprova qualidade ou autoria.
+O procedimento textual não depende de Python. Para uma auditoria local, use `terminal` na pasta da skill:
+
+```text
+python3 scripts/humanizar.py audit entrada.txt
+python3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17
+python3 scripts/humanizar.py apply entrada.txt --plan plano-aprovado.json --output revisado.txt
+python3 scripts/humanizar.py verify entrada.txt revisado.txt
+```
+
+O script não redige. `suggest` oferece recomendações e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. Use `--protect "termo"` para invariantes adicionais. Ver [uso e exemplo de plano](README.me).
+
+Scripts de experimento e resultados ficam em [tests/](tests/README.md). Chamadas externas exigem autorização e teto financeiro. Não envie material confidencial a terceiros sem autorização.
 
 ## Verificação
 
-- Todos os fatos e qualificações mantidos; nenhuma experiência ou fonte adicionada sem base.
-- Cada alteração tem motivo contextual e está dentro da autorização.
-- Voz e gênero preservados; nenhuma aplicação cega de regex.
-- Relatórios distinguem achados, sugestões, edições aprovadas e pendências.
-- Resultados empíricos, custos e rankings só aparecem acompanhados de execução e evidência real.
+- O resultado cumpre o pedido e funciona no gênero, sem impor informalidade ou ornamentação.
+- Na revisão, preserva sentido, fatos, condições e voz; na criação, respeita os limites de invenção.
+- Cada mudança melhora a leitura ou a precisão, não apenas uma contagem de palavras.
+- Não usa notas de juízes ou detectores para otimizar o texto. Resultados de percepção precisam de leitura humana.
 
-Para avaliação e limites dos dados, ler [protocolo](references/protocolo.md) e [fontes](references/fontes.md). Exploração de amostra não equivale a validação do catálogo.
+[Fontes e limites das heurísticas](references/fontes.md). Nenhuma taxa de autoria ou garantia de “passar em detector” é oferecida.
