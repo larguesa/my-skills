@@ -2,7 +2,7 @@
 
 Escreva ou revise em português brasileiro sem ficar preso à cara de um texto genérico. A skill orienta ritmo, detalhes úteis e uma voz coerente, preservando fatos na revisão e permitindo invenção quando o pedido é ficcional.
 
-**Veja o resultado, não apenas a promessa.** O primeiro teste apresenta dois pequenos contos, 14 modelos e 38 pares sem/com skill. Abaixo há exemplos fixos de três famílias. O [índice dos testes](tests/README.md) traz resumos visuais e relatórios completos por pedido em `tests/experiments/`, além de 24 novos casos preparados em 12 gêneros, aguardando orçamento para execução. O [relatório da rodada histórica](tests/REPORT.md) preserva os resultados e a contabilidade anteriores.
+**Veja o resultado, não apenas a promessa.** O primeiro teste apresenta dois pequenos contos, 14 modelos e 38 pares sem/com skill. Abaixo há exemplos fixos de três famílias. O [índice dos testes](tests/README.md) traz resumos visuais e relatórios completos por pedido. A ampliação em 24 pedidos de 12 gêneros foi iniciada, mas interrompida por indisponibilidade do provedor: 20 textos válidos de resposta, nove pares completos e os três juízes do par piloto, com US$ 0.613509514 conciliados. A matriz completa permanece pendente. [Estado da ampliação](tests/results/expansao-20261002/STATUS.md). O [relatório histórico](tests/REPORT.md) preserva os resultados e a contabilidade anteriores.
 
 A avaliação humana está pendente. Não anunciamos ganho garantido, vencedor ou proteção contra detectores. Nas colunas de detecção, cada número é uma impressão do juiz, de 0 a 100, na ordem original → com skill; não é uma probabilidade de autoria. Ambos os textos foram gerados por IA.
 
@@ -68,6 +68,6 @@ Use `--protect "termo"` para proteção adicional. A comparação mecânica não
 
 ## Organização
 
-`README.me`, `SKILL.md`, `references/`, `scripts/` e `tests/`, sem resultados soltos na pasta da skill. O nome `README.me` foi mantido literalmente conforme o pedido; a apresentação renderizável no GitHub está em `tests/README.md`.
+`README.md`, `SKILL.md`, `references/`, `scripts/` e `tests/`, sem resultados soltos na pasta da skill. A apresentação e o índice de resultados são renderizáveis no GitHub.
 
 [Catálogo editorial](references/catalogo.json), [estilos](references/estilos.json), [fontes e limites](references/fontes.md). Não há palavras proibidas nem score de autoria no editor local. Não usar catálogos arbitrários como código confiável.

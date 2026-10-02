@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Apresentação e uso](skills/humanizador-pt-br/README.me): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O [índice dos testes](skills/humanizador-pt-br/tests/README.md) reúne resumos visuais e relatórios individuais em `tests/experiments/`: dois contos concluídos, em 14 modelos e 19 configurações, e 24 novos casos preparados em 12 gêneros, ainda aguardando orçamento para execução. Jev, Astra e Opus 5.5 aparecem em colunas próprias. [Relatório da rodada histórica](skills/humanizador-pt-br/tests/REPORT.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
+[Apresentação e uso](skills/humanizador-pt-br/README.md): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O [índice dos testes](skills/humanizador-pt-br/tests/README.md) reúne os dois contos históricos e a ampliação em 24 pedidos de 12 gêneros. A nova execução foi interrompida por indisponibilidade do provedor: 20 textos válidos de resposta, nove pares completos e três julgamentos do par piloto; US$ 0.613509514 conciliados. A matriz completa permanece pendente. Jev, Astra e Opus 5.5 aparecem em colunas próprias. [Estado e limitações](skills/humanizador-pt-br/tests/results/expansao-20261002/STATUS.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
 
 ## Telegraphist
 
