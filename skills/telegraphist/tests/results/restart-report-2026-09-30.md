@@ -1,8 +1,10 @@
-# Telegraphist, reinício da avaliação
+> Historical report, English translation. The status and protocol below describe 2026-09-30, not the current benchmark. [Immutable Portuguese original](https://github.com/larguesa/my-skills/blob/777070e686d3b233d1e4d15ffc1917204849201e/skills/telegraphist/tests/results/restart-report-2026-09-30.md), SHA-256 `2378d1f93a130dae94d5ce28e55244d9a39e08328dcb2a7a07cf9ebb97afd5cd`. Original measurements, identifiers and historical conclusions are unchanged; only prose is translated and relocated evidence links are corrected.
 
-Atualizado em 2026-09-30. Status: skill e organização corrigidas; bateria de fronteira não executada. Não há novas medições de economia ou acertos.
+# Telegraphist, evaluation restart
 
-## Entrega atual
+Updated on 2026-09-30. Status: skill and organization corrected; frontier evaluation suite not run. There are no new measurements of savings or correctness.
+
+## Current deliverable
 
 ```text
 skills/telegraphist/
@@ -13,70 +15,70 @@ skills/telegraphist/
     results/
 ```
 
-O corpo da skill usa o prompt fornecido por Ricardo, sem regras adicionais, ferramentas, explicações ou links. Apenas a pontuação entre `language` e `no fluff` foi convertida para vírgula. O exemplo e o literal `PARE.` foram mantidos. Metadados mínimos permanecem no frontmatter.
+The skill body uses the prompt supplied by Ricardo, without additional rules, tools, explanations, or links. Only the punctuation between `language` and `no fluff` was changed to a comma. The example and the original-language prompt literal `PARE.` were retained. Minimal metadata remains in the frontmatter.
 
-Scripts e evidências antigos foram realocados, não tratados como avaliação do novo prompt. Os nomes `legacy_*` identificam o piloto anterior. O runner legado está limitado ao desenho original de dois modelos, não implementa a nova matriz de sete modelos nem o trio de juízes.
+Old scripts and evidence were relocated, not treated as an evaluation of the new prompt. The `legacy_*` names identify the previous pilot. The legacy runner is limited to the original two-model design; it does not implement the new seven-model matrix or the three-judge panel.
 
-## Pré-verificação de modelos
+## Model preflight
 
-Fonte: API oficial OpenRouter, catálogo e endpoints, consultados em 2026-09-30 14:18 UTC. Evidência: [model-preflight-2026-09-30.json](results/model-preflight-2026-09-30.json).
+Source: official OpenRouter API, catalog and endpoints, queried on 2026-09-30 14:18 UTC. Evidence: [model-preflight-2026-09-30.json](model-preflight-2026-09-30.json).
 
-| Nome solicitado | ID consultado | Catálogo / endpoints |
+| Requested name | Queried ID | Catalog / endpoints |
 |---|---|---|
-| Opus 5.5 | `anthropic/claude-opus-5.5` | Listado; endpoint responde |
-| GPT-6-Astra | `openai/gpt-6-astra` | Listado; endpoint responde |
-| GPT-6.1-Sol | `openai/gpt-6.1-sol` | Listado; endpoint responde |
-| GPT-6.1-Luna | `openai/gpt-6.1-luna` | Ausente; endpoint não encontrado |
-| GLM 4.3-Flash | `z-ai/glm-4.3-flash` | Ausente; endpoint não encontrado |
-| Gemini 3.8 Flash | `google/gemini-3.8-flash` | Listado; endpoint responde |
-| Qwen 3.8 Flash | `qwen/qwen3.8-flash` | Listado; endpoint responde |
+| Opus 5.5 | `anthropic/claude-opus-5.5` | Listed; endpoint responds |
+| GPT-6-Astra | `openai/gpt-6-astra` | Listed; endpoint responds |
+| GPT-6.1-Sol | `openai/gpt-6.1-sol` | Listed; endpoint responds |
+| GPT-6.1-Luna | `openai/gpt-6.1-luna` | Absent; endpoint not found |
+| GLM 4.3-Flash | `z-ai/glm-4.3-flash` | Absent; endpoint not found |
+| Gemini 3.8 Flash | `google/gemini-3.8-flash` | Listed; endpoint responds |
+| Qwen 3.8 Flash | `qwen/qwen3.8-flash` | Listed; endpoint responds |
 
-Disponibilidade de catálogo não equivale a inferência validada. Nenhuma chamada de geração ou julgamento foi submetida nesta etapa. O endpoint de `typesafe/jev-1.13`, versão usada pelo cliente Jev existente, também respondeu; a rota de inferência Decisions ainda não foi sondada neste reinício. Astra e Opus têm seus endpoints registrados na mesma evidência. Nomes informais não foram usados como autorização para escolher outros modelos.
+Catalog availability does not amount to validated inference. No generation or judging call was submitted at this stage. The endpoint for `typesafe/jev-1.13`, the version used by the existing Jev client, also responded; the Decisions inference route has not yet been probed in this restart. Astra and Opus have their endpoints recorded in the same evidence. Informal names were not used as authorization to select other models.
 
-Há entradas distintas para GPT-6 Luna, GLM 4.7 Flash e GLM 5.3 Flash. Não substituem automaticamente os nomes solicitados. A implementação da bateria aguarda confirmação dos dois IDs e do teto de custo, incluindo candidatos, juízes e sondagens pagas. O limite do piloto anterior não foi reutilizado como autorização para uma nova bateria.
+There are separate entries for GPT-6 Luna, GLM 4.7 Flash, and GLM 5.3 Flash. They do not automatically replace the requested names. Implementation of the evaluation suite awaits confirmation of the two IDs and the cost ceiling, including candidates, judges, and paid probes. The previous pilot's limit was not reused as authorization for a new evaluation suite.
 
-## Métricas solicitadas
+## Requested metrics
 
-| Métrica | Com skill | Sem skill | Razão com / sem |
+| Metric | With skill | Without skill | With / without ratio |
 |---|---|---|---|
-| Acertos por trio de juízes | Pendente | Pendente | Não calculada |
-| Tokens IN | Pendente | Pendente | Não calculada |
-| Tokens OUT | Pendente | Pendente | Não calculada |
-| Tokens CACHED | Pendente | Pendente | Não calculada |
-| Latência | Pendente | Pendente | Não calculada |
-| Custo | Pendente | Pendente | Não calculada |
+| Correct answers according to three judges | Pending | Pending | Not calculated |
+| Tokens IN | Pending | Pending | Not calculated |
+| Tokens OUT | Pending | Pending | Not calculated |
+| Tokens CACHED | Pending | Pending | Not calculated |
+| Latency | Pending | Pending | Not calculated |
+| Cost | Pending | Pending | Not calculated |
 
-Pendente significa não medido, nunca zero. Resultados antigos não preenchem esta tabela.
+Pending means unmeasured, never zero. Old results do not fill this table.
 
-## Contrato proposto para a nova bateria
+## Proposed contract for the new evaluation suite
 
-Este contrato não está congelado nem implementado. Contagem de tarefas, repetições e limites depende do orçamento confirmado.
+This contract is neither frozen nor implemented. Task counts, repetitions, and limits depend on the confirmed budget.
 
-- HTTPS direto ao OpenRouter, sem SOUL, memórias, AGENTS, plugins ou outras skills. Mesmo sistema neutro, tarefas, ferramentas, limites e configurações dentro de cada modelo; somente o `SKILL.md` completo difere entre braços.
-- Incluir trajetórias agênticas de vários passos e tarefas de resposta longa, além de perguntas curtas. Manter histórico acumulado, ferramentas e critério de entrega final equivalentes. Não confundir respostas curtas com sucesso funcional.
-- Congelar tarefas, respostas de referência, critérios, runner e prompt antes da primeira geração; preservar hashes e ordenar pares aleatoriamente. Não gerar novas respostas para substituir falhas, respostas vazias ou truncadas.
-- Juízes solicitados: Jev, GPT-6 Astra e Opus 5.5. Avaliação individual e cega, sem modelo ou braço revelado; maioria de três determina o acerto quando todos os votos forem válidos. Preservar divergências. Indisponibilidade de um juiz deixa avaliação incompleta, não autoriza maioria de dois.
-- Jev usa API Decisions, não chat. Definir pergunta binária e limiar antes da execução. Validar rota, versão e telemetria numa sondagem limitada. Para Astra/Opus, exigir voto estruturado e motivo apoiado no gabarito. Como também são candidatos, explicitar o risco de viés por autoavaliação. Validações determinísticas de formato e execução complementam, não substituem, o trio pedido.
-- Acerto significa cumprir tarefa e restrições, preservando conteúdo necessário. Brevidade não rende pontos por si só. Não exigir quantidade exata de palavras em todas as tarefas, nem considerar uma resposta mínima correta apenas por ser pequena.
-- IN e OUT vêm da telemetria nativa; IN inclui skill e histórico, OUT inclui raciocínio quando o provedor assim contabiliza. Raciocínio não é somado novamente. Caracteres públicos são medida separada, nunca substituto para tokens nativos.
-- Cache-read e cache-write separados; campo ausente permanece desconhecido. Zero declarado é zero observado. Razão com denominador zero é indefinida, acompanhada dos totais absolutos. Medir condições de primeiro uso e cache aquecido separadamente, sem presumir cache frio por falta de diretiva.
-- Latência de ponta a ponta, do envio ao retorno completo, com mediana e p95 por braço. Para agentes, informar também duração total da trajetória e número de chamadas. Separar aquecimento, erros e tentativas de disponibilidade da matriz principal.
-- Custo real de candidatos e de juízes em grupos separados, incluindo sondagens e falhas potencialmente cobradas; reconciliar custos de resposta com a chave exclusiva. Conta financiada e chave limitada são verificações distintas.
-- Razão agregada = soma(com skill) / soma(sem skill), apenas em pares completos comparáveis. Relatar cobertura, diferenças de taxa de acerto, falhas e razões maiores que 1. Latência p50/p95 usa razão das estatísticas correspondentes, não razão de médias de percentis. Não extrapolar um piloto para economia universal ou equivalência de qualidade.
+- Direct HTTPS to OpenRouter, without SOUL, memories, AGENTS, plugins, or other skills. The same neutral system, tasks, tools, limits, and settings within each model; only the complete `SKILL.md` differs between arms.
+- Include multistep agentic trajectories and long-answer tasks, in addition to short questions. Keep accumulated history, tools, and the final-delivery criterion equivalent. Do not confuse short answers with functional success.
+- Freeze tasks, reference answers, criteria, runner, and prompt before the first generation; preserve hashes and randomize pair order. Do not generate new answers to replace failures, empty answers, or truncated answers.
+- Requested judges: Jev, GPT-6 Astra, and Opus 5.5. Individual, blinded evaluation, with neither model nor arm revealed; a majority of three determines correctness when all votes are valid. Preserve disagreements. Unavailability of one judge leaves the evaluation incomplete; it does not authorize a two-judge majority.
+- Jev uses the Decisions API, not chat. Define the binary question and threshold before execution. Validate route, version, and telemetry in a limited probe. For Astra/Opus, require a structured vote and a reason supported by the reference answer. Since they are also candidates, explicitly state the risk of self-evaluation bias. Deterministic format and execution checks complement, rather than replace, the requested three-judge panel.
+- Correctness means fulfilling the task and constraints while preserving necessary content. Brevity earns no points by itself. Do not require an exact word count for every task, or consider a minimal answer correct merely because it is small.
+- IN and OUT come from native telemetry; IN includes skill and history, OUT includes reasoning when the provider accounts for it that way. Reasoning is not added again. Publicly visible characters are a separate measure, never a substitute for native tokens.
+- Separate cache-read and cache-write; an absent field remains unknown. A declared zero is an observed zero. A ratio with a zero denominator is undefined and accompanied by the absolute totals. Measure first-use and warm-cache conditions separately, without assuming a cold cache because no directive is present.
+- End-to-end latency, from submission to the complete response, with median and p95 by arm. For agents, also report total trajectory duration and number of calls. Separate warm-up, errors, and availability attempts from the main matrix.
+- Actual candidate and judge costs in separate groups, including probes and potentially billed failures; reconcile response costs with the dedicated key. A funded account and a capped key are separate checks.
+- Aggregate ratio = sum(with skill) / sum(without skill), only for complete comparable pairs. Report coverage, differences in correctness rates, failures, and ratios greater than 1. Latency p50/p95 uses the ratio of the corresponding statistics, not a ratio of averages of percentiles. Do not extrapolate a pilot to universal savings or quality equivalence.
 
-## Verificação offline
+## Offline verification
 
-Os testes do pacote validam o prompt e a estrutura de pastas. Os testes legados validam scripts antigos, não o comportamento dos modelos novos.
+The package tests validate the prompt and folder structure. The legacy tests validate old scripts, not the behavior of the new models.
 
 ```sh
 python3 -B -m unittest discover -s skills/telegraphist/tests/scripts -v
 ```
 
-32 testes offline passaram: 3 verificam o novo prompt/layout e 29 cobrem scripts legados. O baseline anterior também passou nos 29 testes. Quatro mutações deliberadas (texto adicional, remoção de `PARE.`, arquivo indevido na raiz e arquivo indevido em `tests/`) foram rejeitadas pelos verificadores. Evidências: [execução completa](results/offline-green.txt) e [resumo verificável](results/offline-validation.json). Nenhum resultado offline equivale a benchmark de LLM.
+32 offline tests passed: 3 verify the new prompt/layout and 29 cover legacy scripts. The previous baseline also passed the 29 tests. Four deliberate mutations (additional text, removal of the original-language literal `PARE.`, an unauthorized file in the root, and an unauthorized file in `tests/`) were rejected by the validators. Evidence: [full execution](offline-green.txt) and [verifiable summary](offline-validation.json). No offline result amounts to an LLM benchmark.
 
-## Histórico preservado
+## Preserved history
 
-- [Piloto anterior, evidências](results/legacy-pilot-2026-09-29.zip), SHA-256 `7e3a0ad0c8c00ac5b6de6f501ae242a57b24cd825cddf10178863f864817ad01`.
-- [Relatório original](results/legacy-report-2026-09-29.md), SHA-256 `cad46b1fc81d946fca09cdba924c273e3da6d156f2182b9b0b620ed546d00c6b`.
+- [Previous pilot, evidence](legacy-pilot-2026-09-29.zip), SHA-256 `7e3a0ad0c8c00ac5b6de6f501ae242a57b24cd825cddf10178863f864817ad01`.
+- [Original report](legacy-report-2026-09-29.md), SHA-256 `cad46b1fc81d946fca09cdba924c273e3da6d156f2182b9b0b620ed546d00c6b`.
 
-Ambos mantêm bytes originais. Caminhos, protocolos, modelos e afirmações no relatório histórico pertencem à versão anterior. Seu conteúdo não demonstra o resultado da skill reescrita e seus comandos não são o procedimento desta nova bateria.
+Both retain their original bytes. Paths, protocols, models, and claims in the historical report belong to the previous version. Its content does not demonstrate the result of the rewritten skill, and its commands are not the procedure for this new evaluation suite.

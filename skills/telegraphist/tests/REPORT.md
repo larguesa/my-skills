@@ -2,6 +2,16 @@
 
 Status: STOPPED, INCOMPLETE. The approved corrected models were used, with English documentation and English/Portuguese prompts. No overall efficiency or accuracy conclusion is available.
 
+## Spending and language clarification, 2026-10-02
+
+The user explicitly reaffirmed that this benchmark has no spending ceiling, monetary quota or assistant-imposed budget enforcement. The dedicated key already had `limit: null` and `limit_reset: null` during the stopped run. Its post-stop disablement was removed, and both the exact Management API record and the inference-key endpoint were read back successfully. The active frontier runner has no cumulative-spend gate; older budget checks belong only to the historical pilot runner and are not called by the frontier run or judge commands. Token/cost accounting remains a requested benchmark measurement, not a mechanism that stops work at a monetary threshold.
+
+The recorded rejection identifies `reason: in_flight_budget_exhausted` and `limit_source: openrouter_in_flight_budget`. This is OpenRouter's own request-reservation mechanism, not a key quota set by the assistant. Removing a key cap does not disable that service constraint, and automatic recharge does not by itself eliminate it. See the [official limits documentation](https://openrouter.ai/docs/api-reference/limits#in-flight-spending-budget).
+
+Repository documentation is English; email correspondence is Portuguese; test prompts and verbatim candidate evidence retain their English/Portuguese languages. Historical readable reports have English translations with immutable original sources linked below. No candidate or judge requests were submitted for this policy/documentation correction. The original frozen protocol, ledger, outputs and measurements remain unchanged, and the full benchmark is still incomplete.
+
+[Verified spending-policy clarification](results/spending-policy-2026-10-02.json).
+
 ## Executive result
 
 The run encountered an OpenRouter in-flight request-budget reservation limit while concurrent requests were active. A subsequent funding check still showed positive account credits. This is a request-reservation constraint, not proof of an empty account or failed automatic recharge. The frozen no-retry rule stopped the batch; the remaining stages were not started.
@@ -379,6 +389,6 @@ The earlier pilot and reports remain historical, not measurements of the current
 
 - [Original pilot ZIP](results/legacy-pilot-2026-09-29.zip), SHA-256 `7e3a0ad0c8c00ac5b6de6f501ae242a57b24cd825cddf10178863f864817ad01`.
 - [Original report](results/legacy-report-2026-09-29.md), SHA-256 `cad46b1fc81d946fca09cdba924c273e3da6d156f2182b9b0b620ed546d00c6b`.
-- [Restart status report](results/restart-report-2026-09-30.md), preserved without translating or altering its original bytes.
+- [Restart status report, English translation](results/restart-report-2026-09-30.md). The [immutable Portuguese original](https://github.com/larguesa/my-skills/blob/777070e686d3b233d1e4d15ffc1917204849201e/skills/telegraphist/tests/results/restart-report-2026-09-30.md) retains SHA-256 `2378d1f93a130dae94d5ce28e55244d9a39e08328dcb2a7a07cf9ebb97afd5cd`.
 
-Current documentation is English; Portuguese remains only in bilingual test prompts/answers and immutable historical material.
+Current readable documentation is English. Portuguese remains in bilingual test prompts/answers, the supplied literal `PARE.`, and immutable historical evidence. The already-English original pilot report remains byte-identical.
