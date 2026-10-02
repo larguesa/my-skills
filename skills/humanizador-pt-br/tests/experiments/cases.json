@@ -1,0 +1,288 @@
+{
+  "version": 1,
+  "status": "prepared_awaiting_budget",
+  "cases": [
+    {
+      "id": "01-noticia-bibliotecas",
+      "genre": "Jornalístico",
+      "title": "Notícia sobre bibliotecas",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nProduza uma notícia factual de 150 a 220 palavras, com título e lide no primeiro parágrafo. Base: a prefeitura fictícia de Vila Clara anunciou em 1º de outubro de 2026 a abertura de 1.200 vagas gratuitas em oficinas de leitura nas seis bibliotecas municipais. Inscrições de 5 a 16 de outubro, presencialmente nas bibliotecas, para pessoas a partir de 12 anos. As oficinas começam em 3 de novembro. O anúncio não informa divisão de vagas por unidade nem horários das aulas. Não escreva opinião nem falas atribuídas.",
+      "checks": [
+        "Título e lide; 150 a 220 palavras, incluindo título.",
+        "Preservar 1.200 vagas, seis bibliotecas, gratuidade, idade mínima e datas.",
+        "Não inventar horários, distribuição por unidade, citações ou impacto."
+      ]
+    },
+    {
+      "id": "02-reportagem-drenagem",
+      "genre": "Jornalístico",
+      "title": "Reportagem sobre monitoramento de drenagem",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nProduza uma reportagem explicativa de 250 a 350 palavras, com título e três parágrafos. Base: a cidade fictícia de Porto Sereno instalou 48 sensores de nível de água em oito pontos de drenagem. O piloto durou dois meses e observou duas chuvas fortes; não houve grupo de comparação nem estimativa de redução de alagamentos. Custo do piloto: R$ 180 mil. Fontes do briefing: boletim técnico municipal 07/2026; engenheira fictícia Lia Prado, responsável pelo piloto, cuja declaração exata é \"O sensor avisa que o nível subiu; ele não aumenta a capacidade do canal.\"; associação fictícia de moradores do bairro Baixada, cuja nota exata é \"Queremos saber quem recebe o alerta e em quanto tempo age.\" Explique o funcionamento e os limites, mantendo as duas declarações literais. Não acrescente entrevistas.",
+      "checks": [
+        "Título e três parágrafos; 250 a 350 palavras.",
+        "Preservar 48 sensores, oito pontos, dois meses, duas chuvas e R$ 180 mil.",
+        "Manter as duas declarações literalmente e suas atribuições.",
+        "Não afirmar redução de alagamentos nem validação de eficácia."
+      ]
+    },
+    {
+      "id": "03-documentacao-api",
+      "genre": "Técnico em desenvolvimento",
+      "title": "Documentação de uma API de tarefas",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega.",
+      "checks": [
+        "Quatro seções na ordem; 250 a 400 palavras, incluindo blocos de código.",
+        "Preservar endpoint, nomes de campos, cabeçalhos, status HTTP e limites.",
+        "JSON válido e curl coerente com o contrato; apenas token fictício <TOKEN>.",
+        "Não apresentar queued como sucesso da execução nem inventar endpoints."
+      ]
+    },
+    {
+      "id": "04-analise-bug",
+      "genre": "Técnico em desenvolvimento",
+      "title": "Análise de um argumento padrão mutável",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+      "checks": [
+        "Seções e código Python sintaticamente válidos; 220 a 320 palavras.",
+        "Explicar argumento padrão criado uma vez, sem mudar comportamento da lista explícita.",
+        "Correção com is None; duas chamadas independentes e identidade da lista fornecida testadas.",
+        "Não usar bucket or [] nem prometer segurança concorrente."
+      ]
+    },
+    {
+      "id": "05-energia-movimento",
+      "genre": "Técnico em física",
+      "title": "Movimento e conservação de energia",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nExplique em 180 a 260 palavras o movimento de um objeto no modelo fornecido. Dados: massa m = 2,0 kg, queda vertical h = 5,0 m, partida do repouso, aceleração g = 10 m/s², resistência do ar desprezada. Equações do modelo: E_p = mgh e E_c = mv²/2. Adote energia potencial zero no ponto final. Organize em dois parágrafos explicativos e duas linhas de cálculo. Calcule energia potencial inicial e rapidez final; explique a transferência entre formas de energia. Declare que o resultado depende de desprezar dissipação. Não trate rapidez como um vetor.",
+      "checks": [
+        "180 a 260 palavras e formato solicitado.",
+        "Energia inicial 100 J e rapidez final 10 m/s, com substituição dimensional coerente.",
+        "Manter partida do repouso, referência da energia potencial e dissipação desprezada.",
+        "Não afirmar conservação da energia mecânica com arrasto presente."
+      ]
+    },
+    {
+      "id": "06-experimento-periodo",
+      "genre": "Técnico em física",
+      "title": "Interpretação de medidas de período",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um relatório didático de 180 a 260 palavras, com as seções Dados, Resultado e Limites. Um experimento fictício mediu cinco vezes o período de um mesmo oscilador: 1,20 s; 1,22 s; 1,19 s; 1,21 s; 1,18 s. O protocolo fornece incerteza instrumental absoluta de ±0,02 s por leitura. Calcule a média e reporte a média acompanhada desse valor instrumental, deixando explícito que ele não foi obtido da dispersão e não é intervalo de confiança da média. Não há medições de outro oscilador, curva de calibração ou valor teórico de referência. Não conclua concordância com uma teoria nem estime uma incerteza estatística sem método adicional.",
+      "checks": [
+        "Média 1,20 s; incerteza instrumental fornecida ±0,02 s.",
+        "180 a 260 palavras e três seções.",
+        "Separar dispersão das leituras, incerteza instrumental e intervalo de confiança.",
+        "Não fabricar referência teórica, calibração ou significância."
+      ]
+    },
+    {
+      "id": "07-equilibrio-quimico",
+      "genre": "Técnico em química",
+      "title": "Equilíbrio químico para estudantes",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nExplique equilíbrio químico em 180 a 260 palavras para estudantes do ensino médio, em três parágrafos. Use exclusivamente o modelo ideal fornecido: A ⇌ B, ambas espécies em solução; à temperatura fixa do exercício, K_c = [B]/[A] = 4. No equilíbrio inicial, [A] = 0,20 mol/L e [B] = 0,80 mol/L. Uma adição de A faz, imediatamente após a mistura, [A] = 0,40 mol/L e [B] = 0,80 mol/L; a temperatura permanece fixa. Calcule Q_c nesse instante, compare com K_c e indique o sentido esperado da transformação líquida. Explique que equilíbrio dinâmico não significa concentrações iguais nem reação parada. Não calcule novas concentrações finais.",
+      "checks": [
+        "180 a 260 palavras e três parágrafos.",
+        "Q_c inicial após adição = 2; transformação líquida de A para B.",
+        "Preservar K_c = 4, temperatura fixa e unidades dos dados.",
+        "Não igualar concentrações no equilíbrio nem alterar K por adição de reagente."
+      ]
+    },
+    {
+      "id": "08-titulacao",
+      "genre": "Técnico em química",
+      "title": "Discussão de resultados de uma titulação",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nProduza uma discussão de 200 a 280 palavras, com uma tabela de três linhas de medições e dois parágrafos. Base: titulação fictícia de alíquotas de 25,00 mL de HCl com NaOH de concentração fornecida 0,1000 mol/L. Modelo: HCl + NaOH → NaCl + H2O, proporção molar 1:1; o exercício assume ponto final coincidente com equivalência e despreza mudanças de volume da alíquota antes da titulação. Volumes de NaOH: 12,40 mL; 12,50 mL; 12,60 mL. Calcule volume médio e concentração média de HCl, apresentando unidades e conversão de mL para L. Discuta a dispersão sem afirmar exatidão, pois não há valor de referência, branco nem orçamento de incerteza. Não invente intervalo de confiança.",
+      "checks": [
+        "Volume médio 12,50 mL e concentração média de HCl 0,05000 mol/L.",
+        "200 a 280 palavras; tabela com três medições e dois parágrafos.",
+        "Preservar 1:1, 25,00 mL, 0,1000 mol/L e hipótese sobre ponto final.",
+        "Não confundir repetibilidade com exatidão nem fabricar incerteza."
+      ]
+    },
+    {
+      "id": "09-decomposicao",
+      "genre": "Biologia e meio ambiente",
+      "title": "Decomposição explicada para leigos",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nExplique em 170 a 240 palavras, em três parágrafos, o papel dos decompositores em um modelo de horta fornecido. Base conceitual: restos vegetais contêm matéria orgânica; fungos e bactérias podem decompor essa matéria; parte dos nutrientes retorna ao solo e pode ser absorvida por plantas; organismos decompositores também respiram, devolvendo parte do carbono ao ambiente como CO2; água, temperatura e disponibilidade de oxigênio influenciam o processo. Use uma analogia curta e identifique seu limite. Evite equiparar decomposição a desaparecimento da matéria, afirmar que todo carbono fica no solo ou inventar percentuais e prazos.",
+      "checks": [
+        "170 a 240 palavras e três parágrafos.",
+        "Preservar nutrientes, respiração e retorno de parte do carbono como CO2.",
+        "Analogia curta com limite explícito.",
+        "Sem desaparecimento da matéria, percentual inventado ou prazo universal."
+      ]
+    },
+    {
+      "id": "10-estudo-ambiental",
+      "genre": "Biologia e meio ambiente",
+      "title": "Análise de um estudo ambiental",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma nota de análise de 200 a 280 palavras, com tabela de dados e as seções Observações e Limitações. Dados fictícios: três medidas de oxigênio dissolvido a montante de um trecho de rio: 7,1; 7,0; 7,2 mg/L. Três medidas a jusante, no mesmo dia: 5,9; 6,0; 6,1 mg/L. Calcule as médias e a diferença jusante menos montante. Temperatura, vazão, horário individual de coleta e outras substâncias não foram registrados; não há repetição em outros dias. Discuta a diferença observada sem atribuir causa, declarar poluição comprovada ou generalizar para o rio inteiro. Não invente teste estatístico.",
+      "checks": [
+        "Médias 7,1 e 6,0 mg/L; diferença -1,1 mg/L.",
+        "200 a 280 palavras; dados completos e duas seções.",
+        "Manter ausência de controles e repetição temporal.",
+        "Não inferir causalidade, poluição comprovada ou significância."
+      ]
+    },
+    {
+      "id": "11-resumo-estudo",
+      "genre": "Acadêmico",
+      "title": "Resumo de um estudo fornecido",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um resumo acadêmico de 180 a 240 palavras, em um único parágrafo, com objetivo, método, resultados e limitações. Base do estudo fictício: 120 voluntários adultos de um único curso online, alocação aleatória em dois grupos de 60. Durante oito semanas, o grupo A recebeu exercícios com feedback semanal e o B recebeu os mesmos exercícios sem esse feedback. Média inicial na prova de 0 a 100: 50 em ambos. Média final: 68 no A e 61 no B. Não foram fornecidos desvios-padrão, intervalos de confiança, dados individuais, cegamento, taxa de abandono ou avaliação após oito semanas. Apresente a diferença entre as médias finais e os ganhos em relação ao início. Não invente autoria, revista, aprovação ética, significância estatística ou taxa de abandono. A randomização deve ser mencionada, mas não elimina as limitações disponíveis.",
+      "checks": [
+        "180 a 240 palavras, um parágrafo e quatro componentes.",
+        "Ganhos 18 e 11 pontos; diferença final de 7 pontos, não 7%.",
+        "Preservar amostra, grupos, randomização e duração.",
+        "Sem significância, detalhes metodológicos ou fonte bibliográfica inventados."
+      ]
+    },
+    {
+      "id": "12-discussao-estudo",
+      "genre": "Acadêmico",
+      "title": "Discussão das limitações de um estudo",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma discussão acadêmica de 250 a 350 palavras, em quatro parágrafos: interpretação, explicações alternativas, limitações, implicação cautelosa. Base do estudo fictício: 120 voluntários adultos de um único curso online, alocação aleatória em dois grupos de 60. Durante oito semanas, o grupo A recebeu exercícios com feedback semanal e o B recebeu os mesmos exercícios sem esse feedback. Média inicial na prova de 0 a 100: 50 em ambos. Média final: 68 no A e 61 no B. Não foram fornecidos desvios-padrão, intervalos de confiança, dados individuais, cegamento, taxa de abandono ou avaliação após oito semanas. Distingua diferença descritiva de estimativa precisa de efeito. Explique por que ausência de dispersão e de seguimento limita conclusões. Possíveis vieses podem ser hipóteses, nunca fatos ocorridos. Não conclua benefício duradouro ou universal.",
+      "checks": [
+        "250 a 350 palavras e quatro parágrafos na ordem pedida.",
+        "Diferença final 7 pontos, sem p-valor ou intervalo inventado.",
+        "Distinguir hipóteses de vieses de eventos comprovados.",
+        "Sem extrapolação duradoura, universal ou abandono inventado."
+      ]
+    },
+    {
+      "id": "13-cache-iniciantes",
+      "genre": "Didático",
+      "title": "Cache explicado para iniciantes",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nExplique cache a um iniciante em programação, em 170 a 240 palavras, com três parágrafos e um exemplo cotidiano. Contrato do exemplo técnico: uma página guarda por até 30 segundos o preço retornado por uma API; dentro desse período pode mostrar o valor guardado sem consultar novamente; depois do prazo a próxima consulta pede um valor à API. Esse cache não recebe notificações de mudanças. Explique ganho de reutilização e risco de preço desatualizado. A analogia deve deixar claro que cache não é a fonte oficial dos dados. Não acrescente invalidação automática por mudança de preço.",
+      "checks": [
+        "170 a 240 palavras e três parágrafos.",
+        "Preservar validade de até 30 segundos e consulta após expiração.",
+        "Explicar reutilização e possibilidade de dado desatualizado.",
+        "Não inventar notificações ou atualização instantânea."
+      ]
+    },
+    {
+      "id": "14-probabilidade-condicional",
+      "genre": "Didático",
+      "title": "Resolução comentada de probabilidade condicional",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nResolva em 200 a 280 palavras um problema para alunos com conhecimentos de probabilidade. Em uma fábrica hipotética, 2% de 10.000 peças têm defeito. Um sensor sinaliza 90% das peças defeituosas e 5% das peças sem defeito. Monte uma tabela 2×2 com números de peças (defeito/sem defeito versus sinalizado/não sinalizado). Calcule a fração de peças realmente defeituosas entre as sinalizadas, arredondando o percentual a uma casa decimal. Explique por que 90% não é a resposta dessa pergunta. Os percentuais do enunciado são exatos no modelo; não acrescente incerteza amostral.",
+      "checks": [
+        "Tabela: 180/20 com defeito e 490/9.310 sem defeito, nas colunas sinalizado/não sinalizado.",
+        "180/670 = 26,9% arredondado; 200 a 280 palavras.",
+        "Distinguir sensibilidade de valor preditivo e manter base de 10.000 peças.",
+        "Não trocar o denominador nem inventar dados."
+      ]
+    },
+    {
+      "id": "15-proposta-comercial",
+      "genre": "Negócios",
+      "title": "Proposta comercial baseada em briefing",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nRedija uma proposta de 220 a 320 palavras, com seções Escopo, Prazo, Investimento, Exclusões e Próximo passo, nessa ordem. Cliente fictício Estúdio Boreal; oferta: integrar um sistema de estoque a uma API de pedidos já existente, com homologação pelo cliente. Uma integração, sem aplicativo móvel nem migração de dados históricos. Prazo estimado de seis semanas a partir da entrega das credenciais e aprovação do mapeamento pelo cliente. Implantação: R$ 30.000, em duas parcelas iguais (assinatura e aceite da homologação). Manutenção opcional: R$ 600 por mês, até duas horas mensais de suporte. Não há metas de economia ou retorno financeiro contratadas. Próximo passo: aprovar escopo e indicar responsável pela homologação. Não invente SLA, descontos ou ROI.",
+      "checks": [
+        "Cinco seções e 220 a 320 palavras.",
+        "Parcelas de R$ 15.000; manutenção opcional de R$ 600/mês e duas horas.",
+        "Prazo condicionado à entrega e aprovação; preservar exclusões.",
+        "Não inventar ROI, SLA, desconto ou expansão de escopo."
+      ]
+    },
+    {
+      "id": "16-nota-investimento",
+      "genre": "Negócios",
+      "title": "Nota executiva comparando infraestrutura",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma nota executiva de 200 a 280 palavras, com tabela de custos, recomendação condicional e limites. Empresa fictícia compara duas alternativas para 24 meses. Local: compra inicial de R$ 120.000 e operação de R$ 4.000/mês. Nuvem: sem compra inicial e mensalidade de R$ 6.000. Premissa do exercício: ambas atendem a mesma carga e requisito de disponibilidade, mas isso ainda deve ser validado por teste. Calcule custo nominal total e diferença, sem desconto a valor presente. Migração, impostos adicionais, câmbio, valor residual e custo de capital estão fora da base; não suponha que sejam zero na realidade. Recomende a opção de menor custo apenas dentro dessas premissas.",
+      "checks": [
+        "Totais nominais R$ 216.000 e R$ 144.000; diferença de R$ 72.000.",
+        "200 a 280 palavras e formato solicitado.",
+        "Preservar horizonte de 24 meses e premissas não validadas.",
+        "Não alegar superioridade geral nem incorporar custos desconhecidos como zero real."
+      ]
+    },
+    {
+      "id": "17-email-prazo",
+      "genre": "Comunicação profissional",
+      "title": "E-mail de negociação de prazo",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um e-mail de 90 a 140 palavras, incluindo assunto e despedida, dirigido à cliente fictícia Marina, assinado por Paula, da equipe de integração. Base: entrega prevista para 9 de outubro de 2026; arquivo obrigatório do cliente, previsto para 5 de outubro, foi recebido em 7 de outubro. A equipe precisa de dois dias úteis para validação após o recebimento, antes da homologação. Paula propõe, para aprovação de Marina, mudar a entrega para 13 de outubro e manter uma demonstração parcial em 9 de outubro. Não calcular feriados nem afirmar que a proposta já foi aceita. Negocie com respeito, sem acusar o cliente nem assumir penalidades ou descontos.",
+      "checks": [
+        "90 a 140 palavras, assunto, destinatária fictícia e assinatura de Paula.",
+        "Preservar datas, dois dias úteis, proposta e demonstração parcial.",
+        "Não apresentar aprovação, garantia ou penalidade inexistentes."
+      ]
+    },
+    {
+      "id": "18-comunicado-indisponibilidade",
+      "genre": "Comunicação profissional",
+      "title": "Comunicado sobre indisponibilidade",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nRedija um comunicado de 100 a 160 palavras aos clientes do serviço fictício Painel Aurora, com título e dois parágrafos. Em 1º de outubro de 2026, das 14h10 às 14h42 (UTC-3), usuários não conseguiram acessar o painel; o serviço foi restabelecido às 14h42. A equipe ainda investiga a causa. Até a apuração desse comunicado, nenhuma perda de dados foi confirmada, mas a análise dos registros não terminou. Atualização da investigação prevista para 2 de outubro às 12h (UTC-3). Não afirme ausência definitiva de perda, causa raiz, compensação, garantia de não recorrência ou duração inferior à real.",
+      "checks": [
+        "Intervalo de 32 minutos e horários em UTC-3 preservados.",
+        "100 a 160 palavras; título e dois parágrafos.",
+        "Distinguir nenhuma perda confirmada de comprovação de ausência de perda.",
+        "Manter investigação pendente e data da próxima atualização."
+      ]
+    },
+    {
+      "id": "19-ia-educacao",
+      "genre": "Opinião e ensaio",
+      "title": "Artigo argumentativo sobre IA na educação",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um artigo de opinião de 280 a 380 palavras, com título e quatro parágrafos, sobre uso de IA na educação. Defenda uma posição clara que permita apoio à aprendizagem sem delegar a avaliação integralmente a um modelo. Trate como argumentos, não resultados de estudos: feedback pode ser útil; respostas automáticas podem conter erros; usar uma ferramenta não comprova aprendizagem; professores precisam conhecer como o estudante chegou à resposta. Inclua um contraponto plausível e responda a ele. Não invente estatísticas, estudos, especialistas, experiência pessoal ou consenso científico.",
+      "checks": [
+        "280 a 380 palavras; título, quatro parágrafos, tese e contraponto.",
+        "Separar argumento normativo de evidência empírica.",
+        "Não inventar fonte, experiência, estatística ou consenso."
+      ]
+    },
+    {
+      "id": "20-ensaio-produtividade",
+      "genre": "Opinião e ensaio",
+      "title": "Ensaio sobre produtividade e interrupções",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um ensaio de 250 a 350 palavras, sem subtítulos e com cinco parágrafos. Explore a tensão entre proteger o tempo de concentração e permanecer disponível para a equipe. Use uma situação explicitamente hipotética: alguém bloqueia duas horas para concluir uma análise, mas uma colega precisa de ajuda para destravar uma entrega. Inclua contrapontos, sem apresentar produtividade como obrigação moral nem concluir que existe uma rotina universal. Não atribua essa experiência a você ou a Ricardo e não invente dados de pesquisa.",
+      "checks": [
+        "250 a 350 palavras, cinco parágrafos e nenhum subtítulo.",
+        "Exemplo identificado como hipotético e contraponto presente.",
+        "Sem autobiografia, dados inventados ou solução universal."
+      ]
+    },
+    {
+      "id": "21-linkedin-aprendizado",
+      "genre": "Redes sociais",
+      "title": "Post de LinkedIn sobre um aprendizado documentado",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um post de LinkedIn de 130 a 200 palavras, em primeira pessoa de uma coordenadora fictícia, explicitamente como simulação editorial. Comece com a frase literal \"Exemplo fictício para avaliação editorial.\" Base do registro simulado: equipe criou um checklist de revisão de deploy. Nas quatro semanas anteriores foram 28 deploys e 12 rollbacks; nas quatro posteriores, 35 deploys e três rollbacks. Mediana do tempo de deploy: 30 minutos antes e 18 depois. Não houve grupo de controle e outras mudanças na equipe não foram registradas. Conte o aprendizado sem atribuir causalidade exclusiva ao checklist, sem generalizar para outras empresas e sem pedir seguidores, inserir hashtags ou inventar um episódio pessoal adicional.",
+      "checks": [
+        "130 a 200 palavras e aviso literal no início.",
+        "Preservar períodos, 28/35 deploys, 12/3 rollbacks e medianas de 30/18 minutos.",
+        "Se comparar taxas, usar denominadores corretos; não trocar mediana por média.",
+        "Sem causalidade exclusiva, hashtags, pedido de seguidores ou experiência de Ricardo."
+      ]
+    },
+    {
+      "id": "22-roteiro-hash",
+      "genre": "Redes sociais",
+      "title": "Roteiro curto explicando hash e senha",
+      "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nCrie um roteiro de vídeo educativo de 45 a 60 segundos, com fala de 100 a 140 palavras e três indicações visuais curtas separadas da fala. Tema: por que um serviço não deve guardar senhas em texto aberto. Base conceitual fornecida: uma função adequada para senhas combina processamento deliberadamente caro e salt individual; o resultado armazenado é verificado contra a senha apresentada, sem recuperar a senha original; hash não é criptografia reversível; salt não precisa ser secreto e dificulta reutilizar tabelas pré-calculadas; senhas fracas ainda podem ser adivinhadas por tentativa. Evite recomendar hash rápido genérico como solução suficiente ou afirmar proteção absoluta. Não cite algoritmo específico nem invente demonstração de ataque.",
+      "checks": [
+        "Fala de 100 a 140 palavras e exatamente três indicações visuais.",
+        "Distinguir hash de criptografia reversível e salt de segredo.",
+        "Preservar custo deliberado e risco de tentativas com senhas fracas.",
+        "Não recomendar hash rápido genérico nem garantia absoluta."
+      ]
+    },
+    {
+      "id": "23-conto-oficina",
+      "genre": "Literário",
+      "title": "Conto em primeira pessoa na oficina",
+      "prompt": "Escreva um conto ficcional de 180 a 240 palavras em português brasileiro, em primeira pessoa, narrado por uma aprendiz de relojoaria. Durante o último atendimento antes de fechar a oficina, ela encontra dentro de um relógio parado um bilhete sem assinatura com a frase literal \"não acerte a hora\". Uma cliente volta para buscar o relógio antes do fechamento. Construa uma cena concreta e um final aberto, sem explicar por completo o bilhete. Entregue somente o conto, sem título, prefácio ou moral final. Não use travessão longo.",
+      "checks": [
+        "180 a 240 palavras, primeira pessoa e somente o conto.",
+        "Aprendiz, oficina, relógio parado, cliente que retorna e bilhete literal presentes.",
+        "Final aberto; sem explicação completa ou moral obrigatória."
+      ]
+    },
+    {
+      "id": "24-cronica-lavanderia",
+      "genre": "Literário",
+      "title": "Crônica ficcional de uma lavanderia",
+      "prompt": "Escreva uma crônica explicitamente ficcional de 200 a 280 palavras em português brasileiro. Use o título literal \"Crônica ficcional: a meia no recibo\". Narrador em primeira pessoa passa a manhã em uma lavanderia de bairro; a atendente anota no recibo uma meia sem par que não é dele. Explore esse pequeno desencontro com observação cotidiana e humor discreto, sem transformá-lo em lição de vida. Não atribua o episódio a uma pessoa real. Entregue somente a crônica com o título solicitado. Não use travessão longo.",
+      "checks": [
+        "200 a 280 palavras incluindo o título literal.",
+        "Primeira pessoa, lavanderia, atendente, recibo e meia de outra pessoa.",
+        "Ficção explícita; humor contextual sem moral pronta."
+      ]
+    }
+  ]
+}

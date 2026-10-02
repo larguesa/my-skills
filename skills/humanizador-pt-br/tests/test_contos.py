@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import re
 import sys
 import tempfile
 import unittest
@@ -150,6 +151,105 @@ class StoryTests(unittest.TestCase):
             self.assertIn('| Entre 80 e 120 palavras | 34/38 | 36/38 |', text)
             self.assertIn('| Sem travessão longo | 36/38 | 34/38 |', text)
             self.assertIn('| Ambas as verificações | 33/38 | 33/38 |', text)
+
+    def test_experiment_documents_preserve_all_real_pairs(self):
+        import relatorio
+        self.assertTrue(callable(getattr(relatorio, 'experiment_documents', None)),
+                        'Missing per-experiment reports and summary index')
+        _, records, tables = relatorio.results()
+        documents = relatorio.experiment_documents(tables, records, [])
+        self.assertEqual(set(documents), {'README.md', 'experiments/chave/REPORT.md',
+                                         'experiments/bolo/REPORT.md'})
+        self.assertIn('experiments/chave/REPORT.md', documents['README.md'])
+        self.assertNotIn(tables[0][1][0]['original'], documents['README.md'])
+        for case, rows in tables:
+            report = documents['experiments/' + case['id'] + '/REPORT.md']
+            self.assertIn(case['prompt'], report)
+            self.assertIn('✅', report)
+            self.assertIn('🟩', report)
+            self.assertIn('avaliação humana', report.lower())
+            self.assertIn('Custo original (USD)', report)
+            self.assertIn('Tempo com skill (s)', report)
+            self.assertEqual(report.count('| anthropic/claude-opus-5.5 (raciocínio ligado)'), 1)
+            for row in rows:
+                self.assertIn(relatorio.cell(row['original']), report)
+                self.assertIn(relatorio.cell(row['skill']), report)
+            self.assertEqual(sum(line.startswith('| ') and 'raciocínio ' in line
+                                 for line in report.splitlines()), 19)
+
+    def test_experiment_documents_reject_duplicate_or_unsafe_ids(self):
+        import relatorio
+        _, records, tables = relatorio.results()
+        for identifier in ('chave', '../escape', 'Case Name'):
+            planned = [dict(id=identifier, genre='Didático', title='Caso', prompt='Pedido', checks=['Preservar fatos'])]
+            with self.assertRaisesRegex(ValueError, 'experiment ID'):
+                relatorio.experiment_documents(tables, records, planned)
+
+    def test_render_experiments_writes_26_reports_without_paid_calls(self):
+        import relatorio
+        from collections import Counter
+        from unittest.mock import patch
+        self.assertTrue(callable(getattr(relatorio, 'render_experiments', None)),
+                        'Missing offline experiment publication')
+        cases = relatorio.load(Path(__file__).parent / 'experiments/cases.json')['cases']
+        self.assertEqual(len(cases), 24)
+        self.assertEqual(set(Counter(c['genre'] for c in cases).values()), {2})
+        self.assertEqual(len({c['genre'] for c in cases}), 12)
+        with tempfile.TemporaryDirectory() as folder:
+            destination = Path(folder)
+            with patch.object(c.urllib.request, 'urlopen', side_effect=AssertionError('Paid request forbidden')):
+                relatorio.render_experiments(destination)
+            self.assertEqual(len(list(destination.glob('experiments/*/REPORT.md'))), 26)
+            index = (destination / 'README.md').read_text()
+            self.assertEqual(index.count('⏸️ aguardando orçamento'), 24)
+            for case in cases:
+                report = (destination / 'experiments' / case['id'] / 'REPORT.md').read_text()
+                prompt_block = re.search(r'\n(`{3,})\n(.*?)\n\1\n', report, re.DOTALL)
+                self.assertIsNotNone(prompt_block, case['id'])
+                fence, prompt = prompt_block.groups()
+                self.assertEqual(prompt, case['prompt'])
+                self.assertTrue(all(len(run) < len(fence) for run in re.findall(r'`+', prompt)))
+                self.assertEqual(sum(' | pendente | pendente | pendente | pendente | pendente |' in line
+                                     for line in report.splitlines()), 19)
+                self.assertNotIn('✅', report)
+
+    def test_prepared_reports_preserve_literal_token_and_nested_python(self):
+        from html.parser import HTMLParser
+        import relatorio
+        cases = {case['id']: case for case in relatorio.load(
+            Path(__file__).parent / 'experiments/cases.json')['cases']}
+        _, records, tables = relatorio.results()
+        documents = relatorio.experiment_documents(tables, records, list(cases.values()))
+        for identifier, fence, literal in (
+                ('03-documentacao-api', '```', '<TOKEN>'),
+                ('04-analise-bug', '````', '```python\ndef collect(item, bucket=[]):\n'
+                 '    bucket.append(item)\n    return bucket\n```')):
+            with self.subTest(identifier=identifier):
+                report = documents['experiments/' + identifier + '/REPORT.md']
+                block = report.split('ainda.\n\n', 1)[1].split('\n\n## Resumo dos resultados', 1)[0]
+                opening, body = block.split('\n', 1)
+                prompt, closing = body.rsplit('\n', 1)
+                self.assertEqual(opening, fence)
+                self.assertEqual(closing, fence)
+                self.assertEqual(prompt, cases[identifier]['prompt'])
+                self.assertIn(literal, prompt)
+        with self.subTest(section='criterios-api'):
+            criteria = documents['experiments/03-documentacao-api/REPORT.md'].split(
+                '## Critérios previstos', 1)[1].split('## Tabela completa', 1)[0]
+            text = []
+            parser = HTMLParser()
+            parser.handle_data = text.append
+            parser.feed(criteria)
+            self.assertIn('<TOKEN>', ''.join(text))
+            self.assertIn('&lt;TOKEN&gt;', criteria)
+
+    def test_linkedin_check_only_forbids_the_requested_follower_cta(self):
+        import relatorio
+        cases = relatorio.load(Path(__file__).parent / 'experiments/cases.json')['cases']
+        case = next(case for case in cases if case['id'] == '21-linkedin-aprendizado')
+        self.assertIn('sem pedir seguidores', case['prompt'])
+        self.assertEqual(case['checks'][-1],
+                         'Sem causalidade exclusiva, hashtags, pedido de seguidores ou experiência de Ricardo.')
 
     def test_existing_uncertain_jev_call_is_never_replayed(self):
         state = {'prompt': 'conto', 'textos': {'t000': 'texto'}, 'pares': {}}

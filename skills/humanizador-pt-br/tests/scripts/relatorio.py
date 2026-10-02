@@ -81,11 +81,13 @@ def results():
     return config, records, tables
 
 
-def table_blocks(tables, selected=None):
+def table_blocks(tables, selected=None, records=None):
     out = []
     for case, rows in tables:
+        metrics_header = ' Custo original (USD) | Custo com skill (USD) | Tempo original (s) | Tempo com skill (s) |' if records is not None else ''
         out.extend(['## ' + case['title'], '', '**Prompt original**', '', '> ' + case['prompt'], '',
-                    '| Modelo | Resposta original | Resposta com skill | Detecção Jev | Detecção Astra | Detecção Opus 5.5 |', '|---|---|---|---|---|---|'])
+                    '| Modelo | Resposta original | Resposta com skill | Detecção Jev | Detecção Astra | Detecção Opus 5.5 |' + metrics_header,
+                    '|---|---|---|---|---|---|' + ('---:|---:|---:|---:|' if records is not None else '')])
         for row in rows:
             if selected is not None and (row['model'], row['mode']) not in selected:
                 continue
@@ -95,7 +97,13 @@ def table_blocks(tables, selected=None):
                 data = row['detection'][name]
                 choice = {'original': 'original', 'skill': 'com skill', 'empate': 'empate'}[data['preference']]
                 detection.append(f"{data['original']:.1f} → {data['skill']:.1f}; prefere {choice}")
-            out.append('| ' + ' | '.join(cell(x) for x in (label, row['original'], row['skill'], *detection)) + ' |')
+            metrics = []
+            if records is not None:
+                pair_records = [next(r for r in records if (r['case'], r['model'], r['mode'], r['arm']) ==
+                                     (case['id'], row['model'], row['mode'], arm)) for arm in ('original', 'skill')]
+                metrics = [f"{Decimal(r['cost_usd']):.8f}" for r in pair_records]
+                metrics += [f"{r['elapsed_seconds']:.1f}" for r in pair_records]
+            out.append('| ' + ' | '.join(cell(x) for x in (label, row['original'], row['skill'], *detection, *metrics)) + ' |')
         out.append('')
     return '\n'.join(out)
 
@@ -185,6 +193,128 @@ def accounting(records):
     for mid, data in sorted(groups.items()):
         out.append(f"| {mid} | {data['calls']} | {data['cost']:.8f} | {data['input']} | {data['output']} | {data['seconds']:.1f} |")
     return '\n'.join(out)
+
+
+def experiment_documents(tables, records, planned):
+    """Índice e relatórios por prompt, sem novas gerações ou alteração de respostas."""
+    ids = [case['id'] for case, _ in tables] + [case['id'] for case in planned]
+    if len(set(ids)) != len(ids) or any(not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', value) for value in ids):
+        raise ValueError('invalid or duplicate experiment ID')
+
+    def fraction(n, total, good='🟩', rest='⬜'):
+        filled = round(n / total * 10)
+        return f'{good * filled}{rest * (10 - filled)} {n}/{total} ({n / total * 100:.1f}%)'
+
+    def summary(entries, evidence):
+        lines = ['## Resumo dos resultados', '',
+                 '| Juiz | Impressão de IA: original → skill | Prefere com skill | Prefere original | Empate |',
+                 '|---|---:|---|---|---|']
+        for name, data in aggregate_results(entries).items():
+            lines.append('| ' + ' | '.join(['Opus 5.5' if name == 'Opus' else name,
+                f'{data["original_mean"]:.2f} → {data["skill_mean"]:.2f} ({data["delta_mean"]:+.2f} pontos)',
+                fraction(data['skill'], data['pairs']), fraction(data['original'], data['pairs'], '🟦'),
+                fraction(data['empate'], data['pairs'], '🟨')]) + ' |')
+        lines += ['', 'As barras de preferência indicam votos, não sucesso factual. Menor impressão de IA não prova melhor texto ou autoria humana.', '',
+                  '| Verificação mecânica | Original | Com skill |', '|---|---|---|']
+        for label, check in [('80 a 120 palavras', lambda s: 80 <= len(s.split()) <= 120),
+                             ('Sem travessão longo', lambda s: '\u2014' not in s),
+                             ('Ambas', lambda s: 80 <= len(s.split()) <= 120 and '\u2014' not in s)]:
+            values = []
+            for arm in ('original', 'skill'):
+                texts = [r['edited'] for r in evidence if r['arm'] == arm]
+                values.append(fraction(sum(check(s) for s in texts), len(texts), rest='🟥'))
+            lines.append('| ' + ' | '.join([label, *values]) + ' |')
+        return '\n'.join(lines)
+
+    documents = {}
+    n_pairs = sum(len(rows) for _, rows in tables)
+    routes = sorted({(r['model'], r['mode']) for r in records})
+    index = ['# Humanizador PT-BR: resumo e índice dos testes', '',
+             f'✅ {len(tables)} casos concluídos: {len(records)} textos, {n_pairs} pares e {n_pairs * 3} julgamentos de pares. '
+             f'⏸️ {len(planned)} novos casos preparados, sem geração paga ou resultados.', '',
+             'A avaliação humana continua pendente. A rodada nova depende de um teto de gasto específico; o teto de US$ 10 era do piloto anterior.', '',
+             '## Legenda visual', '',
+             '✅ dados e julgamentos completos; ⏸️ execução pendente; 🟩 voto na skill ou verificação aprovada; '
+             '🟦 voto no original; 🟨 empate; 🟥 verificação reprovada; ⬜ parcela restante. '
+             'As contagens e os rótulos tornam as tabelas legíveis sem depender das cores. As barras têm dez posições, arredondadas.', '',
+             summary(tables, records), '',
+             'As médias usam peso igual por par/configuração. Os três juízes opinaram sobre os mesmos textos em seis chamadas em lote, '
+             'produzindo 228 índices individuais de impressão de IA. Não se somam suas escalas como probabilidades calibradas. '
+             'A menor impressão média de IA veio acompanhada de preferência divergente: Jev preferiu mais originais; '
+             'Astra e Opus preferiram mais versões com skill. Os novos gêneros ainda não foram avaliados.', '',
+             '## Índice dos experimentos', '',
+             '| Conteúdo | Caso | Estado | Textos | Pares | Custo de geração (USD) | Tempo de chamadas (s) |',
+             '|---|---|---|---:|---:|---:|---:|']
+    for case, rows in tables:
+        evidence = [r for r in records if r['case'] == case['id']]
+        cost = sum((Decimal(r['cost_usd']) for r in evidence), Decimal(0))
+        seconds = sum(r['elapsed_seconds'] for r in evidence)
+        path = 'experiments/' + case['id'] + '/REPORT.md'
+        index.append(f'| Literário | [{cell(case["title"])}]({path}) | ✅ concluído | {len(evidence)} | {len(rows)} | {cost:.8f} | {seconds:.1f} |')
+        report = [f'# {case["title"]}', '', '✅ Gerações e três juízes concluídos. Avaliação humana pendente.', '',
+                  f'{len(evidence)} textos e {len(rows)} pares em gerações independentes, não reescritas. '
+                  'Cada par recebeu o mesmo pedido; apenas a condição com skill recebeu suas instruções editoriais.', '',
+                  summary([(case, rows)], evidence), '',
+                  f'Geração: US$ {cost:.8f}; tempo somado das chamadas: {seconds:.1f} s. '
+                  'Tempos são durações registradas das requisições, não o tempo total da rodada. '
+                  'Custos de juízes, sondagens e reconciliação estão no [relatório da rodada](../../REPORT.md#consumo-desta-rodada).', '',
+                  '## Prompt e tabela completa', '', table_blocks([(case, rows)], records=evidence), '',
+                  '## Leitura crítica e limites', '',
+                  'Índices de impressão de IA vão de 0 a 100 e não são probabilidades de autoria. '
+                  'Preferência é medida separadamente. Todos os textos são de IA; não houve edição ou escolha guiada por notas. '
+                  'Os três juízes opinam sobre os mesmos pares, sem equivaler a experimentos independentes. '
+                  'Naturalidade, clareza, gênero e correção não receberam notas separadas no protocolo histórico. '
+                  'As verificações mecânicas não validam continuidade, precisão ou voz.', '',
+                  'Leia os dois textos antes de consultar os juízes. A avaliação humana pode preferir qualquer condição, nenhuma delas ou empate.', '',
+                  'Há emendas de rota MiMo no conto do bolo, preservadas no [registro de recuperação](../../RECOVERY.md). '
+                  'Uma geração por condição e dois contos não demonstram eficácia geral.', '',
+                  '[Respostas e julgamentos brutos](../../results/) · [Protocolo histórico](../../PROTOCOL.md) · [Voltar ao índice](../../README.md)', '']
+        documents[path] = '\n'.join(report)
+    # ponytail: preparação sem orçamento não executa modelos; ampliar o runner apenas após autorização.
+    for case in planned:
+        path = 'experiments/' + case['id'] + '/REPORT.md'
+        fence = '`' * max(3, 1 + max((len(run) for run in re.findall(r'`+', case['prompt'])), default=0))
+        index.append(f'| {cell(case["genre"])} | [{cell(case["title"])}]({path}) | ⏸️ aguardando orçamento | 0 | 0 | não executado | não executado |')
+        report = ['# ' + case['title'], '', '⏸️ Caso preparado; nenhuma geração nem julgamento foi executado.', '',
+                  '## Prompt previsto para as duas condições', '',
+                  'Este é o pedido a usar sem e com skill, em chamadas independentes. Não foi utilizado para gerar um texto ainda.', '',
+                  fence, case['prompt'], fence, '',
+                  '## Resumo dos resultados', '',
+                  '| Etapa | Estado |', '|---|---|',
+                  '| Geração sem e com skill | ⏸️ 0/38 textos |',
+                  '| Trio de juízes | ⏸️ não executado |',
+                  '| Avaliação humana | ⏸️ pendente |', '',
+                  '## Critérios previstos', '',
+                  'Naturalidade, clareza, adequação ao gênero e correção serão avaliadas separadamente. '
+                  'Impressão de IA e preferência não substituirão a verificação de fidelidade. '
+                  'Os critérios e o controle de execução serão congelados antes da primeira chamada paga.', '',
+                  *('- ' + escape(check, quote=False) for check in case['checks']), '',
+                  '## Tabela completa da matriz prevista', '',
+                  'Todas as posições abaixo estão pendentes. Não são falhas observadas nem resultados simulados.', '',
+                  '| Modelo/configuração histórica | Original | Com skill | Jev | Astra | Opus 5.5 |', '|---|---|---|---|---|---|']
+        for model, mode in routes:
+            label = model + (' (raciocínio ligado)' if mode == 'on' else ' (raciocínio desligado solicitado)')
+            report.append('| ' + label + ' | pendente | pendente | pendente | pendente | pendente |')
+        report += ['', 'As 19 configurações históricas são uma referência, não uma confirmação atual de disponibilidade. '
+                   'Rotas efetivas e aceitação dos modos de raciocínio devem ser verificadas antes da execução. '
+                   'Nenhum modelo será substituído silenciosamente.', '',
+                   '[Planejamento e critérios comuns](../PLAN.md) · [Voltar ao índice](../../README.md)', '']
+        documents[path] = '\n'.join(report)
+    index += ['', '## Contabilidade e evidências', '',
+              'O custo de geração por caso não inclui juízes. A rodada dos dois contos custou US$ 1.01871632, '
+              'com juízes e sondagens. O histórico anterior custou US$ 1.01376563 e permanece separado. '
+              'A preparação desta página não executa inferência paga.', '',
+              '[Relatório integral da rodada histórica](REPORT.md) · [Resultados brutos](results/) · '
+              '[Piloto anterior](historico-20260929/REPORT.md) · [Planejamento dos novos casos](experiments/PLAN.md)', '',
+              '## Testes de software', '',
+              '`test_humanizar.py`: editor local e proteção de dados. '
+              '`test_benchmark.py`: execução, orçamento e tratamento de falhas. '
+              '`test_contos.py`: desenho A/B, juízes, integridade e relatórios. '
+              'Esses testes verificam código, não qualidade literária.', '',
+              'Para recriar o índice e os relatórios a partir das evidências preservadas, sem chamar modelos:', '',
+              '```text', 'python3 skills/humanizador-pt-br/tests/scripts/relatorio.py --experiments', '```', '']
+    documents['README.md'] = '\n'.join(index)
+    return documents
 
 
 def render():
@@ -286,7 +416,7 @@ Contagem por separação em espaços, incluindo eventuais títulos não solicita
 
 Escreva ou revise em português brasileiro sem ficar preso à cara de um texto genérico. A skill orienta ritmo, detalhes úteis e uma voz coerente, preservando fatos na revisão e permitindo invenção quando o pedido é ficcional.
 
-**Veja o resultado, não apenas a promessa.** O primeiro teste apresenta dois pequenos contos, 14 modelos e 38 pares sem/com skill. Abaixo há exemplos fixos de três famílias; o conjunto completo está no [README dos testes](tests/README.md) e no [relatório final](tests/REPORT.md).
+**Veja o resultado, não apenas a promessa.** O primeiro teste apresenta dois pequenos contos, 14 modelos e 38 pares sem/com skill. Abaixo há exemplos fixos de três famílias. O [índice dos testes](tests/README.md) traz resumos visuais e relatórios completos por pedido em `tests/experiments/`, além de 24 novos casos preparados em 12 gêneros, aguardando orçamento para execução. O [relatório da rodada histórica](tests/REPORT.md) preserva os resultados e a contabilidade anteriores.
 
 A avaliação humana está pendente. Não anunciamos ganho garantido, vencedor ou proteção contra detectores. Nas colunas de detecção, cada número é uma impressão do juiz, de 0 a 100, na ordem original → com skill; não é uma probabilidade de autoria. Ambos os textos foram gerados por IA.
 
@@ -337,5 +467,23 @@ Use `--protect "termo"` para proteção adicional. A comparação mecânica não
     print(json.dumps({'pairs': summary['pairs'], 'rows_in_each_full_document': sum(len(rows) for _, rows in tables), 'root_example_rows': sum((r['model'], r['mode']) in selected for _, rows in tables for r in rows)}))
 
 
+def render_experiments(destination=TESTS):
+    _, records, tables = results()
+    cases = load(TESTS / 'experiments/cases.json')['cases']
+    documents = experiment_documents(tables, records, cases)
+    for relative, content in documents.items():
+        target = Path(destination) / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding='utf-8')
+    print(json.dumps({'completed_cases': len(tables), 'prepared_cases': len(cases),
+                      'reports': len(documents) - 1, 'paid_calls': 0}))
+
+
 if __name__ == '__main__':
-    render()
+    if sys.argv[1:] == ['--experiments']:
+        render_experiments()
+    elif not sys.argv[1:]:
+        render()
+        render_experiments()
+    else:
+        raise SystemExit('Use relatorio.py [--experiments]')

@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Apresentação e uso](skills/humanizador-pt-br/README.me): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O primeiro teste prático compara pequenos contos sem e com a skill em 14 modelos, com Jev, Astra e Opus 5.5 como juízes. [Leia os contos lado a lado](skills/humanizador-pt-br/tests/README.md) ou o [relatório](skills/humanizador-pt-br/tests/REPORT.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
+[Apresentação e uso](skills/humanizador-pt-br/README.me): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O [índice dos testes](skills/humanizador-pt-br/tests/README.md) reúne resumos visuais e relatórios individuais em `tests/experiments/`: dois contos concluídos, em 14 modelos e 19 configurações, e 24 novos casos preparados em 12 gêneros, ainda aguardando orçamento para execução. Jev, Astra e Opus 5.5 aparecem em colunas próprias. [Relatório da rodada histórica](skills/humanizador-pt-br/tests/REPORT.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
 
 ## Telegraphist
 
