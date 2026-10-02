@@ -91,6 +91,66 @@ class StoryTests(unittest.TestCase):
         import relatorio
         self.assertEqual(relatorio.cell('A | B\n<teste> & fim'), 'A \\| B<br>&lt;teste&gt; &amp; fim')
 
+    def test_story_tables_have_one_detection_column_per_judge(self):
+        import relatorio
+        _, _, tables = relatorio.results()
+        rendered = relatorio.table_blocks(tables)
+        header = '| Modelo | Resposta original | Resposta com skill | Detecção Jev | Detecção Astra | Detecção Opus 5.5 |'
+        self.assertEqual(rendered.count(header), 2)
+        rows = [line for line in rendered.splitlines() if line.startswith('| ') and line != header]
+        self.assertEqual(len(rows), 38)
+        for line, row in zip(rows, [row for _, entries in tables for row in entries]):
+            columns = line.split(' | ')
+            self.assertEqual(len(columns), 6)
+            self.assertEqual(columns[1], relatorio.cell(row['original']))
+            self.assertEqual(columns[2], relatorio.cell(row['skill']))
+        self.assertIn('| 64.0 → 58.0; prefere original | 86.0 → 78.0; prefere com skill | 60.0 → 45.0; prefere com skill |', rendered)
+
+    def test_aggregate_results_keeps_preferences_separate_from_detection(self):
+        import relatorio
+        self.assertTrue(callable(getattr(relatorio, 'aggregate_results', None)), 'Missing judgment aggregation')
+        rows = [{'detection': {name: dict(original=a, skill=b, preference=p)
+                              for name in ('Jev', 'Astra', 'Opus')}}
+                for a, b, p in ((80, 20, 'original'), (10, 70, 'skill'), (50, 50, 'empate'))]
+        result = relatorio.aggregate_results([({}, rows)])
+        for stats in result.values():
+            self.assertEqual(stats['pairs'], 3)
+            self.assertAlmostEqual(stats['original_mean'], 140 / 3)
+            self.assertAlmostEqual(stats['skill_mean'], 140 / 3)
+            self.assertEqual(stats['delta_mean'], 0)
+            self.assertEqual((stats['lower'], stats['equal'], stats['higher']), (1, 1, 1))
+            self.assertEqual((stats['skill'], stats['original'], stats['empate']), (1, 1, 1))
+
+    def test_aggregate_results_rejects_empty_sample(self):
+        import relatorio
+        self.assertTrue(callable(getattr(relatorio, 'aggregate_results', None)), 'Missing judgment aggregation')
+        with self.assertRaisesRegex(ValueError, 'empty'):
+            relatorio.aggregate_results([])
+
+    def test_renderer_puts_consolidated_results_before_story_tables(self):
+        import relatorio
+        from unittest.mock import patch
+        documents = {}
+        with patch.object(Path, 'write_text', autospec=True,
+                          side_effect=lambda path, text, **kwargs: documents.setdefault(path.name, text)):
+            relatorio.render()
+        for name in ('README.md', 'REPORT.md'):
+            text = documents[name]
+            self.assertIn('## Resultados consolidados', text)
+            self.assertLess(text.index('## Resultados consolidados'), text.index('## Como ler as colunas de detecção'))
+            self.assertLess(text.index('## Resultados consolidados'), text.index('## A chave no ônibus'))
+            self.assertIn('114 julgamentos de pares', text)
+            self.assertIn('228 índices individuais', text)
+            self.assertIn('| Jev | 60.29 | 52.63 | -7.66 | 33 / 0 / 5 |', text)
+            self.assertIn('| Astra | 84.45 | 72.61 | -11.84 | 34 / 0 / 4 |', text)
+            self.assertIn('| Opus 5.5 | 65.26 | 51.18 | -14.08 | 36 / 1 / 1 |', text)
+            self.assertIn('| Total (114 julgamentos) | 71/114 (62.3%) | 43/114 (37.7%) | 0/114 (0.0%) |', text)
+            self.assertIn('| A chave no ônibus | 19 | 36/57 (63.2%) | 21/57 (36.8%) | 0/57 (0.0%) |', text)
+            self.assertIn('| O bolo na portaria | 19 | 35/57 (61.4%) | 22/57 (38.6%) | 0/57 (0.0%) |', text)
+            self.assertIn('| Entre 80 e 120 palavras | 34/38 | 36/38 |', text)
+            self.assertIn('| Sem travessão longo | 36/38 | 34/38 |', text)
+            self.assertIn('| Ambas as verificações | 33/38 | 33/38 |', text)
+
     def test_existing_uncertain_jev_call_is_never_replayed(self):
         state = {'prompt': 'conto', 'textos': {'t000': 'texto'}, 'pares': {}}
         with tempfile.TemporaryDirectory() as folder:

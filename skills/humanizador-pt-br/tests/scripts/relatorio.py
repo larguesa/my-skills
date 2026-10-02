@@ -67,16 +67,15 @@ def results():
             keys = {v['arm']: tid for tid, v in mapping.items() if v['model'] == route['model'] and v['mode'] == route['mode']}
             tids = set(keys.values())
             pid, pair = next((pid, p) for pid, p in paired.items() if set(p.values()) == tids)
-            detection = []
+            detection = {}
             for name, judgment in scores.items():
-                values = [f"{judgment['deteccao'][keys[arm]]:.1f}" for arm in ('original', 'skill')]
                 pref = judgment['preferencia'][pid]
                 choice = 'empate' if pref == 'empate' else mapping[pair[pref]]['arm']
-                choice = {'original': 'original', 'skill': 'com skill', 'empate': 'empate'}[choice]
-                detection.append(f'{name}: {values[0]} → {values[1]}; prefere {choice}')
+                detection[name] = {arm: judgment['deteccao'][keys[arm]] for arm in ('original', 'skill')}
+                detection[name]['preference'] = choice
             original, skill = [next(r for r in records if r['model'] == route['model'] and r['mode'] == route['mode'] and r['case'] == case['id'] and r['arm'] == arm)['edited'] for arm in ('original', 'skill')]
             row = dict(model=route['model'], mode=route['mode'], original=original, skill=skill,
-                       detection='\n'.join(detection))
+                       detection=detection)
             rows.append(row)
         tables.append((case, rows))
     return config, records, tables
@@ -86,13 +85,90 @@ def table_blocks(tables, selected=None):
     out = []
     for case, rows in tables:
         out.extend(['## ' + case['title'], '', '**Prompt original**', '', '> ' + case['prompt'], '',
-                    '| Modelo | Resposta original | Resposta com skill | Detecção |', '|---|---|---|---|'])
+                    '| Modelo | Resposta original | Resposta com skill | Detecção Jev | Detecção Astra | Detecção Opus 5.5 |', '|---|---|---|---|---|---|'])
         for row in rows:
             if selected is not None and (row['model'], row['mode']) not in selected:
                 continue
             label = row['model'] + (' (raciocínio ligado)' if row['mode'] == 'on' else ' (raciocínio desligado solicitado)')
-            out.append('| ' + ' | '.join(cell(x) for x in (label, row['original'], row['skill'], row['detection'])) + ' |')
+            detection = []
+            for name in ('Jev', 'Astra', 'Opus'):
+                data = row['detection'][name]
+                choice = {'original': 'original', 'skill': 'com skill', 'empate': 'empate'}[data['preference']]
+                detection.append(f"{data['original']:.1f} → {data['skill']:.1f}; prefere {choice}")
+            out.append('| ' + ' | '.join(cell(x) for x in (label, row['original'], row['skill'], *detection)) + ' |')
         out.append('')
+    return '\n'.join(out)
+
+
+def aggregate_results(tables):
+    rows = [row for _, entries in tables for row in entries]
+    if not rows:
+        raise ValueError('empty judgment sample')
+    out = {}
+    for name in ('Jev', 'Astra', 'Opus'):
+        data = [row['detection'][name] for row in rows]
+        n = len(data)
+        out[name] = dict(
+            pairs=n,
+            original_mean=sum(d['original'] for d in data) / n,
+            skill_mean=sum(d['skill'] for d in data) / n,
+            delta_mean=sum(d['skill'] - d['original'] for d in data) / n,
+            lower=sum(d['skill'] < d['original'] for d in data),
+            equal=sum(d['skill'] == d['original'] for d in data),
+            higher=sum(d['skill'] > d['original'] for d in data),
+            **{choice: sum(d['preference'] == choice for d in data) for choice in ('skill', 'original', 'empate')})
+    return out
+
+
+def aggregate_block(tables, records, judge_calls):
+    # ponytail: interpretação desta rodada congelada; revisar a síntese antes de publicar outra rodada.
+    stats = aggregate_results(tables)
+    pairs = sum(len(rows) for _, rows in tables)
+    judgments = pairs * len(stats)
+    out = ['## Resultados consolidados', '',
+           f'Esta consolidação considera somente a rodada de contos, sem misturar o histórico anterior: {len(tables)} pedidos, '
+           f'{len({r["model"] for r in records})} modelos, {len({(r["model"], r["mode"]) for r in records})} configurações de modelo/raciocínio, '
+           f'{len(records)} textos e {pairs} pares sem/com skill. Os três juízes avaliaram todos os pares: '
+           f'**{judgments} julgamentos de pares e {judgments * 2} índices individuais**, obtidos em {judge_calls} chamadas de julgamento em lote.', '',
+           '### Impressão de escrita por IA', '',
+           f'Índice de 0 a 100, não uma probabilidade de autoria. Cada média usa os mesmos {pairs} pares do respectivo juiz. '
+           'Variação = com skill menos original, em pontos do índice. A última coluna conta pares com índice menor, igual ou maior na versão com skill.', '',
+           '| Juiz | Média original | Média com skill | Variação média (pontos) | Pares: menor / igual / maior |',
+           '|---|---:|---:|---:|---:|']
+    for name, data in stats.items():
+        label = 'Opus 5.5' if name == 'Opus' else name
+        out.append(f'| {label} | {data["original_mean"]:.2f} | {data["skill_mean"]:.2f} | {data["delta_mean"]:+.2f} | {data["lower"]} / {data["equal"]} / {data["higher"]} |')
+    out.extend(['', '### Preferência de leitura', '',
+                'A preferência foi julgada separadamente do índice de impressão de IA. Percentuais usam o total de julgamentos indicado em cada linha.', '',
+                '| Juiz | Prefere com skill | Prefere original | Empate |', '|---|---:|---:|---:|'])
+    total = dict(pairs=judgments, **{choice: sum(d[choice] for d in stats.values()) for choice in ('skill', 'original', 'empate')})
+    for name, data in [*stats.items(), (f'Total ({judgments} julgamentos)', total)]:
+        label = 'Opus 5.5' if name == 'Opus' else name
+        out.append('| ' + ' | '.join([label, *(f'{data[choice]}/{data["pairs"]} ({data[choice] / data["pairs"] * 100:.1f}%)' for choice in ('skill', 'original', 'empate'))]) + ' |')
+    out.extend(['', '| Conto | Pares | Prefere com skill | Prefere original | Empate |', '|---|---:|---:|---:|---:|'])
+    for case, rows in tables:
+        case_stats = aggregate_results([(case, rows)])
+        n = len(rows) * len(case_stats)
+        counts = {choice: sum(d[choice] for d in case_stats.values()) for choice in ('skill', 'original', 'empate')}
+        out.append('| ' + ' | '.join([cell(case['title']), str(len(rows)), *(f'{counts[choice]}/{n} ({counts[choice] / n * 100:.1f}%)' for choice in ('skill', 'original', 'empate'))]) + ' |')
+    out.extend(['', '### Verificações mecânicas', '',
+                'Contagem por separação em espaços, incluindo títulos. Estes critérios não medem continuidade narrativa, voz ou fidelidade semântica ao pedido.', '',
+                '| Critério | Original | Com skill |', '|---|---:|---:|'])
+    for label, check in (
+            ('Entre 80 e 120 palavras', lambda text: 80 <= len(text.split()) <= 120),
+            ('Sem travessão longo', lambda text: '\u2014' not in text),
+            ('Ambas as verificações', lambda text: 80 <= len(text.split()) <= 120 and '\u2014' not in text)):
+        values = []
+        for arm in ('original', 'skill'):
+            texts = [r['edited'] for r in records if r['arm'] == arm]
+            values.append(f'{sum(check(text) for text in texts)}/{len(texts)}')
+        out.append('| ' + ' | '.join([label, *values]) + ' |')
+    out.extend(['', '**Leitura do resultado:** os três juízes atribuíram menor impressão média de IA à versão com skill, mas a preferência literária divergiu: '
+                'Jev preferiu mais originais; Astra e Opus 5.5 preferiram mais versões com skill. Menor impressão de IA não implica automaticamente um conto melhor.', '',
+                'As médias têm peso igual por par, não por modelo; modelos testados em dois modos contribuem com mais pares. '
+                'Não combinamos as médias dos juízes, cujas escalas não são calibradas. O total de preferências é uma contagem descritiva de opiniões sobre os mesmos textos, '
+                f'não {judgments} experimentos independentes. Dois pedidos e uma geração por condição não permitem generalizar superioridade. '
+                '**A avaliação humana permanece pendente.** Textos, julgamentos e skill foram preservados; esta consolidação não exigiu novas chamadas de modelos.', ''])
     return '\n'.join(out)
 
 
@@ -122,7 +198,9 @@ Leia os contos lado a lado e decida se a skill melhora a leitura. **A avaliaçã
 
 Foram gerados {len(records)} contos em {len(set(r['model'] for r in records))} modelos: dois pedidos, {len(config['routes'])} configurações de modelo/raciocínio e duas condições. Isso produz {summary['pairs']} pares. Cada par mostra a primeira resposta sem skill e a primeira resposta com a skill.
 
-## Como ler a coluna detecção
+{aggregate_block(tables, records, summary['judge_calls'])}
+
+## Como ler as colunas de detecção
 
 Cada juiz dá um índice de **impressão de escrita por IA**, de 0 a 100. A seta mostra **original → com skill**. Menor índice significa que o juiz percebeu menos marcas de escrita padronizada. A preferência ao lado indica qual conto ele considerou melhor de ler.
 
@@ -210,7 +288,7 @@ Escreva ou revise em português brasileiro sem ficar preso à cara de um texto g
 
 **Veja o resultado, não apenas a promessa.** O primeiro teste apresenta dois pequenos contos, 14 modelos e 38 pares sem/com skill. Abaixo há exemplos fixos de três famílias; o conjunto completo está no [README dos testes](tests/README.md) e no [relatório final](tests/REPORT.md).
 
-A avaliação humana está pendente. Não anunciamos ganho garantido, vencedor ou proteção contra detectores. Na coluna detecção, cada número é uma impressão do juiz, de 0 a 100, na ordem original → com skill; não é uma probabilidade de autoria. Ambos os textos foram gerados por IA.
+A avaliação humana está pendente. Não anunciamos ganho garantido, vencedor ou proteção contra detectores. Nas colunas de detecção, cada número é uma impressão do juiz, de 0 a 100, na ordem original → com skill; não é uma probabilidade de autoria. Ambos os textos foram gerados por IA.
 
 ## Usar a skill
 
