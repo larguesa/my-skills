@@ -113,4 +113,4 @@ Custos de geração, Jev, Astra, Opus e sondagens/extras separados. Custo conhec
 
 ## Evidências brutas
 
-[evidência](../../results/expansao-20261002/frozen/config.json)
+[evidência](../../results/expansao-20261002-retomada/frozen/config.json)

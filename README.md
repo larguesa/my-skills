@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Apresentação e uso](skills/humanizador-pt-br/README.md): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O [índice dos testes](skills/humanizador-pt-br/tests/README.md) reúne os dois contos históricos e a ampliação em 24 pedidos de 12 gêneros. A nova execução foi interrompida por indisponibilidade do provedor: 20 textos válidos de resposta, nove pares completos e três julgamentos do par piloto; US$ 0.613509514 conciliados. A matriz completa permanece pendente. Jev, Astra e Opus 5.5 aparecem em colunas próprias. [Estado e limitações](skills/humanizador-pt-br/tests/results/expansao-20261002/STATUS.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
+[Apresentação e uso](skills/humanizador-pt-br/README.md): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. O [índice dos testes](skills/humanizador-pt-br/tests/README.md) reúne os dois contos históricos e a ampliação em 24 pedidos de 12 gêneros. A retomada avançou para 51 textos válidos de resposta, 25 pares completos e 39 julgamentos de pares (13 por juiz), mas outra rejeição do provedor no segundo pedido interrompeu a execução. Gasto acumulado desta ampliação: US$ 1.747699620, segundo a chave exclusiva. A matriz completa permanece pendente. Jev, Astra e Opus 5.5 aparecem em colunas próprias. [Estado e limitações da retomada](skills/humanizador-pt-br/tests/results/expansao-20261002-retomada/STATUS.md). A avaliação humana está pendente; não há promessa de superioridade ou de escapar de detectores.
 
 ## Telegraphist
 
