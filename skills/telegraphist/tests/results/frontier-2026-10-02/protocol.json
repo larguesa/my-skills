@@ -1,0 +1,3219 @@
+{
+  "routes": [
+    {
+      "model": "anthropic/claude-opus-5.5",
+      "provider": "anthropic",
+      "reasoning": {
+        "effort": "high"
+      },
+      "returned_models": [
+        "anthropic/claude-opus-5.5"
+      ],
+      "observed_provider": "Anthropic"
+    },
+    {
+      "model": "openai/gpt-6-astra",
+      "provider": "openai",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "openai/gpt-6-astra"
+      ],
+      "observed_provider": "OpenAI"
+    },
+    {
+      "model": "openai/gpt-6.1-sol",
+      "provider": "openai",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "openai/gpt-6.1-sol"
+      ],
+      "observed_provider": "OpenAI"
+    },
+    {
+      "model": "openai/gpt-6-luna",
+      "provider": "openai",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "openai/gpt-6-luna"
+      ],
+      "observed_provider": "OpenAI"
+    },
+    {
+      "model": "z-ai/glm-5.3-flash",
+      "provider": "z-ai/fp8",
+      "reasoning": {
+        "effort": "max"
+      },
+      "returned_models": [
+        "z-ai/glm-5.3-flash"
+      ],
+      "observed_provider": "Z.AI"
+    },
+    {
+      "model": "google/gemini-3.8-flash",
+      "provider": "google-ai-studio",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "google/gemini-3.8-flash"
+      ],
+      "observed_provider": "Google AI Studio"
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "provider": "alibaba",
+      "reasoning": {
+        "enabled": true
+      },
+      "returned_models": [
+        "qwen/qwen3.8-flash"
+      ],
+      "observed_provider": "Alibaba"
+    }
+  ],
+  "jev": {
+    "model": "typesafe/jev-1.13",
+    "provider": "typesafe",
+    "returned_models": [
+      "typesafe/jev-1.13-20260917"
+    ]
+  },
+  "max_tokens": 8192,
+  "transport": {
+    "response_ceiling_bytes": 16777216,
+    "socket_timeout_seconds": 180,
+    "redirects": "disabled",
+    "automatic_retries": 0
+  },
+  "spending_ceiling_usd": null,
+  "documentation_language": "English",
+  "test_prompt_languages": [
+    "English",
+    "Portuguese"
+  ],
+  "cache_control": "Uncontrolled native caching. First-use and repeated requests are not guaranteed cold and warm cache conditions.",
+  "probe_accounting": {
+    "requests": 21,
+    "cost": "0.016958804",
+    "kind": "Availability/control probes, excluded from candidate ratios"
+  },
+  "judges": [
+    {
+      "model": "typesafe/jev-1.13",
+      "provider": "typesafe",
+      "returned_models": [
+        "typesafe/jev-1.13-20260917"
+      ],
+      "kind": "decisions"
+    },
+    {
+      "model": "openai/gpt-6-astra",
+      "provider": "openai",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "openai/gpt-6-astra"
+      ],
+      "observed_provider": "OpenAI",
+      "kind": "chat"
+    },
+    {
+      "model": "anthropic/claude-opus-5.5",
+      "provider": "anthropic",
+      "reasoning": {
+        "effort": "medium"
+      },
+      "returned_models": [
+        "anthropic/claude-opus-5.5"
+      ],
+      "observed_provider": "Anthropic",
+      "kind": "chat"
+    }
+  ],
+  "version": "telegraphist-frontier-v1",
+  "frozen_at": "2026-10-02T10:00:05.537851+00:00",
+  "tasks": [
+    {
+      "id": "grounded_explanation_en",
+      "category": "grounded_explanation",
+      "language": "en",
+      "prompt": "Explain to a new operations engineer why the supplied queue trace does not prove exactly-once delivery. Give a meaningful causal explanation, identify what succeeded and what remains unknown, and recommend two specific checks. Preserve exact identifiers and do not invent a missing audit record. Answer in English.\nSource: request_id=\"001-AX\"; producer sent operation \"reserve\" twice after a timeout; idempotency key \"R-0007\" was present only on the first attempt. The first worker logged \"write committed\" at 09:00:02. The second logged \"duplicate check unavailable\", not \"duplicate rejected\", at 09:00:05. Both attempts returned ACK. No audit record or final inventory total is supplied. An ACK records receipt, not necessarily a unique effect.",
+      "reference": "The first write committed. Timeout and retry without the same key permit a second effect; ACKs alone do not prove unique effects. The second duplicate check was unavailable, not a rejection. Whether a second write occurred and the final inventory are unknown. Check durable audit/effect records for 001-AX and R-0007, and test/enforce atomic persistent deduplication with the same key on every retry.",
+      "rubric": [
+        "Explain the causal chain, not just a conclusion.",
+        "Preserve 001-AX and R-0007 and the negation.",
+        "Distinguish receipt, commit, and exactly-once effects.",
+        "Explicitly retain unknown audit and final inventory.",
+        "Provide two concrete verification/remediation checks."
+      ]
+    },
+    {
+      "id": "grounded_explanation_pt",
+      "category": "grounded_explanation",
+      "language": "pt",
+      "prompt": "Explique a um novo engenheiro de operações por que o rastreio da fila fornecido não comprova entrega exatamente uma vez. Dê uma explicação causal com detalhes relevantes, identifique o que funcionou e o que permanece desconhecido e recomende duas verificações específicas. Preserve os identificadores exatos e não invente um registro de auditoria ausente. Responda em português.\nFonte: request_id=\"001-AX\"; o produtor enviou a operação \"reserve\" duas vezes após um timeout; a chave de idempotência \"R-0007\" estava presente somente na primeira tentativa. O primeiro worker registrou \"write committed\" às 09:00:02. O segundo registrou \"duplicate check unavailable\", não \"duplicate rejected\", às 09:00:05. Ambas as tentativas retornaram ACK. Não foi fornecido registro de auditoria nem total final de estoque. Um ACK registra recebimento, não necessariamente um efeito único.",
+      "reference": "The first write committed. Timeout and retry without the same key permit a second effect; ACKs alone do not prove unique effects. The second duplicate check was unavailable, not a rejection. Whether a second write occurred and the final inventory are unknown. Check durable audit/effect records for 001-AX and R-0007, and test/enforce atomic persistent deduplication with the same key on every retry.",
+      "rubric": [
+        "Explain the causal chain, not just a conclusion.",
+        "Preserve 001-AX and R-0007 and the negation.",
+        "Distinguish receipt, commit, and exactly-once effects.",
+        "Explicitly retain unknown audit and final inventory.",
+        "Provide two concrete verification/remediation checks."
+      ]
+    },
+    {
+      "id": "long_deliverable_en",
+      "category": "long_deliverable",
+      "language": "en",
+      "prompt": "Write a 350-500 word decision memo in English for the board of a fictional water utility. Count all visible final-answer words, including headings, by whitespace. Use headings Recommendation, Evidence, Risks, and Next steps. Include a balanced recommendation with concrete evidence, limitations, and accountable next steps. Do not merely list facts or invent outcomes.\nFrozen facts: pilot P-004 covered 120 meters for 6 weeks; 18 meters produced leak alerts; technicians verified 11 real leaks, found 4 sensor faults, and could not access 3 properties. The prior 6-week comparison recorded 8 verified leaks, but used a different neighborhood and is not randomized. Hardware costs USD 24,000 and training USD 3,000; no ongoing fee estimate or water-savings measurement is available. A grant can cover 40% of hardware only, not training, and expires on 2026-11-15. Privacy review is incomplete; the dashboard retains hourly readings for 90 days. Expansion has not been approved. Propose a scoped next phase with a finance owner, an operations owner, and a privacy owner; label proposed actions as proposals.",
+      "reference": "An evidence-balanced scoped next phase is defensible, not an approved rollout. Report P-004, 120, 6 weeks, 18 alerts, 11 confirmed, 4 faults, 3 inaccessible, and the nonrandomized 8-leak comparator accurately. Costs total USD 27000; potential hardware grant USD 9600 leaves USD 17400 upfront including training, not a demonstrated saving. Ongoing costs and water savings are unknown. Preserve expiry 2026-11-15 and retention 90 days. Privacy clearance, access follow-up, matched comparison, and a cost estimate are proposed owner-assigned next steps.",
+      "rubric": [
+        "350-500 whitespace-separated words with the four requested headings.",
+        "Meaningful recommendation and reasoning, not a compressed fact list.",
+        "Preserve numerical facts, negation, identifiers, and deadline.",
+        "No invented ongoing costs, savings, approval, or causal proof.",
+        "Assign finance, operations, and privacy actions and distinguish proposals."
+      ],
+      "word_range": [
+        350,
+        500
+      ]
+    },
+    {
+      "id": "long_deliverable_pt",
+      "category": "long_deliverable",
+      "language": "pt",
+      "prompt": "Escreva um memorando de decisão de 350-500 palavras em português para o conselho de uma concessionária fictícia de água. Conte todas as palavras visíveis da resposta final, inclusive títulos, separando por espaços. Use os títulos Recomendação, Evidências, Riscos e Próximos passos. Inclua uma recomendação equilibrada com evidências concretas, limitações e próximos passos com responsáveis. Não apenas liste fatos nem invente resultados.\nFatos fixos: o piloto P-004 abrangeu 120 medidores por 6 semanas; 18 medidores geraram alertas de vazamento; técnicos confirmaram 11 vazamentos reais, encontraram 4 falhas de sensor e não conseguiram acessar 3 imóveis. A comparação anterior de 6 semanas registrou 8 vazamentos confirmados, mas usou outro bairro e não foi randomizada. O hardware custa USD 24.000 e o treinamento USD 3.000; não há estimativa de tarifa recorrente nem medição de economia de água. Um subsídio pode cobrir 40% apenas do hardware, não do treinamento, e expira em 2026-11-15. A revisão de privacidade está incompleta; o painel retém leituras horárias por 90 dias. A expansão não foi aprovada. Proponha uma próxima fase delimitada com responsáveis de finanças, operações e privacidade; identifique ações propostas como propostas.",
+      "reference": "An evidence-balanced scoped next phase is defensible, not an approved rollout. Report P-004, 120, 6 weeks, 18 alerts, 11 confirmed, 4 faults, 3 inaccessible, and the nonrandomized 8-leak comparator accurately. Costs total USD 27000; potential hardware grant USD 9600 leaves USD 17400 upfront including training, not a demonstrated saving. Ongoing costs and water savings are unknown. Preserve expiry 2026-11-15 and retention 90 days. Privacy clearance, access follow-up, matched comparison, and a cost estimate are proposed owner-assigned next steps.",
+      "rubric": [
+        "350-500 whitespace-separated words with the four requested headings.",
+        "Meaningful recommendation and reasoning, not a compressed fact list.",
+        "Preserve numerical facts, negation, identifiers, and deadline.",
+        "No invented ongoing costs, savings, approval, or causal proof.",
+        "Assign finance, operations, and privacy actions and distinguish proposals."
+      ],
+      "word_range": [
+        350,
+        500
+      ]
+    },
+    {
+      "id": "agentic_investigation_en",
+      "category": "agentic_investigation",
+      "language": "en",
+      "prompt": "Investigate whether batch LOT-007 can be released, using only read_record. Start with case-index and follow record links; read the policy and the referenced certificate rather than assuming they exist. Give a grounded English decision, exact supporting facts, missing evidence, and the next responsible action. Do not treat \"not cleared\" as clearance or substitute LOT-7. The tool exposes frozen test records, not a live API. Do not give hidden reasoning.",
+      "reference": "Hold LOT-007: 9 C exceeds the 8 C limit for 25 minutes; operator note is not cleared. Policy requires QA sign-off and a certificate. QA sign-off is absent and certificate-007 returns a frozen missing-source result. Seek QA review and the missing certificate before release; do not claim a live investigation or change LOT-007 to LOT-7.",
+      "rubric": [
+        "Follow dependent sources and read at least three correct distinct records.",
+        "Read certificate-007 and identify it as missing.",
+        "State hold with exact 9 C, 8 C, 25 minutes and LOT-007.",
+        "Respect not cleared and missing QA approval.",
+        "Give a responsible next action without inventing source content."
+      ],
+      "records": {
+        "case-index": {
+          "batch": "LOT-007",
+          "next_record": "manifest-007"
+        },
+        "manifest-007": {
+          "batch": "LOT-007",
+          "temperature_log": "inspection-007",
+          "certificate_record": "certificate-007",
+          "note": "A historical LOT-7 row is unrelated."
+        },
+        "inspection-007": {
+          "batch": "LOT-007",
+          "peak_celsius": 9,
+          "limit_celsius": 8,
+          "duration_minutes": 25,
+          "operator_note": "not cleared for release",
+          "next_record": "release-policy"
+        },
+        "release-policy": {
+          "rule": "Any excursion above 8 C requires QA sign-off plus a certificate before release. No QA sign-off is present in this frozen case."
+        }
+      },
+      "required_reads": [
+        "case-index",
+        "manifest-007",
+        "inspection-007",
+        "release-policy"
+      ],
+      "missing_records": [
+        "certificate-007"
+      ],
+      "required_missing": [
+        "certificate-007"
+      ],
+      "prerequisites": {
+        "manifest-007": [
+          "case-index"
+        ],
+        "inspection-007": [
+          "manifest-007"
+        ],
+        "release-policy": [
+          "inspection-007"
+        ],
+        "certificate-007": [
+          "manifest-007"
+        ]
+      },
+      "progress_required": false
+    },
+    {
+      "id": "agentic_investigation_pt",
+      "category": "agentic_investigation",
+      "language": "pt",
+      "prompt": "Investigue se o lote LOT-007 pode ser liberado usando somente read_record. Comece por case-index e siga os links dos registros; leia a política e o certificado referenciado em vez de presumir que existem. Dê uma decisão fundamentada em português, fatos exatos que a sustentam, evidências ausentes e a próxima ação com responsável. Não trate \"not cleared\" como liberação nem substitua por LOT-7. A ferramenta expõe registros fixos de teste, não uma API ao vivo. Não forneça raciocínio oculto.",
+      "reference": "Hold LOT-007: 9 C exceeds the 8 C limit for 25 minutes; operator note is not cleared. Policy requires QA sign-off and a certificate. QA sign-off is absent and certificate-007 returns a frozen missing-source result. Seek QA review and the missing certificate before release; do not claim a live investigation or change LOT-007 to LOT-7.",
+      "rubric": [
+        "Follow dependent sources and read at least three correct distinct records.",
+        "Read certificate-007 and identify it as missing.",
+        "State hold with exact 9 C, 8 C, 25 minutes and LOT-007.",
+        "Respect not cleared and missing QA approval.",
+        "Give a responsible next action without inventing source content."
+      ],
+      "records": {
+        "case-index": {
+          "batch": "LOT-007",
+          "next_record": "manifest-007"
+        },
+        "manifest-007": {
+          "batch": "LOT-007",
+          "temperature_log": "inspection-007",
+          "certificate_record": "certificate-007",
+          "note": "A historical LOT-7 row is unrelated."
+        },
+        "inspection-007": {
+          "batch": "LOT-007",
+          "peak_celsius": 9,
+          "limit_celsius": 8,
+          "duration_minutes": 25,
+          "operator_note": "not cleared for release",
+          "next_record": "release-policy"
+        },
+        "release-policy": {
+          "rule": "Any excursion above 8 C requires QA sign-off plus a certificate before release. No QA sign-off is present in this frozen case."
+        }
+      },
+      "required_reads": [
+        "case-index",
+        "manifest-007",
+        "inspection-007",
+        "release-policy"
+      ],
+      "missing_records": [
+        "certificate-007"
+      ],
+      "required_missing": [
+        "certificate-007"
+      ],
+      "prerequisites": {
+        "manifest-007": [
+          "case-index"
+        ],
+        "inspection-007": [
+          "manifest-007"
+        ],
+        "release-policy": [
+          "inspection-007"
+        ],
+        "certificate-007": [
+          "manifest-007"
+        ]
+      },
+      "progress_required": false
+    },
+    {
+      "id": "agentic_structured_en",
+      "category": "agentic_structured",
+      "language": "en",
+      "prompt": "Using only read_record, start with order-index and follow each dependent record. Before every assistant turn containing tool calls, provide one brief public progress sentence explaining the next check, not hidden reasoning. Then deliver only a JSON object as the final English answer, with exactly keys order_id, sku, available, requested, decision, partial_allowed, owner, next_review, sources. sources must be the four successfully read record names in dependency order. Calculate available as on_hand minus reserved. Do not authorize a dispatch lacking inventory or approval; preserve zero-padded identifiers. Tool records are frozen fixture data, not live API observations. Use decision exactly \"release\" for an authorized dispatch or \"hold\" otherwise. Use available and requested as JSON integers, partial_allowed as a JSON boolean, sources as an array of JSON strings, and all remaining values as JSON strings. Copy order_id, sku, owner, and next_review exactly from the source records, preserving date format. Do not wrap final JSON in a code fence.",
+      "reference": "The final object preserves ORD-0009 and SKU-01, available=7, requested=10, decision=\"hold\" in English or \"reter\" in Portuguese, partial_allowed=false, owner=\"Mina\", next_review=\"2026-10-05\", sources=[\"order-index\",\"stock-R09\",\"rule-R09\",\"dispatch-R09\"]. Insufficient available stock, forbidden partial delivery, and no dispatch approval mean hold. Provide brief public progress before every tool-call turn and no prose outside the final JSON.",
+      "rubric": [
+        "At least three distinct correct dependent reads, all four required.",
+        "Public progress before every tool-call turn.",
+        "Only final JSON with exact keys and correctly typed values.",
+        "Available 7, requested 10, partial_allowed false, hold decision.",
+        "Preserve identifiers, owner, date, and ordered sources; no invented authorization."
+      ],
+      "records": {
+        "order-index": {
+          "order_id": "ORD-0009",
+          "next_record": "stock-R09"
+        },
+        "stock-R09": {
+          "sku": "SKU-01",
+          "requested": 10,
+          "on_hand": 12,
+          "reserved": 5,
+          "next_record": "rule-R09"
+        },
+        "rule-R09": {
+          "partial_allowed": false,
+          "priority": "normal",
+          "next_record": "dispatch-R09"
+        },
+        "dispatch-R09": {
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "approval": null,
+          "note": "No dispatch has been authorized."
+        }
+      },
+      "required_reads": [
+        "order-index",
+        "stock-R09",
+        "rule-R09",
+        "dispatch-R09"
+      ],
+      "missing_records": [],
+      "required_missing": [],
+      "prerequisites": {
+        "stock-R09": [
+          "order-index"
+        ],
+        "rule-R09": [
+          "stock-R09"
+        ],
+        "dispatch-R09": [
+          "rule-R09"
+        ]
+      },
+      "progress_required": true,
+      "expected_by_language": {
+        "en": {
+          "order_id": "ORD-0009",
+          "sku": "SKU-01",
+          "available": 7,
+          "requested": 10,
+          "decision": "hold",
+          "partial_allowed": false,
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "sources": [
+            "order-index",
+            "stock-R09",
+            "rule-R09",
+            "dispatch-R09"
+          ]
+        },
+        "pt": {
+          "order_id": "ORD-0009",
+          "sku": "SKU-01",
+          "available": 7,
+          "requested": 10,
+          "decision": "reter",
+          "partial_allowed": false,
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "sources": [
+            "order-index",
+            "stock-R09",
+            "rule-R09",
+            "dispatch-R09"
+          ]
+        }
+      }
+    },
+    {
+      "id": "agentic_structured_pt",
+      "category": "agentic_structured",
+      "language": "pt",
+      "prompt": "Usando somente read_record, comece por order-index e siga cada registro dependente. Antes de cada turno do assistente que contenha chamadas de ferramenta, forneça uma frase pública breve de progresso explicando a próxima verificação, não raciocínio oculto. Depois entregue apenas um objeto JSON como resposta final em português, com exatamente as chaves order_id, sku, available, requested, decision, partial_allowed, owner, next_review, sources. sources deve conter os quatro nomes de registros lidos com sucesso na ordem de dependência. Calcule available como on_hand menos reserved. Não autorize uma expedição sem estoque ou aprovação; preserve identificadores com zeros à esquerda. Os registros da ferramenta são dados fixos de teste, não observações de uma API ao vivo. Use decision exatamente \"liberar\" para uma expedição autorizada ou \"reter\" em caso contrário. Use available e requested como inteiros JSON, partial_allowed como booleano JSON, sources como um array de strings JSON e todos os demais valores como strings JSON. Copie order_id, sku, owner e next_review exatamente dos registros de origem, preservando o formato da data. Não envolva o JSON final em um bloco de código.",
+      "reference": "The final object preserves ORD-0009 and SKU-01, available=7, requested=10, decision=\"hold\" in English or \"reter\" in Portuguese, partial_allowed=false, owner=\"Mina\", next_review=\"2026-10-05\", sources=[\"order-index\",\"stock-R09\",\"rule-R09\",\"dispatch-R09\"]. Insufficient available stock, forbidden partial delivery, and no dispatch approval mean hold. Provide brief public progress before every tool-call turn and no prose outside the final JSON.",
+      "rubric": [
+        "At least three distinct correct dependent reads, all four required.",
+        "Public progress before every tool-call turn.",
+        "Only final JSON with exact keys and correctly typed values.",
+        "Available 7, requested 10, partial_allowed false, hold decision.",
+        "Preserve identifiers, owner, date, and ordered sources; no invented authorization."
+      ],
+      "records": {
+        "order-index": {
+          "order_id": "ORD-0009",
+          "next_record": "stock-R09"
+        },
+        "stock-R09": {
+          "sku": "SKU-01",
+          "requested": 10,
+          "on_hand": 12,
+          "reserved": 5,
+          "next_record": "rule-R09"
+        },
+        "rule-R09": {
+          "partial_allowed": false,
+          "priority": "normal",
+          "next_record": "dispatch-R09"
+        },
+        "dispatch-R09": {
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "approval": null,
+          "note": "No dispatch has been authorized."
+        }
+      },
+      "required_reads": [
+        "order-index",
+        "stock-R09",
+        "rule-R09",
+        "dispatch-R09"
+      ],
+      "missing_records": [],
+      "required_missing": [],
+      "prerequisites": {
+        "stock-R09": [
+          "order-index"
+        ],
+        "rule-R09": [
+          "stock-R09"
+        ],
+        "dispatch-R09": [
+          "rule-R09"
+        ]
+      },
+      "progress_required": true,
+      "expected_by_language": {
+        "en": {
+          "order_id": "ORD-0009",
+          "sku": "SKU-01",
+          "available": 7,
+          "requested": 10,
+          "decision": "hold",
+          "partial_allowed": false,
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "sources": [
+            "order-index",
+            "stock-R09",
+            "rule-R09",
+            "dispatch-R09"
+          ]
+        },
+        "pt": {
+          "order_id": "ORD-0009",
+          "sku": "SKU-01",
+          "available": 7,
+          "requested": 10,
+          "decision": "reter",
+          "partial_allowed": false,
+          "owner": "Mina",
+          "next_review": "2026-10-05",
+          "sources": [
+            "order-index",
+            "stock-R09",
+            "rule-R09",
+            "dispatch-R09"
+          ]
+        }
+      }
+    }
+  ],
+  "settings": {
+    "max_tokens": 8192,
+    "max_calls": 8,
+    "stream": false,
+    "repetitions": 2,
+    "seed": 20261002,
+    "jev_threshold": 0.5
+  },
+  "slots": [
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|0|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|0|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|0|skill",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|0|skill",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|0|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|0|skill",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|0|skill",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|0|skill",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|0|skill",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|0|skill",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|0|baseline",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|0|skill",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|0|short_control",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|0|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|0|short_control",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|0|baseline",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|0|skill",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|0|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|0|skill",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|0|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|0|baseline",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|0|skill",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|0|short_control",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|0|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|0|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|0|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|0|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|0|baseline",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|0|short_control",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|0|skill",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|0|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|0|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|0|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|0|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "baseline",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|0|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "skill",
+      "exposure": "first-use"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|0|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 0,
+      "arm": "short_control",
+      "exposure": "first-use"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|qwen/qwen3.8-flash|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|anthropic/claude-opus-5.5|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|google/gemini-3.8-flash|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6.1-sol|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|google/gemini-3.8-flash|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6.1-sol|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|google/gemini-3.8-flash|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-luna|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|1|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-luna|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|z-ai/glm-5.3-flash|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|anthropic/claude-opus-5.5|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|anthropic/claude-opus-5.5|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6-astra|1|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|z-ai/glm-5.3-flash|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|google/gemini-3.8-flash|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-astra|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-luna|1|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|anthropic/claude-opus-5.5|1|skill",
+      "task": "agentic_structured_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|qwen/qwen3.8-flash|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|1|skill",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|z-ai/glm-5.3-flash|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6.1-sol|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|z-ai/glm-5.3-flash|1|skill",
+      "task": "agentic_structured_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6.1-sol|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|z-ai/glm-5.3-flash|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|qwen/qwen3.8-flash|1|skill",
+      "task": "long_deliverable_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6.1-sol|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|openai/gpt-6-astra|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-astra|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|1|skill",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|google/gemini-3.8-flash|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-luna|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|anthropic/claude-opus-5.5|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|openai/gpt-6-luna|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|qwen/qwen3.8-flash|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|qwen/qwen3.8-flash|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-luna|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|openai/gpt-6-astra|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-luna|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|1|short_control",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|1|baseline",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_en|google/gemini-3.8-flash|1|skill",
+      "task": "grounded_explanation_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|1|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6-astra|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|z-ai/glm-5.3-flash|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6.1-sol|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|qwen/qwen3.8-flash|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|1|baseline",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|1|skill",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_pt|anthropic/claude-opus-5.5|1|short_control",
+      "task": "agentic_structured_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|google/gemini-3.8-flash|1|skill",
+      "task": "long_deliverable_en",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|1|skill",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|openai/gpt-6.1-sol|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|qwen/qwen3.8-flash|1|skill",
+      "task": "agentic_structured_en",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|1|baseline",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|1|skill",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_structured_en|openai/gpt-6.1-sol|1|short_control",
+      "task": "agentic_structured_en",
+      "model": "openai/gpt-6.1-sol",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|1|baseline",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|1|short_control",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_en|anthropic/claude-opus-5.5|1|skill",
+      "task": "long_deliverable_en",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|google/gemini-3.8-flash|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "google/gemini-3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|qwen/qwen3.8-flash|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "qwen/qwen3.8-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|openai/gpt-6-astra|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|anthropic/claude-opus-5.5|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "anthropic/claude-opus-5.5",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|1|short_control",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|1|skill",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "grounded_explanation_pt|z-ai/glm-5.3-flash|1|baseline",
+      "task": "grounded_explanation_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|1|baseline",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|1|skill",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_pt|openai/gpt-6-astra|1|short_control",
+      "task": "agentic_investigation_pt",
+      "model": "openai/gpt-6-astra",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|1|skill",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|1|baseline",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "agentic_investigation_en|openai/gpt-6-luna|1|short_control",
+      "task": "agentic_investigation_en",
+      "model": "openai/gpt-6-luna",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|1|skill",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "skill",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|1|baseline",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "baseline",
+      "exposure": "repeated"
+    },
+    {
+      "id": "long_deliverable_pt|z-ai/glm-5.3-flash|1|short_control",
+      "task": "long_deliverable_pt",
+      "model": "z-ai/glm-5.3-flash",
+      "repeat": 1,
+      "arm": "short_control",
+      "exposure": "repeated"
+    }
+  ]
+}

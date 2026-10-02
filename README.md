@@ -14,7 +14,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Telegraphist
 
-[Telegraphist](skills/telegraphist/SKILL.md): prompt direto para respostas ultracurtas, com abreviações e símbolos. A pasta contém somente `SKILL.md` e `tests/`. [Relatório](skills/telegraphist/tests/REPORT.md): versão reescrita; nova bateria de fronteira pendente de confirmação de dois modelos e do orçamento. Evidências anteriores preservadas como histórico, não como resultados do novo prompt.
+[Telegraphist](skills/telegraphist/SKILL.md): the supplied ultra-short reply prompt, with abbreviations and symbols. [English benchmark report](skills/telegraphist/tests/REPORT.md): seven current models, English/Portuguese prompts and Jev/Astra/Opus judges. The run stopped at an OpenRouter concurrent-request reservation limit: 67 of 336 planned candidate episodes started, nine valid judge votes, USD 1.860233450 reconciled spend. The full comparison remains incomplete; no general token-saving or quality claim is justified. The skill root contains only `SKILL.md` and `tests/`; original historical evidence is preserved.
 
 ## Estrutura
 
