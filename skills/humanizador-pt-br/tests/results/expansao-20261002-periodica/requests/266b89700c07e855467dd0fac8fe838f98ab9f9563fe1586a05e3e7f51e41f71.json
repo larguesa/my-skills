@@ -1,0 +1,189 @@
+{
+  "model": "anthropic/claude-sonnet-5.5",
+  "endpoint": {
+    "name": "Google | anthropic/claude-sonnet-5.5-20260928",
+    "model_id": "anthropic/claude-sonnet-5.5",
+    "model_name": "Anthropic: Claude Sonnet 5.5",
+    "context_length": 1000000,
+    "pricing": {
+      "prompt": "0.000002",
+      "completion": "0.00001",
+      "web_search": "0.01",
+      "input_cache_read": "0.0000002",
+      "input_cache_write": "0.0000025",
+      "input_cache_write_1h": "0.000004",
+      "discount": 0
+    },
+    "provider_name": "Google",
+    "tag": "google-vertex/global",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "max_tokens",
+      "stop",
+      "reasoning",
+      "include_reasoning",
+      "tool_choice",
+      "tools",
+      "response_format",
+      "verbosity",
+      "structured_outputs",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": false,
+      "function": false
+    },
+    "status": 0,
+    "uptime_last_30m": 100,
+    "uptime_last_5m": 100,
+    "uptime_last_1d": 99.98554168541972,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:bash": {
+        "type": "bash_20250124"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "anthropic/claude-sonnet-5.5",
+        "provider_returned": "Google",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945415-7lP1FaTSKFBRxgdpdPB6",
+        "observed_at": "2026-10-02T12:50:15.877648+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "anthropic/claude-sonnet-5.5",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "google-vertex/global"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "266b89700c07e855467dd0fac8fe838f98ab9f9563fe1586a05e3e7f51e41f71",
+  "status": "completed",
+  "started_at": "2026-10-02T19:16:43.088298+00:00",
+  "response": {
+    "id": "gen-1790968603-ddb4oj5bHGnJHM2rJK94",
+    "object": "chat.completion",
+    "created": 1790968603,
+    "model": "anthropic/claude-sonnet-5.5",
+    "provider": "Google",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "# Análise de bug: lista padrão compartilhada em `collect`\n\n## Reprodução\n\nEm um processo novo do interpretador, com a função original:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nprint(collect(\"A\"))  # ['A']\nprint(collect(\"B\"))  # ['A', 'B']\n```\n\nA segunda chamada não passa `bucket`, mas o resultado traz o item da primeira. O esperado seria `[\"B\"]`.\n\n## Causa\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia `[]` é criada nesse momento e fica associada à função como o valor padrão de `bucket`. Toda chamada que omite o argumento recebe esse mesmo objeto. Como `list.append` modifica a lista no lugar, cada chamada acrescenta o item ao objeto compartilhado, e o conteúdo acumulado aparece nas chamadas seguintes. A primeira chamada retorna a própria lista padrão, e a segunda retorna esse mesmo objeto, agora com dois elementos.\n\n## Correção\n\nUsar `None` como sentinela e criar uma lista nova apenas quando nenhuma for fornecida:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Lista fornecida: o contrato de acrescentar e retornar a mesma lista é mantido\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\nO teste `is None` é intencional. Uma lista vazia fornecida pelo chamador é falsa em contexto booleano, e `if not bucket` a substituiria por uma lista nova, quebrando a identidade esperada.\n\n## Limitações\n\nOs `assert` acima cobrem apenas os dois comportamentos descritos: independência entre chamadas sem argumento e preservação da identidade da lista fornecida. Não foram verificados outros tipos de entrada. A correção não torna a função segura para uso concorrente: se várias threads acrescentarem à mesma lista fornecida, nada aqui coordena esse acesso, e esse cenário não foi analisado.",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 479,
+      "completion_tokens": 847,
+      "total_tokens": 1326,
+      "cost": 0.009428,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.009428,
+        "upstream_inference_prompt_cost": 0.000958,
+        "upstream_inference_completions_cost": 0.00847
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "Google",
+  "model_returned": "anthropic/claude-sonnet-5.5",
+  "usage": {
+    "prompt_tokens": 479,
+    "completion_tokens": 847,
+    "total_tokens": 1326,
+    "cost": 0.009428,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.009428,
+      "upstream_inference_prompt_cost": 0.000958,
+      "upstream_inference_completions_cost": 0.00847
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.009428",
+  "edited": "# Análise de bug: lista padrão compartilhada em `collect`\n\n## Reprodução\n\nEm um processo novo do interpretador, com a função original:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nprint(collect(\"A\"))  # ['A']\nprint(collect(\"B\"))  # ['A', 'B']\n```\n\nA segunda chamada não passa `bucket`, mas o resultado traz o item da primeira. O esperado seria `[\"B\"]`.\n\n## Causa\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia `[]` é criada nesse momento e fica associada à função como o valor padrão de `bucket`. Toda chamada que omite o argumento recebe esse mesmo objeto. Como `list.append` modifica a lista no lugar, cada chamada acrescenta o item ao objeto compartilhado, e o conteúdo acumulado aparece nas chamadas seguintes. A primeira chamada retorna a própria lista padrão, e a segunda retorna esse mesmo objeto, agora com dois elementos.\n\n## Correção\n\nUsar `None` como sentinela e criar uma lista nova apenas quando nenhuma for fornecida:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Lista fornecida: o contrato de acrescentar e retornar a mesma lista é mantido\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\nO teste `is None` é intencional. Uma lista vazia fornecida pelo chamador é falsa em contexto booleano, e `if not bucket` a substituiria por uma lista nova, quebrando a identidade esperada.\n\n## Limitações\n\nOs `assert` acima cobrem apenas os dois comportamentos descritos: independência entre chamadas sem argumento e preservação da identidade da lista fornecida. Não foram verificados outros tipos de entrada. A correção não torna a função segura para uso concorrente: se várias threads acrescentarem à mesma lista fornecida, nada aqui coordena esse acesso, e esse cenário não foi analisado.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": null,
+  "usage_issues": [],
+  "elapsed_seconds": 6.8890832886099815,
+  "finished_at": "2026-10-02T19:16:49.992962+00:00"
+}

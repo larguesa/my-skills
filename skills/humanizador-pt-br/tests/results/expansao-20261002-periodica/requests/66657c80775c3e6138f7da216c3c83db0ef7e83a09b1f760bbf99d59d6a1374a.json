@@ -1,0 +1,205 @@
+{
+  "model": "anthropic/claude-opus-5.5",
+  "endpoint": {
+    "name": "Amazon Bedrock | anthropic/claude-opus-5.5-20260921",
+    "model_id": "anthropic/claude-opus-5.5",
+    "model_name": "Anthropic: Claude Opus 5.5",
+    "context_length": 1000000,
+    "pricing": {
+      "prompt": "0.000004",
+      "completion": "0.00002",
+      "web_search": "0.01",
+      "input_cache_read": "0.0000002",
+      "input_cache_write": "0.000005",
+      "input_cache_write_1h": "0.000008",
+      "discount": 0
+    },
+    "provider_name": "Amazon Bedrock",
+    "tag": "amazon-bedrock",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "max_tokens",
+      "stop",
+      "tool_choice",
+      "tools",
+      "response_format",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": false,
+      "function": false
+    },
+    "status": 0,
+    "uptime_last_30m": 99.92043646283247,
+    "uptime_last_5m": 99.90439770554494,
+    "uptime_last_1d": 99.33393772096429,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:bash": {
+        "type": "bash_20250124"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "anthropic/claude-opus-5.5",
+        "provider_returned": "Amazon Bedrock",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945392-xvUvclt1TUBNZbrRkJKQ",
+        "observed_at": "2026-10-02T12:49:52.439005+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "anthropic/claude-opus-5.5",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "amazon-bedrock"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "66657c80775c3e6138f7da216c3c83db0ef7e83a09b1f760bbf99d59d6a1374a",
+  "status": "completed",
+  "started_at": "2026-10-02T18:31:18.120395+00:00",
+  "response": {
+    "id": "gen-1790965878-KoH1Gy84UFpb4XUqOvTL",
+    "object": "chat.completion",
+    "created": 1790965878,
+    "model": "anthropic/claude-opus-5.5",
+    "provider": "Amazon Bedrock",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "end_turn",
+        "message": {
+          "role": "assistant",
+          "content": "**Reprodução**\n\nEm um processo novo do interpretador, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, também sem argumento para `bucket`, retorna `[\"A\", \"B\"]`. O esperado era `[\"B\"]`, já que as duas chamadas deveriam ser independentes.\n\n**Causa**\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia criada nesse momento fica associada à própria função e é reutilizada por todas as chamadas que omitem `bucket`. Como `append` altera essa lista no lugar, cada chamada sem argumento acrescenta itens ao mesmo objeto. Assim, o estado acumulado em uma chamada aparece nas seguintes.\n\n**Correção**\n\nUsamos `None` como sentinela e criamos uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, mesmo vazia, a função mantém o contrato: acrescenta o item àquela própria lista e a retorna. O teste `is None` é preferível a `if not bucket`, pois este último substituiria indevidamente uma lista vazia fornecida pelo chamador.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes não compartilham estado\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# A lista fornecida é a mesma retornada e recebe o item\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\n**Limitações**\n\nA correção trata apenas o compartilhamento do valor padrão entre chamadas. Ela não torna a função segura para uso concorrente: se várias threads usarem a mesma lista fornecida, a sincronização continua sendo responsabilidade do chamador, e esse cenário não foi verificado aqui. Código que dependia, de forma intencional ou acidental, do acúmulo entre chamadas passará a se comportar de outro modo. Os asserts cobrem somente os casos descritos e não substituem uma suíte de testes mais ampla.",
+          "refusal": null,
+          "reasoning": "Preciso escrever a resposta em português, com 220-320 palavras, seções em ordem, sem travessão, incluindo código com asserts, sem afirmar segurança de concorrência e com uma seção de limitações cobrindo isso. Estou esboçando a seção de reprodução mostrando que chamadas sucessivas a collect acumulam resultados ao invés de reiniciar.\n\nA causa é o clássico problema de valor padrão mutável em Python, criado uma única vez na definição da função e reutilizado em todas as chamadas sem argumento, acumulando itens via append. A correção usa None como sentinela, criando uma lista nova apenas quando necessário, preservando listas fornecidas pelo chamador. Agora estou descrevendo as limitações: a correção resolve apenas o compartilhamento do valor padrão, não trata segurança em uso concorrente com múltiplas threads compartilhando a mesma lista.\n\n",
+          "reasoning_details": [
+            {
+              "type": "reasoning.text",
+              "text": "Preciso escrever a resposta em português, com 220-320 palavras, seções em ordem, sem travessão, incluindo código com asserts, sem afirmar segurança de concorrência e com uma seção de limitações cobrindo isso. Estou esboçando a seção de reprodução mostrando que chamadas sucessivas a collect acumulam resultados ao invés de reiniciar.\n\nA causa é o clássico problema de valor padrão mutável em Python, criado uma única vez na definição da função e reutilizado em todas as chamadas sem argumento, acumulando itens via append. A correção usa None como sentinela, criando uma lista nova apenas quando necessário, preservando listas fornecidas pelo chamador. Agora estou descrevendo as limitações: a correção resolve apenas o compartilhamento do valor padrão, não trata segurança em uso concorrente com múltiplas threads compartilhando a mesma lista.\n\n",
+              "format": "anthropic-claude-v1",
+              "index": 0,
+              "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1vcHVzLTUuNS0yMDI2MDkyMXxhbWF6b24tYmVkcm9jayJ9"
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 479,
+      "completion_tokens": 1605,
+      "total_tokens": 2084,
+      "cost": 0.034016,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.034016,
+        "upstream_inference_prompt_cost": 0.001916,
+        "upstream_inference_completions_cost": 0.0321
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 797,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "Amazon Bedrock",
+  "model_returned": "anthropic/claude-opus-5.5",
+  "usage": {
+    "prompt_tokens": 479,
+    "completion_tokens": 1605,
+    "total_tokens": 2084,
+    "cost": 0.034016,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.034016,
+      "upstream_inference_prompt_cost": 0.001916,
+      "upstream_inference_completions_cost": 0.0321
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 797,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.034016",
+  "edited": "**Reprodução**\n\nEm um processo novo do interpretador, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, também sem argumento para `bucket`, retorna `[\"A\", \"B\"]`. O esperado era `[\"B\"]`, já que as duas chamadas deveriam ser independentes.\n\n**Causa**\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia criada nesse momento fica associada à própria função e é reutilizada por todas as chamadas que omitem `bucket`. Como `append` altera essa lista no lugar, cada chamada sem argumento acrescenta itens ao mesmo objeto. Assim, o estado acumulado em uma chamada aparece nas seguintes.\n\n**Correção**\n\nUsamos `None` como sentinela e criamos uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, mesmo vazia, a função mantém o contrato: acrescenta o item àquela própria lista e a retorna. O teste `is None` é preferível a `if not bucket`, pois este último substituiria indevidamente uma lista vazia fornecida pelo chamador.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes não compartilham estado\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# A lista fornecida é a mesma retornada e recebe o item\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\n**Limitações**\n\nA correção trata apenas o compartilhamento do valor padrão entre chamadas. Ela não torna a função segura para uso concorrente: se várias threads usarem a mesma lista fornecida, a sincronização continua sendo responsabilidade do chamador, e esse cenário não foi verificado aqui. Código que dependia, de forma intencional ou acidental, do acúmulo entre chamadas passará a se comportar de outro modo. Os asserts cobrem somente os casos descritos e não substituem uma suíte de testes mais ampla.",
+  "finish_reason": "stop",
+  "reasoning_returned": "Preciso escrever a resposta em português, com 220-320 palavras, seções em ordem, sem travessão, incluindo código com asserts, sem afirmar segurança de concorrência e com uma seção de limitações cobrindo isso. Estou esboçando a seção de reprodução mostrando que chamadas sucessivas a collect acumulam resultados ao invés de reiniciar.\n\nA causa é o clássico problema de valor padrão mutável em Python, criado uma única vez na definição da função e reutilizado em todas as chamadas sem argumento, acumulando itens via append. A correção usa None como sentinela, criando uma lista nova apenas quando necessário, preservando listas fornecidas pelo chamador. Agora estou descrevendo as limitações: a correção resolve apenas o compartilhamento do valor padrão, não trata segurança em uso concorrente com múltiplas threads compartilhando a mesma lista.\n\n",
+  "reasoning_details": [
+    {
+      "type": "reasoning.text",
+      "text": "Preciso escrever a resposta em português, com 220-320 palavras, seções em ordem, sem travessão, incluindo código com asserts, sem afirmar segurança de concorrência e com uma seção de limitações cobrindo isso. Estou esboçando a seção de reprodução mostrando que chamadas sucessivas a collect acumulam resultados ao invés de reiniciar.\n\nA causa é o clássico problema de valor padrão mutável em Python, criado uma única vez na definição da função e reutilizado em todas as chamadas sem argumento, acumulando itens via append. A correção usa None como sentinela, criando uma lista nova apenas quando necessário, preservando listas fornecidas pelo chamador. Agora estou descrevendo as limitações: a correção resolve apenas o compartilhamento do valor padrão, não trata segurança em uso concorrente com múltiplas threads compartilhando a mesma lista.\n\n",
+      "format": "anthropic-claude-v1",
+      "index": 0,
+      "signature": "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.eyJlbmRwb2ludF9zbHVnIjoiYW50aHJvcGljL2NsYXVkZS1vcHVzLTUuNS0yMDI2MDkyMXxhbWF6b24tYmVkcm9jayJ9"
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 24.23168110474944,
+  "finished_at": "2026-10-02T18:31:42.364229+00:00"
+}

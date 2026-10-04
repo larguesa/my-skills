@@ -1,0 +1,200 @@
+{
+  "model": "openai/gpt-6-luna",
+  "endpoint": {
+    "name": "OpenAI | openai/gpt-6-luna-20260922",
+    "model_id": "openai/gpt-6-luna",
+    "model_name": "OpenAI: GPT-6 Luna",
+    "context_length": 1050000,
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "discount": 0,
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "provider_name": "OpenAI",
+    "tag": "openai",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": 922000,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "seed",
+      "max_tokens",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.97904172978357,
+    "uptime_last_5m": 99.9938193774877,
+    "uptime_last_1d": 99.97478361443893,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:web_search": {
+        "type": "web_search"
+      },
+      "openrouter:apply_patch": {
+        "type": "apply_patch"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "off": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": false,
+          "effort": "none"
+        },
+        "model_returned": "openai/gpt-6-luna",
+        "provider_returned": "OpenAI",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945409-sD4JWg8F7pQKGj3XaNqG",
+        "observed_at": "2026-10-02T12:50:09.768704+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": false,
+      "effort": "none"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "03-documentacao-api",
+  "arm": "original",
+  "mode": "off",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega.",
+  "id": "22cc4488058a0e67f90de8d9d0f73ff44e6ca9ed78b732b293259193e0260c91",
+  "status": "completed",
+  "started_at": "2026-10-02T18:22:48.011563+00:00",
+  "response": {
+    "id": "gen-1790965368-UB7oMnjEe7gHin01WmNR",
+    "object": "chat.completion",
+    "created": 1790965368,
+    "model": "openai/gpt-6-luna",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "## Autenticação\n\nA API usa autenticação por token Bearer. Envie o token no cabeçalho `Authorization` de cada requisição:\n\n```http\nAuthorization: Bearer <TOKEN>\n```\n\nA ausência de token ou o envio de um token inválido resulta em HTTP `401`.\n\n## Criar tarefa\n\nCrie uma tarefa enviando uma requisição `POST` para `/v1/jobs`, com `Content-Type: application/json`. O corpo deve conter `name`: uma string obrigatória, não vazia e com até 80 caracteres.\n\nCorpo da requisição:\n\n```json\n{\"name\":\"backup\"}\n```\n\nExemplo com `curl`:\n\n```bash\ncurl -X POST https://api.example.com/v1/jobs \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nSe a requisição for aceita, a API responde com HTTP `201` e um objeto contendo o identificador e o estado da tarefa. Exemplo de sucesso:\n\n```json\n{\"id\":\"job_123\",\"status\":\"queued\"}\n```\n\nO estado `queued` indica que a tarefa foi enfileirada; não significa que sua execução foi concluída.\n\nO cabeçalho `Idempotency-Key` é opcional. Se a mesma chave for enviada com o mesmo corpo, a API retorna a tarefa existente por 24 horas. Se a mesma chave for usada com um corpo diferente, a resposta será HTTP `409`.\n\n## Erros\n\n- `400`: o valor de `name` é inválido. Verifique se está presente, se é uma string não vazia e se tem até 80 caracteres.\n- `401`: o token está ausente ou é inválido.\n- `409`: uma chave de idempotência já usada foi enviada com um corpo diferente.\n- `429`: o limite de 60 requisições por minuto por token foi atingido. A resposta inclui `Retry-After`, em segundos, indicando quando tentar novamente.\n\n## Limitações\n\nO limite é de 60 requisições por minuto por token. Respeite o valor informado em `Retry-After` ao receber HTTP `429`.\n\nA resposta `201` confirma que a tarefa foi criada, não que foi executada. Esta documentação não especifica um endpoint para consultar tarefas nem uma garantia de entrega ou conclusão.",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 341,
+      "completion_tokens": 497,
+      "total_tokens": 838,
+      "cost": 0.0002826,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0002826,
+        "upstream_inference_prompt_cost": 3.41e-05,
+        "upstream_inference_completions_cost": 0.0002485
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "OpenAI",
+  "model_returned": "openai/gpt-6-luna",
+  "usage": {
+    "prompt_tokens": 341,
+    "completion_tokens": 497,
+    "total_tokens": 838,
+    "cost": 0.0002826,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0002826,
+      "upstream_inference_prompt_cost": 3.41e-05,
+      "upstream_inference_completions_cost": 0.0002485
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.0002826",
+  "edited": "## Autenticação\n\nA API usa autenticação por token Bearer. Envie o token no cabeçalho `Authorization` de cada requisição:\n\n```http\nAuthorization: Bearer <TOKEN>\n```\n\nA ausência de token ou o envio de um token inválido resulta em HTTP `401`.\n\n## Criar tarefa\n\nCrie uma tarefa enviando uma requisição `POST` para `/v1/jobs`, com `Content-Type: application/json`. O corpo deve conter `name`: uma string obrigatória, não vazia e com até 80 caracteres.\n\nCorpo da requisição:\n\n```json\n{\"name\":\"backup\"}\n```\n\nExemplo com `curl`:\n\n```bash\ncurl -X POST https://api.example.com/v1/jobs \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nSe a requisição for aceita, a API responde com HTTP `201` e um objeto contendo o identificador e o estado da tarefa. Exemplo de sucesso:\n\n```json\n{\"id\":\"job_123\",\"status\":\"queued\"}\n```\n\nO estado `queued` indica que a tarefa foi enfileirada; não significa que sua execução foi concluída.\n\nO cabeçalho `Idempotency-Key` é opcional. Se a mesma chave for enviada com o mesmo corpo, a API retorna a tarefa existente por 24 horas. Se a mesma chave for usada com um corpo diferente, a resposta será HTTP `409`.\n\n## Erros\n\n- `400`: o valor de `name` é inválido. Verifique se está presente, se é uma string não vazia e se tem até 80 caracteres.\n- `401`: o token está ausente ou é inválido.\n- `409`: uma chave de idempotência já usada foi enviada com um corpo diferente.\n- `429`: o limite de 60 requisições por minuto por token foi atingido. A resposta inclui `Retry-After`, em segundos, indicando quando tentar novamente.\n\n## Limitações\n\nO limite é de 60 requisições por minuto por token. Respeite o valor informado em `Retry-After` ao receber HTTP `429`.\n\nA resposta `201` confirma que a tarefa foi criada, não que foi executada. Esta documentação não especifica um endpoint para consultar tarefas nem uma garantia de entrega ou conclusão.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": null,
+  "usage_issues": [],
+  "elapsed_seconds": 4.4533692598342896,
+  "finished_at": "2026-10-02T18:22:52.467742+00:00"
+}

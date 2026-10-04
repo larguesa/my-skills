@@ -1,0 +1,217 @@
+{
+  "model": "openai/gpt-6-luna",
+  "endpoint": {
+    "name": "OpenAI | openai/gpt-6-luna-20260922",
+    "model_id": "openai/gpt-6-luna",
+    "model_name": "OpenAI: GPT-6 Luna",
+    "context_length": 1050000,
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "discount": 0,
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "provider_name": "OpenAI",
+    "tag": "openai",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": 922000,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "seed",
+      "max_tokens",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.97904172978357,
+    "uptime_last_5m": 99.9938193774877,
+    "uptime_last_1d": 99.97478361443893,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:web_search": {
+        "type": "web_search"
+      },
+      "openrouter:apply_patch": {
+        "type": "apply_patch"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "openai/gpt-6-luna",
+        "provider_returned": "OpenAI",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945410-bzlLmRCYPC0LEtDDBkl4",
+        "observed_at": "2026-10-02T12:50:10.808300+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "03-documentacao-api",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega.",
+  "id": "ded018e8ffd204951c3e9ed7fec369ce8877f695dd0ad88da9c655b18c225b0c",
+  "status": "completed",
+  "started_at": "2026-10-02T18:22:57.092505+00:00",
+  "response": {
+    "id": "gen-1790965377-gLBRSOvH0PGuKq37515r",
+    "object": "chat.completion",
+    "created": 1790965377,
+    "model": "openai/gpt-6-luna",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "## Autenticação\n\nA API exige um token de autenticação no cabeçalho `Authorization`, no formato `Bearer <TOKEN>`. Inclua também `Content-Type: application/json` para enviar o corpo como JSON.\n\n## Criar tarefa\n\nEnvie uma requisição `POST` para `/v1/jobs` com um objeto JSON que contenha o campo `name`. Esse campo é obrigatório, deve ser uma string não vazia e pode ter até 80 caracteres.\n\nExemplo de requisição com `curl`:\n\n```bash\ncurl -X POST https://api.example.com/v1/jobs \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nSe a requisição for aceita, a API responde com HTTP `201` e um objeto com o identificador e o estado da tarefa:\n\n```json\n{\n  \"id\": \"job_123\",\n  \"status\": \"queued\"\n}\n```\n\nO estado `queued` indica que a tarefa está na fila; não significa que sua execução foi concluída.\n\nO cabeçalho `Idempotency-Key` é opcional. Se você enviar a mesma chave novamente com o mesmo corpo dentro de 24 horas, a API retorna a tarefa existente. Se reutilizar a chave com um corpo diferente, a resposta será HTTP `409`.\n\n## Erros\n\nA API usa os seguintes códigos para indicar falhas na requisição:\n\n- `400`: o campo `name` está ausente ou não atende aos requisitos de validação.\n- `401`: o token está ausente ou é inválido.\n- `409`: uma chave de idempotência já usada foi enviada com um corpo diferente.\n- `429`: o token excedeu o limite de 60 requisições por minuto. A resposta inclui o cabeçalho `Retry-After`, cujo valor indica o intervalo em segundos.\n\n## Limitações\n\nO limite de requisições é de 60 por minuto para cada token. Ao receber HTTP `429`, use o valor de `Retry-After` como referência para aguardar antes de enviar novas requisições.\n\nA reutilização de uma chave de idempotência com o mesmo corpo retorna a tarefa existente por 24 horas. Esse comportamento não se aplica a uma chave reutilizada com um corpo diferente, que resulta em HTTP `409`. O estado `queued` não confirma que a tarefa foi executada nem que sua execução terminou.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "gAAAAABqv_aEEsD55uLrid97YTKsKSIOwSx-b5qELTqo_g5xkE9sDSrPU9j3OpS1oxhDgDHJOQCEQHdVz8W8yCUfmOJvZP8suQ9PQIGhw9zTJ5jyzRXM0Qh--Da2ar3oH6vfOTdUjuL-Kkk2JupORJCaIt5vos9gU6Ih7E4LvWH8efv02gz76vQfipo8DoPe82IPE8Xz1ajOn6pKDXhnD8oZgqDwyKyuGxXfS-3hwXuaRq65uOb2b4ifbHgnaggJ7MS9-EQd_Y-K1_bmuYRrAS9SZYB706PNqTjUUxaXKG14-6_jxDpRY40D58Q6BgJuTQLTG5B6ZRFdBBYHhEUHpsLXcEbfEr7EUhosLfs7Oj1F0hpTxSh_ZscP-8AyFe8EIFNkHio1ILk-dt49aNRlUQ7kaDkLUmLLdX3nawXV90LWVCL9l9RgPzhfRxOvTQV6O_8GHAvUZoXA4bn-2tTmpO2g8aO8olp__3NQhURWHWGHHQYn3ATBql_DF8a2reOka60L82wzBkTJE01oGrHyrZAQOSof1Es2mm2IeW3y6nmsBJxDnGFr1PHCg9GpEixtCFrDLZloZkqk6kiIiouFpBme203U_kr-UjsJf_GylKyP9jgcEnE6mD1KvBelYMdLrxWpl1zW0hZxIzHxdtdhP0S8wikeVV_13bTPgWII2BznC-jZMioldl_vYuILGEYpITqd6OKcdYQG3yZ5mwj8yLjib2B5LVnmx97S6Gr4AFsmjAZRNvkkxXOXEh7EQaSXQ9-P8k-zoopFiRcb1zJub7xPmzkUYlK1Jc2eXtPhs19dsQe2Hy3LM2vhz2DR_LWarQI0pR3S_Xw5Epx6_IsGH3qjilYYfG2yMFxHc7aUy6Xhykyt0xnYVqH4RhYFsVCstitCAoeNsmP4Jk1RgK8oZatMtl2EcFtZAmxto1eGOSM6MQi6DCZHAhnbRMysj5WFeuEox--k1RtgqUM0yy3QUr3eZ5Etdh52L2EFHD7_DtXd2HHTPSwxEiVDbGoEWBgyYry8tWR1UIxqV-q45_ewecZ6fwR8uG9Tq934ejaThLALGHVibfQuxRU_1GR2603g7UsfHD9LdXor-JkrvWRaDJFi25zc29dg3JG2sLDb-RJPVJuhKRnr2zLPH3XeFFxM2eiUQzhkxNDVi00FEw43kotTZbK8h6UCdGDzCuudYnfgRffomy4l_6V-cKsDRgPe3qRJ1H7-YX37CGCrw8YAZPlzlt6SwKqPULZPrwkSZtDh1T44Ydj7mWFkFRC4mz40ckZxV0gHEMbRVAzKPXcDU7sDOSa4WvU9l5xg8UcMA4_Y9xnLLDTGwO39GtV6ZyYo1RY0g7USqEfD86yRP5m-TEpuFNlT1xK4q2pS9PNFT1yq3wq7Sxs6dm1cfUCp-49RpjNjMgjyF5qtevp_jTif5sjazWny4yYTFVTZnYPKdWKX7bnspaqFnAZSK5TP_8cGP1flOt83kbDdah5iAHnZGRx-aGmd0Y_RVJPx_pHdKS6P5kmQgus5sn-yoZOqGp8opcCPIPmUhRo8SQRa-WCaZ0fFlsaWdKh2NEbsD98r4dwNZ1Zz3ztulIhhGho2db5oIqb-gYQ3KWKgxi2V5q2LRWtyN2BL4P8M2Wf3gggnzzCRBWiC0F9Zkq97gavFofe64L2mgN2q7ndumXWokLto7EHDbkh89kWDSSAdUnLPsjeBhriJMjiI5FdS_wfiuDw_rG4Ux_835IEd7kRXycbBu_aTWm6ctzKpTIuXBZ7pqQDg6lDvY_l7rIYbu-81g-Y-tR2Fq4wxawTz0wGqPkJPkgRqA0cz0QoHM33ZhitpYGMvPJEqvkiGJyaRqDP6ukhZ8fSfiU3_k2F4o9jCpWMTdqZd75peLqSWQ_ZPYkVB4VKG5e7bUlY3BYd3mJo99PCpKbT6wTkKWDgbdGYE9UJP65hGjZ7Ny6uKRnuBhlsiXjzTAH6Qf4shoUV68KaaDvf1AD442dUlF8-lqOL04IC1gpWXr1t6tKvDhHOgqZKmVE5NLpMnipZFLOLWqxX0AMdZ4LWK1CITIS85Cm1VNs96jBrXZ7LKoDWz1mcnmSx2tu6JuH29snDXjcsOI5bBqu-J5n7fILiUonICpzrwbuz41tOTYHC0uflRm0AJDaSMqUbdC3ktM9YjCIoBxx4kE5qR_B6YE75zva-94mFG3HTOr6-zXGg6m8A-6gtSXDe5A4qrR_ewNSmrmTCiq0zAJOXsM5ScmReTIIldcBXwbxW_fEPnCvr-pznjDPwlM67GJgci7XyoYhk7Cm0KvIkKh7X3PqJT4nCL9IPhIeGuvU0yM_Z41kSt4Cg0m6TDBNs77nvJ9VPNvY8ASPx0KaEKw17g5ZFeg9xTc68OEuLMnicmNY9kT6r9MBO_ep7rsInU_IxFZ3UCsamSS495gGibGEK9JBjAsYFO_oFqwCQiTIBaZTzNpuKPM3uUpAjrx5PUNRLazP8eHhhjRui2fWMVxhQM_nv1I7vY1ajQ7YMIVYJJISLbS8fipIXdOzFuoAWnBHbzSiTaR1xASfmsGF1kMIFlmdZ39s9cz2JPgBkmcaq-8LMdvAfGsBWDxNMat-evqHeS8S6lED1TpFXeUqfuvlAP7n6IXX2pEdENLNLOCvsppQdERK4q0-aHvR_BMevX4H-8ki-c0UXXPJP0-UNhzN8aicPJBmV7Lb5ush46p1xpBGVzlwE0PexmUgdmstd9_BMzt8oyBPSzWvnd8-9lXtkAiBMEKht7C6ZFdcCmj86BK5d_e78kjI5l9zC4DKilkaomzP6rkTB018uH49CtQXzIDWAZVfJLCoE7DcYXSalwxXdo3FTzU_CBuQ==.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+              "format": "openai-responses-v1",
+              "id": "rs_0c6d684784cd49be016abff681d49c87d19643cf0b85e0db4f",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 341,
+      "completion_tokens": 753,
+      "total_tokens": 1094,
+      "cost": 0.0004106,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0004106,
+        "upstream_inference_prompt_cost": 3.41e-05,
+        "upstream_inference_completions_cost": 0.0003765
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 240,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "OpenAI",
+  "model_returned": "openai/gpt-6-luna",
+  "usage": {
+    "prompt_tokens": 341,
+    "completion_tokens": 753,
+    "total_tokens": 1094,
+    "cost": 0.0004106,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0004106,
+      "upstream_inference_prompt_cost": 3.41e-05,
+      "upstream_inference_completions_cost": 0.0003765
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 240,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.0004106",
+  "edited": "## Autenticação\n\nA API exige um token de autenticação no cabeçalho `Authorization`, no formato `Bearer <TOKEN>`. Inclua também `Content-Type: application/json` para enviar o corpo como JSON.\n\n## Criar tarefa\n\nEnvie uma requisição `POST` para `/v1/jobs` com um objeto JSON que contenha o campo `name`. Esse campo é obrigatório, deve ser uma string não vazia e pode ter até 80 caracteres.\n\nExemplo de requisição com `curl`:\n\n```bash\ncurl -X POST https://api.example.com/v1/jobs \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nSe a requisição for aceita, a API responde com HTTP `201` e um objeto com o identificador e o estado da tarefa:\n\n```json\n{\n  \"id\": \"job_123\",\n  \"status\": \"queued\"\n}\n```\n\nO estado `queued` indica que a tarefa está na fila; não significa que sua execução foi concluída.\n\nO cabeçalho `Idempotency-Key` é opcional. Se você enviar a mesma chave novamente com o mesmo corpo dentro de 24 horas, a API retorna a tarefa existente. Se reutilizar a chave com um corpo diferente, a resposta será HTTP `409`.\n\n## Erros\n\nA API usa os seguintes códigos para indicar falhas na requisição:\n\n- `400`: o campo `name` está ausente ou não atende aos requisitos de validação.\n- `401`: o token está ausente ou é inválido.\n- `409`: uma chave de idempotência já usada foi enviada com um corpo diferente.\n- `429`: o token excedeu o limite de 60 requisições por minuto. A resposta inclui o cabeçalho `Retry-After`, cujo valor indica o intervalo em segundos.\n\n## Limitações\n\nO limite de requisições é de 60 por minuto para cada token. Ao receber HTTP `429`, use o valor de `Retry-After` como referência para aguardar antes de enviar novas requisições.\n\nA reutilização de uma chave de idempotência com o mesmo corpo retorna a tarefa existente por 24 horas. Esse comportamento não se aplica a uma chave reutilizada com um corpo diferente, que resulta em HTTP `409`. O estado `queued` não confirma que a tarefa foi executada nem que sua execução terminou.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": [
+    {
+      "type": "reasoning.encrypted",
+      "data": "gAAAAABqv_aEEsD55uLrid97YTKsKSIOwSx-b5qELTqo_g5xkE9sDSrPU9j3OpS1oxhDgDHJOQCEQHdVz8W8yCUfmOJvZP8suQ9PQIGhw9zTJ5jyzRXM0Qh--Da2ar3oH6vfOTdUjuL-Kkk2JupORJCaIt5vos9gU6Ih7E4LvWH8efv02gz76vQfipo8DoPe82IPE8Xz1ajOn6pKDXhnD8oZgqDwyKyuGxXfS-3hwXuaRq65uOb2b4ifbHgnaggJ7MS9-EQd_Y-K1_bmuYRrAS9SZYB706PNqTjUUxaXKG14-6_jxDpRY40D58Q6BgJuTQLTG5B6ZRFdBBYHhEUHpsLXcEbfEr7EUhosLfs7Oj1F0hpTxSh_ZscP-8AyFe8EIFNkHio1ILk-dt49aNRlUQ7kaDkLUmLLdX3nawXV90LWVCL9l9RgPzhfRxOvTQV6O_8GHAvUZoXA4bn-2tTmpO2g8aO8olp__3NQhURWHWGHHQYn3ATBql_DF8a2reOka60L82wzBkTJE01oGrHyrZAQOSof1Es2mm2IeW3y6nmsBJxDnGFr1PHCg9GpEixtCFrDLZloZkqk6kiIiouFpBme203U_kr-UjsJf_GylKyP9jgcEnE6mD1KvBelYMdLrxWpl1zW0hZxIzHxdtdhP0S8wikeVV_13bTPgWII2BznC-jZMioldl_vYuILGEYpITqd6OKcdYQG3yZ5mwj8yLjib2B5LVnmx97S6Gr4AFsmjAZRNvkkxXOXEh7EQaSXQ9-P8k-zoopFiRcb1zJub7xPmzkUYlK1Jc2eXtPhs19dsQe2Hy3LM2vhz2DR_LWarQI0pR3S_Xw5Epx6_IsGH3qjilYYfG2yMFxHc7aUy6Xhykyt0xnYVqH4RhYFsVCstitCAoeNsmP4Jk1RgK8oZatMtl2EcFtZAmxto1eGOSM6MQi6DCZHAhnbRMysj5WFeuEox--k1RtgqUM0yy3QUr3eZ5Etdh52L2EFHD7_DtXd2HHTPSwxEiVDbGoEWBgyYry8tWR1UIxqV-q45_ewecZ6fwR8uG9Tq934ejaThLALGHVibfQuxRU_1GR2603g7UsfHD9LdXor-JkrvWRaDJFi25zc29dg3JG2sLDb-RJPVJuhKRnr2zLPH3XeFFxM2eiUQzhkxNDVi00FEw43kotTZbK8h6UCdGDzCuudYnfgRffomy4l_6V-cKsDRgPe3qRJ1H7-YX37CGCrw8YAZPlzlt6SwKqPULZPrwkSZtDh1T44Ydj7mWFkFRC4mz40ckZxV0gHEMbRVAzKPXcDU7sDOSa4WvU9l5xg8UcMA4_Y9xnLLDTGwO39GtV6ZyYo1RY0g7USqEfD86yRP5m-TEpuFNlT1xK4q2pS9PNFT1yq3wq7Sxs6dm1cfUCp-49RpjNjMgjyF5qtevp_jTif5sjazWny4yYTFVTZnYPKdWKX7bnspaqFnAZSK5TP_8cGP1flOt83kbDdah5iAHnZGRx-aGmd0Y_RVJPx_pHdKS6P5kmQgus5sn-yoZOqGp8opcCPIPmUhRo8SQRa-WCaZ0fFlsaWdKh2NEbsD98r4dwNZ1Zz3ztulIhhGho2db5oIqb-gYQ3KWKgxi2V5q2LRWtyN2BL4P8M2Wf3gggnzzCRBWiC0F9Zkq97gavFofe64L2mgN2q7ndumXWokLto7EHDbkh89kWDSSAdUnLPsjeBhriJMjiI5FdS_wfiuDw_rG4Ux_835IEd7kRXycbBu_aTWm6ctzKpTIuXBZ7pqQDg6lDvY_l7rIYbu-81g-Y-tR2Fq4wxawTz0wGqPkJPkgRqA0cz0QoHM33ZhitpYGMvPJEqvkiGJyaRqDP6ukhZ8fSfiU3_k2F4o9jCpWMTdqZd75peLqSWQ_ZPYkVB4VKG5e7bUlY3BYd3mJo99PCpKbT6wTkKWDgbdGYE9UJP65hGjZ7Ny6uKRnuBhlsiXjzTAH6Qf4shoUV68KaaDvf1AD442dUlF8-lqOL04IC1gpWXr1t6tKvDhHOgqZKmVE5NLpMnipZFLOLWqxX0AMdZ4LWK1CITIS85Cm1VNs96jBrXZ7LKoDWz1mcnmSx2tu6JuH29snDXjcsOI5bBqu-J5n7fILiUonICpzrwbuz41tOTYHC0uflRm0AJDaSMqUbdC3ktM9YjCIoBxx4kE5qR_B6YE75zva-94mFG3HTOr6-zXGg6m8A-6gtSXDe5A4qrR_ewNSmrmTCiq0zAJOXsM5ScmReTIIldcBXwbxW_fEPnCvr-pznjDPwlM67GJgci7XyoYhk7Cm0KvIkKh7X3PqJT4nCL9IPhIeGuvU0yM_Z41kSt4Cg0m6TDBNs77nvJ9VPNvY8ASPx0KaEKw17g5ZFeg9xTc68OEuLMnicmNY9kT6r9MBO_ep7rsInU_IxFZ3UCsamSS495gGibGEK9JBjAsYFO_oFqwCQiTIBaZTzNpuKPM3uUpAjrx5PUNRLazP8eHhhjRui2fWMVxhQM_nv1I7vY1ajQ7YMIVYJJISLbS8fipIXdOzFuoAWnBHbzSiTaR1xASfmsGF1kMIFlmdZ39s9cz2JPgBkmcaq-8LMdvAfGsBWDxNMat-evqHeS8S6lED1TpFXeUqfuvlAP7n6IXX2pEdENLNLOCvsppQdERK4q0-aHvR_BMevX4H-8ki-c0UXXPJP0-UNhzN8aicPJBmV7Lb5ush46p1xpBGVzlwE0PexmUgdmstd9_BMzt8oyBPSzWvnd8-9lXtkAiBMEKht7C6ZFdcCmj86BK5d_e78kjI5l9zC4DKilkaomzP6rkTB018uH49CtQXzIDWAZVfJLCoE7DcYXSalwxXdo3FTzU_CBuQ==.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+      "format": "openai-responses-v1",
+      "id": "rs_0c6d684784cd49be016abff681d49c87d19643cf0b85e0db4f",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 7.474973373115063,
+  "finished_at": "2026-10-02T18:23:04.571595+00:00"
+}

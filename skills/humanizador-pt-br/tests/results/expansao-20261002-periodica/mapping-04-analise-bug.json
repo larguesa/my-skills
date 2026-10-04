@@ -1,0 +1,439 @@
+{
+  "chunks": [
+    {
+      "index": 0,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t010": "**Reprodução**\n\nEm um processo novo do interpretador, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, também sem argumento para `bucket`, retorna `[\"A\", \"B\"]`. O esperado era `[\"B\"]`, já que as duas chamadas deveriam ser independentes.\n\n**Causa**\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia criada nesse momento fica associada à própria função e é reutilizada por todas as chamadas que omitem `bucket`. Como `append` altera essa lista no lugar, cada chamada sem argumento acrescenta itens ao mesmo objeto. Assim, o estado acumulado em uma chamada aparece nas seguintes.\n\n**Correção**\n\nUsamos `None` como sentinela e criamos uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, mesmo vazia, a função mantém o contrato: acrescenta o item àquela própria lista e a retorna. O teste `is None` é preferível a `if not bucket`, pois este último substituiria indevidamente uma lista vazia fornecida pelo chamador.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes não compartilham estado\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# A lista fornecida é a mesma retornada e recebe o item\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\n**Limitações**\n\nA correção trata apenas o compartilhamento do valor padrão entre chamadas. Ela não torna a função segura para uso concorrente: se várias threads usarem a mesma lista fornecida, a sincronização continua sendo responsabilidade do chamador, e esse cenário não foi verificado aqui. Código que dependia, de forma intencional ou acidental, do acúmulo entre chamadas passará a se comportar de outro modo. Os asserts cobrem somente os casos descritos e não substituem uma suíte de testes mais ampla.",
+          "t011": "## Reprodução\n\nEm um processo novo do Python, a função abaixo foi chamada duas vezes sem o segundo argumento:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nA chamada `collect(\"A\")` retorna `[\"A\"]`. A chamada seguinte, `collect(\"B\")`, deveria retornar `[\"B\"]`, mas retorna `[\"A\", \"B\"]`.\n\n## Causa\n\nO valor padrão de `bucket` é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista criada nesse momento fica associada ao objeto da função e é reutilizada sempre que o chamador omite `bucket`. Como `append` altera essa lista no lugar, o item da primeira chamada permanece nela na segunda. As duas chamadas devolvem o mesmo objeto, que acumula estado entre usos.\n\n## Correção\n\nA solução é usar `None` como sentinela e criar uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, a função continua acrescentando o item a ela e retornando esse mesmo objeto:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nprimeira = collect(\"A\")\nsegunda = collect(\"B\")\nassert primeira == [\"A\"] and segunda == [\"B\"]\nassert primeira is not segunda\n\nlista = [\"x\"]\nresultado = collect(\"y\", lista)\nassert resultado is lista\nassert lista == [\"x\", \"y\"]\n```\n\nO teste `is None` também preserva uma lista vazia fornecida pelo chamador. Uma expressão como `bucket or []` trocaria essa lista vazia por outra e quebraria o contrato.\n\n## Limitações\n\nA correção elimina o estado compartilhado do valor padrão, mas não torna a função segura para uso concorrente. Se várias threads acrescentarem itens à mesma lista fornecida, a coordenação continua sob responsabilidade do chamador. A função ainda modifica a lista recebida, conforme o contrato. Quem não quiser essa mutação deve passar uma cópia. Código que dependia do acúmulo entre chamadas, mesmo sem intenção, passará a receber listas independentes. Os asserts cobrem apenas os casos descritos e não substituem uma suíte de testes."
+        },
+        "pares": {
+          "p005": {
+            "A": "t010",
+            "B": "t011"
+          }
+        }
+      },
+      "mapping": {
+        "t010": {
+          "model": "anthropic/claude-opus-5.5",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790965878-KoH1Gy84UFpb4XUqOvTL"
+        },
+        "t011": {
+          "model": "anthropic/claude-opus-5.5",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790965902-Zq44zZnNSFMbf6VuLxJj"
+        }
+      },
+      "invalid_ids": [],
+      "eligible": true
+    },
+    {
+      "index": 1,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t000": "# Análise de bug: lista padrão mutável compartilhada\n\n## Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora nenhuma lista tenha sido passada em nenhuma das duas. O resultado esperado era `[\"B\"]` na segunda chamada, já que cada chamada sem argumento deveria começar com uma lista vazia.\n\nO código observado é:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\n## Causa\n\nO valor padrão `[]` é avaliado uma única vez, quando a função é definida, e não a cada chamada. Esse objeto de lista é criado nesse momento e armazenado no atributo `__defaults__` da função. Todas as chamadas que omitem `bucket` recebem a mesma referência a essa lista.\n\nPor isso, o `append` da segunda chamada altera a lista que já havia sido devolvida e guardada pela primeira. Não há cópia nem lista nova por chamada. O comportamento observado é consequência direta do compartilhamento do objeto padrão entre chamadas.\n\n## Correção\n\nUse `None` como padrão e crie uma lista nova apenas quando `bucket is None`. Se o chamador fornecer uma lista, ela deve ser usada diretamente, preservando o contrato de acrescentar àquela própria lista e retorná-la.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nVerificação do comportamento independente:\n\n```python\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"]\nassert b == [\"B\"]\nassert a is not b\n```\n\nVerificação do contrato com lista fornecida:\n\n```python\nminha = []\nresultado = collect(\"C\", minha)\nassert resultado is minha\nassert minha == [\"C\"]\n```\n\n## Limitações\n\nA correção trata o compartilhamento do padrão entre chamadas no mesmo processo. Ela não torna a função segura para uso concorrente: duas threads ou tarefas que chamem `collect` com a mesma lista fornecida ainda podem intercalar `append` e produzir resultado dependente do escalonamento. Também não há proteção contra o chamador reutilizar a lista retornada em outro contexto. Se isolamento entre chamadas for necessário, ele deve vir de uma lista nova por chamada ou de sincronização explícita, conforme o caso.",
+          "t001": "**Reprodução**\n\nEm um processo Python novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. Em seguida, `collect(\"B\")` retorna `[\"A\", \"B\"]`, mesmo sem o chamador ter passado qualquer lista. O comportamento persiste enquanto o processo estiver vivo: cada nova chamada acrescenta o item ao mesmo objeto.\n\n**Causa**\n\nO parâmetro `bucket=[]` define uma lista mutável como valor padrão. Em Python, valores padrão são avaliados uma única vez, no momento da definição da função, e ficam armazenados no objeto da função. Assim, todas as chamadas que omitem `bucket` compartilham a mesma lista. A primeira chamada acrescenta `\"A\"` a essa lista e a retorna. A segunda chamada reutiliza o mesmo objeto, que já contém `\"A\"`, e acrescenta `\"B\"`. O resultado `[\"A\", \"B\"]` não vem de duas listas distintas, mas de uma única lista acumulada entre chamadas.\n\n**Correção**\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# identidade da lista fornecida\nminha_lista = []\nresultado = collect(\"C\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"C\"]\n```\n\nCom `bucket=None`, a função cria uma lista nova apenas quando nenhuma lista é fornecida. Se o chamador passar uma lista, a função acrescenta àquela própria lista e devolve o mesmo objeto, preservando o contrato.\n\n**Limitações**\n\nEsta correção elimina o compartilhamento do objeto padrão entre chamadas. Ela não trata acesso concorrente: se a mesma lista for usada por várias threads ou tarefas ao mesmo tempo, acrescentar e retornar podem interagir de forma não coordenada. Não há alegação de segurança para uso concorrente.",
+          "t002": "**Reprodução**\n\nEm um processo novo, a chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada `collect(\"B\")` retorna `[\"A\", \"B\"]`, quando o esperado seria `[\"B\"]` ou uma lista independente. O problema é reproduzível em qualquer sequência de chamadas sem argumento explícito para `bucket`.\n\n**Causa**\n\nA lista vazia `[]` definida como valor padrão do parâmetro `bucket` é criada uma única vez na definição da função e permanece na memória do objeto função. Cada chamada que omite o argumento reutiliza a mesma instância. O método `append` altera a lista in-place, acumulando itens entre invocações. Não se trata de um erro de lógica no corpo da função, mas de um compartilhamento de estado mutável no nível do objeto função.\n\n**Correção**\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes sem argumento\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"], \"Chamadas independentes devem retornar listas separadas\"\nassert b == [\"B\"], \"Chamadas independentes devem retornar listas separadas\"\n\n# Identidade da lista fornecida pelo chamador\nlista = []\nretorno = collect(\"X\", lista)\nassert retorno is lista, \"Deve acrescentar à própria lista fornecida\"\nassert lista == [\"X\"], \"A lista original deve conter o item\"\n```\n\nA correção substitui o objeto mutável padrão por `None` e cria uma nova lista a cada chamada quando o argumento não é fornecido. Quando o chamador passa uma lista existente, o contrato de mutar e retornar aquela instância é preservado.\n\n**Limitações**\n\nA função permanece vulnerável a condições de corrida se múltiplas threads chamarem `collect` com a mesma lista de `bucket` simultaneamente, pois `list.append` não é atômico em todos os interpretadores. Esta análise não alega segurança para uso concorrente.",
+          "t003": "## Reprodução\n\nA função `collect` usa uma lista vazia como valor padrão para o parâmetro `bucket`. Essa lista é criada uma única vez, no momento em que a função é definida. Cada chamada subsequente que não passa um valor para `bucket` reutiliza o mesmo objeto.\n\nO resultado é o acúmulo inesperado de itens:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\ncollect(\"A\")  # [\"A\"]\ncollect(\"B\")  # [\"A\", \"B\"]\n```\n\nEm um processo novo, a primeira chamada retorna `[\"A\"]`. A segunda chamada retorna `[\"A\", \"B\"]`, porque o objeto padrão persiste entre invocações.\n\n## Causa\n\nValores padrão em Python são avaliados uma única vez, na definição da função, e não a cada chamada. Quando o valor é mutável, como uma lista, as modificações feitas em uma chamada permanecem visíveis para as próximas.\n\nIsso ocorre porque `bucket` aponta para o mesmo objeto na memória em toda chamada que usa o padrão. O método `append` altera esse objeto compartilhado, não cria um novo.\n\n## Correção\n\nA forma padrão de evitar o problema é usar `None` como sentinela e criar uma nova lista dentro da função quando necessário. O código corrigido:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nQuando o chamador fornece uma lista, a função acrescenta àquela própria lista e a retorna, preservando o contrato original de mutar o objeto passado.\n\nAbaixo, verificações que cobrem os dois comportamentos:\n\n```python\n# Duas chamadas independentes, cada uma cria sua própria lista.\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"], a\nassert b == [\"B\"], b\n\n# Lista fornecida pelo chamador é mutada e retornada por identidade.\nminha_lista = []\nretorno = collect(\"C\", minha_lista)\nassert retorno is minha_lista\nassert minha_lista == [\"C\"]\n```\n\n## Limitações\n\nA correção resolve o acúmulo do objeto padrão compartilhado. Ela não torna a função segura para uso concorrente: se múltiplas threads chamarem `collect` com a mesma lista, as operações de `append` podem entrar em condição de corrida. Para ambientes com concorrência, é necessário sincronizar o acesso ou adotar outra estratégia de isolamento de estado.",
+          "t004": "## Reprodução\n\nO código observado usa uma lista vazia como valor padrão do parâmetro `bucket`:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nEm um processo novo, `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora nenhuma lista tenha sido fornecida explicitamente. O resultado mostra que os itens das duas chamadas foram acumulados no mesmo objeto, em vez de serem mantidos em listas independentes.\n\n## Causa\n\nEm Python, os valores padrão dos parâmetros são avaliados quando a definição da função é executada, não a cada chamada. Assim, `bucket=[]` cria uma única lista, reutilizada por todas as chamadas que omitem esse argumento.\n\nComo `append` modifica a lista existente, a primeira chamada altera o objeto que também será usado pela segunda. Além disso, o retorno não é uma cópia: quem guardar a lista retornada poderá observar nela alterações feitas por chamadas posteriores que utilizem esse mesmo objeto padrão.\n\n## Correção\n\nUse `None` como padrão e crie uma lista apenas quando `bucket is None`. Se o chamador fornecer uma lista, acrescente o item diretamente nela e retorne esse mesmo objeto:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nprimeira = collect(\"A\")\nsegunda = collect(\"B\")\n\nassert primeira == [\"A\"]\nassert segunda == [\"B\"]\nassert primeira is not segunda\n\nfornecida = []\nresultado = collect(\"C\", fornecida)\n\nassert resultado is fornecida\nassert fornecida == [\"C\"]\n```\n\nA comparação explícita com `None` preserva inclusive uma lista vazia fornecida pelo chamador, sem substituí-la por outra.\n\n## Limitações\n\nA correção elimina o compartilhamento involuntário do valor padrão, mas mantém a mutação intencional de listas fornecidas. Reutilizar explicitamente a mesma lista continua acumulando itens. Os asserts verificam os comportamentos apresentados; não demonstram nem garantem segurança para uso concorrente.",
+          "t005": "## Reprodução\n\nO código observado usa uma lista vazia como valor padrão de `bucket`:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nEm um processo novo, a primeira chamada, `collect(\"A\")`, retorna `[\"A\"]`. A segunda, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora nenhuma lista tenha sido fornecida explicitamente. Assim, a segunda chamada encontra o conteúdo acrescentado pela primeira, em vez de começar com uma lista vazia.\n\n## Causa\n\nO valor padrão é avaliado quando a definição da função é executada, não a cada chamada. Portanto, `bucket=[]` cria um único objeto de lista, reutilizado nas chamadas que omitem esse argumento.\n\nComo `append` modifica a própria lista, cada item permanece nesse objeto compartilhado. O problema não está no retorno, mas na combinação entre um padrão mutável e sua alteração dentro da função. Os resultados dessas chamadas também apontam para a mesma lista.\n\n## Correção\n\nUse `None` como padrão e crie uma lista somente quando `bucket is None`:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nresult = collect(\"A\", provided)\nassert result is provided\nassert provided == [\"A\"]\n```\n\nAs duas primeiras verificações cobrem chamadas independentes sem lista explícita. As seguintes confirmam que uma lista fornecida, mesmo vazia, recebe o item e é retornada sem cópia. Testar `bucket is None`, em vez de sua veracidade, preserva esse contrato.\n\n## Limitações\n\nA correção elimina o compartilhamento involuntário do argumento padrão. Ela não impede o compartilhamento deliberado: se o chamador reutilizar uma lista, as chamadas continuarão acrescentando itens nela. Os asserts verificam os casos apresentados; não demonstram segurança para uso concorrente, e a correção não oferece essa garantia.",
+          "t006": "**Reprodução**\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada `collect(\"B\")` retorna `[\"A\", \"B\"]`, mesmo sem referência explícita à lista anterior. O comportamento se repete em qualquer sequência de chamadas que omita o segundo argumento.\n\n**Causa**\n\nO parâmetro `bucket=[]` cria um único objeto lista no momento da definição da função. Esse objeto é avaliado uma vez e passa a ser compartilhado como valor padrão em todas as chamadas que não fornecem o argumento. Cada `append` modifica a mesma lista em memória, acumulando itens entre invocações distintas.\n\n**Correção**\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nQuando o chamador não passa `bucket`, uma lista nova é criada a cada chamada. Quando o chamador fornece uma lista, o contrato se mantém: o item é acrescentado àquela própria lista, e a mesma referência é retornada.\n\n```python\nr1 = collect(\"A\")\nr2 = collect(\"B\")\nassert r1 == [\"A\"]\nassert r2 == [\"B\"]\n\nexterna = [\"x\"]\nr3 = collect(\"y\", externa)\nassert r3 is externa\nassert externa == [\"x\", \"y\"]\n```\n\nO primeiro par de asserts confirma que duas chamadas independentes produzem listas separadas. O segundo par verifica a identidade do objeto fornecido pelo chamador e o acréscimo do item.\n\n**Limitações**\n\nA correção elimina o compartilhamento acidental do valor padrão. Não torna a função segura para uso concorrente: se duas threads chamarem `collect` com a mesma lista ao mesmo tempo, a ausência de sincronização pode corromper o conteúdo.",
+          "t007": "**Reprodução**\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada `collect(\"B\")`, sem argumento explícito para `bucket`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. O estado acumulado na primeira invocação vaza para a segunda, como se ambas compartilhassem um mesmo contêiner.\n\n**Causa**\n\nO valor padrão `bucket=[]` é avaliado uma única vez, no instante em que o interpretador executa a instrução `def`. A lista criada nesse momento fica vinculada ao objeto da função e é reutilizada em toda chamada que omite o argumento. Cada `append` modifica essa única instância em memória, de modo que itens de chamadas supostamente independentes se acumulam no mesmo objeto.\n\n**Correção**\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nQuando o chamador omite `bucket`, uma nova lista é criada a cada invocação, eliminando o compartilhamento. Quando o chamador fornece uma lista própria, o contrato original é preservado: o item é acrescentado àquela lista e a mesma referência é devolvida.\n\n```python\nr1 = collect(\"A\")\nr2 = collect(\"B\")\nassert r1 == [\"A\"]\nassert r2 == [\"B\"]\n\nexterna = [\"X\"]\nresultado = collect(\"Y\", externa)\nassert resultado is externa\nassert externa == [\"X\", \"Y\"]\n```\n\nO primeiro par de asserts confirma que duas chamadas independentes produzem listas separadas. O segundo par confirma a identidade do objeto fornecido pelo chamador.\n\n**Limitações**\n\nA correção resolve o vazamento entre chamadas sequenciais dentro de um mesmo processo. Não se alega segurança para uso concorrente: se múltiplas threads compartilharem a mesma lista e invocarem `collect` ao mesmo tempo, a ausência de sincronização pode corromper o conteúdo. Esta análise restringe-se ao comportamento em um único fluxo de execução."
+        },
+        "pares": {
+          "p000": {
+            "A": "t000",
+            "B": "t001"
+          },
+          "p001": {
+            "A": "t002",
+            "B": "t003"
+          },
+          "p002": {
+            "A": "t004",
+            "B": "t005"
+          },
+          "p003": {
+            "A": "t006",
+            "B": "t007"
+          }
+        }
+      },
+      "mapping": {
+        "t000": {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "mode": "off",
+          "arm": "skill",
+          "generation_id": "gen-1791014727-06X4QHaxnjY9Youm3Tzi"
+        },
+        "t001": {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "mode": "off",
+          "arm": "original",
+          "generation_id": "gen-1791014716-BXkHiWO4p9cd1MoNO7Iv"
+        },
+        "t002": {
+          "model": "qwen/qwen3.8-flash",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1791014679-hkwX1MY40mdol1What57"
+        },
+        "t003": {
+          "model": "qwen/qwen3.8-flash",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1791014690-8pIFRWVHLPoqKKB82Sl8"
+        },
+        "t004": {
+          "model": "openai/gpt-6-astra",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790965924-xgTvi69m14SOzfuZyoFz"
+        },
+        "t005": {
+          "model": "openai/gpt-6-astra",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790965938-iJLsJuVVnnIpecMvXyIC"
+        },
+        "t006": {
+          "model": "qwen/qwen3.8-max-prime",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968256-8cUjjbwusTuQTzkNK8wC"
+        },
+        "t007": {
+          "model": "qwen/qwen3.8-max-prime",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968240-CL2cVHLlLhICfpLQyHTl"
+        }
+      },
+      "invalid_ids": [],
+      "eligible": true
+    },
+    {
+      "index": 2,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t008": "## Reprodução\n\nO defeito pode ser reproduzido em um processo novo:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"A\", \"B\"]\n```\n\nA segunda chamada inclui `\"A\"`, embora o chamador tenha passado apenas `\"B\"`. Isso ocorre porque o argumento padrão `[]` é criado quando a função é definida, não a cada chamada. As chamadas que omitem `bucket` reutilizam o mesmo objeto de lista, que mantém as alterações feitas anteriormente.\n\n## Causa\n\nO valor padrão mutável fica associado à função e persiste entre chamadas. Assim, `append` altera a lista compartilhada. O comportamento pode ser inesperado quando se presume que cada chamada sem argumento começará com uma lista vazia.\n\n## Correção\n\nUse `None` como valor padrão e crie uma lista apenas quando `bucket is None`. Se o chamador fornecer uma lista, acrescente o item a essa mesma lista e retorne o próprio objeto:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nresult = collect(\"C\", provided)\nassert result is provided\nassert provided == [\"C\"]\n```\n\nAs duas primeiras chamadas são independentes porque cada uma cria sua própria lista. A última verificação confirma a identidade da lista fornecida, além de mostrar que ela recebeu o item.\n\n## Limitações\n\nA correção resolve o compartilhamento acidental do argumento padrão entre chamadas sem `bucket`. Quando uma lista é fornecida, ela é alterada de propósito, conforme o contrato de acrescentar àquela própria lista e retorná-la. Esta alteração, por si só, não garante segurança para uso concorrente.",
+          "t009": "## Reprodução\n\nO problema pode ser reproduzido em um processo novo:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"A\", \"B\"]\n```\n\nA segunda chamada inclui `\"A\"`, embora o chamador tenha passado apenas `\"B\"`. Isso ocorre porque o valor padrão `[]` é criado uma vez, quando a função é definida, e o mesmo objeto é reutilizado nas chamadas em que `bucket` não é informado.\n\n## Causa\n\nListas são mutáveis. Assim, `bucket.append(item)` altera o objeto padrão, e essa alteração permanece disponível nas chamadas seguintes. O valor padrão não é recriado a cada execução da função.\n\n## Correção\n\nUse `None` como valor padrão e crie uma lista dentro da função apenas quando `bucket is None`. Se o chamador fornecer uma lista, a função acrescenta o item àquela mesma lista e a retorna.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nfirst = collect(\"A\")\nsecond = collect(\"B\")\nassert first == [\"A\"]\nassert second == [\"B\"]\nassert first is not second\n\nprovided = []\nresult = collect(\"C\", provided)\nassert result == [\"C\"]\nassert result is provided\n```\n\nOs dois primeiros resultados são independentes: cada chamada sem lista fornecida recebe uma nova lista. No último caso, `result` é o próprio objeto passado em `provided`, agora com `\"C\"` acrescentado.\n\n## Limitações\n\nA correção trata o compartilhamento involuntário do valor padrão entre chamadas. Ela não torna a operação segura para uso concorrente: chamadas simultâneas que compartilhem a mesma lista ainda podem interferir umas nas outras. Se houver listas compartilhadas entre chamadas concorrentes, a coordenação necessária não está definida por este exemplo.",
+          "t012": "**Reprodução**\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. O resultado acumula itens de chamadas anteriores, o que indica que a lista padrão criada na definição da função está sendo reaproveitada entre chamadas, e não instanciada a cada invocação.\n\n**Causa**\n\nO parâmetro `bucket=[]` usa uma lista literal como valor padrão. O interpretador avalia esse valor uma única vez, quando a função é definida, e reutiliza o mesmo objeto em todas as chamadas que não recebem `bucket` explicitamente. Cada chamada sem argumento faz `append` na mesma lista interna, por isso o segundo retorno contém o item da primeira chamada. O compartilhamento não ocorre entre processos diferentes, pois cada processo cria sua própria lista na avaliação da definição.\n\n**Correção**\n\nSubstitua o padrão por `None` e crie uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, preserve o contrato: acrescente àquela própria lista e retorne-a.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"] and b == [\"B\"], \"chamadas independentes devem ser listas separadas\"\n\nprovided = []\nreturned = collect(\"C\", provided)\nassert returned is provided and provided == [\"C\"], \"lista fornecida deve ser preservada e retornada\"\n```\n\n**Limitações**\n\nA correção resolve o compartilhamento do objeto padrão, mas não garante segurança para uso concorrente. Dois threads chamando a função sem argumento ao mesmo tempo ainda operam em listas distintas, enquanto chamadas com a mesma lista fornecida continuam concorrendo sobre aquele objeto sem proteção.",
+          "t013": "Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` devolve `[\"A\"]`. A segunda chamada, `collect(\"B\")`, devolve `[\"A\", \"B\"]` em vez de uma lista apenas com `\"B\"`. O comportamento se repete a cada nova chamada da função dentro do mesmo processo: o segundo elemento sempre acompanha o primeiro.\n\nCausa\n\nA assinatura `def collect(item, bucket=[])` usa uma lista literal como valor padrão. Em Python, esse valor padrão é criado uma única vez, na definição da função, e passa a ser o mesmo objeto em todas as chamadas que não recebem `bucket`. Como `bucket.append(item)` modifica a lista em vez de criar outra, cada chamada acrescenta ao objeto compartilhado. A lista persiste entre chamadas porque fica vinculada ao objeto função.\n\nCorreção\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nCom `bucket=None`, cada chamada sem lista explícita cria uma lista nova. Quando o chamador fornece uma lista, a função preserva o contrato: acrescenta àquela própria lista e a retorna, sem substituí-la.\n\nLimitações\n\nOs `assert` cobrem chamadas independentes e a identidade da lista fornecida, mas dependem de não serem executados com a otimização que os remove. A correção trata apenas o compartilhamento do objeto padrão; não diz respeito a concorrência, e nada aqui garante uso seguro em threads.",
+          "t014": "# Análise de bug: lista padrão compartilhada em `collect`\n\n## Reprodução\n\nEm um processo novo do interpretador, com a função original:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nprint(collect(\"A\"))  # ['A']\nprint(collect(\"B\"))  # ['A', 'B']\n```\n\nA segunda chamada não passa `bucket`, mas o resultado traz o item da primeira. O esperado seria `[\"B\"]`.\n\n## Causa\n\nEm Python, o valor padrão de um parâmetro é avaliado uma única vez, quando a instrução `def` é executada, e não a cada chamada. A lista vazia `[]` é criada nesse momento e fica associada à função como o valor padrão de `bucket`. Toda chamada que omite o argumento recebe esse mesmo objeto. Como `list.append` modifica a lista no lugar, cada chamada acrescenta o item ao objeto compartilhado, e o conteúdo acumulado aparece nas chamadas seguintes. A primeira chamada retorna a própria lista padrão, e a segunda retorna esse mesmo objeto, agora com dois elementos.\n\n## Correção\n\nUsar `None` como sentinela e criar uma lista nova apenas quando nenhuma for fornecida:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Lista fornecida: o contrato de acrescentar e retornar a mesma lista é mantido\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\nO teste `is None` é intencional. Uma lista vazia fornecida pelo chamador é falsa em contexto booleano, e `if not bucket` a substituiria por uma lista nova, quebrando a identidade esperada.\n\n## Limitações\n\nOs `assert` acima cobrem apenas os dois comportamentos descritos: independência entre chamadas sem argumento e preservação da identidade da lista fornecida. Não foram verificados outros tipos de entrada. A correção não torna a função segura para uso concorrente: se várias threads acrescentarem à mesma lista fornecida, nada aqui coordena esse acesso, e esse cenário não foi analisado.",
+          "t015": "# Análise de bug: lista padrão compartilhada em `collect`\n\n## Reprodução\n\nEm um processo novo, a primeira chamada devolve apenas o item recebido, e a segunda já traz o resultado da primeira:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nprint(collect(\"A\"))  # [\"A\"]\nprint(collect(\"B\"))  # [\"A\", \"B\"]\n```\n\nNenhuma das duas chamadas passou `bucket`. Mesmo assim, a segunda enxergou o item \"A\".\n\n## Causa\n\nO valor padrão de um parâmetro em Python é avaliado uma única vez, no momento em que a instrução `def` é executada, e não a cada chamada. Aqui, `[]` é criada nesse instante e fica guardada na própria função como o valor padrão de `bucket`. Toda chamada que omite o argumento recebe esse mesmo objeto. Como `append` altera a lista existente, sem criar outra, o conteúdo acumulado em uma chamada continua visível nas seguintes. O problema, portanto, não está no `append`, e sim no objeto mutável usado como padrão.\n\n## Correção\n\nUsar `None` como marcador de \"nenhuma lista fornecida\" e criar a lista dentro da função, somente quando for necessário:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Identidade da lista fornecida\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\nCada chamada sem argumento passa a receber uma lista nova. Quando o chamador fornece uma lista, o contrato original é mantido: o item é acrescentado àquela própria lista, que também é o valor retornado.\n\n## Limitações\n\nA verificação acima cobre apenas os casos descritos: duas chamadas sem argumento e uma chamada com lista fornecida. A correção não torna a função segura para uso concorrente. Se várias threads acrescentarem itens à mesma lista fornecida, nada aqui coordena esse acesso. Além disso, a comparação `bucket is None` trata somente `None` como ausência de argumento. Uma lista vazia fornecida pelo chamador continua sendo usada, como esperado.",
+          "t016": null,
+          "t017": "Reprodução\nAo executar o código observado em um processo novo, a primeira chamada com a instrução `collect(\"A\")` retorna a lista `[\"A\"]`. Na sequência, uma segunda chamada executada como `collect(\"B\")` retorna `[\"A\", \"B\"]`. Esse comportamento evidencia que o estado interno da lista não foi reiniciado entre as chamadas sucessivas que omitiram o segundo parâmetro.\n\nCausa\nA falha tem como origem o compartilhamento do objeto padrão entre chamadas da função. No interpretador Python, os valores padrão de argumentos são avaliados e instanciados exatamente uma vez, no instante da definição da função, e não a cada invocação. Como uma lista é uma estrutura de dados mutável, o parâmetro `bucket` mantém a referência para a mesma instância original na memória. Dessa forma, qualquer operação de inserção via `bucket.append(item)` afeta permanentemente a lista padrão reutilizada nas execuções posteriores.\n\nCorreção\nA solução consiste em definir `bucket=None` na assinatura e criar uma nova lista local somente quando `bucket is None`. Caso o chamador decida fornecer explicitamente uma lista preexistente, o contrato de acrescentar o item diretamente àquela própria lista e retorná-la é estritamente preservado.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\n# Duas chamadas independentes\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Identidade da lista fornecida\nalvo = []\nassert collect(\"item\", alvo) is alvo\n```\n\nLimitações\nO ajuste resolve o acúmulo indevido de itens em execuções sucessivas e mantém o comportamento esperado para referências passadas explicitamente. No entanto, não se deve alegar segurança para uso concorrente; se múltiplos fluxos de execução compartilharem a mesma lista externa, conflitos poderão ocorrer."
+        },
+        "pares": {
+          "p004": {
+            "A": "t008",
+            "B": "t009"
+          },
+          "p006": {
+            "A": "t012",
+            "B": "t013"
+          },
+          "p007": {
+            "A": "t014",
+            "B": "t015"
+          },
+          "p008": {
+            "A": "t016",
+            "B": "t017"
+          }
+        }
+      },
+      "mapping": {
+        "t008": {
+          "model": "openai/gpt-6-luna",
+          "mode": "off",
+          "arm": "original",
+          "generation_id": "gen-1790968270-lSm4pH6XJyx8EgOkPRmO"
+        },
+        "t009": {
+          "model": "openai/gpt-6-luna",
+          "mode": "off",
+          "arm": "skill",
+          "generation_id": "gen-1790968275-sWyC6y9rCodxGwEbtJNJ"
+        },
+        "t012": {
+          "model": "xiaomi/mimo-v2.6-flash",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968454-vqb2V4jsqB2LxjDIV5UZ"
+        },
+        "t013": {
+          "model": "xiaomi/mimo-v2.6-flash",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968500-5NawENrqJW1oriIMZOZ8"
+        },
+        "t014": {
+          "model": "anthropic/claude-sonnet-5.5",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968603-ddb4oj5bHGnJHM2rJK94"
+        },
+        "t015": {
+          "model": "anthropic/claude-sonnet-5.5",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968610-7cawwPCsm3szoWKstc3X"
+        },
+        "t016": {
+          "model": "google/gemini-3.8-flash",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790966168-7MevwWcs6O59S6BSmvPA",
+          "invalid_status": "invalid_response"
+        },
+        "t017": {
+          "model": "google/gemini-3.8-flash",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790966154-I5kT0n6kct56RzK65O0m"
+        }
+      },
+      "invalid_ids": [
+        "t016"
+      ],
+      "eligible": false
+    },
+    {
+      "index": 3,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t018": null,
+          "t019": null,
+          "t020": "Reprodução\nEm um processo novo, a primeira chamada collect(\"A\") retorna [\"A\"]. A segunda chamada collect(\"B\"), sem segundo argumento, retorna [\"A\", \"B\"]. Este comportamento foi observado com o código abaixo, tratado aqui como exemplo fictício para exercício, sem relação com relato real:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nA repetição mostra acúmulo entre chamadas independentes, mesmo sem que o chamador tenha passado lista.\n\nCausa\nO objeto usado como valor padrão é criado uma única vez, na definição da função, e não a cada chamada. Assim, o mesmo objeto lista é reutilizado quando bucket não é informado. Cada append modifica esse objeto compartilhado. Por isso, o item da primeira chamada permanece presente na segunda. Não se trata de nova lista por chamada, mas de referência persistente ao mesmo objeto padrão.\n\nCorreção\nA correção usa bucket=None como padrão e cria uma nova lista somente quando bucket is None. Quando o chamador fornece uma lista, a função mantém o contrato de acrescentar àquela própria lista e retorná-la:\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\nA verificação pode ser demonstrada com:\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\nOs dois primeiros asserts confirmam chamadas independentes. Os seguintes confirmam identidade e acréscimo na lista fornecida.\n\nLimitações\nEsta análise cobre apenas o caso descrito, com chamadas sequenciais em processo novo. Não amplia o resultado para outros códigos, medições ou promessas de desempenho. Também não afirma segurança para uso concorrente, pois acesso simultâneo à mesma lista pode exigir controle adicional fora do escopo deste exercício fictício.\n",
+          "t021": "Reprodução\nEm um processo novo, a primeira chamada collect(\"A\") retorna [\"A\"]. A segunda chamada, collect(\"B\"), sem reiniciar o interpretador, retorna [\"A\", \"B\"]. Se o retorno da primeira chamada foi guardado em uma variável, ele também passa a conter [\"A\", \"B\"]. O efeito se repete nas chamadas seguintes sem argumento para bucket. O valor de item não altera esse padrão de acúmulo.\n\nCausa\nO objeto usado como valor padrão é criado uma vez, quando a função é definida. Nas chamadas sem argumento, bucket recebe sempre a mesma lista. Como append altera a própria lista, cada chamada adiciona um item ao objeto compartilhado. Por isso a segunda chamada encontra o item deixado pela primeira. Não existe cópia automática nem criação de nova lista por chamada. A falha está nesse compartilhamento do objeto mutável padrão.\n\nCorreção\nO ajuste usa bucket=None no cabeçalho e cria uma lista nova somente quando bucket is None. Se o chamador fornecer uma lista, a função acrescenta o item àquela própria lista e a retorna, sem criar outra. O código corrigido é:\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\nA verificação inclui chamadas independentes e a identidade da lista fornecida:\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\nminha_lista = [\"X\"]\nresultado = collect(\"Y\", minha_lista)\nassert resultado is minha_lista\nassert minha_lista == [\"X\", \"Y\"]\n```\n\nLimitações\nA correção impede o acúmulo involuntário entre chamadas sem argumento, mas mantém o acúmulo intencional quando a mesma lista é passada explicitamente. Ela não valida o tipo de bucket nem isola listas reutilizadas pelo chamador em outros trechos. Também não deve ser vista como garantia para uso concorrente. Acessos simultâneos à mesma lista continuam sujeitos a interferência entre appends e leituras.",
+          "t022": "Reprodução\n\nEm um processo novo, a primeira chamada cria o estado inicial:\n\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"A\", \"B\"]\n```\n\nA primeira chamada produz [\"A\"], como esperado. A segunda chamada, no entanto, devolve [\"A\", \"B\"] em vez de [\"B\"], acumulando itens entre chamadas que deveriam ser independentes. Isso ocorre sem que o chamador tenha passado qualquer lista explicitamente.\n\nCausa\n\nO parâmetro `bucket=[]` é avaliado apenas uma vez, quando a função é definida, e não a cada chamada. Portanto, o mesmo objeto lista passa a ser o valor padrão de todas as invocações que omitem `bucket`. Como o corpo da função faz `bucket.append(item)`, cada chamada modifica esse objeto compartilhado e o devolve, preservando os itens anteriores. Trata-se do padrão clássico de valor padrão mutável em Python. O problema não depende de importações, de ordem de módulos ou de estado global: basta chamar a função duas vezes no mesmo processo, sempre omitindo o argumento.\n\nCorreção\n\nUse `None` como valor padrão e crie uma nova lista apenas quando o chamador não fornecer uma:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nAs duas primeiras verificações confirmam que chamadas independentes não compartilham estado. A última confirma a identidade da lista fornecida.\n\nLimitações\n\nQuando o chamador fornece uma lista, o contrato permanece: os itens são acrescentados àquela própria lista e ela é retornada, não uma cópia. Quem chamar `collect` passando uma lista ainda verá essa lista mutada. O `assert` de identidade documenta esse comportamento, mas não é uma garantia em tempo de execução fora dos testes. Também não se alega segurança para uso concorrente: várias threads chamando a função com a mesma lista podem produzir resultados indefinidos, e nenhuma trava foi adicionada. Por fim, os exemplos acima verificam apenas o formato listado e a identidade do objeto retornado, sem cobrir outros tipos mutáveis que o chamador eventualmente venha a fornecer.",
+          "t023": "# Análise de bug: lista padrão compartilhada em `collect`\n\n## Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`, como esperado. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. Os itens somem apenas se o processo for encerrado: enquanto o processo durar, cada nova chamada sem argumento continua acumulando elementos na mesma lista.\n\n## Causa\n\nO parâmetro `bucket=[]` é avaliado uma única vez, quando a função `def` é executada. Isso cria um único objeto lista, associado ao valor padrão do parâmetro e reutilizado por todas as chamadas que omitirem `bucket`. Como `bucket.append(item)` modifica esse objeto em vez de criar outro, o acúmulo se propaga entre chamadas independentes, que passam a compartilhar o mesmo estado. Não se trata de retorno errado: a função devolve fielmente a lista que recebeu, e essa lista é a mesma a cada chamada.\n\n## Correção\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nA nova lista é criada somente quando `bucket is None`, ou seja, quando o chamador não forneceu uma. Quando o chamador fornece uma lista, o contrato se mantem: os elementos são acrescentados àquela própria lista e a lista é retornada, preservando o uso existente.\n\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nminha_lista = []\nassert collect(\"C\", minha_lista) is minha_lista\nassert minha_lista == [\"C\"]\n```\n\nO primeiro bloco comprova que duas chamadas independentes não se influenciam. O segundo comprova a identidade: a lista fornecida é a lista retornada, e recebe o item.\n\n## Limitações\n\nA correção elimina o compartilhamento do padrão, mas não torna a função segura para uso concorrente. Se duas threads passarem a mesma lista, ou chamarem a função sem argumento e gravarem o resultado em estrutura compartilhada, continuam existindo condições de corrida, que precisam de sincronização externa. A função também não limita o tamanho da lista: quando o chamador reaproveita a própria lista, o crescimento é esperado e intencional. Nada aqui cobre cópia defensiva, remoção de duplicatas ou validação do tipo de `bucket`.",
+          "t024": "Reprodução\nEm um processo novo, collect(\"A\") retorna [\"A\"]. Na chamada seguinte, collect(\"B\") retorna [\"A\", \"B\"]. Isso indica que a segunda chamada reaproveita a lista criada pela primeira. O código observado é:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nCausa\nO valor padrão bucket=[] é avaliado uma única vez, no momento da definição da função, e não a cada chamada. A lista padrão pertence ao objeto função e é criada uma vez. Por isso, todas as chamadas que omitem bucket compartilham a mesma lista. Como append altera o objeto no lugar, o estado permanece entre chamadas. O parâmetro não recebe uma lista nova a cada execução. Esse comportamento ocorre com qualquer objeto mutável usado como padrão.\n\nCorreção\nUsar bucket=None como sentinela e criar uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, ela deve ser usada diretamente, preservando o contrato de acrescentar àquela própria lista e retorná-la.\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nlista = []\nresultado = collect(\"C\", lista)\nassert resultado is lista\nassert lista == [\"C\"]\n```\n\nLimitações\nA correção elimina o compartilhamento do objeto padrão entre chamadas que omitem bucket. Ela não torna a função segura para uso concorrente. Se a mesma lista fornecida for acessada por várias threads ou tarefas ao mesmo tempo, append e leitura podem competir. O escopo aqui é apenas o bug do argumento padrão mutável. A correção não altera o contrato quando uma lista é passada explicitamente, apenas evita a reutilização acidental do padrão. Também não há validação de tipo de bucket; se o chamador passar um objeto sem append, a falha ocorrerá no uso. Não se alega segurança para uso concorrente.",
+          "t025": "Análise de bug: argumento padrão mutável em collect\n\nReprodução\nEm um processo novo, collect(\"A\") retorna [\"A\"]. A chamada seguinte, collect(\"B\"), retorna [\"A\", \"B\"]. O segundo resultado inclui o item da chamada anterior, embora nenhuma lista tenha sido passada explicitamente. Isso indica que as duas chamadas compartilham o mesmo objeto de lista associado ao parâmetro bucket.\n\nCausa\nO valor padrão bucket=[] é avaliado uma única vez, quando a definição da função é executada. A lista criada nesse momento fica guardada no objeto função e é reutilizada em toda chamada que omite o argumento. O append modifica essa lista compartilhada. Na primeira chamada, \"A\" é acrescentado. Na segunda, o mesmo objeto ainda contém \"A\", e \"B\" é acrescentado ao final.\n\nCorreção\nUsar None como sentinela e criar uma lista nova apenas quando o argumento não for fornecido. Se o chamador passar uma lista, a função deve acrescentar a essa própria lista e retorná-la, sem substituí-la.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nfornecida = []\nresultado = collect(\"C\", fornecida)\nassert resultado is fornecida\nassert fornecida == [\"C\"]\n```\n\nLimitações\nA correção não torna a função segura para uso concorrente. Chamadas simultâneas que compartilhem a mesma lista fornecida podem intercalar operações de append sem sincronização. A função também não copia a lista recebida, apenas preserva o contrato de mutação e retorno. Por fim, None deixa de ser um valor válido para o parâmetro bucket."
+        },
+        "pares": {
+          "p009": {
+            "A": "t018",
+            "B": "t019"
+          },
+          "p010": {
+            "A": "t020",
+            "B": "t021"
+          },
+          "p011": {
+            "A": "t022",
+            "B": "t023"
+          },
+          "p012": {
+            "A": "t024",
+            "B": "t025"
+          }
+        }
+      },
+      "mapping": {
+        "t018": {
+          "model": "x-ai/grok-4.7",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790966037-RQhiHWZcda4nXMaF3Lzl",
+          "invalid_status": "invalid_response"
+        },
+        "t019": {
+          "model": "x-ai/grok-4.7",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790965954-ZgRKihwdjHr5YSbCFO1M",
+          "invalid_status": "invalid_response"
+        },
+        "t020": {
+          "model": "meta/muse-spark-1.3",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790966185-92gpOgtfW6w6SPMGsnE7"
+        },
+        "t021": {
+          "model": "meta/muse-spark-1.3",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790966201-XutGsd2cwZwoiucC91pF"
+        },
+        "t022": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968144-S66WgGdnoq0dSkR9OdPH"
+        },
+        "t023": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968168-TvWnAzeuKLYPmRkZgaPk"
+        },
+        "t024": {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1791014741-NP7BQYVbLGX0Vx45AVEA"
+        },
+        "t025": {
+          "model": "deepseek/deepseek-v4.1-flash",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1791014806-w7jqjMAcnRrkiPtjFI6a"
+        }
+      },
+      "invalid_ids": [
+        "t018",
+        "t019"
+      ],
+      "eligible": false
+    },
+    {
+      "index": 4,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t026": "# Análise de bug: valor padrão mutável em `collect`\n\n## Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, quando o esperado seria `[\"B\"]`. O comportamento ocorre de forma consistente no Python, pois o argumento padrão `bucket=[]` é avaliado uma única vez, no momento da definição da função, e não a cada chamada.\n\n## Causa\n\nO objeto lista padrão é criado uma vez e armazenado no atributo `__defaults__` da função. Todas as chamadas que não recebem `bucket` explícito compartilham esse mesmo objeto. Como `list.append` modifica a lista no lugar, cada chamada acumula itens na lista compartilhada. Assim, `\"A\"` acrescentado na primeira chamada permanece presente quando `\"B\"` é acrescentado na segunda. O mesmo problema afetaria outros valores mutáveis, como `dict` ou `set`.\n\n## Correção\n\nUsar `None` como marcador e criar a lista somente quando necessário:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nCom essa correção, duas chamadas sem argumento retornam listas independentes, e uma lista fornecida pelo chamador continua sendo usada e retornada, preservando o contrato original:\n\n```python\nr1 = collect(\"A\")\nr2 = collect(\"B\")\nassert r1 == [\"A\"]\nassert r2 == [\"B\"]\n\nmeu_bucket = [\"x\"]\nresultado = collect(\"y\", meu_bucket)\nassert resultado is meu_bucket\nassert resultado == [\"x\", \"y\"]\n```\n\n## Limitações\n\nA correção elimina o compartilhamento entre chamadas, mas não torna a função segura para uso concorrente. Se duas threads chamarem `collect` com o mesmo `bucket`, pode ocorrer condição de corrida no `append`, e nenhuma garantia de atomicidade é oferecida aqui. Casos concorrentes exigem mecanismos de sincronização próprios do chamador.",
+          "t027": "# Análise de bug: argumento padrão mutável em collect\n\n## Reprodução\nEm um processo novo, chamando `collect(\"A\")` o retorno é `[\"A\"]`. A chamada seguinte `collect(\"B\")` retorna `[\"A\", \"B\"]`, embora a intenção fosse obter apenas `[\"B\"]`. O comportamento se repete a cada chamada sem argumento: a lista cresce acumulando itens de todas as chamadas anteriores no mesmo processo.\n\n## Causa\nO problema está no argumento padrão mutável `bucket=[]`. Em Python, a expressão padrão é avaliada uma única vez, na definição da função, e o objeto resultante fica armazenado no atributo da função, reutilizado em todas as chamadas em que o argumento não é fornecido. Assim, todas as chamadas sem segundo argumento compartilham a mesma lista, e `append` altera esse objeto compartilhado. O código observado é:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\n## Correção\nUsar `None` como padrão e criar uma nova lista somente quando necessário:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nSe o chamador fornecer uma lista, o contrato é preservado: a função acrescenta àquela própria lista e a retorna.\n\n```python\nr1 = collect(\"A\")\nassert r1 == [\"A\"]\nr2 = collect(\"B\")\nassert r2 == [\"B\"]\nassert r1 != r2\n\nminha = [\"x\"]\nres = collect(\"y\", minha)\nassert res is minha\nassert res == [\"x\", \"y\"]\n```\n\n## Limitações\nEsta análise cobre apenas o comportamento observado em processo novo com chamadas sequenciais. Nenhuma garantia é alegada para uso concorrente: chamadas simultâneas a partir de múltiplas threads ou processos não foram avaliadas e podem exigir mecanismos adicionais de sincronização. O exercício usa dados e personagens fictícios.",
+          "t028": "Reprodução\nAo executar a função collect com o argumento padrão bucket=[], observa-se um comportamento inesperado de persistência de estado. Em um processo novo, a primeira chamada collect(\"A\") retorna [\"A\"]. Imediatamente após, a segunda chamada collect(\"B\") retorna [\"A\", \"B\"], em vez da esperada [\"B\"]. Isso ocorre porque o valor padrão é avaliado apenas uma vez, no momento da definição da função, e não em cada invocação. Consequentemente, todas as chamadas que omitem o segundo parâmetro compartilham a mesma instância de lista na memória.\n\nCausa\nO problema reside na mutabilidade do objeto padrão. Listas são objetos mutáveis em Python. Quando a função é definida, o interpretador cria a lista vazia [] e vincula esse objeto específico ao parâmetro bucket. A instrução bucket.append(item) altera diretamente essa lista compartilhada. Assim, o estado acumulado entre as chamadas não é isolado, mas sim global à definição da função, levando a efeitos colaterais indesejados para qualquer código que dependa de listas independentes por chamada.\n\nCorreção\nPara resolver a questão, deve-se utilizar None como sentinela padrão. O código corrigido verifica se bucket is None dentro do corpo da função. Se verdadeiro, inicializa uma nova lista local. Caso contrário, utiliza a lista fornecida pelo chamador. Esta abordagem garante que novas chamadas sem argumentos recebam listas distintas, preservando a independência dos estados. Além disso, mantém o contrato original quando uma lista é explicitamente passada: a função acrescenta o item àquela própria lista e retorna a referência inalterada. Abaixo segue a implementação correta com testes de assertividade:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Teste de isolamento\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Teste de identidade\nlista_externa = []\nresultado = collect(\"C\", lista_externa)\nassert resultado is lista_externa\nassert lista_externa == [\"C\"]\n```\n\nLimitações\nEsta correção elimina o bug de estado compartilhado implícito, mas não aborda problemas de concorrência. Em ambientes multithreaded, múltiplas threads acessando a mesma lista externa simultaneamente podem causar condições de corrida ou inconsistências de dados, pois list.append não é atômico em todos os contextos de execução paralela real. Portanto, a segurança para uso concorrente não é garantida por esta alteração simples.",
+          "t029": "## Reprodução\n\nAo executar o código em um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada `collect(\"B\")`, sem argumentos adicionais, retorna `[\"A\", \"B\"]`. O comportamento esperado seria que cada invocação independente retornasse apenas o item recém-adicionado, ou seja, `[\"B\"]`. A persistência do estado entre chamadas sucessivas demonstra que a lista padrão não é recriada a cada execução da função.\n\n## Causa\n\nO problema reside na avaliação dos valores padrão dos argumentos no Python. Diferente de linguagens onde os padrões são avaliados em tempo de execução, no Python eles são avaliados uma única vez, durante a definição da função (em tempo de compilação). No trecho `bucket=[]`, uma nova lista vazia é criada e vinculada ao objeto função como seu valor padrão permanente. Toda vez que `collect` é chamada sem especificar `bucket`, ela utiliza essa mesma instância de lista na memória. Consequentemente, `bucket.append(item)` altera o objeto compartilhado, acumulando itens indefinidamente enquanto o processo estiver ativo. Isso configura um efeito colateral indesejado para funções puras ou com contrato de independência de estado.\n\n## Correção\n\nPara resolver, deve-se usar `None` como sentinela para indicar ausência de argumento. Dentro do corpo da função, verifica-se se `bucket` é `None`. Se for, cria-se uma nova lista local; caso contrário, mantém-se a referência fornecida pelo chamador. Isso garante que cada chamada sem parâmetro explícito trabalhe com um objeto isolado, preservando simultaneamente a capacidade de operar sobre listas externas quando necessário.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Testes de validação\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nlista_externa = []\nresultado = collect(\"C\", lista_externa)\nassert resultado is lista_externa\n```\n\n## Limitações\n\nEsta correção elimina o acúmulo automático entre chamadas independentes, mas não torna a função segura para uso concorrente. Em ambientes multithreaded ou multiprocessos, múltiplas invocações simultâneas podem ainda competir por recursos compartilhados se o chamador passar referências de objetos mutáveis. Além disso, a abordagem assume que o contrato de API permite que o usuário forneça sua própria lista. Se a intenção original fosse sempre criar uma cópia interna, mesmo quando um argumento é passado, esta solução exigiria ajustes adicionais na lógica de clonagem.",
+          "t030": "**Reprodução**\n\nExecutar as seguintes chamadas em um processo novo:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n\nfirst = collect(\"A\")\nsecond = collect(\"B\")\nprint(first)   # [\"A\", \"B\"]\nprint(second)  # [\"A\", \"B\"]\nprint(first is second)  # True\n```\nO resultado inesperado é que a primeira lista, atribuída a `first`, também contém \"B\", demonstrando que ambas as chamadas operaram sobre o mesmo objeto de lista.\n\n**Causa**\n\nA causa é o uso de uma lista mutável como argumento padrão, `bucket=[]`. O Python avalia e cria essa lista uma única vez, na ocasião da definição da função, e a associa ao objeto de parâmetro. Todas as chamadas em que `bucket` não é informado reutilizam exatamente esse mesmo objeto mutável, compartilhando o estado entre invocações distintas. O método `append` modifica essa lista em memória, o que explica por que a saída da primeira chamada mudou após a segunda chamada, e por que as duas listas retornadas são idênticas em identidade (`is`).\n\n**Correção**\n\nA solução é usar `None` como padrão e criar uma nova lista apenas quando necessário, preservando o contrato com listas fornecidas:\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nresult = collect(\"C\", provided)\nassert result is provided\nassert provided == [\"C\"]\n```\nAgora cada chamada sem lista explícita obtém um novo objeto, enquanto listas fornecidas pelo chamador são preservadas em identidade e conteúdo.\n\n**Limitações**\n\nA correção elimina o compartilhamento acidental do argumento padrão, mas não trata concorrência. Ainda é responsabilidade do chamador evitar uso simultâneo da mesma lista em múltiplas threads.",
+          "t031": "Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. O valor esperado para chamadas independentes seria uma lista contendo apenas o item daquela chamada. O comportamento se repete sempre que a função é invocada sem um terceiro argumento, independentemente do item passado.\n\nCausa\n\nA lista `bucket=[]` é avaliada uma única vez, no momento em que a função é definida. Todas as chamadas que omitem o argumento recebem a mesma lista objeto, criada na execução do `def`. Cada chamada acrescenta seu item a essa lista compartilhada e a devolve, então o segundo chamador encontra o conteúdo deixado pelo primeiro. Não se trata de retorno em cache nem de estado intencional: é um objeto padrão mutável mantido vivo pela própria função.\n\nCorreção\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nQuando `bucket` não é fornecido, `None` sinaliza a ausência e uma lista nova é criada naquela chamada. Quando o chamador entrega uma lista, ela é preservada: a função acrescenta o item àquela própria lista e a retorna, mantendo o contrato original de mutação in place.\n\n```python\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"] and b == [\"B\"]\n\nprovided = [\"X\"]\nresult = collect(\"Y\", provided)\nassert result is provided and provided == [\"X\", \"Y\"]\n```\n\nLimitações\n\nA correção resolve o compartilhamento do objeto padrão, mas não torna a função segura para uso concorrente. Listas passadas pelo chamador continuam mutáveis e visíveis a quem as compartilha, e nenhuma sincronização é oferecida. O comportamento com `None` explícito como terceiro argumento também cria uma lista nova, o que pode ser indesejado em quem quis passar `None` de propósito.",
+          "t032": "# Análise de bug: lista padrão mutável em `collect`\n\n## Reprodução\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`, como esperado. A segunda chamada `collect(\"B\")` não cria uma lista nova: retorna `[\"A\", \"B\"]`, acumulando o item anterior. Chamadas seguintes seguem acumulando, sem qualquer limpeza entre elas.\n\n## Causa\n\nO valor padrão de `bucket` é uma lista criada uma única vez, quando a função é definida. Em Python, valores padrão mutáveis são avaliados na definição e depois compartilhados entre todas as chamadas que omitirem o argumento. Cada `bucket.append(item)` altera esse mesmo objeto, e `return bucket` devolve a referência compartilhada. O efeito não depende de estado global: depende do objeto padrão armazenado no objeto função.\n\n## Correção\n\nUse `None` como marcador e crie uma lista nova somente quando o argumento for omitido. Se o chamador fornecer uma lista, o contrato continua sendo acrescentar àquela própria lista e retorná-la, preservando a identidade do objeto.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]  # chamadas independentes\n\ndados = []\nassert collect(\"C\", dados) is dados  # mesma lista do chamador\nassert dados == [\"C\"]\n```\n\nO primeiro `assert` comprova que duas chamadas sem argumento não compartilham estado. O segundo comprova que a lista fornecida é a mesma retornada e a única modificada.\n\n## Limitações\n\nA correção trata o compartilhamento do objeto padrão. Não há garantia de segurança para uso concorrente: se a mesma lista for passada por várias threads, as chamadas continuam podendo interferir entre si, e o código não usa bloqueio nem outra forma de sincronização. O contrato de mutar a lista fornecida também permanece, de modo que efeitos colaterais no argumento do chamador são esperados.",
+          "t033": "Reprodução\nEm um processo novo, a primeira chamada a collect(\"A\") retorna [\"A\"]. Uma segunda chamada, collect(\"B\"), retorna [\"A\", \"B\"], em vez de apenas [\"B\"]. Esse comportamento ocorre mesmo sem laço ou reutilização explícita de uma variável: a função acumula itens entre invocações aparentemente independentes, contrariando a expectativa de que cada chamada sem argumento opcional comece com uma lista vazia.\n\nCausa\nA lista padrão bucket=[] é avaliada uma única vez, na definição da função, e não a cada chamada. O mesmo objeto lista é compartilhado por todas as invocações que usam o valor padrão. Como bucket.append(item) modifica esse objeto no lugar, os elementos permanecem visíveis na chamada seguinte. O problema não está em append em si, mas na mutação do objeto padrão compartilhado entre chamadas.\n\nCorreção\nUse None como marcador de ausência e crie uma nova lista somente quando o chamador não fornecer uma. Se uma lista for informada, acrescente ao próprio objeto e retorne-o, preservando o contrato existente.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nLimitações\nA correção elimina o compartilhamento entre chamadas independentes que não recebem lista. Ela não garante segurança para uso concorrente: várias threads ou processos que compartilhem a mesma lista fornecida podem interferir entre si, pois append continua sendo uma operação no mesmo objeto. A verificação de identidade is confirma apenas que a lista informada é a mesma devolvida, sem qualquer controle de sincronização."
+        },
+        "pares": {
+          "p013": {
+            "A": "t026",
+            "B": "t027"
+          },
+          "p014": {
+            "A": "t028",
+            "B": "t029"
+          },
+          "p015": {
+            "A": "t030",
+            "B": "t031"
+          },
+          "p016": {
+            "A": "t032",
+            "B": "t033"
+          }
+        }
+      },
+      "mapping": {
+        "t026": {
+          "model": "z-ai/glm-5.3-flash",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968589-XZGuqie39WU87sD3hAZC"
+        },
+        "t027": {
+          "model": "z-ai/glm-5.3-flash",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968578-DecDlEJUQvb76FkParvG"
+        },
+        "t028": {
+          "model": "qwen/qwen3.8-flash",
+          "mode": "off",
+          "arm": "original",
+          "generation_id": "gen-1790968617-iTNLNbSlHrVqKoEvvnMx"
+        },
+        "t029": {
+          "model": "qwen/qwen3.8-flash",
+          "mode": "off",
+          "arm": "skill",
+          "generation_id": "gen-1790982208-xuzZhaie1HYlm4dFpcld"
+        },
+        "t030": {
+          "model": "xiaomi/mimo-v2.6-flash",
+          "mode": "off",
+          "arm": "original",
+          "generation_id": "gen-1790968294-sBUPvuEPN0XOByAXk19O"
+        },
+        "t031": {
+          "model": "xiaomi/mimo-v2.6-flash",
+          "mode": "off",
+          "arm": "skill",
+          "generation_id": "gen-1790968397-o7iA5ZrZL611kZw4i1sK"
+        },
+        "t032": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "mode": "off",
+          "arm": "skill",
+          "generation_id": "gen-1790968119-Q1ywFnq9FPCYOPH3puAg"
+        },
+        "t033": {
+          "model": "xiaomi/mimo-v2.6-pro",
+          "mode": "off",
+          "arm": "original",
+          "generation_id": "gen-1790968099-XaNmhAlJ56GOH1x56Ph5"
+        }
+      },
+      "invalid_ids": [],
+      "eligible": true
+    },
+    {
+      "index": 5,
+      "state": {
+        "prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+        "textos": {
+          "t034": "## Reprodução\n\nO código observado recebe `bucket` com uma lista vazia como valor padrão. Em um processo novo, `collect(\"A\")` retorna `[\"A\"]`. Na chamada seguinte, `collect(\"B\")` retorna `[\"A\", \"B\"]`, pois o item `\"B\"` é acrescentado à mesma lista usada na primeira chamada.\n\n## Causa\n\nO valor padrão de um parâmetro é criado quando a função é definida, não a cada chamada. Como listas são mutáveis, a lista padrão permanece armazenada e é compartilhada por todas as chamadas que não fornecem um valor para `bucket`. Assim, cada chamada modifica o mesmo objeto. O problema não é o `append` em si, mas o uso de uma lista mutável como valor padrão.\n\n## Correção\n\nUse `None` como valor padrão e crie uma lista dentro da função somente quando `bucket is None`. Se o chamador fornecer uma lista, a função acrescenta o item a essa própria lista e retorna o mesmo objeto.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nfirst = collect(\"A\")\nsecond = collect(\"B\")\n\nassert first == [\"A\"]\nassert second == [\"B\"]\nassert first is not second\n\nprovided = []\nresult = collect(\"C\", provided)\n\nassert result is provided\nassert provided == [\"C\"]\n```\n\nAs duas chamadas sem argumento para `bucket` recebem listas distintas. Já a chamada com `provided` modifica e retorna exatamente a lista fornecida.\n\n## Limitações\n\nA correção trata o compartilhamento acidental da lista padrão entre chamadas. Ela não estabelece segurança para uso concorrente, nem altera o comportamento esperado quando várias operações compartilham intencionalmente uma lista fornecida pelo chamador. Cada chamada com uma lista explícita continua acrescentando o item a esse objeto, conforme o contrato descrito.",
+          "t035": "## Reprodução\n\nNo processo novo, a primeira chamada, `collect(\"A\")`, retorna `[\"A\"]`. A segunda, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora não tenha recebido explicitamente a lista criada pela chamada anterior. O comportamento observado decorre do valor padrão mutável definido na assinatura da função.\n\n## Causa\n\nEm Python, o valor padrão de um parâmetro é avaliado uma vez, quando a função é definida, e não a cada chamada. Assim, `bucket=[]` cria uma única lista que fica associada à função. Nas chamadas sem argumento para `bucket`, essa mesma lista é reutilizada. Como `append` modifica a lista, cada chamada acrescenta seu item ao estado deixado pelas anteriores. Isso pode fazer resultados dependerem da ordem em que a função foi chamada.\n\n## Correção\n\nUse `None` como valor padrão e crie uma lista nova dentro da função somente quando `bucket is None`. Se o chamador fornecer uma lista, acrescente o item àquela própria lista e retorne-a:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nresult = collect(\"C\", provided)\nassert result is provided\nassert provided == [\"C\"]\n```\n\nAs duas primeiras asserções verificam chamadas independentes sem uma lista fornecida. As seguintes confirmam que, quando uma lista é passada, a função a modifica e retorna o mesmo objeto, preservando esse contrato.\n\n## Limitações\n\nA correção evita que chamadas sem argumento compartilhem a lista padrão. Ela não altera a mutabilidade de uma lista fornecida pelo chamador: essa lista continuará sendo modificada. Também não define comportamento para valores de `bucket` que não sejam `None` nem listas. Esta análise não afirma segurança para uso concorrente.",
+          "t036": "# Análise de bug: argumento padrão mutável em `collect`\n\n## Reprodução\n\nEm um processo recém-iniciado, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. Uma segunda chamada `collect(\"B\")`, sem passar o argumento `bucket`, retorna `[\"A\", \"B\"]`, e não `[\"B\"]` como se esperaria de uma coleta isolada.\n\n## Causa\n\nO parâmetro `bucket` tem como valor padrão a expressão `[]`. Em Python, essa expressão é avaliada uma única vez, na definição da função, e o objeto resultante fica associado ao código da função. Cada chamada sem `bucket` reutiliza a mesma lista, que persiste entre chamadas e acumula itens. Como listas são mutáveis, o `append` altera esse objeto compartilhado, e o estado de uma chamada vaza para as seguintes.\n\n## Correção\n\nUsar `None` como sentinela e criar a lista no corpo da função:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n```\n\nTestes correspondentes:\n\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]  # chamadas independentes\n\nfornecida = [\"X\"]\nresultado = collect(\"Y\", bucket=fornecida)\nassert resultado is fornecida  # mesma lista\nassert resultado == [\"X\", \"Y\"]\n```\n\nQuando o chamador fornece uma lista, a correção preserva o contrato original: o item é acrescentado àquela mesma lista, que é retornada.\n\n## Limitações\n\nA correção elimina o estado compartilhado involuntário entre chamadas sem argumento, mas não torna a função segura para uso concorrente: chamadas simultâneas que recebam a mesma lista explícita ainda disputam o mesmo objeto, e este exercício não avaliou comportamento em múltiplas threads.",
+          "t037": "# Análise de Bug: Compartilhamento do Argumento Padrão Mutável\n\n## Reprodução\n\nEm um processo novo, ao executar `collect(\"A\")`, o retorno é `[\"A\"]`. Em seguida, uma segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora a expectativa fosse receber apenas `[\"B\"]`. O comportamento se repete em chamadas seguintes: a lista acumula todos os itens desde o início do processo.\n\n## Causa\n\nEm Python, o valor padrão de um argumento é avaliado uma única vez, na definição da função, e não a cada chamada. No código observado, `bucket=[]` cria uma única lista no momento da definição. Essa mesma lista fica associada ao atributo da função e é reutilizada como valor padrão em todas as chamadas que não fornecem o argumento. Como listas são mutáveis, `bucket.append(item)` altera esse objeto compartilhado, e o estado persiste entre chamadas dentro do mesmo processo.\n\n## Correção\n\nO padrão recomendado é usar um marcador imutável, criar a lista dentro da função e documentar o contrato de reutilização quando o chamador fornecer a própria lista:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n# Chamadas independentes usam listas distintas\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\n# Lista fornecida é acrescida e retornada como o mesmo objeto\nfornecida = [\"x\"]\nresultado = collect(\"y\", fornecida)\nassert resultado is fornecida\nassert fornecida == [\"x\", \"y\"]\n```\n\n## Limitações\n\nA correção elimina o compartilhamento entre chamadas independentes, mas não altera o contrato de mutação: quando o chamador passa uma lista, ela é modificada e retornada. O comportamento em uso concorrente por múltiplas threads não foi avaliado e não é garantido como seguro."
+        },
+        "pares": {
+          "p017": {
+            "A": "t034",
+            "B": "t035"
+          },
+          "p018": {
+            "A": "t036",
+            "B": "t037"
+          }
+        }
+      },
+      "mapping": {
+        "t034": {
+          "model": "openai/gpt-6-luna",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968288-3bQGUQkcKKvCldf0iYuo"
+        },
+        "t035": {
+          "model": "openai/gpt-6-luna",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968280-AGPo0XJFLB4IhMwcRuWu"
+        },
+        "t036": {
+          "model": "z-ai/glm-5.3-prime",
+          "mode": "on",
+          "arm": "skill",
+          "generation_id": "gen-1790968234-lh1dBPqoRKZ3dKKhegfG"
+        },
+        "t037": {
+          "model": "z-ai/glm-5.3-prime",
+          "mode": "on",
+          "arm": "original",
+          "generation_id": "gen-1790968228-cdfL6pMjVqfigstpl2TB"
+        }
+      },
+      "invalid_ids": [],
+      "eligible": true
+    }
+  ],
+  "note": "PRIVATE mapping; full-case IDs remain stable across pilot and full run."
+}

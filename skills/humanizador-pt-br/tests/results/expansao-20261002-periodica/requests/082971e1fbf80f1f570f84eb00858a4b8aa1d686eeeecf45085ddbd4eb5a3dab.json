@@ -1,0 +1,217 @@
+{
+  "model": "openai/gpt-6-luna",
+  "endpoint": {
+    "name": "OpenAI | openai/gpt-6-luna-20260922",
+    "model_id": "openai/gpt-6-luna",
+    "model_name": "OpenAI: GPT-6 Luna",
+    "context_length": 1050000,
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "discount": 0,
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "provider_name": "OpenAI",
+    "tag": "openai",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": 922000,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "seed",
+      "max_tokens",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.97904172978357,
+    "uptime_last_5m": 99.9938193774877,
+    "uptime_last_1d": 99.97478361443893,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:web_search": {
+        "type": "web_search"
+      },
+      "openrouter:apply_patch": {
+        "type": "apply_patch"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "openai/gpt-6-luna",
+        "provider_returned": "OpenAI",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945410-bzlLmRCYPC0LEtDDBkl4",
+        "observed_at": "2026-10-02T12:50:10.808300+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo.\n\nSKILL E REFERÊNCIAS:\n---\nname: humanizador-pt-br\ndescription: Melhore naturalidade em PT-BR sem perder a voz.\nversion: 0.2.0\nauthor: Ricardo Pupo Larguesa (larguesa), Hermes Agent\nplatforms: [linux, macos, windows]\nmetadata:\n  hermes:\n    tags: [escrita, edicao, pt-br]\n    related_skills: []\n---\n\n# Humanizador PT-BR\n\nMelhore o texto para quem vai ler: clareza, ritmo, precisão e voz. Cortar sinais de escrita genérica é um meio, não o objetivo. Um texto sem palavras sinalizadas ainda pode ser ruim.\n\n## Quando usar\n\n- Reescrever textos genéricos, repetitivos ou com formalidade deslocada.\n- Revisar artigos, mensagens, conteúdo técnico e pequenos contos.\n- Escrever do zero quando o pedido autorizar criação, inclusive ficção.\n- Auditar sem reescrever quando o usuário pedir apenas diagnóstico.\n\nNão usar para esconder atribuições, fabricar depoimentos ou comprovar autoria. Esta skill não é um detector de IA.\n\n## Antes de escrever\n\nLeia o pedido e o material disponível. Identifique gênero, leitor, intenção, registro e restrições. Use a amostra de voz quando houver; sem amostra, preserve o registro do original ou o indicado no pedido. Pergunte só se faltar informação que altere o resultado.\n\nDistinga as duas tarefas:\n\n- **Revisão:** conserve os acontecimentos, fatos, nomes, números, citações, negações, condições e grau de certeza. Não acrescente experiências, fontes ou detalhes apresentados como reais.\n- **Criação:** desenvolva o conteúdo dentro do que o pedido permite. Em ficção, pode inventar personagens, cenas, ações e sensações; não apresente isso como biografia, depoimento ou fato real. Ao revisar uma ficção existente, preserve seu enredo e ponto de vista, salvo autorização para mudá-los.\n\n## Como melhorar a leitura\n\n1. **Comece pelo que acontece ou pelo que importa.** Remova aberturas que apenas anunciam o assunto. Em um conto, a cena pode começar com uma ação, um objeto ou uma fala, se isso servir à história.\n2. **Troque abstração vazia por informação sustentada.** Em não ficção, use somente detalhes disponíveis. Na criação ficcional, escolha detalhes concretos que participem da cena, sem preencher cada frase com decoração.\n3. **Ajuste o ritmo ao trecho.** Combine comprimentos e construções quando a leitura pedir. Não transforme todos os parágrafos em frases curtas, fragmentos dramáticos ou uma sequência de frases igualmente polidas.\n4. **Conserve palavras que têm função.** Repetição pode sustentar uma ideia, uma voz ou um efeito literário. Não alterne sinônimos só para evitar repetir um nome ou termo técnico.\n5. **Reduza explicações que o texto já resolve.** Corte moral da história, resumo final e interpretação de emoções quando ações e contexto já comunicarem isso. Mantenha explicações necessárias ao leitor.\n6. **Prefira uma voz coerente a uma personalidade fabricada.** Humor, coloquialidade, opinião e primeira pessoa dependem do pedido e da voz. Gírias, erros deliberados e falsa intimidade não tornam o texto melhor.\n7. **Leia o resultado como texto, não como checklist.** Retire a alteração que piora precisão, continuidade, ritmo ou intenção. Não editar um trecho bom também é uma decisão válida.\n\nConsulte o [catálogo](references/catalogo.json) para localizar candidatos à revisão. Uma regex não decide se há defeito: considere contexto, gênero, exceções e risco de sentido. As palavras “robusto”, “significativo” e “além disso” não são proibidas. Consulte os [estilos](references/estilos.json) quando precisar variar discretamente a forma, sem sortear fatos ou personalidade.\n\n## Entrega\n\nEm pedido de criação ou reescrita, entregue o texto pronto. Acrescente observações ou mudanças somente quando forem solicitadas ou quando uma dúvida relevante impedir a revisão fiel. Em auditoria, mostre problemas concretos, trechos e sugestões, sem reescrever por conta própria.\n\nNão publique nem sobrescreva o original sem autorização. Não introduza travessão longo na prosa nova; preserve um trecho literal protegido e sinalize conflito se houver. Não remova ressalvas técnicas, científicas, jurídicas ou de segurança para deixar o texto mais leve.\n\n## Scripts opcionais\n\nO procedimento textual não depende de Python. Para uma auditoria local, use `terminal` na pasta da skill:\n\n```text\npython3 scripts/humanizar.py audit entrada.txt\npython3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17\npython3 scripts/humanizar.py apply entrada.txt --plan plano-aprovado.json --output revisado.txt\npython3 scripts/humanizar.py verify entrada.txt revisado.txt\n```\n\nO script não redige. `suggest` oferece recomendações e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. Use `--protect \"termo\"` para invariantes adicionais. Ver [uso e exemplo de plano](README.me).\n\nScripts de experimento e resultados ficam em [tests/](tests/README.md). Chamadas externas exigem autorização e teto financeiro. Não envie material confidencial a terceiros sem autorização.\n\n## Verificação\n\n- O resultado cumpre o pedido e funciona no gênero, sem impor informalidade ou ornamentação.\n- Na revisão, preserva sentido, fatos, condições e voz; na criação, respeita os limites de invenção.\n- Cada mudança melhora a leitura ou a precisão, não apenas uma contagem de palavras.\n- Não usa notas de juízes ou detectores para otimizar o texto. Resultados de percepção precisam de leitura humana.\n\n[Fontes e limites das heurísticas](references/fontes.md). Nenhuma taxa de autoria ou garantia de “passar em detector” é oferecida.\n\n\nCATALOGO EDITORIAL:\n[{\"id\":\"PTBR-01\",\"name\":\"abertura-generica\",\"pattern\":\"(?i)\\\\b(?:no mundo (?:atual|acelerado de hoje)|na sociedade atual|em um cenário (?:cada vez mais|em constante evolução))\\\\b\",\"suggestion\":\"Começar pelo assunto específico já presente, se a abertura não delimitar tempo ou contexto.\",\"source\":[\"justdone\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Abertura intercambiável entre assuntos.\",\"exceptions\":[\"Enquadramento histórico ou citação literal.\"],\"positive_example\":\"Na sociedade atual, o cadastro exige um documento.\",\"negative_example\":\"O cadastro exige um documento.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-02\",\"name\":\"anuncio-de-percurso\",\"pattern\":\"(?i)\\\\b(?:vamos (?:mergulhar|explorar|nos aprofundar)|este (?:texto|artigo) irá (?:discutir|abordar))\\\\b\",\"suggestion\":\"Avaliar se o anúncio pode dar lugar ao conteúdo, sem apagar objetivos didáticos.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Anúncio sem orientação útil ao leitor.\",\"exceptions\":[\"Roteiro falado, aula e descrição formal do escopo.\"],\"positive_example\":\"Vamos mergulhar nas opções de cadastro.\",\"negative_example\":\"Há duas opções de cadastro.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-03\",\"name\":\"ressalva-vazia\",\"pattern\":\"(?i)\\\\b(?:é importante (?:notar|ressaltar|destacar) que|vale (?:ressaltar|destacar) que|faz-se necessário pontuar)\\\\b\",\"suggestion\":\"Considerar começar pela informação; manter alertas que mudam a decisão.\",\"source\":[\"justdone\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Ênfase repetida sem hierarquia real.\",\"exceptions\":[\"Advertência de segurança ou contraste necessário.\"],\"positive_example\":\"É importante notar que o prazo termina amanhã.\",\"negative_example\":\"O prazo termina amanhã.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-04\",\"name\":\"conector-recorrente\",\"pattern\":\"(?im)(?:^|[.!?]\\\\s+)(?:ademais|além disso|nesse sentido|dessa forma|diante disso)\\\\b\",\"suggestion\":\"Revisar recorrência no documento e função lógica, nunca remover por ocorrência isolada.\",\"source\":[\"rpiochi\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Vários parágrafos abrem com a mesma ligação sem relação clara.\",\"exceptions\":[\"Adição, conclusão ou consequência realmente sustentada.\"],\"positive_example\":\"Ademais, o formulário aceita anexos.\",\"negative_example\":\"O formulário também aceita anexos.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-05\",\"name\":\"contraste-encenado\",\"pattern\":\"(?i)\\\\bnão (?:é|se trata de|se trata) apenas\\\\b[^.!?\\\\n]{0,180}\\\\bmas\\\\b\",\"suggestion\":\"Verificar se existe contraste real; sugerir afirmação direta quando só repete a tese.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Contraste teatral sem diferença explicada.\",\"exceptions\":[\"Correção conceitual, distinção técnica ou contraste autoral deliberado.\"],\"positive_example\":\"Não é apenas um aviso, mas uma mensagem.\",\"negative_example\":\"É um aviso.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-06\",\"name\":\"autoridade-vaga\",\"pattern\":\"(?i)\\\\b(?:especialistas (?:acreditam|afirmam|dizem)|estudos (?:mostram|comprovam)|segundo (?:especialistas|pesquisadores))\\\\b\",\"suggestion\":\"Pedir a referência e o escopo da alegação; não inventar fonte nem apagar uma alegação sem aprovação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Atribuição sem referência identificável no contexto.\",\"exceptions\":[\"Fonte identificada na frase anterior, nota ou bibliografia.\"],\"positive_example\":\"Especialistas afirmam que a mudança resolve o problema.\",\"negative_example\":\"O relatório citado descreve a mudança.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-07\",\"name\":\"importancia-inflada\",\"pattern\":\"(?i)\\\\b(?:marco (?:histórico|fundamental)|papel (?:crucial|fundamental)|revoluciona(?:r|ndo)?|transformação sem precedentes)\\\\b\",\"suggestion\":\"Solicitar a consequência concreta ou moderar a avaliação quando autorizado.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Importância declarada sem critério ou evidência.\",\"exceptions\":[\"Evento histórico documentado; papel necessário demonstrado.\"],\"positive_example\":\"O novo botão representa um marco histórico.\",\"negative_example\":\"O novo botão abre o formulário.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-08\",\"name\":\"promessa-total\",\"pattern\":\"(?i)\\\\b(?:perfeitamente integrad[oa]s?|resultados revolucionários|solução definitiva|experiência sem falhas)\\\\b\",\"suggestion\":\"Conferir limites da promessa com a fonte, sem trocar por outra garantia.\",\"source\":[\"justdone\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Promessa comercial absoluta sem condições.\",\"exceptions\":[\"Citação atribuída ou requisito explicitamente normativo.\"],\"positive_example\":\"É uma solução definitiva para falhas.\",\"negative_example\":\"A solução trata as falhas descritas no relatório.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-09\",\"name\":\"robustez-sem-criterio\",\"pattern\":\"(?i)\\\\b(?:soluç(?:ão|ões)|sistemas?|plataformas?|processos?)\\\\s+robust[oa]s?\\\\b\",\"suggestion\":\"Perguntar a que falhas, cargas ou variações a robustez se refere.\",\"source\":[\"justdone\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Qualidade ampla sem critério no contexto.\",\"exceptions\":[\"Estatística robusta, controle robusto, teste de robustez ou limites técnicos documentados; preservar o termo técnico.\"],\"positive_example\":\"Temos uma solução robusta.\",\"negative_example\":\"A solução mantém o serviço durante a falha descrita no teste.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-10\",\"name\":\"significancia-sem-escopo\",\"pattern\":\"(?i)\\\\b(?:melhoria|aumento|redução|impacto|diferença)\\\\s+significativ[oa]s?\\\\b\",\"suggestion\":\"Distinguir relevância prática de significância estatística e pedir medida já existente.\",\"source\":[\"justdone\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Avaliação sem escala ou teste identificável.\",\"exceptions\":[\"Significância estatística com método e contexto; não remover significativo nem confundir p-valor com efeito.\"],\"positive_example\":\"Houve uma melhoria significativa.\",\"negative_example\":\"Houve melhoria no indicador acompanhado.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-11\",\"name\":\"jargao-sem-referente\",\"pattern\":\"(?i)\\\\b(?:alavancar|sinergia|potencializar)\\\\b\",\"suggestion\":\"Explicitar a ação e seus agentes apenas se já estiverem no texto.\",\"source\":[\"justdone\",\"undetectable\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Jargão substitui a descrição do trabalho.\",\"exceptions\":[\"Alavancagem financeira, sinergia farmacológica ou outro uso técnico definido.\"],\"positive_example\":\"Precisamos alavancar a sinergia.\",\"negative_example\":\"As equipes precisam compartilhar o planejamento.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-12\",\"name\":\"gerundio-interpretativo\",\"pattern\":\"(?i),\\\\s*(?:evidenciando|simbolizando|refletindo|demonstrando)\\\\b\",\"suggestion\":\"Verificar se o comentário final acrescenta inferência não sustentada; preservar relações demonstradas.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Interpretação anexada a um fato sem apoio.\",\"exceptions\":[\"Descrição de processo simultâneo, resultado demonstrado ou imagem literária intencional.\"],\"positive_example\":\"O botão mudou, simbolizando uma nova era.\",\"negative_example\":\"O botão mudou.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-13\",\"name\":\"incerteza-empilhada\",\"pattern\":\"(?i)\\\\b(?:poderia potencialmente|talvez possa possivelmente|possivelmente talvez)\\\\b\",\"suggestion\":\"Conservar o grau de incerteza e simplificar somente a duplicação comprovada.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Modalizadores duplicados, sem distinção de escopo.\",\"exceptions\":[\"Ressalvas independentes, probabilidade, consentimento informado ou obrigação jurídica.\"],\"positive_example\":\"A falha poderia potencialmente retornar.\",\"negative_example\":\"A falha pode retornar.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-14\",\"name\":\"perifrase-finalidade\",\"pattern\":\"(?i)\\\\b(?:com o intuito de|com o objetivo de|a fim de que)\\\\b\",\"suggestion\":\"Testar uma forma mais curta sem mudar finalidade para causa ou resultado.\",\"source\":[\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Perífrase longa em texto de execução.\",\"exceptions\":[\"Objetivo formal, contraste entre intenção e efeito ou citação.\"],\"positive_example\":\"Com o intuito de validar, execute o teste.\",\"negative_example\":\"Para validar, execute o teste.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-15\",\"name\":\"copula-funcional\",\"pattern\":\"(?i)\\\\b(?:se apresenta como|configura-se como|constitui-se como)\\\\b\",\"suggestion\":\"Considerar ser somente quando não alterar aparência, constituição ou função.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Construção cerimoniosa sem função semântica adicional.\",\"exceptions\":[\"Descrição de aparência distinta de realidade; definição jurídica constitutiva.\"],\"positive_example\":\"O documento se apresenta como um guia.\",\"negative_example\":\"O documento é um guia.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-16\",\"name\":\"fecho-generico\",\"pattern\":\"(?i)\\\\b(?:o futuro é promissor|o potencial é imenso|juntos podemos transformar|rumo a um futuro melhor)\\\\b\",\"suggestion\":\"Encerrar no último ponto útil se a conclusão não acrescenta decisão ou ideia autoral.\",\"source\":[\"rpiochi\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Otimismo sem conteúdo adicional.\",\"exceptions\":[\"Discurso motivacional pedido, slogan aprovado ou declaração atribuída.\"],\"positive_example\":\"O futuro é promissor para este formulário.\",\"negative_example\":\"O formulário estará disponível na data informada.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-17\",\"name\":\"residuo-de-chat\",\"pattern\":\"(?i)\\\\b(?:espero que (?:isso|isto) ajude|se quiser, posso|aqui está (?:o|um) texto)\\\\b\",\"suggestion\":\"Separar a mensagem ao solicitante do artefato destinado à publicação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Mensagem do assistente incorporada ao artigo por engano.\",\"exceptions\":[\"Conversa de atendimento, carta ou oferta real de suporte.\"],\"positive_example\":\"Espero que isso ajude!\",\"negative_example\":\"Consulte o guia de instalação.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-18\",\"name\":\"elogio-automatico\",\"pattern\":\"(?i)\\\\b(?:excelente pergunta|ótima pergunta|você está absolutamente certo)\\\\b\",\"suggestion\":\"Conferir se há avaliação genuína relevante; preferir responder ao conteúdo.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Elogio automático antes de qualquer resposta.\",\"exceptions\":[\"Reconhecimento adequado em ensino ou conversa; citação literal.\"],\"positive_example\":\"Excelente pergunta! O cadastro fica no menu.\",\"negative_example\":\"O cadastro fica no menu.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-19\",\"name\":\"gancho-revelacao\",\"pattern\":\"(?i)\\\\b(?:o que ninguém te conta|a verdade é que|e aqui está o segredo|pense nisso)\\\\b\",\"suggestion\":\"Avaliar se a revelação tem conteúdo; preservar voz deliberada sem fabricar exclusividade.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Suspense desproporcional ao conteúdo.\",\"exceptions\":[\"Roteiro persuasivo solicitado com promessa sustentada.\"],\"positive_example\":\"O que ninguém te conta: o menu tem ajuda.\",\"negative_example\":\"O menu tem ajuda.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-20\",\"name\":\"lista-rotulada\",\"pattern\":\"(?m)^\\\\s*[-*]\\\\s+\\\\*\\\\*[^*\\\\n]{1,80}:?\\\\*\\\\*:?\\\\s*\",\"suggestion\":\"Revisar rótulos redundantes e manter listas quando favorecem consulta e acessibilidade.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Rótulo e início do item repetem a mesma informação.\",\"exceptions\":[\"Checklist, glossário, procedimento e relatório escaneável.\"],\"positive_example\":\"- **Prazo:** O prazo é amanhã.\",\"negative_example\":\"O prazo é amanhã.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"}]\n\nESTILOS:\n{\"schema_version\":\"1.0\",\"purpose\":\"Variações discretas dentro da voz fornecida, não personas.\",\"voice_invariants\":[\"Fatos e grau de certeza\",\"Registro do autor\",\"Vocabulário técnico necessário\",\"Posição e experiências explicitamente fornecidas\"],\"seed_policy\":{\"scope\":\"Selecionar com seed uma ênfase opcional entre os ajustes do perfil, sem alterar invariantes nem aplicar reescrita.\",\"record\":[\"seed\",\"profile_id\",\"catalog_version\",\"voice_sample_id\"],\"limits\":\"Mesma seed não garante texto idêntico de um modelo. Não sortear fatos, opiniões, persona ou nível de certeza. Preferência explícita do autor prevalece.\"},\"forbidden\":[\"Falsa experiência pessoal\",\"Erros deliberados\",\"Regionalismo presumido\",\"Mudança de opinião para criar personalidade\",\"Alternância aleatória de sinônimos técnicos\"],\"profiles\":[{\"id\":\"neutro-claro\",\"genres\":[\"artigo\",\"relatorio\"],\"adjustments\":[\"Manter formalidade original\",\"Variar extensão de frases só quando ajudar a leitura\",\"Preferir informação a comentários sobre importância\"],\"avoid\":[\"Impor conversa íntima\",\"Trocar toda repetição lexical\"]},{\"id\":\"tecnico-preciso\",\"genres\":[\"tecnico\",\"relatorio\"],\"adjustments\":[\"Conservar terminologia e qualificadores\",\"Deixar condições junto da afirmação\",\"Usar listas quando facilitam consulta\"],\"avoid\":[\"Metáforas decorativas\",\"Simplificação que apaga hipótese ou método\"]},{\"id\":\"conversacional-contido\",\"genres\":[\"email\",\"post\"],\"adjustments\":[\"Preservar a forma de tratamento do autor\",\"Usar transições simples sem eliminar lógica\",\"Permitir contrações somente se presentes na voz\"],\"avoid\":[\"Gírias sorteadas\",\"Humor não pedido\",\"Primeira pessoa sem respaldo\"]},{\"id\":\"argumentativo-sobrio\",\"genres\":[\"artigo\",\"post\"],\"adjustments\":[\"Explicitar a tese já presente\",\"Aproximar razões e ressalvas\",\"Encerrar quando o argumento estiver completo\"],\"avoid\":[\"Contrastes inventados\",\"Frase de efeito obrigatória\",\"Tom de certeza maior que a fonte\"]}],\"implementation_status\":\"humanizar.py suggest carrega os perfis e retorna style_focus reproduzível com seed. É orientação editorial, não reescrita automática.\"}"
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "03-documentacao-api",
+  "arm": "skill",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva documentação técnica de 250 a 400 palavras para a API fictícia de tarefas. Seções obrigatórias nesta ordem: Autenticação, Criar tarefa, Erros, Limitações. Contrato: POST /v1/jobs; Authorization: Bearer <TOKEN>; Content-Type: application/json. Corpo {\"name\":\"backup\"}; name é obrigatório, string não vazia de até 80 caracteres. Sucesso HTTP 201 com {\"id\":\"job_123\",\"status\":\"queued\"}; queued não significa execução concluída. O cabeçalho Idempotency-Key é opcional; a mesma chave e o mesmo corpo retornam a tarefa existente por 24 horas; a mesma chave com corpo diferente retorna 409. HTTP 400 para name inválido; 401 para token ausente ou inválido; 429 para limite de 60 requisições por minuto por token, com Retry-After em segundos. Inclua um exemplo curl com URL https://api.example.com/v1/jobs e um exemplo JSON de sucesso. Não invente endpoints de consulta, SDKs ou garantia de entrega.",
+  "id": "082971e1fbf80f1f570f84eb00858a4b8aa1d686eeeecf45085ddbd4eb5a3dab",
+  "status": "completed",
+  "started_at": "2026-10-02T18:23:04.589532+00:00",
+  "response": {
+    "id": "gen-1790965384-i5gf9qZYwzVVHuulvb15",
+    "object": "chat.completion",
+    "created": 1790965384,
+    "model": "openai/gpt-6-luna",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "## Autenticação\n\nA API exige um token de acesso no cabeçalho `Authorization`, no formato `Bearer <TOKEN>`. Envie também `Content-Type: application/json` para indicar que o corpo da requisição está em JSON. Se o token estiver ausente ou for inválido, a API retorna HTTP 401.\n\n## Criar tarefa\n\nUse `POST /v1/jobs` para enviar uma tarefa. O corpo deve conter o campo obrigatório `name`, que precisa ser uma string não vazia com até 80 caracteres. Por exemplo, para criar uma tarefa chamada `backup`:\n\n```bash\ncurl -X POST \"https://api.example.com/v1/jobs\" \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nQuando a requisição é aceita, a resposta usa HTTP 201 e inclui o identificador da tarefa e seu status. Um exemplo de resposta:\n\n```json\n{\n  \"id\": \"job_123\",\n  \"status\": \"queued\"\n}\n```\n\nO cabeçalho `Idempotency-Key` é opcional. Se a mesma chave for enviada com o mesmo corpo, a API retorna a tarefa existente durante 24 horas. Se a chave for repetida com um corpo diferente, a resposta será HTTP 409.\n\n## Erros\n\nA API retorna HTTP 400 quando `name` está ausente ou é inválido, incluindo valores que não sejam strings, strings vazias ou nomes com mais de 80 caracteres. HTTP 401 indica que o token não foi enviado ou não é válido. HTTP 409 ocorre quando uma chave de idempotência já usada é apresentada com um corpo diferente.\n\nO limite é de 60 requisições por minuto por token. Ao excedê-lo, a API retorna HTTP 429 e informa, no cabeçalho `Retry-After`, quantos segundos esperar antes de tentar novamente.\n\n## Limitações\n\nO status `queued` indica que a tarefa está na fila; não significa que sua execução foi concluída. A resposta de criação não informa o resultado da execução. O contrato descrito aqui não especifica um endpoint para consultar tarefas nem uma garantia de entrega. Os exemplos representam o formato da requisição e da resposta, não uma confirmação de execução.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "gAAAAABqv_aN8Gp0O1S6GnQpQJwimKVsZKIM2gagyBCJbknqVCRYTr1XOLo1wLUxhpjZkm_J0KbU4jAYYPx_hEr79UgvkXTBeZp1hGdmENPg8ZEEecvKGHh0vcuP0leUlhiQVxVQ2Fhfa_MNObnSLwF_5He9i2ZsX6qXtz01yzjXSunuwvOYrTOf-HyNM3kWm0f3xcPf1K7mA82Uf0cBOWM-jAhcXfF7V-vdRZVOJD5Ela5JAzqoBNEYPFSOUtTuMlOtEx_gEa4-BTUAGuKyF6Zm09Ez1Kh9wsGymH2ff0vnDYrEP-hOEzni_UfG-eyKS4fX5mD5wuEd0sB9sIEWqCE866GJIMFKMaP9aJS43l9_R3P2yhNFER0K1ofsnTC8Njprz6ZELwtfQciqYMAit54-eVF0xRaUm8BJdFvjlC_sMv5-tnCnmsQ9YGs6lA7BkMxfExupyFdUmz9NKotomgfrb7b-aIE3WDY4S1U0Xn3DpBkSVChSYV_hdDQoAH1wcBd8KCj_8TGSKHvdtcsXDF09qoNP4gSEtQsxahFf_0QHAUgVl57nTpeE0uYfVcpTTxEhQYOWmr_Tnw-9uWFjEG7KD-wXGHgRxO1-skpEWYuYZ2OldxVWJ8GaK7In5-lCZDJXyVs3cJsOAg11B_vBSmUXaFXhV6uqoULHYG8DIL5HLjkJX0IlNmCJUCC4LY-4XDbEjz4haeJwJqEVe2woPTwXwamsijAaSakycWFCyeRKfM46Z6dEU-lvt106D6SgBdjr2OwO5Mgy-I3F1ciOepfLGbE34LLdn_Y3omSyQAlzzxwjCXpnR1hG5cxLLWecgSq9Mr8akotXZ0HN01a4ykbZxrXnLcjWRQbA8Wij7gRV7qBoJCI3EB1rWCNYzpa5vOcQroBZ8FWJDsMYLK6mB1kQ9oUeIV_cjknPAN8LaZUou5P4GwylLs2geubU8FZWae0Wlu7ny6CR32RZuYRwPc1FcZdSPq61NKqrSagjg2Xp_YHfTXZVkW1AxYzmQiUiCAn6LV8YV8jCQG8qjOG3jrwo1gmfNDLQHENbCR7XSxp7ACS9worrWBI2YyL1dftU1zvOx1FP1NOKtkIbw0FlOBgV_ae1GpY8-DL99HTlUEtQDvgd3nqLYMEtMWJMpaLUHGdIeeTKAkCvt5N5IVQxE2jUTZU5BPK4EuMO7hvIZpN8qhBLAlm4zTWmixVzO56OlOG8wa_Bo1Ue-fbxYoYdnhF0XovtPwwj50RUSevGojKtqG8ZR45LsmpOUDEfwhcJnjUg9O5SX_2WK0C0N5CBMboSSK-Orrlklokb1ShV-5W50IpV4pAiFu08_ojVqBNK4k5TfLKueHVNPIRyhogUSKIDB13TzXKezJpHqNW-5TYWI5cN-9gb5l3OVHCZWVdTkl_p_mTTSWXKIRwBjz__VdkPc0AecfnAKrTaxu4Z20Vtum6jqIGPBkILCucjxylqTjKYuvXscO3458OU_f_nTJFCSHRD-KWNdlWBQkJiakcS9SnolEBSCtpwUFdScMyuO5YgwCxfGRA5L_mZmntGHo52WgiOk8G5Ah4-oipmdhE8wvr3bdoLxlh81-HrVGCqF-z2-NEK4UtjdgunB9ndbci0aCa_Jx5hZQOP2OUL9rVQYWSqwdmz1vwBdqZtdeQeW2QSaXcuET_08pzrUdU_cm6Hg8xg9I4xiB-JMz6PafLiKeAmBk1sdnSLkQIYgTvWLNfny0oo96o2W45Aeh9gbuy38ZeAG5In2j3dbotd6U0I5h5LR-c07UEBbcdBGgp34Uu2CEzed3m4tGZvJFLoSHOtPvGmd4LFntKzDWM9eLBP2ab44Fpr3VO5H90yiyhKc_CHX408VygwF017jkAxwNVS82_uzUbxUwIzx-WbXys-L2RQ6MsV50HhBsT_TDF38UxXRQcpDUxMurPYZXHX-uh_5wXG5oDSioDvV7e0a2o4jz-UuA1TGWaPd17RURhS52ocNph7JG8rxOPQJ578Sd6BGG1GSnZyv4YL0xus_cQ6fWFRndz9YWEKTiakxSBzFXOk-xKPwPWyEZKT4ZfoeeNCUL9zzKruKLO3SBOHUkhfP_vje6u0jyzz93tX2aog-8yPeOGqTtWZ2Wml8WvnOfRNzXKIln6rQuCoptA5uCkGNQc5fxEnVLEeBQSy_tN9BvPOs_FNJ4ZhlAln5j8ajR0KuvKq3Wh5rguJEgkHEouLoCCrSyjmcRzZq98ckdLNxd9gIJy0WOKaYg7ngWimJ63kJwsgCJEQucjnhOmdxhwkSUanxCs60JI9XkTQg3Q8h1Gd8u_QkMwwGlflhTDhh2dQlT0uSf32DeC7zW47i6N2hEM-w7WjeudGK4wf5uaoyXHXL9NxXqpq0kNNMemRW07TU51eKutWKBVWXMLeJAy-2Yy5hrc47-pPzfWGw7SvJnuOXrgTSSTCPfbJ_fMUWqiSA-833naCdY7PyWFX2zlOJ404MyEDnOQknZhiCK0yTRTjNFlnJ4017tMjmJQQtjra3-YZD384uIQhDTWjkXgipxhg6lEvVqkyLtHHX6Q8d_tuG9MNirZOq_TVpAnt0gq8Foo8uIaMivJ7xPvDi-k_4XXjxN-ScorSDjcodfDGvPYuA1qDllJ0X0duRrS0saIj_HMVw9dagZR2XBTZf1GZOFXwykomfMesUTB-L2yt1u9kntYk2dwqA0pQeaEl1wT5rL1KWdrNsRzlpGt97Lg_2W7M13DWZl1uTiMfLXVZv7LgWUIxTr8-uweqW832TzFmoK44rgkmWHEOqfCiC0PIMwwxjNhDDAoTtTK2BC_gnszsNduM81TE-syXkaUA72ECd6k60I_oSFyPTWkzJVv28PzZDqbsRH3JNTpzpEXnZy4R01ALq4GT3VNZhMlKTMcdnn1jb-DlTqOz2Sb7s8RFQkK3KddB1aM3N3L6rWTqzxV6iRjhqsArZnvuVxvT2GMKuTDrzT6i387VrM7liQQmJwalPVkTLgNGGBOc1hU6TcejT2ontQE9hLy6N932j56j7WbDP-hcK9ua09vI_XStJSYhKs_3Mx-tHrHo_ubN7bCDDWcpOeqk0YJHMyXdKTBiRLIS1FJg-bhtucQNaGEDXZRyRMX2aqLhMse-WyiI6vbD3vDhiHYpK59KQiyvT6lF8CSBz6_HdGTM1iWVKAs-DEyB8uJgwCtaTesfYLjYOkC-cs1TDeYccC0I2CLBdkP1DFbU8ECa7eXGe0icz_Ekt8sG-PDNilDu4hSFYqEsjLWexvFFXxzJE8WqyKgDEvbZtBEw7UdscUfqRBfnEEqGfAoArMRJmtbnKF3rBvsQy5QMXnuktwleHXir_nOz12_6wTSY6Nt_tGWz--sEo27RgUuvytMMjLBdxXF06OrfAJAMDIcNqGIIZTL5WRF4yu8s48h2D1Bm9HR2Tz80CIx2yptJwYrn7jPAbOq3krKEyr992Qc4cJ-HZRWDTlyWLdsAb_6igwoOMQ==.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+              "format": "openai-responses-v1",
+              "id": "rs_01b783e4b5037d10016abff689d4a887d18779dc919c6eef4b",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 5516,
+      "completion_tokens": 819,
+      "total_tokens": 6335,
+      "cost": 0.001098925,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 5513,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.001098925,
+        "upstream_inference_prompt_cost": 0.000689425,
+        "upstream_inference_completions_cost": 0.0004095
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 338,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "OpenAI",
+  "model_returned": "openai/gpt-6-luna",
+  "usage": {
+    "prompt_tokens": 5516,
+    "completion_tokens": 819,
+    "total_tokens": 6335,
+    "cost": 0.001098925,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 5513,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.001098925,
+      "upstream_inference_prompt_cost": 0.000689425,
+      "upstream_inference_completions_cost": 0.0004095
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 338,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.001098925",
+  "edited": "## Autenticação\n\nA API exige um token de acesso no cabeçalho `Authorization`, no formato `Bearer <TOKEN>`. Envie também `Content-Type: application/json` para indicar que o corpo da requisição está em JSON. Se o token estiver ausente ou for inválido, a API retorna HTTP 401.\n\n## Criar tarefa\n\nUse `POST /v1/jobs` para enviar uma tarefa. O corpo deve conter o campo obrigatório `name`, que precisa ser uma string não vazia com até 80 caracteres. Por exemplo, para criar uma tarefa chamada `backup`:\n\n```bash\ncurl -X POST \"https://api.example.com/v1/jobs\" \\\n  -H \"Authorization: Bearer <TOKEN>\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"name\":\"backup\"}'\n```\n\nQuando a requisição é aceita, a resposta usa HTTP 201 e inclui o identificador da tarefa e seu status. Um exemplo de resposta:\n\n```json\n{\n  \"id\": \"job_123\",\n  \"status\": \"queued\"\n}\n```\n\nO cabeçalho `Idempotency-Key` é opcional. Se a mesma chave for enviada com o mesmo corpo, a API retorna a tarefa existente durante 24 horas. Se a chave for repetida com um corpo diferente, a resposta será HTTP 409.\n\n## Erros\n\nA API retorna HTTP 400 quando `name` está ausente ou é inválido, incluindo valores que não sejam strings, strings vazias ou nomes com mais de 80 caracteres. HTTP 401 indica que o token não foi enviado ou não é válido. HTTP 409 ocorre quando uma chave de idempotência já usada é apresentada com um corpo diferente.\n\nO limite é de 60 requisições por minuto por token. Ao excedê-lo, a API retorna HTTP 429 e informa, no cabeçalho `Retry-After`, quantos segundos esperar antes de tentar novamente.\n\n## Limitações\n\nO status `queued` indica que a tarefa está na fila; não significa que sua execução foi concluída. A resposta de criação não informa o resultado da execução. O contrato descrito aqui não especifica um endpoint para consultar tarefas nem uma garantia de entrega. Os exemplos representam o formato da requisição e da resposta, não uma confirmação de execução.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": [
+    {
+      "type": "reasoning.encrypted",
+      "data": "gAAAAABqv_aN8Gp0O1S6GnQpQJwimKVsZKIM2gagyBCJbknqVCRYTr1XOLo1wLUxhpjZkm_J0KbU4jAYYPx_hEr79UgvkXTBeZp1hGdmENPg8ZEEecvKGHh0vcuP0leUlhiQVxVQ2Fhfa_MNObnSLwF_5He9i2ZsX6qXtz01yzjXSunuwvOYrTOf-HyNM3kWm0f3xcPf1K7mA82Uf0cBOWM-jAhcXfF7V-vdRZVOJD5Ela5JAzqoBNEYPFSOUtTuMlOtEx_gEa4-BTUAGuKyF6Zm09Ez1Kh9wsGymH2ff0vnDYrEP-hOEzni_UfG-eyKS4fX5mD5wuEd0sB9sIEWqCE866GJIMFKMaP9aJS43l9_R3P2yhNFER0K1ofsnTC8Njprz6ZELwtfQciqYMAit54-eVF0xRaUm8BJdFvjlC_sMv5-tnCnmsQ9YGs6lA7BkMxfExupyFdUmz9NKotomgfrb7b-aIE3WDY4S1U0Xn3DpBkSVChSYV_hdDQoAH1wcBd8KCj_8TGSKHvdtcsXDF09qoNP4gSEtQsxahFf_0QHAUgVl57nTpeE0uYfVcpTTxEhQYOWmr_Tnw-9uWFjEG7KD-wXGHgRxO1-skpEWYuYZ2OldxVWJ8GaK7In5-lCZDJXyVs3cJsOAg11B_vBSmUXaFXhV6uqoULHYG8DIL5HLjkJX0IlNmCJUCC4LY-4XDbEjz4haeJwJqEVe2woPTwXwamsijAaSakycWFCyeRKfM46Z6dEU-lvt106D6SgBdjr2OwO5Mgy-I3F1ciOepfLGbE34LLdn_Y3omSyQAlzzxwjCXpnR1hG5cxLLWecgSq9Mr8akotXZ0HN01a4ykbZxrXnLcjWRQbA8Wij7gRV7qBoJCI3EB1rWCNYzpa5vOcQroBZ8FWJDsMYLK6mB1kQ9oUeIV_cjknPAN8LaZUou5P4GwylLs2geubU8FZWae0Wlu7ny6CR32RZuYRwPc1FcZdSPq61NKqrSagjg2Xp_YHfTXZVkW1AxYzmQiUiCAn6LV8YV8jCQG8qjOG3jrwo1gmfNDLQHENbCR7XSxp7ACS9worrWBI2YyL1dftU1zvOx1FP1NOKtkIbw0FlOBgV_ae1GpY8-DL99HTlUEtQDvgd3nqLYMEtMWJMpaLUHGdIeeTKAkCvt5N5IVQxE2jUTZU5BPK4EuMO7hvIZpN8qhBLAlm4zTWmixVzO56OlOG8wa_Bo1Ue-fbxYoYdnhF0XovtPwwj50RUSevGojKtqG8ZR45LsmpOUDEfwhcJnjUg9O5SX_2WK0C0N5CBMboSSK-Orrlklokb1ShV-5W50IpV4pAiFu08_ojVqBNK4k5TfLKueHVNPIRyhogUSKIDB13TzXKezJpHqNW-5TYWI5cN-9gb5l3OVHCZWVdTkl_p_mTTSWXKIRwBjz__VdkPc0AecfnAKrTaxu4Z20Vtum6jqIGPBkILCucjxylqTjKYuvXscO3458OU_f_nTJFCSHRD-KWNdlWBQkJiakcS9SnolEBSCtpwUFdScMyuO5YgwCxfGRA5L_mZmntGHo52WgiOk8G5Ah4-oipmdhE8wvr3bdoLxlh81-HrVGCqF-z2-NEK4UtjdgunB9ndbci0aCa_Jx5hZQOP2OUL9rVQYWSqwdmz1vwBdqZtdeQeW2QSaXcuET_08pzrUdU_cm6Hg8xg9I4xiB-JMz6PafLiKeAmBk1sdnSLkQIYgTvWLNfny0oo96o2W45Aeh9gbuy38ZeAG5In2j3dbotd6U0I5h5LR-c07UEBbcdBGgp34Uu2CEzed3m4tGZvJFLoSHOtPvGmd4LFntKzDWM9eLBP2ab44Fpr3VO5H90yiyhKc_CHX408VygwF017jkAxwNVS82_uzUbxUwIzx-WbXys-L2RQ6MsV50HhBsT_TDF38UxXRQcpDUxMurPYZXHX-uh_5wXG5oDSioDvV7e0a2o4jz-UuA1TGWaPd17RURhS52ocNph7JG8rxOPQJ578Sd6BGG1GSnZyv4YL0xus_cQ6fWFRndz9YWEKTiakxSBzFXOk-xKPwPWyEZKT4ZfoeeNCUL9zzKruKLO3SBOHUkhfP_vje6u0jyzz93tX2aog-8yPeOGqTtWZ2Wml8WvnOfRNzXKIln6rQuCoptA5uCkGNQc5fxEnVLEeBQSy_tN9BvPOs_FNJ4ZhlAln5j8ajR0KuvKq3Wh5rguJEgkHEouLoCCrSyjmcRzZq98ckdLNxd9gIJy0WOKaYg7ngWimJ63kJwsgCJEQucjnhOmdxhwkSUanxCs60JI9XkTQg3Q8h1Gd8u_QkMwwGlflhTDhh2dQlT0uSf32DeC7zW47i6N2hEM-w7WjeudGK4wf5uaoyXHXL9NxXqpq0kNNMemRW07TU51eKutWKBVWXMLeJAy-2Yy5hrc47-pPzfWGw7SvJnuOXrgTSSTCPfbJ_fMUWqiSA-833naCdY7PyWFX2zlOJ404MyEDnOQknZhiCK0yTRTjNFlnJ4017tMjmJQQtjra3-YZD384uIQhDTWjkXgipxhg6lEvVqkyLtHHX6Q8d_tuG9MNirZOq_TVpAnt0gq8Foo8uIaMivJ7xPvDi-k_4XXjxN-ScorSDjcodfDGvPYuA1qDllJ0X0duRrS0saIj_HMVw9dagZR2XBTZf1GZOFXwykomfMesUTB-L2yt1u9kntYk2dwqA0pQeaEl1wT5rL1KWdrNsRzlpGt97Lg_2W7M13DWZl1uTiMfLXVZv7LgWUIxTr8-uweqW832TzFmoK44rgkmWHEOqfCiC0PIMwwxjNhDDAoTtTK2BC_gnszsNduM81TE-syXkaUA72ECd6k60I_oSFyPTWkzJVv28PzZDqbsRH3JNTpzpEXnZy4R01ALq4GT3VNZhMlKTMcdnn1jb-DlTqOz2Sb7s8RFQkK3KddB1aM3N3L6rWTqzxV6iRjhqsArZnvuVxvT2GMKuTDrzT6i387VrM7liQQmJwalPVkTLgNGGBOc1hU6TcejT2ontQE9hLy6N932j56j7WbDP-hcK9ua09vI_XStJSYhKs_3Mx-tHrHo_ubN7bCDDWcpOeqk0YJHMyXdKTBiRLIS1FJg-bhtucQNaGEDXZRyRMX2aqLhMse-WyiI6vbD3vDhiHYpK59KQiyvT6lF8CSBz6_HdGTM1iWVKAs-DEyB8uJgwCtaTesfYLjYOkC-cs1TDeYccC0I2CLBdkP1DFbU8ECa7eXGe0icz_Ekt8sG-PDNilDu4hSFYqEsjLWexvFFXxzJE8WqyKgDEvbZtBEw7UdscUfqRBfnEEqGfAoArMRJmtbnKF3rBvsQy5QMXnuktwleHXir_nOz12_6wTSY6Nt_tGWz--sEo27RgUuvytMMjLBdxXF06OrfAJAMDIcNqGIIZTL5WRF4yu8s48h2D1Bm9HR2Tz80CIx2yptJwYrn7jPAbOq3krKEyr992Qc4cJ-HZRWDTlyWLdsAb_6igwoOMQ==.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+      "format": "openai-responses-v1",
+      "id": "rs_01b783e4b5037d10016abff689d4a887d18779dc919c6eef4b",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 7.314788330346346,
+  "finished_at": "2026-10-02T18:23:11.922153+00:00"
+}

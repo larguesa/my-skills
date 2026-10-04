@@ -1,0 +1,217 @@
+{
+  "model": "openai/gpt-6-astra",
+  "endpoint": {
+    "name": "OpenAI | openai/gpt-6-astra-20260903",
+    "model_id": "openai/gpt-6-astra",
+    "model_name": "OpenAI: GPT-6 Astra",
+    "context_length": 1050000,
+    "pricing": {
+      "prompt": "0.00001",
+      "completion": "0.00005",
+      "web_search": "0.01",
+      "input_cache_read": "0.000001",
+      "input_cache_write": "0.0000125",
+      "discount": 0,
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.00002",
+          "completion": "0.000075",
+          "input_cache_read": "0.000002",
+          "input_cache_write": "0.000025"
+        }
+      ]
+    },
+    "provider_name": "OpenAI",
+    "tag": "openai",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": 922000,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "seed",
+      "max_tokens",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.93116740088107,
+    "uptime_last_5m": 100,
+    "uptime_last_1d": 99.94688731725044,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:web_search": {
+        "type": "web_search"
+      },
+      "openrouter:apply_patch": {
+        "type": "apply_patch"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "openai/gpt-6-astra",
+        "provider_returned": "OpenAI",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945394-m65J24elPPMc88yYHZTQ",
+        "observed_at": "2026-10-02T12:49:53.973826+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "openai/gpt-6-astra",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "7c1e4c913d1d847e5066202224431a2f3c9366425bfe96aa472870bcb4fcd3da",
+  "status": "completed",
+  "started_at": "2026-10-02T18:32:04.265675+00:00",
+  "response": {
+    "id": "gen-1790965924-xgTvi69m14SOzfuZyoFz",
+    "object": "chat.completion",
+    "created": 1790965924,
+    "model": "openai/gpt-6-astra",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "## Reprodução\n\nO código observado usa uma lista vazia como valor padrão do parâmetro `bucket`:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nEm um processo novo, `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora nenhuma lista tenha sido fornecida explicitamente. O resultado mostra que os itens das duas chamadas foram acumulados no mesmo objeto, em vez de serem mantidos em listas independentes.\n\n## Causa\n\nEm Python, os valores padrão dos parâmetros são avaliados quando a definição da função é executada, não a cada chamada. Assim, `bucket=[]` cria uma única lista, reutilizada por todas as chamadas que omitem esse argumento.\n\nComo `append` modifica a lista existente, a primeira chamada altera o objeto que também será usado pela segunda. Além disso, o retorno não é uma cópia: quem guardar a lista retornada poderá observar nela alterações feitas por chamadas posteriores que utilizem esse mesmo objeto padrão.\n\n## Correção\n\nUse `None` como padrão e crie uma lista apenas quando `bucket is None`. Se o chamador fornecer uma lista, acrescente o item diretamente nela e retorne esse mesmo objeto:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nprimeira = collect(\"A\")\nsegunda = collect(\"B\")\n\nassert primeira == [\"A\"]\nassert segunda == [\"B\"]\nassert primeira is not segunda\n\nfornecida = []\nresultado = collect(\"C\", fornecida)\n\nassert resultado is fornecida\nassert fornecida == [\"C\"]\n```\n\nA comparação explícita com `None` preserva inclusive uma lista vazia fornecida pelo chamador, sem substituí-la por outra.\n\n## Limitações\n\nA correção elimina o compartilhamento involuntário do valor padrão, mas mantém a mutação intencional de listas fornecidas. Reutilizar explicitamente a mesma lista continua acumulando itens. Os asserts verificam os comportamentos apresentados; não demonstram nem garantem segurança para uso concorrente.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "gAAAAABqv_ipIUE9xSZ0r3wu9jZypoYuy1ZrDlQLv2LvU1BwFXgBFjZVbOz8_j3862A_x48GfEJ37myRPtRhtQkink-evPvXilWEJQVB9-7zXQzm7TI-n0tDJ5W_fbPGJNx_uSNDhCLzNMnkZhJxfmvFp4dt_7KlxnEoRMrEdOzLAD2EvUba6maWBxgMKnP58kp5dt5xXULX3ukk9Xk580h1b5Py8iJ1cbCBr1NjWykMuL7OpB-UrBj3wgq1MgKVPUHaZUfiIk0Ta16Ne1BIGl5LECLwN6jPnNOKOEviYMYnSboqjMIsNvsH3iROjUrH0TEB29W9adTO1rzbXSN8_Uzv9dK3DV2VS-jibHG_rjeOQC-oiiQOdg9YuMjxMub4EQZnlnAVHmgew4qKamoXS-6dpWlzGo9Zq1Kw7-ekY18aBi5NVPNWj9ssp-rkjc8DPGe7vwH809NZ_9QQIWMH9ZPQo63dZreqv5zNBUePSegxIJlkjpRMBpAwHpuMCrDm3JWoEICZw7EvQmU825dAfCMZx7KW77b5wIA4Wp_BpV1Q7mz8vJh35ZqH8Ld-GH22U73QouZIiPeNhyTlTRvrl4wSIUqq9Xyn1jqOmAxW6-0ZGpFf0OMTxeMFjtFJ2zo56B9iTPVRHffYz-PDamx_GE-XuBFdjMhIVSzeyIhINZqC1SyQxNuQQ8jA7FQyg9APUcsA4_zGroPQtn4xoDAzkA6Vwnw7CVsR2nOIPNXEIcrA76cXbNxCUmXjfdqd4gfHwOfRopojDXR3mhiWGgzCLt0p0KfQ9pEP3TNPQlY0Dh1hOgGAMEBjq7lN-ON2HQvpGMafMMMIUdjnMNFv9l7UWItt1m2EXzE8zJi-3HXBOhJPWHczHL2Wli7FaItsUvbiWiumq4rsmBY3PAPh-hTxXS6wNUhWni1LR_NKBqkM38owOHlbwb96VjELNV-NJ1WVCaIEo5GyJlP67rQNgG6Mqjx3fo9afAxBrWwpffMVZ8VCcX6coAGCJWvH7pWWPMKFqs12z15s9R3j2BtjkhwK-53oqkUShrrhj7_Az1XSCYAbwsl-IpeeEXzONJ9gvYuHg5ZxvBpIYG27xzCGt72zMyOGrelN2wqDBIe8quMIC1zKV2ip8MMGACt0Og5BK5cA2uEIF2PkWf2mvLf1fFhLDKJc2q4PNHtLy_1sVo44-pbb2dYQKc0aC6wtbDYG24uGAo9nw8m6z0aSScECfWZN3GPI8I1P0vY6kOmwtoKWx_XrVGKekFbbZ_Xa5x7Nar33LJbjGrlJIdH-oVxEOzZxh8Tj0g3mC1JDEP4qGHnUesDdmZzGbzu5wvxUR-kjd4tuknNX6uu_1qrSjmffG78WQ5u8GaUmOmw3yAPfUop_ppHKnEvlSQV9FAvJ4hjD0rLH2_UrBbmfoCPkxJuEAxs9zOZ6Vz0b1VjxBCg4YINY8UCEHlDrXi0rtijbtoBhjifMdJqHhJguhW_UZ3MxTvh5agkSeakV26wrhm3vw35hQtMZs3ixinSkHlgCVgX8d_OQMESiduGaTEcu8woskai84GOazBG5wQ18RTiEtlMQaXMljqXAHivckYUqukVA-LX3x3r6oSdpijlfNBqWlMuBD2ZfM3oIUUEUoE4L6QoEj2Eh4VwxJvWTC2BfckumHXRrnGLNljoh5J0_cYyODkNqpIm5FAJZ6GJtsW6NCA79mT5Ewv2SRBpIg-SULX1xZqExz_hyrnkS2EvlGcjJxGEe0GoLq9HtWupSNWWOVwYQ9ZiAr_l_Ha9vtNXcC9BASX_MYokknhktx7_uIqup3uCD622VO9UQ0md22zpeFmykchusWSmtoF5bizFoLpZAPCV5RaYRQ1IxlrxUGR42W7XlxqzhojOQehOoSMb54OgGTCYUBlmJX0luAdt3X-68iI9sAV470jP01VwiTvHlxW8KscJ9t-lkMp0IYh-XtmwGcDoaeVS0EaH4hvcPrL6DRr5l_aD_5OVd6_7_33i1VzSnShLU0t_FCNF2LjN3pkk7otW1grVOxtiuID9tF-VbWfmJbRjFe9YR6tCAb1DYmZx4TUKkgK6RyQiMFKssjeCo2PRvyNiVNVy_04FjU034xunJh0Hhk9zKcm-r3Gkow6qR_tjO6FcQXJCPlImKDQ7NbOHAWTq7r29lCjlFXryHMxdpmyvIH_rwmP_-ikWEYXrqEY97NYfAlEZCMgDm4zJxZ5esHawfC-UTED4=.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWFzdHJhLTIwMjYwOTAzfG9wZW5haSJ9",
+              "format": "openai-responses-v1",
+              "id": "rs_0377b04ecd8cddb6016abff8a635fc87d18640545722119c2a",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 281,
+      "completion_tokens": 586,
+      "total_tokens": 867,
+      "cost": 0.03211,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.03211,
+        "upstream_inference_prompt_cost": 0.00281,
+        "upstream_inference_completions_cost": 0.0293
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 133,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "OpenAI",
+  "model_returned": "openai/gpt-6-astra",
+  "usage": {
+    "prompt_tokens": 281,
+    "completion_tokens": 586,
+    "total_tokens": 867,
+    "cost": 0.03211,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.03211,
+      "upstream_inference_prompt_cost": 0.00281,
+      "upstream_inference_completions_cost": 0.0293
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 133,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.03211",
+  "edited": "## Reprodução\n\nO código observado usa uma lista vazia como valor padrão do parâmetro `bucket`:\n\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\n\nEm um processo novo, `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]`, embora nenhuma lista tenha sido fornecida explicitamente. O resultado mostra que os itens das duas chamadas foram acumulados no mesmo objeto, em vez de serem mantidos em listas independentes.\n\n## Causa\n\nEm Python, os valores padrão dos parâmetros são avaliados quando a definição da função é executada, não a cada chamada. Assim, `bucket=[]` cria uma única lista, reutilizada por todas as chamadas que omitem esse argumento.\n\nComo `append` modifica a lista existente, a primeira chamada altera o objeto que também será usado pela segunda. Além disso, o retorno não é uma cópia: quem guardar a lista retornada poderá observar nela alterações feitas por chamadas posteriores que utilizem esse mesmo objeto padrão.\n\n## Correção\n\nUse `None` como padrão e crie uma lista apenas quando `bucket is None`. Se o chamador fornecer uma lista, acrescente o item diretamente nela e retorne esse mesmo objeto:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nprimeira = collect(\"A\")\nsegunda = collect(\"B\")\n\nassert primeira == [\"A\"]\nassert segunda == [\"B\"]\nassert primeira is not segunda\n\nfornecida = []\nresultado = collect(\"C\", fornecida)\n\nassert resultado is fornecida\nassert fornecida == [\"C\"]\n```\n\nA comparação explícita com `None` preserva inclusive uma lista vazia fornecida pelo chamador, sem substituí-la por outra.\n\n## Limitações\n\nA correção elimina o compartilhamento involuntário do valor padrão, mas mantém a mutação intencional de listas fornecidas. Reutilizar explicitamente a mesma lista continua acumulando itens. Os asserts verificam os comportamentos apresentados; não demonstram nem garantem segurança para uso concorrente.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": [
+    {
+      "type": "reasoning.encrypted",
+      "data": "gAAAAABqv_ipIUE9xSZ0r3wu9jZypoYuy1ZrDlQLv2LvU1BwFXgBFjZVbOz8_j3862A_x48GfEJ37myRPtRhtQkink-evPvXilWEJQVB9-7zXQzm7TI-n0tDJ5W_fbPGJNx_uSNDhCLzNMnkZhJxfmvFp4dt_7KlxnEoRMrEdOzLAD2EvUba6maWBxgMKnP58kp5dt5xXULX3ukk9Xk580h1b5Py8iJ1cbCBr1NjWykMuL7OpB-UrBj3wgq1MgKVPUHaZUfiIk0Ta16Ne1BIGl5LECLwN6jPnNOKOEviYMYnSboqjMIsNvsH3iROjUrH0TEB29W9adTO1rzbXSN8_Uzv9dK3DV2VS-jibHG_rjeOQC-oiiQOdg9YuMjxMub4EQZnlnAVHmgew4qKamoXS-6dpWlzGo9Zq1Kw7-ekY18aBi5NVPNWj9ssp-rkjc8DPGe7vwH809NZ_9QQIWMH9ZPQo63dZreqv5zNBUePSegxIJlkjpRMBpAwHpuMCrDm3JWoEICZw7EvQmU825dAfCMZx7KW77b5wIA4Wp_BpV1Q7mz8vJh35ZqH8Ld-GH22U73QouZIiPeNhyTlTRvrl4wSIUqq9Xyn1jqOmAxW6-0ZGpFf0OMTxeMFjtFJ2zo56B9iTPVRHffYz-PDamx_GE-XuBFdjMhIVSzeyIhINZqC1SyQxNuQQ8jA7FQyg9APUcsA4_zGroPQtn4xoDAzkA6Vwnw7CVsR2nOIPNXEIcrA76cXbNxCUmXjfdqd4gfHwOfRopojDXR3mhiWGgzCLt0p0KfQ9pEP3TNPQlY0Dh1hOgGAMEBjq7lN-ON2HQvpGMafMMMIUdjnMNFv9l7UWItt1m2EXzE8zJi-3HXBOhJPWHczHL2Wli7FaItsUvbiWiumq4rsmBY3PAPh-hTxXS6wNUhWni1LR_NKBqkM38owOHlbwb96VjELNV-NJ1WVCaIEo5GyJlP67rQNgG6Mqjx3fo9afAxBrWwpffMVZ8VCcX6coAGCJWvH7pWWPMKFqs12z15s9R3j2BtjkhwK-53oqkUShrrhj7_Az1XSCYAbwsl-IpeeEXzONJ9gvYuHg5ZxvBpIYG27xzCGt72zMyOGrelN2wqDBIe8quMIC1zKV2ip8MMGACt0Og5BK5cA2uEIF2PkWf2mvLf1fFhLDKJc2q4PNHtLy_1sVo44-pbb2dYQKc0aC6wtbDYG24uGAo9nw8m6z0aSScECfWZN3GPI8I1P0vY6kOmwtoKWx_XrVGKekFbbZ_Xa5x7Nar33LJbjGrlJIdH-oVxEOzZxh8Tj0g3mC1JDEP4qGHnUesDdmZzGbzu5wvxUR-kjd4tuknNX6uu_1qrSjmffG78WQ5u8GaUmOmw3yAPfUop_ppHKnEvlSQV9FAvJ4hjD0rLH2_UrBbmfoCPkxJuEAxs9zOZ6Vz0b1VjxBCg4YINY8UCEHlDrXi0rtijbtoBhjifMdJqHhJguhW_UZ3MxTvh5agkSeakV26wrhm3vw35hQtMZs3ixinSkHlgCVgX8d_OQMESiduGaTEcu8woskai84GOazBG5wQ18RTiEtlMQaXMljqXAHivckYUqukVA-LX3x3r6oSdpijlfNBqWlMuBD2ZfM3oIUUEUoE4L6QoEj2Eh4VwxJvWTC2BfckumHXRrnGLNljoh5J0_cYyODkNqpIm5FAJZ6GJtsW6NCA79mT5Ewv2SRBpIg-SULX1xZqExz_hyrnkS2EvlGcjJxGEe0GoLq9HtWupSNWWOVwYQ9ZiAr_l_Ha9vtNXcC9BASX_MYokknhktx7_uIqup3uCD622VO9UQ0md22zpeFmykchusWSmtoF5bizFoLpZAPCV5RaYRQ1IxlrxUGR42W7XlxqzhojOQehOoSMb54OgGTCYUBlmJX0luAdt3X-68iI9sAV470jP01VwiTvHlxW8KscJ9t-lkMp0IYh-XtmwGcDoaeVS0EaH4hvcPrL6DRr5l_aD_5OVd6_7_33i1VzSnShLU0t_FCNF2LjN3pkk7otW1grVOxtiuID9tF-VbWfmJbRjFe9YR6tCAb1DYmZx4TUKkgK6RyQiMFKssjeCo2PRvyNiVNVy_04FjU034xunJh0Hhk9zKcm-r3Gkow6qR_tjO6FcQXJCPlImKDQ7NbOHAWTq7r29lCjlFXryHMxdpmyvIH_rwmP_-ikWEYXrqEY97NYfAlEZCMgDm4zJxZ5esHawfC-UTED4=.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWFzdHJhLTIwMjYwOTAzfG9wZW5haSJ9",
+      "format": "openai-responses-v1",
+      "id": "rs_0377b04ecd8cddb6016abff8a635fc87d18640545722119c2a",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 14.141534734517336,
+  "finished_at": "2026-10-02T18:32:18.431806+00:00"
+}

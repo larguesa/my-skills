@@ -1,0 +1,188 @@
+{
+  "model": "z-ai/glm-5.3-prime",
+  "endpoint": {
+    "name": "Alibaba | z-ai/glm-5.3-prime-20260921",
+    "model_id": "z-ai/glm-5.3-prime",
+    "model_name": "Z.ai: GLM 5.3 Prime",
+    "context_length": 1000000,
+    "pricing": {
+      "prompt": "0.0000028",
+      "completion": "0.0000088",
+      "input_cache_read": "0.00000056",
+      "discount": 0
+    },
+    "provider_name": "Alibaba",
+    "tag": "alibaba",
+    "quantization": "unknown",
+    "max_completion_tokens": 131072,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "max_tokens",
+      "temperature",
+      "top_p",
+      "seed",
+      "presence_penalty",
+      "response_format",
+      "top_k",
+      "frequency_penalty",
+      "stop",
+      "tools",
+      "tool_choice",
+      "logprobs",
+      "top_logprobs",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": false,
+      "function": false
+    },
+    "status": 0,
+    "uptime_last_30m": 99.66024915062289,
+    "uptime_last_5m": 100,
+    "uptime_last_1d": 99.5249563330334,
+    "supports_implicit_caching": false,
+    "native_tools": {},
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "z-ai/glm-5.3-prime",
+        "provider_returned": "Alibaba",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945406-YjwNMtOFHUQPjcTraqsY",
+        "observed_at": "2026-10-02T12:50:06.903406+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "z-ai/glm-5.3-prime",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo.\n\nSKILL E REFERÊNCIAS:\n---\nname: humanizador-pt-br\ndescription: Melhore naturalidade em PT-BR sem perder a voz.\nversion: 0.2.0\nauthor: Ricardo Pupo Larguesa (larguesa), Hermes Agent\nplatforms: [linux, macos, windows]\nmetadata:\n  hermes:\n    tags: [escrita, edicao, pt-br]\n    related_skills: []\n---\n\n# Humanizador PT-BR\n\nMelhore o texto para quem vai ler: clareza, ritmo, precisão e voz. Cortar sinais de escrita genérica é um meio, não o objetivo. Um texto sem palavras sinalizadas ainda pode ser ruim.\n\n## Quando usar\n\n- Reescrever textos genéricos, repetitivos ou com formalidade deslocada.\n- Revisar artigos, mensagens, conteúdo técnico e pequenos contos.\n- Escrever do zero quando o pedido autorizar criação, inclusive ficção.\n- Auditar sem reescrever quando o usuário pedir apenas diagnóstico.\n\nNão usar para esconder atribuições, fabricar depoimentos ou comprovar autoria. Esta skill não é um detector de IA.\n\n## Antes de escrever\n\nLeia o pedido e o material disponível. Identifique gênero, leitor, intenção, registro e restrições. Use a amostra de voz quando houver; sem amostra, preserve o registro do original ou o indicado no pedido. Pergunte só se faltar informação que altere o resultado.\n\nDistinga as duas tarefas:\n\n- **Revisão:** conserve os acontecimentos, fatos, nomes, números, citações, negações, condições e grau de certeza. Não acrescente experiências, fontes ou detalhes apresentados como reais.\n- **Criação:** desenvolva o conteúdo dentro do que o pedido permite. Em ficção, pode inventar personagens, cenas, ações e sensações; não apresente isso como biografia, depoimento ou fato real. Ao revisar uma ficção existente, preserve seu enredo e ponto de vista, salvo autorização para mudá-los.\n\n## Como melhorar a leitura\n\n1. **Comece pelo que acontece ou pelo que importa.** Remova aberturas que apenas anunciam o assunto. Em um conto, a cena pode começar com uma ação, um objeto ou uma fala, se isso servir à história.\n2. **Troque abstração vazia por informação sustentada.** Em não ficção, use somente detalhes disponíveis. Na criação ficcional, escolha detalhes concretos que participem da cena, sem preencher cada frase com decoração.\n3. **Ajuste o ritmo ao trecho.** Combine comprimentos e construções quando a leitura pedir. Não transforme todos os parágrafos em frases curtas, fragmentos dramáticos ou uma sequência de frases igualmente polidas.\n4. **Conserve palavras que têm função.** Repetição pode sustentar uma ideia, uma voz ou um efeito literário. Não alterne sinônimos só para evitar repetir um nome ou termo técnico.\n5. **Reduza explicações que o texto já resolve.** Corte moral da história, resumo final e interpretação de emoções quando ações e contexto já comunicarem isso. Mantenha explicações necessárias ao leitor.\n6. **Prefira uma voz coerente a uma personalidade fabricada.** Humor, coloquialidade, opinião e primeira pessoa dependem do pedido e da voz. Gírias, erros deliberados e falsa intimidade não tornam o texto melhor.\n7. **Leia o resultado como texto, não como checklist.** Retire a alteração que piora precisão, continuidade, ritmo ou intenção. Não editar um trecho bom também é uma decisão válida.\n\nConsulte o [catálogo](references/catalogo.json) para localizar candidatos à revisão. Uma regex não decide se há defeito: considere contexto, gênero, exceções e risco de sentido. As palavras “robusto”, “significativo” e “além disso” não são proibidas. Consulte os [estilos](references/estilos.json) quando precisar variar discretamente a forma, sem sortear fatos ou personalidade.\n\n## Entrega\n\nEm pedido de criação ou reescrita, entregue o texto pronto. Acrescente observações ou mudanças somente quando forem solicitadas ou quando uma dúvida relevante impedir a revisão fiel. Em auditoria, mostre problemas concretos, trechos e sugestões, sem reescrever por conta própria.\n\nNão publique nem sobrescreva o original sem autorização. Não introduza travessão longo na prosa nova; preserve um trecho literal protegido e sinalize conflito se houver. Não remova ressalvas técnicas, científicas, jurídicas ou de segurança para deixar o texto mais leve.\n\n## Scripts opcionais\n\nO procedimento textual não depende de Python. Para uma auditoria local, use `terminal` na pasta da skill:\n\n```text\npython3 scripts/humanizar.py audit entrada.txt\npython3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17\npython3 scripts/humanizar.py apply entrada.txt --plan plano-aprovado.json --output revisado.txt\npython3 scripts/humanizar.py verify entrada.txt revisado.txt\n```\n\nO script não redige. `suggest` oferece recomendações e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. Use `--protect \"termo\"` para invariantes adicionais. Ver [uso e exemplo de plano](README.me).\n\nScripts de experimento e resultados ficam em [tests/](tests/README.md). Chamadas externas exigem autorização e teto financeiro. Não envie material confidencial a terceiros sem autorização.\n\n## Verificação\n\n- O resultado cumpre o pedido e funciona no gênero, sem impor informalidade ou ornamentação.\n- Na revisão, preserva sentido, fatos, condições e voz; na criação, respeita os limites de invenção.\n- Cada mudança melhora a leitura ou a precisão, não apenas uma contagem de palavras.\n- Não usa notas de juízes ou detectores para otimizar o texto. Resultados de percepção precisam de leitura humana.\n\n[Fontes e limites das heurísticas](references/fontes.md). Nenhuma taxa de autoria ou garantia de “passar em detector” é oferecida.\n\n\nCATALOGO EDITORIAL:\n[{\"id\":\"PTBR-01\",\"name\":\"abertura-generica\",\"pattern\":\"(?i)\\\\b(?:no mundo (?:atual|acelerado de hoje)|na sociedade atual|em um cenário (?:cada vez mais|em constante evolução))\\\\b\",\"suggestion\":\"Começar pelo assunto específico já presente, se a abertura não delimitar tempo ou contexto.\",\"source\":[\"justdone\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Abertura intercambiável entre assuntos.\",\"exceptions\":[\"Enquadramento histórico ou citação literal.\"],\"positive_example\":\"Na sociedade atual, o cadastro exige um documento.\",\"negative_example\":\"O cadastro exige um documento.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-02\",\"name\":\"anuncio-de-percurso\",\"pattern\":\"(?i)\\\\b(?:vamos (?:mergulhar|explorar|nos aprofundar)|este (?:texto|artigo) irá (?:discutir|abordar))\\\\b\",\"suggestion\":\"Avaliar se o anúncio pode dar lugar ao conteúdo, sem apagar objetivos didáticos.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Anúncio sem orientação útil ao leitor.\",\"exceptions\":[\"Roteiro falado, aula e descrição formal do escopo.\"],\"positive_example\":\"Vamos mergulhar nas opções de cadastro.\",\"negative_example\":\"Há duas opções de cadastro.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-03\",\"name\":\"ressalva-vazia\",\"pattern\":\"(?i)\\\\b(?:é importante (?:notar|ressaltar|destacar) que|vale (?:ressaltar|destacar) que|faz-se necessário pontuar)\\\\b\",\"suggestion\":\"Considerar começar pela informação; manter alertas que mudam a decisão.\",\"source\":[\"justdone\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Ênfase repetida sem hierarquia real.\",\"exceptions\":[\"Advertência de segurança ou contraste necessário.\"],\"positive_example\":\"É importante notar que o prazo termina amanhã.\",\"negative_example\":\"O prazo termina amanhã.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-04\",\"name\":\"conector-recorrente\",\"pattern\":\"(?im)(?:^|[.!?]\\\\s+)(?:ademais|além disso|nesse sentido|dessa forma|diante disso)\\\\b\",\"suggestion\":\"Revisar recorrência no documento e função lógica, nunca remover por ocorrência isolada.\",\"source\":[\"rpiochi\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Vários parágrafos abrem com a mesma ligação sem relação clara.\",\"exceptions\":[\"Adição, conclusão ou consequência realmente sustentada.\"],\"positive_example\":\"Ademais, o formulário aceita anexos.\",\"negative_example\":\"O formulário também aceita anexos.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-05\",\"name\":\"contraste-encenado\",\"pattern\":\"(?i)\\\\bnão (?:é|se trata de|se trata) apenas\\\\b[^.!?\\\\n]{0,180}\\\\bmas\\\\b\",\"suggestion\":\"Verificar se existe contraste real; sugerir afirmação direta quando só repete a tese.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Contraste teatral sem diferença explicada.\",\"exceptions\":[\"Correção conceitual, distinção técnica ou contraste autoral deliberado.\"],\"positive_example\":\"Não é apenas um aviso, mas uma mensagem.\",\"negative_example\":\"É um aviso.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-06\",\"name\":\"autoridade-vaga\",\"pattern\":\"(?i)\\\\b(?:especialistas (?:acreditam|afirmam|dizem)|estudos (?:mostram|comprovam)|segundo (?:especialistas|pesquisadores))\\\\b\",\"suggestion\":\"Pedir a referência e o escopo da alegação; não inventar fonte nem apagar uma alegação sem aprovação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Atribuição sem referência identificável no contexto.\",\"exceptions\":[\"Fonte identificada na frase anterior, nota ou bibliografia.\"],\"positive_example\":\"Especialistas afirmam que a mudança resolve o problema.\",\"negative_example\":\"O relatório citado descreve a mudança.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-07\",\"name\":\"importancia-inflada\",\"pattern\":\"(?i)\\\\b(?:marco (?:histórico|fundamental)|papel (?:crucial|fundamental)|revoluciona(?:r|ndo)?|transformação sem precedentes)\\\\b\",\"suggestion\":\"Solicitar a consequência concreta ou moderar a avaliação quando autorizado.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Importância declarada sem critério ou evidência.\",\"exceptions\":[\"Evento histórico documentado; papel necessário demonstrado.\"],\"positive_example\":\"O novo botão representa um marco histórico.\",\"negative_example\":\"O novo botão abre o formulário.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-08\",\"name\":\"promessa-total\",\"pattern\":\"(?i)\\\\b(?:perfeitamente integrad[oa]s?|resultados revolucionários|solução definitiva|experiência sem falhas)\\\\b\",\"suggestion\":\"Conferir limites da promessa com a fonte, sem trocar por outra garantia.\",\"source\":[\"justdone\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Promessa comercial absoluta sem condições.\",\"exceptions\":[\"Citação atribuída ou requisito explicitamente normativo.\"],\"positive_example\":\"É uma solução definitiva para falhas.\",\"negative_example\":\"A solução trata as falhas descritas no relatório.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-09\",\"name\":\"robustez-sem-criterio\",\"pattern\":\"(?i)\\\\b(?:soluç(?:ão|ões)|sistemas?|plataformas?|processos?)\\\\s+robust[oa]s?\\\\b\",\"suggestion\":\"Perguntar a que falhas, cargas ou variações a robustez se refere.\",\"source\":[\"justdone\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Qualidade ampla sem critério no contexto.\",\"exceptions\":[\"Estatística robusta, controle robusto, teste de robustez ou limites técnicos documentados; preservar o termo técnico.\"],\"positive_example\":\"Temos uma solução robusta.\",\"negative_example\":\"A solução mantém o serviço durante a falha descrita no teste.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-10\",\"name\":\"significancia-sem-escopo\",\"pattern\":\"(?i)\\\\b(?:melhoria|aumento|redução|impacto|diferença)\\\\s+significativ[oa]s?\\\\b\",\"suggestion\":\"Distinguir relevância prática de significância estatística e pedir medida já existente.\",\"source\":[\"justdone\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Avaliação sem escala ou teste identificável.\",\"exceptions\":[\"Significância estatística com método e contexto; não remover significativo nem confundir p-valor com efeito.\"],\"positive_example\":\"Houve uma melhoria significativa.\",\"negative_example\":\"Houve melhoria no indicador acompanhado.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-11\",\"name\":\"jargao-sem-referente\",\"pattern\":\"(?i)\\\\b(?:alavancar|sinergia|potencializar)\\\\b\",\"suggestion\":\"Explicitar a ação e seus agentes apenas se já estiverem no texto.\",\"source\":[\"justdone\",\"undetectable\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Jargão substitui a descrição do trabalho.\",\"exceptions\":[\"Alavancagem financeira, sinergia farmacológica ou outro uso técnico definido.\"],\"positive_example\":\"Precisamos alavancar a sinergia.\",\"negative_example\":\"As equipes precisam compartilhar o planejamento.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-12\",\"name\":\"gerundio-interpretativo\",\"pattern\":\"(?i),\\\\s*(?:evidenciando|simbolizando|refletindo|demonstrando)\\\\b\",\"suggestion\":\"Verificar se o comentário final acrescenta inferência não sustentada; preservar relações demonstradas.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Interpretação anexada a um fato sem apoio.\",\"exceptions\":[\"Descrição de processo simultâneo, resultado demonstrado ou imagem literária intencional.\"],\"positive_example\":\"O botão mudou, simbolizando uma nova era.\",\"negative_example\":\"O botão mudou.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-13\",\"name\":\"incerteza-empilhada\",\"pattern\":\"(?i)\\\\b(?:poderia potencialmente|talvez possa possivelmente|possivelmente talvez)\\\\b\",\"suggestion\":\"Conservar o grau de incerteza e simplificar somente a duplicação comprovada.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Modalizadores duplicados, sem distinção de escopo.\",\"exceptions\":[\"Ressalvas independentes, probabilidade, consentimento informado ou obrigação jurídica.\"],\"positive_example\":\"A falha poderia potencialmente retornar.\",\"negative_example\":\"A falha pode retornar.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-14\",\"name\":\"perifrase-finalidade\",\"pattern\":\"(?i)\\\\b(?:com o intuito de|com o objetivo de|a fim de que)\\\\b\",\"suggestion\":\"Testar uma forma mais curta sem mudar finalidade para causa ou resultado.\",\"source\":[\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Perífrase longa em texto de execução.\",\"exceptions\":[\"Objetivo formal, contraste entre intenção e efeito ou citação.\"],\"positive_example\":\"Com o intuito de validar, execute o teste.\",\"negative_example\":\"Para validar, execute o teste.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-15\",\"name\":\"copula-funcional\",\"pattern\":\"(?i)\\\\b(?:se apresenta como|configura-se como|constitui-se como)\\\\b\",\"suggestion\":\"Considerar ser somente quando não alterar aparência, constituição ou função.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Construção cerimoniosa sem função semântica adicional.\",\"exceptions\":[\"Descrição de aparência distinta de realidade; definição jurídica constitutiva.\"],\"positive_example\":\"O documento se apresenta como um guia.\",\"negative_example\":\"O documento é um guia.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-16\",\"name\":\"fecho-generico\",\"pattern\":\"(?i)\\\\b(?:o futuro é promissor|o potencial é imenso|juntos podemos transformar|rumo a um futuro melhor)\\\\b\",\"suggestion\":\"Encerrar no último ponto útil se a conclusão não acrescenta decisão ou ideia autoral.\",\"source\":[\"rpiochi\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Otimismo sem conteúdo adicional.\",\"exceptions\":[\"Discurso motivacional pedido, slogan aprovado ou declaração atribuída.\"],\"positive_example\":\"O futuro é promissor para este formulário.\",\"negative_example\":\"O formulário estará disponível na data informada.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-17\",\"name\":\"residuo-de-chat\",\"pattern\":\"(?i)\\\\b(?:espero que (?:isso|isto) ajude|se quiser, posso|aqui está (?:o|um) texto)\\\\b\",\"suggestion\":\"Separar a mensagem ao solicitante do artefato destinado à publicação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Mensagem do assistente incorporada ao artigo por engano.\",\"exceptions\":[\"Conversa de atendimento, carta ou oferta real de suporte.\"],\"positive_example\":\"Espero que isso ajude!\",\"negative_example\":\"Consulte o guia de instalação.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-18\",\"name\":\"elogio-automatico\",\"pattern\":\"(?i)\\\\b(?:excelente pergunta|ótima pergunta|você está absolutamente certo)\\\\b\",\"suggestion\":\"Conferir se há avaliação genuína relevante; preferir responder ao conteúdo.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Elogio automático antes de qualquer resposta.\",\"exceptions\":[\"Reconhecimento adequado em ensino ou conversa; citação literal.\"],\"positive_example\":\"Excelente pergunta! O cadastro fica no menu.\",\"negative_example\":\"O cadastro fica no menu.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-19\",\"name\":\"gancho-revelacao\",\"pattern\":\"(?i)\\\\b(?:o que ninguém te conta|a verdade é que|e aqui está o segredo|pense nisso)\\\\b\",\"suggestion\":\"Avaliar se a revelação tem conteúdo; preservar voz deliberada sem fabricar exclusividade.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Suspense desproporcional ao conteúdo.\",\"exceptions\":[\"Roteiro persuasivo solicitado com promessa sustentada.\"],\"positive_example\":\"O que ninguém te conta: o menu tem ajuda.\",\"negative_example\":\"O menu tem ajuda.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-20\",\"name\":\"lista-rotulada\",\"pattern\":\"(?m)^\\\\s*[-*]\\\\s+\\\\*\\\\*[^*\\\\n]{1,80}:?\\\\*\\\\*:?\\\\s*\",\"suggestion\":\"Revisar rótulos redundantes e manter listas quando favorecem consulta e acessibilidade.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Rótulo e início do item repetem a mesma informação.\",\"exceptions\":[\"Checklist, glossário, procedimento e relatório escaneável.\"],\"positive_example\":\"- **Prazo:** O prazo é amanhã.\",\"negative_example\":\"O prazo é amanhã.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"}]\n\nESTILOS:\n{\"schema_version\":\"1.0\",\"purpose\":\"Variações discretas dentro da voz fornecida, não personas.\",\"voice_invariants\":[\"Fatos e grau de certeza\",\"Registro do autor\",\"Vocabulário técnico necessário\",\"Posição e experiências explicitamente fornecidas\"],\"seed_policy\":{\"scope\":\"Selecionar com seed uma ênfase opcional entre os ajustes do perfil, sem alterar invariantes nem aplicar reescrita.\",\"record\":[\"seed\",\"profile_id\",\"catalog_version\",\"voice_sample_id\"],\"limits\":\"Mesma seed não garante texto idêntico de um modelo. Não sortear fatos, opiniões, persona ou nível de certeza. Preferência explícita do autor prevalece.\"},\"forbidden\":[\"Falsa experiência pessoal\",\"Erros deliberados\",\"Regionalismo presumido\",\"Mudança de opinião para criar personalidade\",\"Alternância aleatória de sinônimos técnicos\"],\"profiles\":[{\"id\":\"neutro-claro\",\"genres\":[\"artigo\",\"relatorio\"],\"adjustments\":[\"Manter formalidade original\",\"Variar extensão de frases só quando ajudar a leitura\",\"Preferir informação a comentários sobre importância\"],\"avoid\":[\"Impor conversa íntima\",\"Trocar toda repetição lexical\"]},{\"id\":\"tecnico-preciso\",\"genres\":[\"tecnico\",\"relatorio\"],\"adjustments\":[\"Conservar terminologia e qualificadores\",\"Deixar condições junto da afirmação\",\"Usar listas quando facilitam consulta\"],\"avoid\":[\"Metáforas decorativas\",\"Simplificação que apaga hipótese ou método\"]},{\"id\":\"conversacional-contido\",\"genres\":[\"email\",\"post\"],\"adjustments\":[\"Preservar a forma de tratamento do autor\",\"Usar transições simples sem eliminar lógica\",\"Permitir contrações somente se presentes na voz\"],\"avoid\":[\"Gírias sorteadas\",\"Humor não pedido\",\"Primeira pessoa sem respaldo\"]},{\"id\":\"argumentativo-sobrio\",\"genres\":[\"artigo\",\"post\"],\"adjustments\":[\"Explicitar a tese já presente\",\"Aproximar razões e ressalvas\",\"Encerrar quando o argumento estiver completo\"],\"avoid\":[\"Contrastes inventados\",\"Frase de efeito obrigatória\",\"Tom de certeza maior que a fonte\"]}],\"implementation_status\":\"humanizar.py suggest carrega os perfis e retorna style_focus reproduzível com seed. É orientação editorial, não reescrita automática.\"}"
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um post de LinkedIn de 130 a 200 palavras, em primeira pessoa de uma coordenadora fictícia, explicitamente como simulação editorial. Comece com a frase literal \"Exemplo fictício para avaliação editorial.\" Base do registro simulado: equipe criou um checklist de revisão de deploy. Nas quatro semanas anteriores foram 28 deploys e 12 rollbacks; nas quatro posteriores, 35 deploys e três rollbacks. Mediana do tempo de deploy: 30 minutos antes e 18 depois. Não houve grupo de controle e outras mudanças na equipe não foram registradas. Conte o aprendizado sem atribuir causalidade exclusiva ao checklist, sem generalizar para outras empresas e sem pedir seguidores, inserir hashtags ou inventar um episódio pessoal adicional."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "alibaba"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "21-linkedin-aprendizado",
+  "arm": "skill",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um post de LinkedIn de 130 a 200 palavras, em primeira pessoa de uma coordenadora fictícia, explicitamente como simulação editorial. Comece com a frase literal \"Exemplo fictício para avaliação editorial.\" Base do registro simulado: equipe criou um checklist de revisão de deploy. Nas quatro semanas anteriores foram 28 deploys e 12 rollbacks; nas quatro posteriores, 35 deploys e três rollbacks. Mediana do tempo de deploy: 30 minutos antes e 18 depois. Não houve grupo de controle e outras mudanças na equipe não foram registradas. Conte o aprendizado sem atribuir causalidade exclusiva ao checklist, sem generalizar para outras empresas e sem pedir seguidores, inserir hashtags ou inventar um episódio pessoal adicional.",
+  "id": "ffbc67d37d73b283b1afa724b76e6874c563cb8e43d4f30ee221fd172cdcf656",
+  "status": "completed",
+  "started_at": "2026-10-04T08:44:45.158366+00:00",
+  "response": {
+    "id": "gen-1791103485-1n5woZdg81ZOCoVp0MEF",
+    "object": "chat.completion",
+    "created": 1791103485,
+    "model": "z-ai/glm-5.3-prime",
+    "provider": "Alibaba",
+    "system_fingerprint": null,
+    "service_tier": null,
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Exemplo fictício para avaliação editorial.\n\nNossa equipe passava por um problema recorrente: deploys com falhas que exigiam rollback. Como coordenadora, sugeri montarmos um checklist de revisão de deploy, com itens curtos e verificáveis antes de cada liberação.\n\nResolvemos acompanhar o resultado por oito semanas. Nas quatro semanas anteriores ao checklist, fizemos 28 deploys e 12 rollbacks. Nas quatro semanas seguintes, 35 deploys e três rollbacks. A mediana do tempo de deploy caiu de 30 minutos para 18.\n\nGostei do que vimos, mas tento ser honesta na leitura: não tivemos grupo de controle e outras mudanças na equipe nesse período não foram registradas. Então não dá para afirmar que o checklist sozinho explica a diferença. Ele parece ter ajudado, e a equipe achou o processo mais previsível, o que para mim já justificou o trabalho de montá-lo.\n\nNão sei se o mesmo efeito apareceria em outra equipe ou empresa. Cada contexto tem sua rotina e sua história. Se alguém tiver medido algo parecido com mais rigor, gostaria de saber como foi.",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 5907,
+      "completion_tokens": 258,
+      "total_tokens": 6165,
+      "cost": 0.01881,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.01881,
+        "upstream_inference_prompt_cost": 0.0165396,
+        "upstream_inference_completions_cost": 0.0022704
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "Alibaba",
+  "model_returned": "z-ai/glm-5.3-prime",
+  "usage": {
+    "prompt_tokens": 5907,
+    "completion_tokens": 258,
+    "total_tokens": 6165,
+    "cost": 0.01881,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.01881,
+      "upstream_inference_prompt_cost": 0.0165396,
+      "upstream_inference_completions_cost": 0.0022704
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.01881",
+  "edited": "Exemplo fictício para avaliação editorial.\n\nNossa equipe passava por um problema recorrente: deploys com falhas que exigiam rollback. Como coordenadora, sugeri montarmos um checklist de revisão de deploy, com itens curtos e verificáveis antes de cada liberação.\n\nResolvemos acompanhar o resultado por oito semanas. Nas quatro semanas anteriores ao checklist, fizemos 28 deploys e 12 rollbacks. Nas quatro semanas seguintes, 35 deploys e três rollbacks. A mediana do tempo de deploy caiu de 30 minutos para 18.\n\nGostei do que vimos, mas tento ser honesta na leitura: não tivemos grupo de controle e outras mudanças na equipe nesse período não foram registradas. Então não dá para afirmar que o checklist sozinho explica a diferença. Ele parece ter ajudado, e a equipe achou o processo mais previsível, o que para mim já justificou o trabalho de montá-lo.\n\nNão sei se o mesmo efeito apareceria em outra equipe ou empresa. Cada contexto tem sua rotina e sua história. Se alguém tiver medido algo parecido com mais rigor, gostaria de saber como foi.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": null,
+  "usage_issues": [],
+  "elapsed_seconds": 3.926342071965337,
+  "finished_at": "2026-10-04T08:44:49.088265+00:00"
+}

@@ -1,0 +1,217 @@
+{
+  "model": "openai/gpt-6-luna",
+  "endpoint": {
+    "name": "OpenAI | openai/gpt-6-luna-20260922",
+    "model_id": "openai/gpt-6-luna",
+    "model_name": "OpenAI: GPT-6 Luna",
+    "context_length": 1050000,
+    "pricing": {
+      "prompt": "0.0000001",
+      "completion": "0.0000005",
+      "web_search": "0.01",
+      "input_cache_read": "0.00000001",
+      "input_cache_write": "0.000000125",
+      "discount": 0,
+      "overrides": [
+        {
+          "min_prompt_tokens": 272000,
+          "prompt": "0.0000002",
+          "completion": "0.00000075",
+          "input_cache_read": "0.00000002",
+          "input_cache_write": "0.00000025"
+        }
+      ]
+    },
+    "provider_name": "OpenAI",
+    "tag": "openai",
+    "quantization": "unknown",
+    "max_completion_tokens": 128000,
+    "max_prompt_tokens": 922000,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "seed",
+      "max_tokens",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice",
+      "verbosity",
+      "reasoning_effort"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.97904172978357,
+    "uptime_last_5m": 99.9938193774877,
+    "uptime_last_1d": 99.97478361443893,
+    "supports_implicit_caching": false,
+    "native_tools": {
+      "openrouter:web_search": {
+        "type": "web_search"
+      },
+      "openrouter:apply_patch": {
+        "type": "apply_patch"
+      }
+    },
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "effort": "medium"
+        },
+        "model_returned": "openai/gpt-6-luna",
+        "provider_returned": "OpenAI",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945410-bzlLmRCYPC0LEtDDBkl4",
+        "observed_at": "2026-10-02T12:50:10.808300+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo.\n\nSKILL E REFERÊNCIAS:\n---\nname: humanizador-pt-br\ndescription: Melhore naturalidade em PT-BR sem perder a voz.\nversion: 0.2.0\nauthor: Ricardo Pupo Larguesa (larguesa), Hermes Agent\nplatforms: [linux, macos, windows]\nmetadata:\n  hermes:\n    tags: [escrita, edicao, pt-br]\n    related_skills: []\n---\n\n# Humanizador PT-BR\n\nMelhore o texto para quem vai ler: clareza, ritmo, precisão e voz. Cortar sinais de escrita genérica é um meio, não o objetivo. Um texto sem palavras sinalizadas ainda pode ser ruim.\n\n## Quando usar\n\n- Reescrever textos genéricos, repetitivos ou com formalidade deslocada.\n- Revisar artigos, mensagens, conteúdo técnico e pequenos contos.\n- Escrever do zero quando o pedido autorizar criação, inclusive ficção.\n- Auditar sem reescrever quando o usuário pedir apenas diagnóstico.\n\nNão usar para esconder atribuições, fabricar depoimentos ou comprovar autoria. Esta skill não é um detector de IA.\n\n## Antes de escrever\n\nLeia o pedido e o material disponível. Identifique gênero, leitor, intenção, registro e restrições. Use a amostra de voz quando houver; sem amostra, preserve o registro do original ou o indicado no pedido. Pergunte só se faltar informação que altere o resultado.\n\nDistinga as duas tarefas:\n\n- **Revisão:** conserve os acontecimentos, fatos, nomes, números, citações, negações, condições e grau de certeza. Não acrescente experiências, fontes ou detalhes apresentados como reais.\n- **Criação:** desenvolva o conteúdo dentro do que o pedido permite. Em ficção, pode inventar personagens, cenas, ações e sensações; não apresente isso como biografia, depoimento ou fato real. Ao revisar uma ficção existente, preserve seu enredo e ponto de vista, salvo autorização para mudá-los.\n\n## Como melhorar a leitura\n\n1. **Comece pelo que acontece ou pelo que importa.** Remova aberturas que apenas anunciam o assunto. Em um conto, a cena pode começar com uma ação, um objeto ou uma fala, se isso servir à história.\n2. **Troque abstração vazia por informação sustentada.** Em não ficção, use somente detalhes disponíveis. Na criação ficcional, escolha detalhes concretos que participem da cena, sem preencher cada frase com decoração.\n3. **Ajuste o ritmo ao trecho.** Combine comprimentos e construções quando a leitura pedir. Não transforme todos os parágrafos em frases curtas, fragmentos dramáticos ou uma sequência de frases igualmente polidas.\n4. **Conserve palavras que têm função.** Repetição pode sustentar uma ideia, uma voz ou um efeito literário. Não alterne sinônimos só para evitar repetir um nome ou termo técnico.\n5. **Reduza explicações que o texto já resolve.** Corte moral da história, resumo final e interpretação de emoções quando ações e contexto já comunicarem isso. Mantenha explicações necessárias ao leitor.\n6. **Prefira uma voz coerente a uma personalidade fabricada.** Humor, coloquialidade, opinião e primeira pessoa dependem do pedido e da voz. Gírias, erros deliberados e falsa intimidade não tornam o texto melhor.\n7. **Leia o resultado como texto, não como checklist.** Retire a alteração que piora precisão, continuidade, ritmo ou intenção. Não editar um trecho bom também é uma decisão válida.\n\nConsulte o [catálogo](references/catalogo.json) para localizar candidatos à revisão. Uma regex não decide se há defeito: considere contexto, gênero, exceções e risco de sentido. As palavras “robusto”, “significativo” e “além disso” não são proibidas. Consulte os [estilos](references/estilos.json) quando precisar variar discretamente a forma, sem sortear fatos ou personalidade.\n\n## Entrega\n\nEm pedido de criação ou reescrita, entregue o texto pronto. Acrescente observações ou mudanças somente quando forem solicitadas ou quando uma dúvida relevante impedir a revisão fiel. Em auditoria, mostre problemas concretos, trechos e sugestões, sem reescrever por conta própria.\n\nNão publique nem sobrescreva o original sem autorização. Não introduza travessão longo na prosa nova; preserve um trecho literal protegido e sinalize conflito se houver. Não remova ressalvas técnicas, científicas, jurídicas ou de segurança para deixar o texto mais leve.\n\n## Scripts opcionais\n\nO procedimento textual não depende de Python. Para uma auditoria local, use `terminal` na pasta da skill:\n\n```text\npython3 scripts/humanizar.py audit entrada.txt\npython3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17\npython3 scripts/humanizar.py apply entrada.txt --plan plano-aprovado.json --output revisado.txt\npython3 scripts/humanizar.py verify entrada.txt revisado.txt\n```\n\nO script não redige. `suggest` oferece recomendações e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. Use `--protect \"termo\"` para invariantes adicionais. Ver [uso e exemplo de plano](README.me).\n\nScripts de experimento e resultados ficam em [tests/](tests/README.md). Chamadas externas exigem autorização e teto financeiro. Não envie material confidencial a terceiros sem autorização.\n\n## Verificação\n\n- O resultado cumpre o pedido e funciona no gênero, sem impor informalidade ou ornamentação.\n- Na revisão, preserva sentido, fatos, condições e voz; na criação, respeita os limites de invenção.\n- Cada mudança melhora a leitura ou a precisão, não apenas uma contagem de palavras.\n- Não usa notas de juízes ou detectores para otimizar o texto. Resultados de percepção precisam de leitura humana.\n\n[Fontes e limites das heurísticas](references/fontes.md). Nenhuma taxa de autoria ou garantia de “passar em detector” é oferecida.\n\n\nCATALOGO EDITORIAL:\n[{\"id\":\"PTBR-01\",\"name\":\"abertura-generica\",\"pattern\":\"(?i)\\\\b(?:no mundo (?:atual|acelerado de hoje)|na sociedade atual|em um cenário (?:cada vez mais|em constante evolução))\\\\b\",\"suggestion\":\"Começar pelo assunto específico já presente, se a abertura não delimitar tempo ou contexto.\",\"source\":[\"justdone\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Abertura intercambiável entre assuntos.\",\"exceptions\":[\"Enquadramento histórico ou citação literal.\"],\"positive_example\":\"Na sociedade atual, o cadastro exige um documento.\",\"negative_example\":\"O cadastro exige um documento.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-02\",\"name\":\"anuncio-de-percurso\",\"pattern\":\"(?i)\\\\b(?:vamos (?:mergulhar|explorar|nos aprofundar)|este (?:texto|artigo) irá (?:discutir|abordar))\\\\b\",\"suggestion\":\"Avaliar se o anúncio pode dar lugar ao conteúdo, sem apagar objetivos didáticos.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Anúncio sem orientação útil ao leitor.\",\"exceptions\":[\"Roteiro falado, aula e descrição formal do escopo.\"],\"positive_example\":\"Vamos mergulhar nas opções de cadastro.\",\"negative_example\":\"Há duas opções de cadastro.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-03\",\"name\":\"ressalva-vazia\",\"pattern\":\"(?i)\\\\b(?:é importante (?:notar|ressaltar|destacar) que|vale (?:ressaltar|destacar) que|faz-se necessário pontuar)\\\\b\",\"suggestion\":\"Considerar começar pela informação; manter alertas que mudam a decisão.\",\"source\":[\"justdone\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Ênfase repetida sem hierarquia real.\",\"exceptions\":[\"Advertência de segurança ou contraste necessário.\"],\"positive_example\":\"É importante notar que o prazo termina amanhã.\",\"negative_example\":\"O prazo termina amanhã.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-04\",\"name\":\"conector-recorrente\",\"pattern\":\"(?im)(?:^|[.!?]\\\\s+)(?:ademais|além disso|nesse sentido|dessa forma|diante disso)\\\\b\",\"suggestion\":\"Revisar recorrência no documento e função lógica, nunca remover por ocorrência isolada.\",\"source\":[\"rpiochi\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Vários parágrafos abrem com a mesma ligação sem relação clara.\",\"exceptions\":[\"Adição, conclusão ou consequência realmente sustentada.\"],\"positive_example\":\"Ademais, o formulário aceita anexos.\",\"negative_example\":\"O formulário também aceita anexos.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-05\",\"name\":\"contraste-encenado\",\"pattern\":\"(?i)\\\\bnão (?:é|se trata de|se trata) apenas\\\\b[^.!?\\\\n]{0,180}\\\\bmas\\\\b\",\"suggestion\":\"Verificar se existe contraste real; sugerir afirmação direta quando só repete a tese.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Contraste teatral sem diferença explicada.\",\"exceptions\":[\"Correção conceitual, distinção técnica ou contraste autoral deliberado.\"],\"positive_example\":\"Não é apenas um aviso, mas uma mensagem.\",\"negative_example\":\"É um aviso.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-06\",\"name\":\"autoridade-vaga\",\"pattern\":\"(?i)\\\\b(?:especialistas (?:acreditam|afirmam|dizem)|estudos (?:mostram|comprovam)|segundo (?:especialistas|pesquisadores))\\\\b\",\"suggestion\":\"Pedir a referência e o escopo da alegação; não inventar fonte nem apagar uma alegação sem aprovação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Atribuição sem referência identificável no contexto.\",\"exceptions\":[\"Fonte identificada na frase anterior, nota ou bibliografia.\"],\"positive_example\":\"Especialistas afirmam que a mudança resolve o problema.\",\"negative_example\":\"O relatório citado descreve a mudança.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-07\",\"name\":\"importancia-inflada\",\"pattern\":\"(?i)\\\\b(?:marco (?:histórico|fundamental)|papel (?:crucial|fundamental)|revoluciona(?:r|ndo)?|transformação sem precedentes)\\\\b\",\"suggestion\":\"Solicitar a consequência concreta ou moderar a avaliação quando autorizado.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Importância declarada sem critério ou evidência.\",\"exceptions\":[\"Evento histórico documentado; papel necessário demonstrado.\"],\"positive_example\":\"O novo botão representa um marco histórico.\",\"negative_example\":\"O novo botão abre o formulário.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-08\",\"name\":\"promessa-total\",\"pattern\":\"(?i)\\\\b(?:perfeitamente integrad[oa]s?|resultados revolucionários|solução definitiva|experiência sem falhas)\\\\b\",\"suggestion\":\"Conferir limites da promessa com a fonte, sem trocar por outra garantia.\",\"source\":[\"justdone\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Promessa comercial absoluta sem condições.\",\"exceptions\":[\"Citação atribuída ou requisito explicitamente normativo.\"],\"positive_example\":\"É uma solução definitiva para falhas.\",\"negative_example\":\"A solução trata as falhas descritas no relatório.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-09\",\"name\":\"robustez-sem-criterio\",\"pattern\":\"(?i)\\\\b(?:soluç(?:ão|ões)|sistemas?|plataformas?|processos?)\\\\s+robust[oa]s?\\\\b\",\"suggestion\":\"Perguntar a que falhas, cargas ou variações a robustez se refere.\",\"source\":[\"justdone\",\"winston\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Qualidade ampla sem critério no contexto.\",\"exceptions\":[\"Estatística robusta, controle robusto, teste de robustez ou limites técnicos documentados; preservar o termo técnico.\"],\"positive_example\":\"Temos uma solução robusta.\",\"negative_example\":\"A solução mantém o serviço durante a falha descrita no teste.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-10\",\"name\":\"significancia-sem-escopo\",\"pattern\":\"(?i)\\\\b(?:melhoria|aumento|redução|impacto|diferença)\\\\s+significativ[oa]s?\\\\b\",\"suggestion\":\"Distinguir relevância prática de significância estatística e pedir medida já existente.\",\"source\":[\"justdone\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Avaliação sem escala ou teste identificável.\",\"exceptions\":[\"Significância estatística com método e contexto; não remover significativo nem confundir p-valor com efeito.\"],\"positive_example\":\"Houve uma melhoria significativa.\",\"negative_example\":\"Houve melhoria no indicador acompanhado.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-11\",\"name\":\"jargao-sem-referente\",\"pattern\":\"(?i)\\\\b(?:alavancar|sinergia|potencializar)\\\\b\",\"suggestion\":\"Explicitar a ação e seus agentes apenas se já estiverem no texto.\",\"source\":[\"justdone\",\"undetectable\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Jargão substitui a descrição do trabalho.\",\"exceptions\":[\"Alavancagem financeira, sinergia farmacológica ou outro uso técnico definido.\"],\"positive_example\":\"Precisamos alavancar a sinergia.\",\"negative_example\":\"As equipes precisam compartilhar o planejamento.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-12\",\"name\":\"gerundio-interpretativo\",\"pattern\":\"(?i),\\\\s*(?:evidenciando|simbolizando|refletindo|demonstrando)\\\\b\",\"suggestion\":\"Verificar se o comentário final acrescenta inferência não sustentada; preservar relações demonstradas.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Interpretação anexada a um fato sem apoio.\",\"exceptions\":[\"Descrição de processo simultâneo, resultado demonstrado ou imagem literária intencional.\"],\"positive_example\":\"O botão mudou, simbolizando uma nova era.\",\"negative_example\":\"O botão mudou.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-13\",\"name\":\"incerteza-empilhada\",\"pattern\":\"(?i)\\\\b(?:poderia potencialmente|talvez possa possivelmente|possivelmente talvez)\\\\b\",\"suggestion\":\"Conservar o grau de incerteza e simplificar somente a duplicação comprovada.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Modalizadores duplicados, sem distinção de escopo.\",\"exceptions\":[\"Ressalvas independentes, probabilidade, consentimento informado ou obrigação jurídica.\"],\"positive_example\":\"A falha poderia potencialmente retornar.\",\"negative_example\":\"A falha pode retornar.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-14\",\"name\":\"perifrase-finalidade\",\"pattern\":\"(?i)\\\\b(?:com o intuito de|com o objetivo de|a fim de que)\\\\b\",\"suggestion\":\"Testar uma forma mais curta sem mudar finalidade para causa ou resultado.\",\"source\":[\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Perífrase longa em texto de execução.\",\"exceptions\":[\"Objetivo formal, contraste entre intenção e efeito ou citação.\"],\"positive_example\":\"Com o intuito de validar, execute o teste.\",\"negative_example\":\"Para validar, execute o teste.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-15\",\"name\":\"copula-funcional\",\"pattern\":\"(?i)\\\\b(?:se apresenta como|configura-se como|constitui-se como)\\\\b\",\"suggestion\":\"Considerar ser somente quando não alterar aparência, constituição ou função.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Construção cerimoniosa sem função semântica adicional.\",\"exceptions\":[\"Descrição de aparência distinta de realidade; definição jurídica constitutiva.\"],\"positive_example\":\"O documento se apresenta como um guia.\",\"negative_example\":\"O documento é um guia.\",\"meaning_risk\":\"alto\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-16\",\"name\":\"fecho-generico\",\"pattern\":\"(?i)\\\\b(?:o futuro é promissor|o potencial é imenso|juntos podemos transformar|rumo a um futuro melhor)\\\\b\",\"suggestion\":\"Encerrar no último ponto útil se a conclusão não acrescenta decisão ou ideia autoral.\",\"source\":[\"rpiochi\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Otimismo sem conteúdo adicional.\",\"exceptions\":[\"Discurso motivacional pedido, slogan aprovado ou declaração atribuída.\"],\"positive_example\":\"O futuro é promissor para este formulário.\",\"negative_example\":\"O formulário estará disponível na data informada.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-17\",\"name\":\"residuo-de-chat\",\"pattern\":\"(?i)\\\\b(?:espero que (?:isso|isto) ajude|se quiser, posso|aqui está (?:o|um) texto)\\\\b\",\"suggestion\":\"Separar a mensagem ao solicitante do artefato destinado à publicação.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Mensagem do assistente incorporada ao artigo por engano.\",\"exceptions\":[\"Conversa de atendimento, carta ou oferta real de suporte.\"],\"positive_example\":\"Espero que isso ajude!\",\"negative_example\":\"Consulte o guia de instalação.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-18\",\"name\":\"elogio-automatico\",\"pattern\":\"(?i)\\\\b(?:excelente pergunta|ótima pergunta|você está absolutamente certo)\\\\b\",\"suggestion\":\"Conferir se há avaliação genuína relevante; preferir responder ao conteúdo.\",\"source\":[\"blader\",\"mackswendhell\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Elogio automático antes de qualquer resposta.\",\"exceptions\":[\"Reconhecimento adequado em ensino ou conversa; citação literal.\"],\"positive_example\":\"Excelente pergunta! O cadastro fica no menu.\",\"negative_example\":\"O cadastro fica no menu.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-19\",\"name\":\"gancho-revelacao\",\"pattern\":\"(?i)\\\\b(?:o que ninguém te conta|a verdade é que|e aqui está o segredo|pense nisso)\\\\b\",\"suggestion\":\"Avaliar se a revelação tem conteúdo; preservar voz deliberada sem fabricar exclusividade.\",\"source\":[\"mackswendhell\",\"blader\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Suspense desproporcional ao conteúdo.\",\"exceptions\":[\"Roteiro persuasivo solicitado com promessa sustentada.\"],\"positive_example\":\"O que ninguém te conta: o menu tem ajuda.\",\"negative_example\":\"O menu tem ajuda.\",\"meaning_risk\":\"medio\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"},{\"id\":\"PTBR-20\",\"name\":\"lista-rotulada\",\"pattern\":\"(?m)^\\\\s*[-*]\\\\s+\\\\*\\\\*[^*\\\\n]{1,80}:?\\\\*\\\\*:?\\\\s*\",\"suggestion\":\"Revisar rótulos redundantes e manter listas quando favorecem consulta e acessibilidade.\",\"source\":[\"blader\",\"rpiochi\"],\"genres\":[\"artigo\",\"post\",\"email\",\"relatorio\",\"tecnico\"],\"context\":\"Rótulo e início do item repetem a mesma informação.\",\"exceptions\":[\"Checklist, glossário, procedimento e relatório escaneável.\"],\"positive_example\":\"- **Prazo:** O prazo é amanhã.\",\"negative_example\":\"O prazo é amanhã.\",\"meaning_risk\":\"baixo\",\"allowed_action\":[\"audit\",\"suggest\"],\"evidence\":\"heuristica_editorial\"}]\n\nESTILOS:\n{\"schema_version\":\"1.0\",\"purpose\":\"Variações discretas dentro da voz fornecida, não personas.\",\"voice_invariants\":[\"Fatos e grau de certeza\",\"Registro do autor\",\"Vocabulário técnico necessário\",\"Posição e experiências explicitamente fornecidas\"],\"seed_policy\":{\"scope\":\"Selecionar com seed uma ênfase opcional entre os ajustes do perfil, sem alterar invariantes nem aplicar reescrita.\",\"record\":[\"seed\",\"profile_id\",\"catalog_version\",\"voice_sample_id\"],\"limits\":\"Mesma seed não garante texto idêntico de um modelo. Não sortear fatos, opiniões, persona ou nível de certeza. Preferência explícita do autor prevalece.\"},\"forbidden\":[\"Falsa experiência pessoal\",\"Erros deliberados\",\"Regionalismo presumido\",\"Mudança de opinião para criar personalidade\",\"Alternância aleatória de sinônimos técnicos\"],\"profiles\":[{\"id\":\"neutro-claro\",\"genres\":[\"artigo\",\"relatorio\"],\"adjustments\":[\"Manter formalidade original\",\"Variar extensão de frases só quando ajudar a leitura\",\"Preferir informação a comentários sobre importância\"],\"avoid\":[\"Impor conversa íntima\",\"Trocar toda repetição lexical\"]},{\"id\":\"tecnico-preciso\",\"genres\":[\"tecnico\",\"relatorio\"],\"adjustments\":[\"Conservar terminologia e qualificadores\",\"Deixar condições junto da afirmação\",\"Usar listas quando facilitam consulta\"],\"avoid\":[\"Metáforas decorativas\",\"Simplificação que apaga hipótese ou método\"]},{\"id\":\"conversacional-contido\",\"genres\":[\"email\",\"post\"],\"adjustments\":[\"Preservar a forma de tratamento do autor\",\"Usar transições simples sem eliminar lógica\",\"Permitir contrações somente se presentes na voz\"],\"avoid\":[\"Gírias sorteadas\",\"Humor não pedido\",\"Primeira pessoa sem respaldo\"]},{\"id\":\"argumentativo-sobrio\",\"genres\":[\"artigo\",\"post\"],\"adjustments\":[\"Explicitar a tese já presente\",\"Aproximar razões e ressalvas\",\"Encerrar quando o argumento estiver completo\"],\"avoid\":[\"Contrastes inventados\",\"Frase de efeito obrigatória\",\"Tom de certeza maior que a fonte\"]}],\"implementation_status\":\"humanizar.py suggest carrega os perfis e retorna style_focus reproduzível com seed. É orientação editorial, não reescrita automática.\"}"
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um resumo acadêmico de 180 a 240 palavras, em um único parágrafo, com objetivo, método, resultados e limitações. Base do estudo fictício: 120 voluntários adultos de um único curso online, alocação aleatória em dois grupos de 60. Durante oito semanas, o grupo A recebeu exercícios com feedback semanal e o B recebeu os mesmos exercícios sem esse feedback. Média inicial na prova de 0 a 100: 50 em ambos. Média final: 68 no A e 61 no B. Não foram fornecidos desvios-padrão, intervalos de confiança, dados individuais, cegamento, taxa de abandono ou avaliação após oito semanas. Apresente a diferença entre as médias finais e os ganhos em relação ao início. Não invente autoria, revista, aprovação ética, significância estatística ou taxa de abandono. A randomização deve ser mencionada, mas não elimina as limitações disponíveis."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "effort": "medium"
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "openai"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "11-resumo-estudo",
+  "arm": "skill",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva um resumo acadêmico de 180 a 240 palavras, em um único parágrafo, com objetivo, método, resultados e limitações. Base do estudo fictício: 120 voluntários adultos de um único curso online, alocação aleatória em dois grupos de 60. Durante oito semanas, o grupo A recebeu exercícios com feedback semanal e o B recebeu os mesmos exercícios sem esse feedback. Média inicial na prova de 0 a 100: 50 em ambos. Média final: 68 no A e 61 no B. Não foram fornecidos desvios-padrão, intervalos de confiança, dados individuais, cegamento, taxa de abandono ou avaliação após oito semanas. Apresente a diferença entre as médias finais e os ganhos em relação ao início. Não invente autoria, revista, aprovação ética, significância estatística ou taxa de abandono. A randomização deve ser mencionada, mas não elimina as limitações disponíveis.",
+  "id": "e7609501632a0be9da14ea66aac86f02871d36db4d76475b12a98428036dbc18",
+  "status": "completed",
+  "started_at": "2026-10-04T01:16:43.492568+00:00",
+  "response": {
+    "id": "gen-1791076603-mJuSidcNp3Wz1jWBUqux",
+    "object": "chat.completion",
+    "created": 1791076603,
+    "model": "openai/gpt-6-luna",
+    "provider": "OpenAI",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "completed",
+        "message": {
+          "role": "assistant",
+          "content": "Este estudo fictício teve como objetivo comparar os resultados de exercícios online com feedback semanal e dos mesmos exercícios sem feedback. Participaram 120 voluntários adultos de um único curso online, alocados aleatoriamente em dois grupos de 60. Durante oito semanas, o grupo A realizou os exercícios com feedback semanal, enquanto o grupo B realizou os mesmos exercícios sem feedback. O desempenho foi avaliado por uma prova com pontuação de 0 a 100, aplicada no início e ao final do período. A média inicial foi de 50 pontos nos dois grupos. Ao término das oito semanas, a média foi de 68 pontos no grupo A e de 61 no grupo B, uma diferença de 7 pontos entre as médias finais. Em relação à avaliação inicial, o grupo A apresentou ganho médio de 18 pontos, e o grupo B, de 11 pontos. Esses resultados descrevem diferenças entre as médias observadas, mas não permitem determinar sua significância estatística. A interpretação também é limitada pela ausência de desvios-padrão, intervalos de confiança e dados individuais, que impede avaliar a variabilidade dos resultados. Não foram informadas medidas de cegamento, taxa de abandono nem avaliação após as oito semanas. Embora a alocação tenha sido aleatória, essas lacunas e a participação de voluntários de um único curso restringem a avaliação dos resultados e sua generalização para outros contextos.",
+          "refusal": null,
+          "reasoning": null,
+          "reasoning_details": [
+            {
+              "type": "reasoning.encrypted",
+              "data": "gAAAAABqwakATYTIgwfiqE7_Lm0hFaUoc2diuu2WfzI4lCq7H5C2xh9_gDQ3zYObKDLa4THgR8KP8po0UtyJV9PTS205UBuBy2VMG66x6gftmkx1iz3-hl0stQbbmfU9YbHf_mNgbisYnRphO6jrOqvM6cysJk0t8cSjFSBINpKFxgGY3kB1OyGNa4AlXEADmbwPF0wTJTA4oj92OqC2Ems1r3cGPjAuKNUoDt1H_XdbIuzhuT28TDwc9904kVSJPyh8XrabTDS6d3qLN5QqW0jy5g6bBjFqTVd-l0w2JBID19mMdxgO6yP44z01iq0l34bs9qdTKrqRPc-HdGpmYNU9PWodXG8G1w141MYMXiqFaivoyimbKtsB5juWGuj2jdZp1xLyQtkxC9IM8flEUtWV-sg1bGpKSlZKJs14E29cuVPQ5iYdOZUCeGaNZgUCrXv9JS1pNW5UZMCWDiBTAL43dfDNkdwygS-qbnyApu7lj2uwwFBarPghgGx6hPJmUZxB2yDr8GFuGmmb9qPWyTQNaisCEJ2FG59MhZ1KMENTDQ_NgrPWiVt5O4b2bKquZx7ff35jD1JlkqXMAEcoFRswx6WpcNIq72St53Gly56Rny46A7FwIrgGnx5MOeiuQ4bVfhcJvskRM7VirwjL-3rMkCH4EB7wuC3ivtCUZnbPB8Cq3nLb2w9F0AUwLyzRiMRh5HHaAu0HrDUXl8bkH_Xg2q-dsKLC66kNolHN-EJgLMIC1ZUHKFMB6XUTYBHcNy7wtQruEbhvUPGeRP-EsFlC-NH05Aa71X6EngNpTmPjbOYeiX5wrsir5MdHC1elV_RHNagYIw7pOmmoH2-wGTKKHRLGVac9dztlhF9X3x7x3eQVovRQAayWI3cdXtNdJ1oRT7MBF20fqC18qCrcc5X5Q8VK9gfkgZ_3YIJ-OTDQT871i3K_5KcocSBNYJwEmp2pEMylyLY6rQNZjmOW2UmB9PXRrETc2EE1GqOuVfaKzoTsKeFbiSHaj_IO5xUl48_ZcWtVPrVTW2k5TGaw9X6XD1acyP5lRZsaeEZyoYl_l2SSE_kqF5WCS-9C3YaA_BFxBsMf-Q8L24qiMqZkXH26ZZOdl8vjwETB0Z3IN_H588YMY0GE39QP-vnWBsYdMZYH3B8_GUrb8MbpGxbsK3OfVUiZQPFT_QuLpg6nfJrU_Gles_t-EVkpzvibtAq4pVfvU7DyTCpVfkC124gpbsVo7GHhxch2CrwJt3-6UXWIWX63uvoetrutMzWdfHVarCQHQ6ThR6bwTrpk0EXks79wt-N10bHgOG3-COyO2Xb2DyHyiZsZBm3l1QlRY5Dh7L2KsDeoyBhVBpRlIc9b9ahm6gmMsE4XNZBB5ovWgQCigRJ6cIlZ9doVXFPrl4BifovEi0x-4DQCetL7qEl1gbNrFXxHoc-D9mykO3g5GVQrWhuW3KXGqm_YAfDvZDy43oGWd78VT-wpC4l33IS-SzSRby0HdIZQocRIwNMAbm159Jo_n1Kk64KxfXMBiL-_CkyHu6RVZBRsXK8RjuH83w70Sg0-KpfyFb8CmuGd4LhNQa2i5CxgX-gOOdznD0F0xkPQYlMYEVPx5M5jE761E6sR99Dv9gHHuNEWtXZSrvvwW0Qr2Q1BPv4guYjQh0JStthB7braQqEa7DtqrP4-CNMsvnSiEOsh-upWfwBus8UhcZuXFLvdfZBgp4RDtEBmVDY4WXcGHoQ0O22IsTz1EGqbhUlEeILxVfxxwA3JDxrBTtW6QqClIa4N9dK40jgvUOfozp8Tp4I-W_weitZ_8ptERd4Mm1p5QedrjBRxcnFeU2jE-6G2brTxGS0gHxZ0i1m-Ck2jmzGkchxzPIvIqm_53XKnbgDfFsWJe7IGj24wyZ3JQ3BHsW7iXRTYk9XqSfaSzuQ02jsAfFH73QzaIubtNnxJDA9gHr4NjHd1IDU6-23B7RBuA0iiRdmLoOyTXPRIWuuVyg4vonmsbvT1J2JJ8N6NMABMSEtNk3yualp-tCEP9ucGK7ebpfZXAhVy65ji5gyDzw5tiwepQEOMkY17v1bRe-t78iDqh6TfFukHZCk_qIMjFDI9zXW4rNdK5NUY0t8dNYGj2c884YR5ic4rEYRln-XcYtl_6yXrM55GojL-Q9tsldOJoz7WhB3nQA-qwaTk5eOlZME_ULK3P50gltlTpaHlHb5BZeWHR5Xo3AN48jjQuWZ4skCXgfufXHZTWWGeIRO-qvIuDFj7E7SIV_RtxIaFh77-hbHV3fltzcRhS61x5fZNi3yhqCqcNO2-MLfFB7KXffxN0DTE3sM2Ruv1rOH-xIsYPW0IW9Ig0QuH_M8dzFKsua7s8gxZ4SwXWW1n9YJKmAAm_10c16R2B2P0HtnlDcdZnFuiLJGtrDLIpohZxKlo1mzxWD5tDEhpBxzYnEQbsa_bqJS2fBDMuJGZ-iWgClBxQ5f-yBjyQGrSjFl-cOMyIkpKFHSW2yG5WEPOTQyTyJV6iyfHhhKNgBeUgoMmVKrR-SLv-ugiljm5rkO8PIJjPM24Ik6IIBYTFL8dkeW7DZz4vIAp0JHOJcDY-NTCo3p8bdcvx5vY1a-MoMgEOYn6hYqBXux4FdPvY3R8iCkO0VX-FAy1FfvZuVW9IwHNSOZxK7HuMatk6gGco_alt0wHsQaQjuZOZiEbuj1pflje49YAN-l1bT_-f9npS0tfwgvBWH4Lv_YmRCpWJVKYo-RY71aVg9bzyon58YBx4UEzVxtSDIlCXfIbG8PO7A1HD8wdXvfrEjppeH4Afi0n5ifC4i9AMI9ak0qkkvQ-iUtkkriQ42jXDTPoDhI9J0hsVeaHQ1Cenogdfcc9QI-wLOBDHfXhmQTJCHwKvShBhVYSDoUJCkmxCDqb4ZUC0kTsbc2X_ZxOIyhdRqNwHmRxFehSCaYjFVYsKsfchTv5BbYk.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+              "format": "openai-responses-v1",
+              "id": "rs_01fed0e2ef8189e9016ac1a8fd3db087d1bb17c716e7a92a95",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 5485,
+      "completion_tokens": 562,
+      "total_tokens": 6047,
+      "cost": 0.00096655,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 5482,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00096655,
+        "upstream_inference_prompt_cost": 0.00068555,
+        "upstream_inference_completions_cost": 0.000281
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 273,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "OpenAI",
+  "model_returned": "openai/gpt-6-luna",
+  "usage": {
+    "prompt_tokens": 5485,
+    "completion_tokens": 562,
+    "total_tokens": 6047,
+    "cost": 0.00096655,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 5482,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00096655,
+      "upstream_inference_prompt_cost": 0.00068555,
+      "upstream_inference_completions_cost": 0.000281
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 273,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.00096655",
+  "edited": "Este estudo fictício teve como objetivo comparar os resultados de exercícios online com feedback semanal e dos mesmos exercícios sem feedback. Participaram 120 voluntários adultos de um único curso online, alocados aleatoriamente em dois grupos de 60. Durante oito semanas, o grupo A realizou os exercícios com feedback semanal, enquanto o grupo B realizou os mesmos exercícios sem feedback. O desempenho foi avaliado por uma prova com pontuação de 0 a 100, aplicada no início e ao final do período. A média inicial foi de 50 pontos nos dois grupos. Ao término das oito semanas, a média foi de 68 pontos no grupo A e de 61 no grupo B, uma diferença de 7 pontos entre as médias finais. Em relação à avaliação inicial, o grupo A apresentou ganho médio de 18 pontos, e o grupo B, de 11 pontos. Esses resultados descrevem diferenças entre as médias observadas, mas não permitem determinar sua significância estatística. A interpretação também é limitada pela ausência de desvios-padrão, intervalos de confiança e dados individuais, que impede avaliar a variabilidade dos resultados. Não foram informadas medidas de cegamento, taxa de abandono nem avaliação após as oito semanas. Embora a alocação tenha sido aleatória, essas lacunas e a participação de voluntários de um único curso restringem a avaliação dos resultados e sua generalização para outros contextos.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": [
+    {
+      "type": "reasoning.encrypted",
+      "data": "gAAAAABqwakATYTIgwfiqE7_Lm0hFaUoc2diuu2WfzI4lCq7H5C2xh9_gDQ3zYObKDLa4THgR8KP8po0UtyJV9PTS205UBuBy2VMG66x6gftmkx1iz3-hl0stQbbmfU9YbHf_mNgbisYnRphO6jrOqvM6cysJk0t8cSjFSBINpKFxgGY3kB1OyGNa4AlXEADmbwPF0wTJTA4oj92OqC2Ems1r3cGPjAuKNUoDt1H_XdbIuzhuT28TDwc9904kVSJPyh8XrabTDS6d3qLN5QqW0jy5g6bBjFqTVd-l0w2JBID19mMdxgO6yP44z01iq0l34bs9qdTKrqRPc-HdGpmYNU9PWodXG8G1w141MYMXiqFaivoyimbKtsB5juWGuj2jdZp1xLyQtkxC9IM8flEUtWV-sg1bGpKSlZKJs14E29cuVPQ5iYdOZUCeGaNZgUCrXv9JS1pNW5UZMCWDiBTAL43dfDNkdwygS-qbnyApu7lj2uwwFBarPghgGx6hPJmUZxB2yDr8GFuGmmb9qPWyTQNaisCEJ2FG59MhZ1KMENTDQ_NgrPWiVt5O4b2bKquZx7ff35jD1JlkqXMAEcoFRswx6WpcNIq72St53Gly56Rny46A7FwIrgGnx5MOeiuQ4bVfhcJvskRM7VirwjL-3rMkCH4EB7wuC3ivtCUZnbPB8Cq3nLb2w9F0AUwLyzRiMRh5HHaAu0HrDUXl8bkH_Xg2q-dsKLC66kNolHN-EJgLMIC1ZUHKFMB6XUTYBHcNy7wtQruEbhvUPGeRP-EsFlC-NH05Aa71X6EngNpTmPjbOYeiX5wrsir5MdHC1elV_RHNagYIw7pOmmoH2-wGTKKHRLGVac9dztlhF9X3x7x3eQVovRQAayWI3cdXtNdJ1oRT7MBF20fqC18qCrcc5X5Q8VK9gfkgZ_3YIJ-OTDQT871i3K_5KcocSBNYJwEmp2pEMylyLY6rQNZjmOW2UmB9PXRrETc2EE1GqOuVfaKzoTsKeFbiSHaj_IO5xUl48_ZcWtVPrVTW2k5TGaw9X6XD1acyP5lRZsaeEZyoYl_l2SSE_kqF5WCS-9C3YaA_BFxBsMf-Q8L24qiMqZkXH26ZZOdl8vjwETB0Z3IN_H588YMY0GE39QP-vnWBsYdMZYH3B8_GUrb8MbpGxbsK3OfVUiZQPFT_QuLpg6nfJrU_Gles_t-EVkpzvibtAq4pVfvU7DyTCpVfkC124gpbsVo7GHhxch2CrwJt3-6UXWIWX63uvoetrutMzWdfHVarCQHQ6ThR6bwTrpk0EXks79wt-N10bHgOG3-COyO2Xb2DyHyiZsZBm3l1QlRY5Dh7L2KsDeoyBhVBpRlIc9b9ahm6gmMsE4XNZBB5ovWgQCigRJ6cIlZ9doVXFPrl4BifovEi0x-4DQCetL7qEl1gbNrFXxHoc-D9mykO3g5GVQrWhuW3KXGqm_YAfDvZDy43oGWd78VT-wpC4l33IS-SzSRby0HdIZQocRIwNMAbm159Jo_n1Kk64KxfXMBiL-_CkyHu6RVZBRsXK8RjuH83w70Sg0-KpfyFb8CmuGd4LhNQa2i5CxgX-gOOdznD0F0xkPQYlMYEVPx5M5jE761E6sR99Dv9gHHuNEWtXZSrvvwW0Qr2Q1BPv4guYjQh0JStthB7braQqEa7DtqrP4-CNMsvnSiEOsh-upWfwBus8UhcZuXFLvdfZBgp4RDtEBmVDY4WXcGHoQ0O22IsTz1EGqbhUlEeILxVfxxwA3JDxrBTtW6QqClIa4N9dK40jgvUOfozp8Tp4I-W_weitZ_8ptERd4Mm1p5QedrjBRxcnFeU2jE-6G2brTxGS0gHxZ0i1m-Ck2jmzGkchxzPIvIqm_53XKnbgDfFsWJe7IGj24wyZ3JQ3BHsW7iXRTYk9XqSfaSzuQ02jsAfFH73QzaIubtNnxJDA9gHr4NjHd1IDU6-23B7RBuA0iiRdmLoOyTXPRIWuuVyg4vonmsbvT1J2JJ8N6NMABMSEtNk3yualp-tCEP9ucGK7ebpfZXAhVy65ji5gyDzw5tiwepQEOMkY17v1bRe-t78iDqh6TfFukHZCk_qIMjFDI9zXW4rNdK5NUY0t8dNYGj2c884YR5ic4rEYRln-XcYtl_6yXrM55GojL-Q9tsldOJoz7WhB3nQA-qwaTk5eOlZME_ULK3P50gltlTpaHlHb5BZeWHR5Xo3AN48jjQuWZ4skCXgfufXHZTWWGeIRO-qvIuDFj7E7SIV_RtxIaFh77-hbHV3fltzcRhS61x5fZNi3yhqCqcNO2-MLfFB7KXffxN0DTE3sM2Ruv1rOH-xIsYPW0IW9Ig0QuH_M8dzFKsua7s8gxZ4SwXWW1n9YJKmAAm_10c16R2B2P0HtnlDcdZnFuiLJGtrDLIpohZxKlo1mzxWD5tDEhpBxzYnEQbsa_bqJS2fBDMuJGZ-iWgClBxQ5f-yBjyQGrSjFl-cOMyIkpKFHSW2yG5WEPOTQyTyJV6iyfHhhKNgBeUgoMmVKrR-SLv-ugiljm5rkO8PIJjPM24Ik6IIBYTFL8dkeW7DZz4vIAp0JHOJcDY-NTCo3p8bdcvx5vY1a-MoMgEOYn6hYqBXux4FdPvY3R8iCkO0VX-FAy1FfvZuVW9IwHNSOZxK7HuMatk6gGco_alt0wHsQaQjuZOZiEbuj1pflje49YAN-l1bT_-f9npS0tfwgvBWH4Lv_YmRCpWJVKYo-RY71aVg9bzyon58YBx4UEzVxtSDIlCXfIbG8PO7A1HD8wdXvfrEjppeH4Afi0n5ifC4i9AMI9ak0qkkvQ-iUtkkriQ42jXDTPoDhI9J0hsVeaHQ1Cenogdfcc9QI-wLOBDHfXhmQTJCHwKvShBhVYSDoUJCkmxCDqb4ZUC0kTsbc2X_ZxOIyhdRqNwHmRxFehSCaYjFVYsKsfchTv5BbYk.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+      "format": "openai-responses-v1",
+      "id": "rs_01fed0e2ef8189e9016ac1a8fd3db087d1bb17c716e7a92a95",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 6.472358265891671,
+  "finished_at": "2026-10-04T01:16:49.972470+00:00"
+}

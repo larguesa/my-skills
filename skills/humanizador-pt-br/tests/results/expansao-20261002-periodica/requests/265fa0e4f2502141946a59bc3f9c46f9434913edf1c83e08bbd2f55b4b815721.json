@@ -1,0 +1,187 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "endpoint": {
+    "name": "DeepInfra | xiaomi/mimo-v2.6-pro-20260921",
+    "model_id": "xiaomi/mimo-v2.6-pro",
+    "model_name": "Xiaomi: MiMo-V2.6-Pro",
+    "context_length": 1048576,
+    "pricing": {
+      "prompt": "0.00000043",
+      "completion": "0.00000087",
+      "input_cache_read": "0.0000000036",
+      "discount": 0
+    },
+    "provider_name": "DeepInfra",
+    "tag": "deepinfra/fp8",
+    "quantization": "fp8",
+    "max_completion_tokens": 943718,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "max_tokens",
+      "temperature",
+      "top_p",
+      "stop",
+      "frequency_penalty",
+      "presence_penalty",
+      "repetition_penalty",
+      "top_k",
+      "seed",
+      "min_p",
+      "logit_bias",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.92565055762081,
+    "uptime_last_5m": 99.83922829581994,
+    "uptime_last_1d": 99.70415484929647,
+    "supports_implicit_caching": false,
+    "native_tools": {},
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "off": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": false
+        },
+        "model_returned": "xiaomi/mimo-v2.6-pro",
+        "provider_returned": "DeepInfra",
+        "reasoning_tokens": 0,
+        "generation_id": "gen-1790945404-7phjCv8cOic0vqqVTBMn",
+        "observed_at": "2026-10-02T12:50:04.292162+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "xiaomi/mimo-v2.6-pro",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": false
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "deepinfra/fp8"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "off",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "265fa0e4f2502141946a59bc3f9c46f9434913edf1c83e08bbd2f55b4b815721",
+  "status": "completed",
+  "started_at": "2026-10-02T19:08:19.162034+00:00",
+  "response": {
+    "id": "gen-1790968099-XaNmhAlJ56GOH1x56Ph5",
+    "object": "chat.completion",
+    "created": 1790968099,
+    "model": "xiaomi/mimo-v2.6-pro",
+    "provider": "DeepInfra",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Reprodução\nEm um processo novo, a primeira chamada a collect(\"A\") retorna [\"A\"]. Uma segunda chamada, collect(\"B\"), retorna [\"A\", \"B\"], em vez de apenas [\"B\"]. Esse comportamento ocorre mesmo sem laço ou reutilização explícita de uma variável: a função acumula itens entre invocações aparentemente independentes, contrariando a expectativa de que cada chamada sem argumento opcional comece com uma lista vazia.\n\nCausa\nA lista padrão bucket=[] é avaliada uma única vez, na definição da função, e não a cada chamada. O mesmo objeto lista é compartilhado por todas as invocações que usam o valor padrão. Como bucket.append(item) modifica esse objeto no lugar, os elementos permanecem visíveis na chamada seguinte. O problema não está em append em si, mas na mutação do objeto padrão compartilhado entre chamadas.\n\nCorreção\nUse None como marcador de ausência e crie uma nova lista somente quando o chamador não fornecer uma. Se uma lista for informada, acrescente ao próprio objeto e retorne-o, preservando o contrato existente.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nLimitações\nA correção elimina o compartilhamento entre chamadas independentes que não recebem lista. Ela não garante segurança para uso concorrente: várias threads ou processos que compartilhem a mesma lista fornecida podem interferir entre si, pois append continua sendo uma operação no mesmo objeto. A verificação de identidade is confirma apenas que a lista informada é a mesma devolvida, sem qualquer controle de sincronização.",
+          "refusal": null,
+          "reasoning": null
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 338,
+      "completion_tokens": 433,
+      "total_tokens": 771,
+      "cost": 0.00052205,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00052205,
+        "upstream_inference_prompt_cost": 0.00014534,
+        "upstream_inference_completions_cost": 0.00037671
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "DeepInfra",
+  "model_returned": "xiaomi/mimo-v2.6-pro",
+  "usage": {
+    "prompt_tokens": 338,
+    "completion_tokens": 433,
+    "total_tokens": 771,
+    "cost": 0.00052205,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00052205,
+      "upstream_inference_prompt_cost": 0.00014534,
+      "upstream_inference_completions_cost": 0.00037671
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.00052205",
+  "edited": "Reprodução\nEm um processo novo, a primeira chamada a collect(\"A\") retorna [\"A\"]. Uma segunda chamada, collect(\"B\"), retorna [\"A\", \"B\"], em vez de apenas [\"B\"]. Esse comportamento ocorre mesmo sem laço ou reutilização explícita de uma variável: a função acumula itens entre invocações aparentemente independentes, contrariando a expectativa de que cada chamada sem argumento opcional comece com uma lista vazia.\n\nCausa\nA lista padrão bucket=[] é avaliada uma única vez, na definição da função, e não a cada chamada. O mesmo objeto lista é compartilhado por todas as invocações que usam o valor padrão. Como bucket.append(item) modifica esse objeto no lugar, os elementos permanecem visíveis na chamada seguinte. O problema não está em append em si, mas na mutação do objeto padrão compartilhado entre chamadas.\n\nCorreção\nUse None como marcador de ausência e crie uma nova lista somente quando o chamador não fornecer uma. Se uma lista for informada, acrescente ao próprio objeto e retorne-o, preservando o contrato existente.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nLimitações\nA correção elimina o compartilhamento entre chamadas independentes que não recebem lista. Ela não garante segurança para uso concorrente: várias threads ou processos que compartilhem a mesma lista fornecida podem interferir entre si, pois append continua sendo uma operação no mesmo objeto. A verificação de identidade is confirma apenas que a lista informada é a mesma devolvida, sem qualquer controle de sincronização.",
+  "finish_reason": "stop",
+  "reasoning_returned": null,
+  "reasoning_details": null,
+  "usage_issues": [],
+  "elapsed_seconds": 20.63071707636118,
+  "finished_at": "2026-10-02T19:08:39.823178+00:00"
+}

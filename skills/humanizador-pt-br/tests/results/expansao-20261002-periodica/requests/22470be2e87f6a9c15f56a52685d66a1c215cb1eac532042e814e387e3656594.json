@@ -1,0 +1,204 @@
+{
+  "model": "xiaomi/mimo-v2.6-flash",
+  "endpoint": {
+    "name": "DeepInfra | xiaomi/mimo-v2.6-flash-20260921",
+    "model_id": "xiaomi/mimo-v2.6-flash",
+    "model_name": "Xiaomi: MiMo-V2.6-Flash",
+    "context_length": 1048576,
+    "pricing": {
+      "prompt": "0.00000014",
+      "completion": "0.00000028",
+      "input_cache_read": "0.0000000028",
+      "discount": 0
+    },
+    "provider_name": "DeepInfra",
+    "tag": "deepinfra/fp8",
+    "quantization": "fp8",
+    "max_completion_tokens": 943718,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "max_tokens",
+      "temperature",
+      "top_p",
+      "stop",
+      "frequency_penalty",
+      "presence_penalty",
+      "repetition_penalty",
+      "top_k",
+      "seed",
+      "min_p",
+      "logit_bias",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.95797436436226,
+    "uptime_last_5m": 100,
+    "uptime_last_1d": 99.14396763133831,
+    "supports_implicit_caching": false,
+    "native_tools": {},
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "max_tokens": 1024
+        },
+        "model_returned": "xiaomi/mimo-v2.6-flash",
+        "provider_returned": "DeepInfra",
+        "reasoning_tokens": 11,
+        "generation_id": "gen-1790945412-2yvcF4sHDam1f6izbhip",
+        "observed_at": "2026-10-02T12:50:12.617698+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "xiaomi/mimo-v2.6-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "max_tokens": 1024
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "deepinfra/fp8"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "22470be2e87f6a9c15f56a52685d66a1c215cb1eac532042e814e387e3656594",
+  "status": "completed",
+  "started_at": "2026-10-02T19:14:14.436907+00:00",
+  "response": {
+    "id": "gen-1790968454-vqb2V4jsqB2LxjDIV5UZ",
+    "object": "chat.completion",
+    "created": 1790968454,
+    "model": "xiaomi/mimo-v2.6-flash",
+    "provider": "DeepInfra",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "**Reprodução**\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. O resultado acumula itens de chamadas anteriores, o que indica que a lista padrão criada na definição da função está sendo reaproveitada entre chamadas, e não instanciada a cada invocação.\n\n**Causa**\n\nO parâmetro `bucket=[]` usa uma lista literal como valor padrão. O interpretador avalia esse valor uma única vez, quando a função é definida, e reutiliza o mesmo objeto em todas as chamadas que não recebem `bucket` explicitamente. Cada chamada sem argumento faz `append` na mesma lista interna, por isso o segundo retorno contém o item da primeira chamada. O compartilhamento não ocorre entre processos diferentes, pois cada processo cria sua própria lista na avaliação da definição.\n\n**Correção**\n\nSubstitua o padrão por `None` e crie uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, preserve o contrato: acrescente àquela própria lista e retorne-a.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"] and b == [\"B\"], \"chamadas independentes devem ser listas separadas\"\n\nprovided = []\nreturned = collect(\"C\", provided)\nassert returned is provided and provided == [\"C\"], \"lista fornecida deve ser preservada e retornada\"\n```\n\n**Limitações**\n\nA correção resolve o compartilhamento do objeto padrão, mas não garante segurança para uso concorrente. Dois threads chamando a função sem argumento ao mesmo tempo ainda operam em listas distintas, enquanto chamadas com a mesma lista fornecida continuam concorrendo sobre aquele objeto sem proteção.",
+          "refusal": null,
+          "reasoning": "The user wants a bug analysis in Brazilian Portuguese, 220-320 words, with sections: Reprodução, Causa, Correção, Limitações. I need to cover the mutable default argument bug in Python.",
+          "reasoning_details": [
+            {
+              "type": "reasoning.text",
+              "text": "The user wants a bug analysis in Brazilian Portuguese, 220-320 words, with sections: Reprodução, Causa, Correção, Limitações. I need to cover the mutable default argument bug in Python.",
+              "format": "unknown",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 336,
+      "completion_tokens": 510,
+      "total_tokens": 846,
+      "cost": 0.00018984,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.00018984,
+        "upstream_inference_prompt_cost": 4.704e-05,
+        "upstream_inference_completions_cost": 0.0001428
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 50,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "DeepInfra",
+  "model_returned": "xiaomi/mimo-v2.6-flash",
+  "usage": {
+    "prompt_tokens": 336,
+    "completion_tokens": 510,
+    "total_tokens": 846,
+    "cost": 0.00018984,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.00018984,
+      "upstream_inference_prompt_cost": 4.704e-05,
+      "upstream_inference_completions_cost": 0.0001428
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 50,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.00018984",
+  "edited": "**Reprodução**\n\nEm um processo novo, a primeira chamada `collect(\"A\")` retorna `[\"A\"]`. A segunda chamada, `collect(\"B\")`, retorna `[\"A\", \"B\"]` em vez de `[\"B\"]`. O resultado acumula itens de chamadas anteriores, o que indica que a lista padrão criada na definição da função está sendo reaproveitada entre chamadas, e não instanciada a cada invocação.\n\n**Causa**\n\nO parâmetro `bucket=[]` usa uma lista literal como valor padrão. O interpretador avalia esse valor uma única vez, quando a função é definida, e reutiliza o mesmo objeto em todas as chamadas que não recebem `bucket` explicitamente. Cada chamada sem argumento faz `append` na mesma lista interna, por isso o segundo retorno contém o item da primeira chamada. O compartilhamento não ocorre entre processos diferentes, pois cada processo cria sua própria lista na avaliação da definição.\n\n**Correção**\n\nSubstitua o padrão por `None` e crie uma lista nova somente quando `bucket is None`. Se o chamador fornecer uma lista, preserve o contrato: acrescente àquela própria lista e retorne-a.\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\na = collect(\"A\")\nb = collect(\"B\")\nassert a == [\"A\"] and b == [\"B\"], \"chamadas independentes devem ser listas separadas\"\n\nprovided = []\nreturned = collect(\"C\", provided)\nassert returned is provided and provided == [\"C\"], \"lista fornecida deve ser preservada e retornada\"\n```\n\n**Limitações**\n\nA correção resolve o compartilhamento do objeto padrão, mas não garante segurança para uso concorrente. Dois threads chamando a função sem argumento ao mesmo tempo ainda operam em listas distintas, enquanto chamadas com a mesma lista fornecida continuam concorrendo sobre aquele objeto sem proteção.",
+  "finish_reason": "stop",
+  "reasoning_returned": "The user wants a bug analysis in Brazilian Portuguese, 220-320 words, with sections: Reprodução, Causa, Correção, Limitações. I need to cover the mutable default argument bug in Python.",
+  "reasoning_details": [
+    {
+      "type": "reasoning.text",
+      "text": "The user wants a bug analysis in Brazilian Portuguese, 220-320 words, with sections: Reprodução, Causa, Correção, Limitações. I need to cover the mutable default argument bug in Python.",
+      "format": "unknown",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 45.75951264798641,
+  "finished_at": "2026-10-02T19:15:00.201951+00:00"
+}

@@ -1,0 +1,204 @@
+{
+  "model": "xiaomi/mimo-v2.6-pro",
+  "endpoint": {
+    "name": "DeepInfra | xiaomi/mimo-v2.6-pro-20260921",
+    "model_id": "xiaomi/mimo-v2.6-pro",
+    "model_name": "Xiaomi: MiMo-V2.6-Pro",
+    "context_length": 1048576,
+    "pricing": {
+      "prompt": "0.00000043",
+      "completion": "0.00000087",
+      "input_cache_read": "0.0000000036",
+      "discount": 0
+    },
+    "provider_name": "DeepInfra",
+    "tag": "deepinfra/fp8",
+    "quantization": "fp8",
+    "max_completion_tokens": 943718,
+    "max_prompt_tokens": null,
+    "supported_parameters": [
+      "reasoning",
+      "include_reasoning",
+      "max_tokens",
+      "temperature",
+      "top_p",
+      "stop",
+      "frequency_penalty",
+      "presence_penalty",
+      "repetition_penalty",
+      "top_k",
+      "seed",
+      "min_p",
+      "logit_bias",
+      "response_format",
+      "structured_outputs",
+      "tools",
+      "tool_choice"
+    ],
+    "supports_tool_choice": {
+      "none": true,
+      "auto": true,
+      "required": true,
+      "function": true
+    },
+    "status": 0,
+    "uptime_last_30m": 99.92565055762081,
+    "uptime_last_5m": 99.83922829581994,
+    "uptime_last_1d": 99.70415484929647,
+    "supports_implicit_caching": false,
+    "native_tools": {},
+    "supports_voice_cloning": false,
+    "supports_multiple_audio_references": false,
+    "supports_image_reference": false,
+    "latency_last_30m": null,
+    "throughput_last_30m": null,
+    "availability": {
+      "on": {
+        "status": "accepted",
+        "reasoning": {
+          "enabled": true,
+          "max_tokens": 1024
+        },
+        "model_returned": "xiaomi/mimo-v2.6-pro",
+        "provider_returned": "DeepInfra",
+        "reasoning_tokens": 11,
+        "generation_id": "gen-1790945405-KuTCRJAVVKkMu18WThvN",
+        "observed_at": "2026-10-02T12:50:05.523530+00:00"
+      }
+    }
+  },
+  "payload": {
+    "model": "xiaomi/mimo-v2.6-pro",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Escreva em português brasileiro no gênero, registro, formato e extensão solicitados no pedido. Preserve a base fornecida e suas ressalvas. Retorne somente o texto solicitado, sem análise do processo."
+      },
+      {
+        "role": "user",
+        "content": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente."
+      }
+    ],
+    "max_tokens": 4096,
+    "reasoning": {
+      "enabled": true,
+      "max_tokens": 1024
+    },
+    "stream": false,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "only": [
+        "deepinfra/fp8"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "data_collection": "allow"
+    }
+  },
+  "case": "04-analise-bug",
+  "arm": "original",
+  "mode": "on",
+  "original": "",
+  "task_prompt": "Escreva em português brasileiro. Este é um exercício com dados e personagens fictícios, não um relato real. Use somente a base fornecida, sem inventar fontes, medições ou promessas. Entregue somente o texto no formato solicitado, sem análise sobre o processo de escrita. Não use travessão longo.\n\nEscreva uma análise de bug de 220 a 320 palavras. Use as seções Reprodução, Causa, Correção e Limitações, nessa ordem. Código observado:\n```python\ndef collect(item, bucket=[]):\n    bucket.append(item)\n    return bucket\n```\nEm um processo novo, collect(\"A\") retorna [\"A\"] e a segunda chamada collect(\"B\") retorna [\"A\", \"B\"]. Explique o compartilhamento do objeto padrão entre chamadas. Apresente código corrigido usando bucket=None e uma nova lista somente quando bucket is None. Se o chamador fornecer uma lista, preserve o contrato de acrescentar àquela própria lista e retorná-la. Inclua assert para duas chamadas independentes e assert para a identidade da lista fornecida. Não alegue segurança para uso concorrente.",
+  "id": "ec29dbbb6df722b92cdc71ef4be954e283da5595f0ae64c36320d3fd7156dc94",
+  "status": "completed",
+  "started_at": "2026-10-02T19:09:04.140306+00:00",
+  "response": {
+    "id": "gen-1790968144-S66WgGdnoq0dSkR9OdPH",
+    "object": "chat.completion",
+    "created": 1790968144,
+    "model": "xiaomi/mimo-v2.6-pro",
+    "provider": "DeepInfra",
+    "system_fingerprint": null,
+    "service_tier": "default",
+    "choices": [
+      {
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop",
+        "native_finish_reason": "stop",
+        "message": {
+          "role": "assistant",
+          "content": "Reprodução\n\nEm um processo novo, a primeira chamada cria o estado inicial:\n\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"A\", \"B\"]\n```\n\nA primeira chamada produz [\"A\"], como esperado. A segunda chamada, no entanto, devolve [\"A\", \"B\"] em vez de [\"B\"], acumulando itens entre chamadas que deveriam ser independentes. Isso ocorre sem que o chamador tenha passado qualquer lista explicitamente.\n\nCausa\n\nO parâmetro `bucket=[]` é avaliado apenas uma vez, quando a função é definida, e não a cada chamada. Portanto, o mesmo objeto lista passa a ser o valor padrão de todas as invocações que omitem `bucket`. Como o corpo da função faz `bucket.append(item)`, cada chamada modifica esse objeto compartilhado e o devolve, preservando os itens anteriores. Trata-se do padrão clássico de valor padrão mutável em Python. O problema não depende de importações, de ordem de módulos ou de estado global: basta chamar a função duas vezes no mesmo processo, sempre omitindo o argumento.\n\nCorreção\n\nUse `None` como valor padrão e crie uma nova lista apenas quando o chamador não fornecer uma:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nAs duas primeiras verificações confirmam que chamadas independentes não compartilham estado. A última confirma a identidade da lista fornecida.\n\nLimitações\n\nQuando o chamador fornece uma lista, o contrato permanece: os itens são acrescentados àquela própria lista e ela é retornada, não uma cópia. Quem chamar `collect` passando uma lista ainda verá essa lista mutada. O `assert` de identidade documenta esse comportamento, mas não é uma garantia em tempo de execução fora dos testes. Também não se alega segurança para uso concorrente: várias threads chamando a função com a mesma lista podem produzir resultados indefinidos, e nenhuma trava foi adicionada. Por fim, os exemplos acima verificam apenas o formato listado e a identidade do objeto retornado, sem cobrir outros tipos mutáveis que o chamador eventualmente venha a fornecer.",
+          "refusal": null,
+          "reasoning": "Write 220-320 words in pt-BR, sections: Reprodução, Causa, Correção e Limitações. No em dash. Include corrected code with bucket=None and asserts.",
+          "reasoning_details": [
+            {
+              "type": "reasoning.text",
+              "text": "Write 220-320 words in pt-BR, sections: Reprodução, Causa, Correção e Limitações. No em dash. Include corrected code with bucket=None and asserts.",
+              "format": "unknown",
+              "index": 0
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 336,
+      "completion_tokens": 619,
+      "total_tokens": 955,
+      "cost": 0.0006693652,
+      "is_byok": false,
+      "prompt_tokens_details": {
+        "cached_tokens": 32,
+        "cache_write_tokens": 0,
+        "audio_tokens": 0,
+        "video_tokens": 0
+      },
+      "cost_details": {
+        "upstream_inference_cost": 0.0006693652,
+        "upstream_inference_prompt_cost": 0.0001308352,
+        "upstream_inference_completions_cost": 0.00053853
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 45,
+        "image_tokens": 0,
+        "audio_tokens": 0
+      }
+    }
+  },
+  "api_error": null,
+  "provider_returned": "DeepInfra",
+  "model_returned": "xiaomi/mimo-v2.6-pro",
+  "usage": {
+    "prompt_tokens": 336,
+    "completion_tokens": 619,
+    "total_tokens": 955,
+    "cost": 0.0006693652,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 32,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0006693652,
+      "upstream_inference_prompt_cost": 0.0001308352,
+      "upstream_inference_completions_cost": 0.00053853
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 45,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "outcome": "returned",
+  "cost_usd": "0.0006693652",
+  "edited": "Reprodução\n\nEm um processo novo, a primeira chamada cria o estado inicial:\n\n```python\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"A\", \"B\"]\n```\n\nA primeira chamada produz [\"A\"], como esperado. A segunda chamada, no entanto, devolve [\"A\", \"B\"] em vez de [\"B\"], acumulando itens entre chamadas que deveriam ser independentes. Isso ocorre sem que o chamador tenha passado qualquer lista explicitamente.\n\nCausa\n\nO parâmetro `bucket=[]` é avaliado apenas uma vez, quando a função é definida, e não a cada chamada. Portanto, o mesmo objeto lista passa a ser o valor padrão de todas as invocações que omitem `bucket`. Como o corpo da função faz `bucket.append(item)`, cada chamada modifica esse objeto compartilhado e o devolve, preservando os itens anteriores. Trata-se do padrão clássico de valor padrão mutável em Python. O problema não depende de importações, de ordem de módulos ou de estado global: basta chamar a função duas vezes no mesmo processo, sempre omitindo o argumento.\n\nCorreção\n\nUse `None` como valor padrão e crie uma nova lista apenas quando o chamador não fornecer uma:\n\n```python\ndef collect(item, bucket=None):\n    if bucket is None:\n        bucket = []\n    bucket.append(item)\n    return bucket\n\n\nassert collect(\"A\") == [\"A\"]\nassert collect(\"B\") == [\"B\"]\n\nprovided = []\nassert collect(\"C\", provided) is provided\nassert provided == [\"C\"]\n```\n\nAs duas primeiras verificações confirmam que chamadas independentes não compartilham estado. A última confirma a identidade da lista fornecida.\n\nLimitações\n\nQuando o chamador fornece uma lista, o contrato permanece: os itens são acrescentados àquela própria lista e ela é retornada, não uma cópia. Quem chamar `collect` passando uma lista ainda verá essa lista mutada. O `assert` de identidade documenta esse comportamento, mas não é uma garantia em tempo de execução fora dos testes. Também não se alega segurança para uso concorrente: várias threads chamando a função com a mesma lista podem produzir resultados indefinidos, e nenhuma trava foi adicionada. Por fim, os exemplos acima verificam apenas o formato listado e a identidade do objeto retornado, sem cobrir outros tipos mutáveis que o chamador eventualmente venha a fornecer.",
+  "finish_reason": "stop",
+  "reasoning_returned": "Write 220-320 words in pt-BR, sections: Reprodução, Causa, Correção e Limitações. No em dash. Include corrected code with bucket=None and asserts.",
+  "reasoning_details": [
+    {
+      "type": "reasoning.text",
+      "text": "Write 220-320 words in pt-BR, sections: Reprodução, Causa, Correção e Limitações. No em dash. Include corrected code with bucket=None and asserts.",
+      "format": "unknown",
+      "index": 0
+    }
+  ],
+  "usage_issues": [],
+  "elapsed_seconds": 24.246510840952396,
+  "finished_at": "2026-10-02T19:09:28.398981+00:00"
+}
