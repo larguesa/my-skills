@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "purpose": "Variações discretas dentro da voz fornecida, não personas.",
+  "purpose": "Orientar registro e ritmo na redação e na revisão, conforme o pedido ou a voz fornecida, sem fabricar personas reais.",
   "voice_invariants": [
     "Fatos e grau de certeza",
-    "Registro do autor",
+    "Registro solicitado ou voz do autor",
     "Vocabulário técnico necessário",
     "Posição e experiências explicitamente fornecidas"
   ],
@@ -18,7 +18,7 @@
     "limits": "Mesma seed não garante texto idêntico de um modelo. Não sortear fatos, opiniões, persona ou nível de certeza. Preferência explícita do autor prevalece."
   },
   "forbidden": [
-    "Falsa experiência pessoal",
+    "Experiência pessoal inventada atribuída a uma pessoa real",
     "Erros deliberados",
     "Regionalismo presumido",
     "Mudança de opinião para criar personalidade",
@@ -32,7 +32,7 @@
         "relatorio"
       ],
       "adjustments": [
-        "Manter formalidade original",
+        "Usar o registro solicitado; na revisão, preservar a formalidade do original",
         "Variar extensão de frases só quando ajudar a leitura",
         "Preferir informação a comentários sobre importância"
       ],
@@ -64,14 +64,14 @@
         "post"
       ],
       "adjustments": [
-        "Preservar a forma de tratamento do autor",
+        "Adotar a forma de tratamento do pedido; na revisão, preservar a do autor",
         "Usar transições simples sem eliminar lógica",
-        "Permitir contrações somente se presentes na voz"
+        "Usar contrações quando forem compatíveis com o público e a voz solicitada"
       ],
       "avoid": [
         "Gírias sorteadas",
         "Humor não pedido",
-        "Primeira pessoa sem respaldo"
+        "Primeira pessoa atribuída ao autor sem papel ou posição autorizados"
       ]
     },
     {
@@ -81,7 +81,7 @@
         "post"
       ],
       "adjustments": [
-        "Explicitar a tese já presente",
+        "Desenvolver a tese solicitada; na revisão, explicitar a tese já presente",
         "Aproximar razões e ressalvas",
         "Encerrar quando o argumento estiver completo"
       ],
@@ -92,5 +92,5 @@
       ]
     }
   ],
-  "implementation_status": "humanizar.py suggest carrega os perfis e retorna style_focus reproduzível com seed. É orientação editorial, não reescrita automática."
+  "implementation_status": "Os perfis orientam redação e revisão pela skill. Sobre um rascunho ou original, humanizar.py suggest retorna style_focus reproduzível com seed. Não gera prosa nem reescreve automaticamente."
 }

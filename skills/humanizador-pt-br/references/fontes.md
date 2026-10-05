@@ -2,6 +2,14 @@
 
 Registro de consulta desta implementação. Fontes públicas acessadas em 29/09/2026; páginas e branches são mutáveis. IDs abaixo correspondem ao campo `source` do catálogo. A redação das regras, exceções e exemplos é própria. Não se importaram listas como verdade estatística nem se reproduziu um corpus.
 
+## Aplicação na redação e na revisão
+
+Estas referências explicam a origem das heurísticas de escrita. Não são fontes sobre o assunto de um artigo, notícia ou proposta, e não autorizam atribuir fatos aos seus autores. Na redação, use o catálogo para evitar fórmulas desde o rascunho; na revisão, inspecione ocorrências sem tratar palavras como proibidas.
+
+A base factual é o contexto disponível da tarefa: briefing, documentos lidos e fontes já verificadas. Não invente estudos, entrevistas, links ou experiências para tornar o texto concreto. Exemplos linguísticos não fornecem dados reais reutilizáveis. Em ficção, a invenção se limita ao gênero autorizado.
+
+O script opera sobre texto já escrito, inclusive um rascunho criado pela skill; não redige nem verifica fatos ou fontes.
+
 ## Referências editoriais
 
 | ID | Fonte primária consultada | Aproveitamento | Limite |
@@ -46,7 +54,7 @@ A card relata filtragem SBERT orientada por rótulos de juiz LLM no material rea
 
 Licença declarada: ODC-By 1.0. Trata-se de licença de base de dados, não de cessão indiscriminada dos direitos autorais de páginas web incorporadas. Conferir atribuição, termos upstream, finalidade, privacidade e direitos de redistribuição antes de publicar amostras. Acesso público não equivale a domínio público.
 
-Não baixar o corpus inteiro como pré-requisito. Usar preview ou streaming estritamente limitado por linhas e bytes, registrando revisão, seleção e falhas. A consulta inicial ao endpoint `/rows` com cinco linhas retornou HTTP 500; isso não prova indisponibilidade permanente. A exploração limitada foi registrada em [exploracao-amostral.json](../tests/historico-20260929/exploracao-amostral.json): amostra de conveniência apenas de `real`/`c4_pt`, sem grupo sintético comparável. Não republica texto original. Seus valores são descritivos e não calibram o catálogo.
+Não baixar o corpus inteiro como pré-requisito. Usar preview ou streaming estritamente limitado por linhas e bytes, registrando revisão, seleção e falhas. A consulta inicial ao endpoint `/rows` com cinco linhas retornou HTTP 500; isso não prova indisponibilidade permanente. A exploração limitada permanece no [histórico anterior à revisão](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/historico-20260929/exploracao-amostral.json): amostra de conveniência apenas de `real`/`c4_pt`, sem grupo sintético comparável. Não republica texto original. Seus valores são descritivos e não calibram o catálogo.
 
 ## Decisões de adaptação
 

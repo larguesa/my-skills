@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Editor conservador de português. Diagnósticos não identificam autoria."""
+"""Auxílio local à redação e revisão em PT-BR, sobre rascunhos ou originais.
+
+Não gera prosa, consulta fontes ou identifica autoria. Use a skill para redigir;
+este script inspeciona o texto produzido e aplica apenas edições aprovadas.
+"""
 import hashlib
 import re
 import random
@@ -172,11 +176,11 @@ def load_catalog(path):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description='Revisão editorial conservadora; não detecta autoria.')
+    parser = argparse.ArgumentParser(description='Auxílio à redação e revisão: inspeciona rascunhos ou originais, sem gerar texto, verificar fontes ou detectar autoria.')
     commands = parser.add_subparsers(dest='command', required=True)
     for command, description in [('audit', 'Diagnosticar sem alterar'), ('suggest', 'Propor trechos não aprovados'), ('apply', 'Aplicar somente trechos aprovados'), ('verify', 'Comparar versões e pedir revisão semântica')]:
         sub = commands.add_parser(command, help=description)
-        sub.add_argument('input', type=Path, help='Arquivo de entrada UTF-8')
+        sub.add_argument('input', type=Path, help='Rascunho recém-redigido ou original recebido, em UTF-8')
         sub.add_argument('--protect', action='append', default=[], help='Termo protegido; pode repetir. Unidades não são inferidas: use --protect kg ou --protect reais.')
         if command in ('audit', 'suggest'):
             sub.add_argument('--catalog', type=Path, default=Path(__file__).resolve().parents[1] / 'references/catalogo.json', help='Catálogo JSON externo')

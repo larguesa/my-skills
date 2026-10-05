@@ -1,75 +1,87 @@
 ---
 name: humanizador-pt-br
-description: Melhore naturalidade em PT-BR sem perder a voz.
-version: 0.2.0
+description: Redija e revise em PT-BR com clareza e voz coerente.
+version: 0.3.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
   hermes:
-    tags: [escrita, edicao, pt-br]
+    tags: [redacao, escrita, revisao, pt-br]
     related_skills: []
 ---
 
 # Humanizador PT-BR
 
-Melhore o texto para quem vai ler: clareza, ritmo, precisão e voz. Cortar sinais de escrita genérica é um meio, não o objetivo. Um texto sem palavras sinalizadas ainda pode ser ruim.
+Redija do zero ou revise em português brasileiro. Trabalhe clareza, ritmo, precisão e voz desde a escolha das ideias até a leitura final. Não é preciso fornecer um texto pronto, e reduzir marcas de escrita genérica não substitui escrever bem.
 
 ## Quando usar
 
-- Reescrever textos genéricos, repetitivos ou com formalidade deslocada.
-- Revisar artigos, mensagens, conteúdo técnico e pequenos contos.
-- Escrever do zero quando o pedido autorizar criação, inclusive ficção.
-- Auditar sem reescrever quando o usuário pedir apenas diagnóstico.
+- Redigir artigos, notícias, conteúdo técnico, textos didáticos, propostas, mensagens, posts, roteiros e literatura a partir de um pedido ou briefing.
+- Revisar ou reescrever um texto existente, no nível de intervenção solicitado.
+- Avaliar um texto sem alterá-lo quando o pedido for somente diagnóstico.
 
-Não usar para esconder atribuições, fabricar depoimentos ou comprovar autoria. Esta skill não é um detector de IA.
+Não usar para fabricar depoimentos, esconder atribuições ou comprovar autoria. Esta skill não é um detector de IA.
 
-## Antes de escrever
+## Defina a tarefa
 
-Leia o pedido e o material disponível. Identifique gênero, leitor, intenção, registro e restrições. Use a amostra de voz quando houver; sem amostra, preserve o registro do original ou o indicado no pedido. Pergunte só se faltar informação que altere o resultado.
+Leia o pedido e o contexto disponível. Identifique gênero, leitor, finalidade, voz, extensão e restrições que realmente foram solicitadas. Uma amostra do autor orienta a voz; sem amostra, use o registro adequado ao pedido, sem inventar uma personalidade. Pergunte somente se faltar informação indispensável.
 
-Distinga as duas tarefas:
+- **Redação:** planeje e produza o texto diretamente do pedido, dos dados e das fontes disponíveis. Não exija um rascunho nem crie uma versão genérica para depois humanizá-la.
+- **Revisão:** preserve fatos, acontecimentos, nomes, números, citações, negações, condições, grau de certeza e posição do autor. Um trecho bom pode permanecer intacto. Reescrita ampla só quando o pedido permitir.
+- **Diagnóstico:** indique trechos concretos, o problema contextual e sugestões. Não entregue uma reescrita completa por iniciativa própria.
 
-- **Revisão:** conserve os acontecimentos, fatos, nomes, números, citações, negações, condições e grau de certeza. Não acrescente experiências, fontes ou detalhes apresentados como reais.
-- **Criação:** desenvolva o conteúdo dentro do que o pedido permite. Em ficção, pode inventar personagens, cenas, ações e sensações; não apresente isso como biografia, depoimento ou fato real. Ao revisar uma ficção existente, preserve seu enredo e ponto de vista, salvo autorização para mudá-los.
+## Fatos, citações e limites de invenção
 
-## Como melhorar a leitura
+Estas regras valem tanto para redação quanto para revisão, sem o usuário precisar repeti-las:
 
-1. **Comece pelo que acontece ou pelo que importa.** Remova aberturas que apenas anunciam o assunto. Em um conto, a cena pode começar com uma ação, um objeto ou uma fala, se isso servir à história.
-2. **Troque abstração vazia por informação sustentada.** Em não ficção, use somente detalhes disponíveis. Na criação ficcional, escolha detalhes concretos que participem da cena, sem preencher cada frase com decoração.
-3. **Ajuste o ritmo ao trecho.** Combine comprimentos e construções quando a leitura pedir. Não transforme todos os parágrafos em frases curtas, fragmentos dramáticos ou uma sequência de frases igualmente polidas.
-4. **Conserve palavras que têm função.** Repetição pode sustentar uma ideia, uma voz ou um efeito literário. Não alterne sinônimos só para evitar repetir um nome ou termo técnico.
-5. **Reduza explicações que o texto já resolve.** Corte moral da história, resumo final e interpretação de emoções quando ações e contexto já comunicarem isso. Mantenha explicações necessárias ao leitor.
-6. **Prefira uma voz coerente a uma personalidade fabricada.** Humor, coloquialidade, opinião e primeira pessoa dependem do pedido e da voz. Gírias, erros deliberados e falsa intimidade não tornam o texto melhor.
-7. **Leia o resultado como texto, não como checklist.** Retire a alteração que piora precisão, continuidade, ritmo ou intenção. Não editar um trecho bom também é uma decisão válida.
+1. Baseie alegações factuais específicas, dados empíricos, citações e atribuições apenas no contexto existente: informações fornecidas, documentos lidos e fontes já verificadas para a tarefa. Os exemplos desta skill e do catálogo não são evidência sobre o assunto.
+2. Não invente fontes, autores, estudos, especialistas, entrevistas, links, números, resultados, clientes ou credenciais. Não use expressões como “estudos mostram” para emprestar autoridade a uma opinião sem referência disponível.
+3. Preserve citações literais e suas atribuições. Uma paráfrase deve manter o sentido e não aparecer como fala literal. Não transforme dado fornecido pelo solicitante em informação independentemente confirmada.
+4. Se faltar uma fonte ou um fato essencial, peça-o ou indique a lacuna. Se for dispensável, escreva sem a alegação. Não pesquise nem amplie o escopo por conta própria apenas para ornamentar o texto.
+5. Separe observação, cálculo, hipótese e opinião. Não converta associação em causalidade, estimativa em garantia ou ausência de confirmação em prova de ausência. Preserve ressalvas técnicas, científicas, jurídicas e de segurança.
+6. Não atribua ao autor experiências, sentimentos ou opiniões pessoais ausentes do contexto. Primeira pessoa depende do papel e da posição autorizados pelo pedido.
+7. Em ficção, desenvolva personagens, cenas, ações e sensações compatíveis com o gênero. Não apresente invenção como biografia, depoimento ou notícia real. Ao revisar ficção, preserve enredo e ponto de vista salvo autorização para mudá-los. Não acrescente avisos de ficção a cada conto quando o gênero já estiver claro.
 
-Consulte o [catálogo](references/catalogo.json) para localizar candidatos à revisão. Uma regex não decide se há defeito: considere contexto, gênero, exceções e risco de sentido. As palavras “robusto”, “significativo” e “além disso” não são proibidas. Consulte os [estilos](references/estilos.json) quando precisar variar discretamente a forma, sem sortear fatos ou personalidade.
+## Redação e leitura final
+
+1. **Escolha o que importa ao leitor.** Organize as informações ou a cena para cumprir a intenção. Comece pelo assunto, ação ou conflito, sem abertura que apenas anuncie o texto.
+2. **Dê função aos detalhes.** Em não ficção, prefira detalhes sustentados pelo contexto. Em literatura, use detalhes que participem da cena. Não compense falta de conteúdo com abstrações, adjetivos ou decoração.
+3. **Ajuste o ritmo ao gênero.** Varie frases e parágrafos quando isso ajudar a leitura. Evite fragmentos dramáticos em sequência, contrastes encenados, listas de três itens obrigatórias e parágrafos com cadência idêntica.
+4. **Mantenha precisão lexical.** Repetição pode sustentar voz, clareza ou efeito literário. Não substitua termos técnicos por sinônimos vagos nem troque palavras só para parecer variado.
+5. **Use estrutura e pontuação com propósito.** Títulos, listas, ênfase e apartes devem ajudar o leitor, não repetir um molde em todo texto. Evite excesso de pontuação enfática; nenhuma marca isolada identifica autoria.
+6. **Não fabrique espontaneidade.** Humor, coloquialidade e primeira pessoa dependem do pedido. Gírias aleatórias, erros deliberados, falsa intimidade e opinião obrigatória não melhoram o texto.
+7. **Corte o que não acrescenta.** Retire anúncios de percurso, importância inflada, fechos genéricos e explicações que a cena ou o argumento já resolvem. Mantenha a explicação necessária ao público.
+8. **Leia o conjunto.** Confira progressão, continuidade, precisão e voz. Desfaça qualquer ajuste que piore a leitura. Na redação, faça essa revisão sobre o próprio rascunho, sem precisar de um texto de outra chamada.
+
+O [catálogo](references/catalogo.json) ajuda a evitar fórmulas na redação e localizar candidatos na revisão. Regex não decide defeitos: considere contexto, gênero, exceções e risco de sentido. Não há blacklist de palavras. Os [estilos](references/estilos.json) orientam a forma tanto na redação quanto na revisão, sem sortear fatos ou personalidade.
 
 ## Entrega
 
-Em pedido de criação ou reescrita, entregue o texto pronto. Acrescente observações ou mudanças somente quando forem solicitadas ou quando uma dúvida relevante impedir a revisão fiel. Em auditoria, mostre problemas concretos, trechos e sugestões, sem reescrever por conta própria.
+Entregue o texto pronto no formato pedido. Mostre diagnóstico, versões intermediárias ou lista de mudanças somente quando solicitados, ou uma observação curta quando uma lacuna impedir a entrega fiel. Não inclua comentários sobre o processo no artefato.
 
-Não publique nem sobrescreva o original sem autorização. Não introduza travessão longo na prosa nova; preserve um trecho literal protegido e sinalize conflito se houver. Não remova ressalvas técnicas, científicas, jurídicas ou de segurança para deixar o texto mais leve.
+Não publique nem sobrescreva o original sem autorização. Não altere trechos literais protegidos para atender uma preferência de estilo.
 
 ## Scripts opcionais
 
-O procedimento textual não depende de Python. Para uma auditoria local, use `terminal` na pasta da skill:
+A redação e a revisão textual não dependem de Python. O script local auxilia a inspeção de um rascunho recém-escrito ou de um original fornecido, sem gerar prosa nem verificar fontes. Use `terminal` na pasta da skill:
 
 ```text
-python3 scripts/humanizar.py audit entrada.txt
-python3 scripts/humanizar.py suggest entrada.txt --profile neutro-claro --seed 17
-python3 scripts/humanizar.py apply entrada.txt --plan plano-aprovado.json --output revisado.txt
-python3 scripts/humanizar.py verify entrada.txt revisado.txt
+python3 scripts/humanizar.py audit rascunho.txt
+python3 scripts/humanizar.py suggest rascunho.txt --profile neutro-claro --seed 17
+python3 scripts/humanizar.py apply rascunho.txt --plan plano-aprovado.json --output revisado.txt
+python3 scripts/humanizar.py verify rascunho.txt revisado.txt
 ```
 
-O script não redige. `suggest` oferece recomendações e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. Use `--protect "termo"` para invariantes adicionais. Ver [uso e exemplo de plano](README.me).
+`suggest` retorna recomendações não aprovadas e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. `--protect "termo"` acrescenta invariantes. Veja [uso e exemplo de plano](README.md).
 
-Scripts de experimento e resultados ficam em [tests/](tests/README.md). Chamadas externas exigem autorização e teto financeiro. Não envie material confidencial a terceiros sem autorização.
+Não envie material confidencial a terceiros sem autorização. Experimentos com modelos só podem começar após aprovação explícita da skill, dos prompts e do protocolo de execução.
 
 ## Verificação
 
-- O resultado cumpre o pedido e funciona no gênero, sem impor informalidade ou ornamentação.
-- Na revisão, preserva sentido, fatos, condições e voz; na criação, respeita os limites de invenção.
-- Cada mudança melhora a leitura ou a precisão, não apenas uma contagem de palavras.
-- Não usa notas de juízes ou detectores para otimizar o texto. Resultados de percepção precisam de leitura humana.
+- Cumpre a intenção e o gênero, sem impor informalidade, ornamentação ou estruturas não pedidas.
+- Na redação, sustenta fatos e atribuições no contexto e respeita os limites de invenção.
+- Na revisão, preserva sentido, condições, certeza e voz.
+- Cada ajuste melhora leitura ou precisão, não apenas uma contagem de palavras.
+- Não trata notas de juízes ou detectores como prova de autoria ou de qualidade.
 
-[Fontes e limites das heurísticas](references/fontes.md). Nenhuma taxa de autoria ou garantia de “passar em detector” é oferecida.
+[Fontes e limites das heurísticas](references/fontes.md). Não há garantia de superioridade nem de “passar em detector”.

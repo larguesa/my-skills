@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Apresentação e uso](skills/humanizador-pt-br/README.md): escrita e revisão em PT-BR, com foco em ritmo, clareza e voz. A ampliação em 24 pedidos de 12 gêneros foi encerrada: 912 posições percorridas, 848 respostas válidas de transporte, 64 saídas inválidas terminais e 410 pares completos. Os três juízes avaliaram 308 pares cada, em 315 chamadas em lote; 102 pares completos ficaram sem notas por pertencerem a grupos congelados inelegíveis. Gasto conciliado: US$ 28.480551395. [Índice e textos completos](skills/humanizador-pt-br/tests/README.md) · [Resultados, custos e limitações](skills/humanizador-pt-br/tests/results/expansao-20261002-periodica/STATUS.md). Jev e Astra ficaram praticamente divididos; Opus preferiu mais versões com skill. A avaliação humana está pendente; validade de resposta não comprova correção factual e não há promessa de superioridade ou de escapar de detectores. Os dois contos históricos e as tentativas anteriores permanecem separados.
+[Humanizador PT-BR](skills/humanizador-pt-br/README.md): redação do zero e revisão, com clareza, ritmo, voz coerente e regras de fidelidade factual na própria skill. O README foi simplificado e a pasta antiga de testes saiu da versão atual. [Prompts propostos](skills/humanizador-pt-br/results/PROMPTS.md) e [status da nova avaliação](skills/humanizador-pt-br/results/README.md): aguardando aprovação, sem novas chamadas a modelos.
 
 ## Telegraphist
 
