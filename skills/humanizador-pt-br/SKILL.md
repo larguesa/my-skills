@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
-description: Redija e revise em PT-BR com clareza e voz coerente.
-version: 0.3.0
+description: Humanize e redija textos em PT-BR sem fórmulas de IA.
+version: 0.4.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
@@ -12,76 +12,66 @@ metadata:
 
 # Humanizador PT-BR
 
-Redija do zero ou revise em português brasileiro. Trabalhe clareza, ritmo, precisão e voz desde a escolha das ideias até a leitura final. Não é preciso fornecer um texto pronto, e reduzir marcas de escrita genérica não substitui escrever bem.
+Redija do zero, revise ou diagnostique em português brasileiro. Diagnóstico não autoriza reescrita. Não detecta autoria nem promete enganar detectores.
 
-## Quando usar
+## Evite explicitamente
 
-- Redigir artigos, notícias, conteúdo técnico, textos didáticos, propostas, mensagens, posts, roteiros e literatura a partir de um pedido ou briefing.
-- Revisar ou reescrever um texto existente, no nível de intervenção solicitado.
-- Avaliar um texto sem alterá-lo quando o pedido for somente diagnóstico.
+- NÃO USE travessão U+2014 na prosa produzida, inclusive em diálogos novos. Use ponto, vírgula, parênteses ou aspas, não outro traço.
+- CORTE enchimentos: "é importante ressaltar que", "vale destacar que", "cabe destacar que", "faz-se necessário pontuar", "vamos mergulhar", "este artigo irá abordar", "em suma", "em conclusão".
+- NÃO USE fórmulas: "no mundo atual", "na era digital", "no cenário atual", "em constante evolução", "o que ninguém te conta", "a verdade é que", "desbloquear o potencial", "divisor de águas", "novo patamar".
+- EVITE decoração: "crucial", "fundamental", "robusto", "inovador", "transformador", "disruptivo", "holístico", "vibrante", "multifacetado", "tessitura", "tapeçaria", "jornada", "ecossistema", "alavancar", "sinergia", "potencializar", "otimizar", "fomentar". Descreva a ação, função ou efeito.
+- NÃO FABRIQUE autoridade: "especialistas afirmam", "estudos comprovam", "impacto significativo", "solução definitiva", "resultados revolucionários". Identifique fonte, medida e limites disponíveis ou omita a alegação dispensável.
+- NÃO ACRESCENTE elogio automático, "espero que isso ajude", oferta do assistente, emoji decorativo, negrito repetitivo, contraste "não é apenas X, mas Y", tríade obrigatória ou slogan final.
 
-Não usar para fabricar depoimentos, esconder atribuições ou comprovar autoria. Esta skill não é um detector de IA.
+Preserve termos técnicos e usos literais (ecossistema biológico, estatística robusta, otimização com critério). Citação, código e dado original são intocáveis, mesmo com item evitado; sinalize a exceção. Síntese, contraste ou lista necessários ao gênero não são defeitos automáticos. Estas regras orientam edição, não identificam autoria.
 
-## Defina a tarefa
+## Catálogo e estilo ANTES de escrever
 
-Leia o pedido e o contexto disponível. Identifique gênero, leitor, finalidade, voz, extensão e restrições que realmente foram solicitadas. Uma amostra do autor orienta a voz; sem amostra, use o registro adequado ao pedido, sem inventar uma personalidade. Pergunte somente se faltar informação indispensável.
+CONSULTE o [catálogo](references/catalogo.json), SELECIONE um [estilo](references/estilos.json) e aplique as instruções e exceções retornadas. Não deixe essa etapa apenas como sugestão. Use `terminal` na pasta da skill (Python 3, sem dependências):
 
-- **Redação:** planeje e produza o texto diretamente do pedido, dos dados e das fontes disponíveis. Não exija um rascunho nem crie uma versão genérica para depois humanizá-la.
-- **Revisão:** preserve fatos, acontecimentos, nomes, números, citações, negações, condições, grau de certeza e posição do autor. Um trecho bom pode permanecer intacto. Reescrita ampla só quando o pedido permitir.
-- **Diagnóstico:** indique trechos concretos, o problema contextual e sugestões. Não entregue uma reescrita completa por iniciativa própria.
+```text
+python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
+python3 scripts/humanizar.py styles --query jornalistico --genre noticia
+python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --breadth 2
+```
 
-## Fatos, citações e limites de invenção
+Leia os vícios de atribuição, o registro e os blocos retornados. Preencha o plano com fatos do briefing, não com exemplos do catálogo. Sem Python, leia os JSONs e faça a mesma seleção.
 
-Estas regras valem tanto para redação quanto para revisão, sem o usuário precisar repeti-las:
+Perfis: `neutro-claro`, `tecnico-preciso`, `conversacional-contido`, `argumentativo-sobrio`, `jornalistico`, `didatico`, `academico`, `executivo-direto`, `literario`. A voz do autor prevalece.
 
-1. Baseie alegações factuais específicas, dados empíricos, citações e atribuições apenas no contexto existente: informações fornecidas, documentos lidos e fontes já verificadas para a tarefa. Os exemplos desta skill e do catálogo não são evidência sobre o assunto.
-2. Não invente fontes, autores, estudos, especialistas, entrevistas, links, números, resultados, clientes ou credenciais. Não use expressões como “estudos mostram” para emprestar autoridade a uma opinião sem referência disponível.
-3. Preserve citações literais e suas atribuições. Uma paráfrase deve manter o sentido e não aparecer como fala literal. Não transforme dado fornecido pelo solicitante em informação independentemente confirmada.
-4. Se faltar uma fonte ou um fato essencial, peça-o ou indique a lacuna. Se for dispensável, escreva sem a alegação. Não pesquise nem amplie o escopo por conta própria apenas para ornamentar o texto.
-5. Separe observação, cálculo, hipótese e opinião. Não converta associação em causalidade, estimativa em garantia ou ausência de confirmação em prova de ausência. Preserve ressalvas técnicas, científicas, jurídicas e de segurança.
-6. Não atribua ao autor experiências, sentimentos ou opiniões pessoais ausentes do contexto. Primeira pessoa depende do papel e da posição autorizados pelo pedido.
-7. Em ficção, desenvolva personagens, cenas, ações e sensações compatíveis com o gênero. Não apresente invenção como biografia, depoimento ou notícia real. Ao revisar ficção, preserve enredo e ponto de vista salvo autorização para mudá-los. Não acrescente avisos de ficção a cada conto quando o gênero já estiver claro.
+## Fluxo
 
-## Redação e leitura final
+1. Identifique gênero, leitor, objetivo, extensão e voz. Pergunte só pelo indispensável. Redação parte do briefing, sem exigir rascunho ou resposta de outra chamada.
+2. Consulte catálogo e estilo. Na redação, gere um plano compatível. `--breadth` limita cobertura opcional, nunca blocos obrigatórios. `--randomness 0` é determinístico; até `1`, varia escolhas opcionais. `--seed 17` reproduz o plano local, não o texto de um modelo.
+3. Escreva pelo assunto, ação ou conflito. Use detalhes úteis, ritmo adequado e termos estáveis. Não imponha informalidade, metáforas, gírias, erros ou personalidade.
+4. Audite o texto, leia ocorrências no contexto e corte redundâncias. Não persiga contagem zero à custa de precisão. Entregue só o artefato pedido, sem bastidores; não publique nem sobrescreva original sem autorização.
 
-1. **Escolha o que importa ao leitor.** Organize as informações ou a cena para cumprir a intenção. Comece pelo assunto, ação ou conflito, sem abertura que apenas anuncie o texto.
-2. **Dê função aos detalhes.** Em não ficção, prefira detalhes sustentados pelo contexto. Em literatura, use detalhes que participem da cena. Não compense falta de conteúdo com abstrações, adjetivos ou decoração.
-3. **Ajuste o ritmo ao gênero.** Varie frases e parágrafos quando isso ajudar a leitura. Evite fragmentos dramáticos em sequência, contrastes encenados, listas de três itens obrigatórias e parágrafos com cadência idêntica.
-4. **Mantenha precisão lexical.** Repetição pode sustentar voz, clareza ou efeito literário. Não substitua termos técnicos por sinônimos vagos nem troque palavras só para parecer variado.
-5. **Use estrutura e pontuação com propósito.** Títulos, listas, ênfase e apartes devem ajudar o leitor, não repetir um molde em todo texto. Evite excesso de pontuação enfática; nenhuma marca isolada identifica autoria.
-6. **Não fabrique espontaneidade.** Humor, coloquialidade e primeira pessoa dependem do pedido. Gírias aleatórias, erros deliberados, falsa intimidade e opinião obrigatória não melhoram o texto.
-7. **Corte o que não acrescenta.** Retire anúncios de percurso, importância inflada, fechos genéricos e explicações que a cena ou o argumento já resolvem. Mantenha a explicação necessária ao público.
-8. **Leia o conjunto.** Confira progressão, continuidade, precisão e voz. Desfaça qualquer ajuste que piore a leitura. Na redação, faça essa revisão sobre o próprio rascunho, sem precisar de um texto de outra chamada.
+Exemplo técnico, execute antes de redigir a documentação:
 
-O [catálogo](references/catalogo.json) ajuda a evitar fórmulas na redação e localizar candidatos na revisão. Regex não decide defeitos: considere contexto, gênero, exceções e risco de sentido. Não há blacklist de palavras. Os [estilos](references/estilos.json) orientam a forma tanto na redação quanto na revisão, sem sortear fatos ou personalidade.
+```text
+python3 scripts/humanizar.py catalog --query robustez --genre tecnico
+python3 scripts/humanizar.py styles --query tecnico-preciso
+python3 scripts/humanizar.py structure --profile tecnico-preciso --genre tecnico --breadth 1
+```
 
-## Entrega
+Preencha contrato, execução e verificação com a API fornecida. Para conto, use `--profile literario --genre conto`; acrescente `--randomness 0.4 --seed 17` se quiser variar o plano, nunca o enredo exigido.
 
-Entregue o texto pronto no formato pedido. Mostre diagnóstico, versões intermediárias ou lista de mudanças somente quando solicitados, ou uma observação curta quando uma lacuna impedir a entrega fiel. Não inclua comentários sobre o processo no artefato.
-
-Não publique nem sobrescreva o original sem autorização. Não altere trechos literais protegidos para atender uma preferência de estilo.
-
-## Scripts opcionais
-
-A redação e a revisão textual não dependem de Python. O script local auxilia a inspeção de um rascunho recém-escrito ou de um original fornecido, sem gerar prosa nem verificar fontes. Use `terminal` na pasta da skill:
+## Auditoria e substituições
 
 ```text
 python3 scripts/humanizar.py audit rascunho.txt
+python3 scripts/humanizar.py rhythm rascunho.txt
+python3 scripts/humanizar.py replace rascunho.txt --from "com o intuito de" --to "para"
 python3 scripts/humanizar.py suggest rascunho.txt --profile neutro-claro --seed 17
 python3 scripts/humanizar.py apply rascunho.txt --plan plano-aprovado.json --output revisado.txt
 python3 scripts/humanizar.py verify rascunho.txt revisado.txt
 ```
 
-`suggest` retorna recomendações não aprovadas e uma ênfase de estilo; `edits: []` é válido. `apply` exige SHA256 da entrada, offsets Unicode, trecho exato e aprovação explícita por edição; o destino deve ser novo. `--protect "termo"` acrescenta invariantes. Veja [uso e exemplo de plano](README.md).
+`rhythm` mostra comprimentos e aberturas repetidas. `replace` e `suggest` devolvem JSON não aprovado, sem alterar arquivos. Salve o retorno, revise cada trecho e marque `approved: true` apenas nas edições autorizadas. `apply` exige hash, offsets Unicode, trecho exato e destino novo. `--protect "kg"` protege termos/unidades adicionais; citações, código, números, possíveis nomes e condições têm bloqueios conservadores. Travessão exige pontuação escolhida pelo contexto, não troca global por vírgula.
 
-Não envie material confidencial a terceiros sem autorização. Experimentos com modelos só podem começar após aprovação explícita da skill, dos prompts e do protocolo de execução.
+## Fidelidade e verificação
 
-## Verificação
-
-- Cumpre a intenção e o gênero, sem impor informalidade, ornamentação ou estruturas não pedidas.
-- Na redação, sustenta fatos e atribuições no contexto e respeita os limites de invenção.
-- Na revisão, preserva sentido, condições, certeza e voz.
-- Cada ajuste melhora leitura ou precisão, não apenas uma contagem de palavras.
-- Não trata notas de juízes ou detectores como prova de autoria ou de qualidade.
-
-[Fontes e limites das heurísticas](references/fontes.md). Não há garantia de superioridade nem de “passar em detector”.
+- Use fatos, fontes e atribuições fornecidos ou verificados para a tarefa. Não invente estudos, entrevistas, links, números, clientes, experiências ou sentimentos. Exemplos editoriais não são fatos reutilizáveis.
+- Preserve negações, condições, unidades, incerteza e posição do autor. Não converta associação em causa, estimativa em garantia ou ausência de confirmação em ausência. Ficção permite invenção no gênero pedido, não depoimento falso.
+- Confira requisitos, voz e cada ocorrência evitada; desfaça edição que prejudique sentido. `verify` compara inventários, não prova equivalência semântica nem verdade. [fontes.md](references/fontes.md) traz instruções para aprofundar a revisão.
+- Não envie texto confidencial a terceiros. Avaliações com modelos exigem aprovação da skill e do protocolo; aprovar prompts não inicia execução.

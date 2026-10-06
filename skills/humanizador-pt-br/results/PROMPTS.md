@@ -1,6 +1,6 @@
-# Prompts propostos para aprovação
+# Prompts aprovados
 
-Status: proposta, sem execução. Os 24 casos abaixo preservam os temas da ampliação anterior, mas são pedidos novos e mais próximos do uso comum. Dois contos do teste histórico aparecem separadamente ao final; não ampliam automaticamente a matriz de 24 casos.
+Status: 24 prompts aprovados por Ricardo em 06/10/2026; sem execução. H1 e H2 descartados. Aprovação da versão revisada da skill e do protocolo permanece pendente.
 
 Os briefings com nomes, eventos e dados específicos são cenários de avaliação, não apuração jornalística, estudos reais ou registros de clientes. Essa informação pertence à documentação do experimento, não será acrescentada aos prompts dos candidatos nem aos textos finais.
 
@@ -173,20 +173,4 @@ Escreva um conto curto em primeira pessoa, narrado por uma aprendiz de relojoari
 
 ```text
 Escreva uma crônica em primeira pessoa sobre uma manhã em uma lavanderia de bairro. A atendente anota no recibo uma meia sem par que não pertence ao narrador. Explore esse pequeno desencontro com humor discreto.
-```
-
-## Dois contos históricos, separados da ampliação
-
-Estes pedidos já eram simples. A proposta é mantê-los para comparação histórica, somente se sua inclusão for aprovada.
-
-### H1. A chave no ônibus
-
-```text
-Escreva um pequeno conto de 80 a 120 palavras em português brasileiro. Uma motorista de ônibus encontra uma chave sem identificação no último banco, depois do fim do expediente. Ela precisa decidir o que fazer com a chave antes de ir embora. Conte em terceira pessoa.
-```
-
-### H2. O bolo na portaria
-
-```text
-Escreva um pequeno conto de 80 a 120 palavras em português brasileiro. Um morador chega à portaria com um bolo preparado para um vizinho com quem não fala há meses. O porteiro avisa que o vizinho está de mudança naquele momento. Conte em terceira pessoa.
 ```

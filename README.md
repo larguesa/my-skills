@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Humanizador PT-BR](skills/humanizador-pt-br/README.md): redação do zero e revisão, com clareza, ritmo, voz coerente e regras de fidelidade factual na própria skill. O README foi simplificado e a pasta antiga de testes saiu da versão atual. [Prompts propostos](skills/humanizador-pt-br/results/PROMPTS.md) e [status da nova avaliação](skills/humanizador-pt-br/results/README.md): aguardando aprovação, sem novas chamadas a modelos.
+[Humanizador PT-BR 0.4.0](skills/humanizador-pt-br/README.md): redação e revisão com regras explícitas contra travessão e fórmulas de IA. Consulta ativa de catálogo e estilos, planos estruturais, substituições aprovadas e diagnóstico de ritmo, com Python padrão e sem API. [24 prompts aprovados](skills/humanizador-pt-br/results/PROMPTS.md), sem H1/H2. A revisão da skill aguarda aprovação; [validação local e status](skills/humanizador-pt-br/results/README.md) não são benchmark de escrita.
 
 ## Telegraphist
 

@@ -1,65 +1,92 @@
-# Fontes, rastreabilidade e limites
+# Fontes convertidas em instruções
 
-Registro de consulta desta implementação. Fontes públicas acessadas em 29/09/2026; páginas e branches são mutáveis. IDs abaixo correspondem ao campo `source` do catálogo. A redação das regras, exceções e exemplos é própria. Não se importaram listas como verdade estatística nem se reproduziu um corpus.
+Reconsulta: 06/10/2026. IDs correspondem ao `source` do catálogo. Aplicações são adaptações editoriais próprias; nenhuma fonte valida o desempenho deste pacote.
 
-## Aplicação na redação e na revisão
+## Regras comuns
 
-Estas referências explicam a origem das heurísticas de escrita. Não são fontes sobre o assunto de um artigo, notícia ou proposta, e não autorizam atribuir fatos aos seus autores. Na redação, use o catálogo para evitar fórmulas desde o rascunho; na revisão, inspecione ocorrências sem tratar palavras como proibidas.
+1. Consulte [catálogo](catalogo.json) e [estilos](estilos.json); aplique a instrução com suas exceções. A voz e o gênero pedidos prevalecem.
+2. Preserve fatos, citações, código, números, unidades, negações, condições e certeza. Não invente detalhe, fonte ou vivência; não converta associação em causa.
+3. Não use travessão U+2014 na prosa produzida. Refaça a sintaxe; preserve o original literal protegido. É preferência do pacote, não prova de autoria.
+4. Corte enchimentos, jargão vazio e repetição mecânica; mantenha termos técnicos, ressalvas e listas úteis. Consulte as listas explícitas na [skill](../SKILL.md), sem impor informalidade ou erros.
 
-A base factual é o contexto disponível da tarefa: briefing, documentos lidos e fontes já verificadas. Não invente estudos, entrevistas, links ou experiências para tornar o texto concreto. Exemplos linguísticos não fornecem dados reais reutilizáveis. Em ficção, a invenção se limita ao gênero autorizado.
+## Orientação editorial
 
-O script opera sobre texto já escrito, inclusive um rascunho criado pela skill; não redige nem verifica fatos ou fontes.
+### `blader`
+- **Aplicar:** comece pela informação útil; corte contraste teatral, importância inflada, fecho repetitivo e autoridade sem fonte.
+- **Não adotar:** identificação de autoria por sinais ou reação pessoal inventada. O guia parte do inglês e da Wikipedia, não de calibração PT-BR.
+- **Fonte:** [Humanizer, SKILL.md fixado](https://raw.githubusercontent.com/blader/humanizer/225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8/SKILL.md).
 
-## Referências editoriais
+### `aboudjem`
+- **Aplicar:** defina público e registro; separe auditoria de reescrita; compare o inventário factual antes e depois.
+- **Não adotar:** score de autoria, meta de variância de frases ou detalhe novo para dar concretude.
+- **Fonte:** [Humanizer Skill, SKILL.md fixado](https://raw.githubusercontent.com/Aboudjem/humanizer-skill/a58df065367550b6ce40ff3f648335018d8e0589/skills/humanizer/SKILL.md).
 
-| ID | Fonte primária consultada | Aproveitamento | Limite |
-|---|---|---|---|
-| `blader` | [blader/humanizer](https://github.com/blader/humanizer), [README bruto](https://raw.githubusercontent.com/blader/humanizer/main/README.md) | Categorias de inflação, encenação, autoridade vaga e resíduos de conversa; preservação de fatos e voz. | Guia editorial baseado no contexto da Wikipedia e no inglês. Não importar frequências, ranking de sinais ou teste divulgado como validação PT-BR. |
-| `aboudjem` | [Aboudjem/humanizer-skill](https://github.com/Aboudjem/humanizer-skill), [README bruto](https://raw.githubusercontent.com/Aboudjem/humanizer-skill/main/README.md) | Separação entre auditoria, comparação factual e orientação de voz. | Não importar score 0 a 100, limiares ou interpretação de autoria. Retenção lexical não assegura equivalência semântica. |
-| `mackswendhell` | [mackswendhell/humanizer-pt-br](https://github.com/mackswendhell/humanizer-pt-br), [README bruto](https://raw.githubusercontent.com/mackswendhell/humanizer-pt-br/main/README.md) | Candidatos em português: preenchimento, ganchos artificiais, tom promocional e fechos. | Adaptação editorial, não estudo controlado de frequência. Não autoriza criar uma personalidade fictícia. |
-| `rpiochi` | [rpiochi/humanizer-pt-br](https://github.com/rpiochi/humanizer-pt-br), [README bruto](https://raw.githubusercontent.com/rpiochi/humanizer-pt-br/main/README.md) | Conectivos, qualificações, jargão e exemplos de registro brasileiro. | Exemplos da fonte não são fatos. Algumas reescritas exemplificadas acrescentam especificidade ausente no antes; essa prática não foi adotada. |
-| `meta-unslop` | Meta RAM, [Towards RL for Superhuman Text: Unslopping AI](https://facebookresearch.github.io/RAM/blogs/unslop/) | Adequação à função da seção, seleção de informação e cuidado com juiz que premia cobertura e polimento. | Relato de RL-XAR dos próprios autores. Rubricas e resultados daquele experimento não calibram este catálogo, não demonstram ganho em PT-BR e não foram reproduzidos aqui. |
+### `mackswendhell`
+- **Aplicar:** corte anúncios de percurso, ganchos vazios e conclusões motivacionais; leia em voz alta para localizar monotonia.
+- **Não adotar:** frequência alegada como estatística, personalidade fabricada ou regra de que dois itens são melhores que três.
+- **Fonte:** [Humanizer PT-BR, SKILL.md fixado](https://raw.githubusercontent.com/mackswendhell/humanizer-pt-br/ada3599ae2732725585f1d93770eeae98c922ff0/SKILL.md).
 
-A versão local previamente disponível de Humanizer divergia do README público atual. Não se fixou um número universal de padrões nem se transplantaram comandos de instalação. Para reprodução histórica rigorosa, registrar commit e hash dos documentos usados na próxima calibração.
+### `rpiochi`
+- **Aplicar:** verifique a função dos conectivos; troque "com o intuito de" por "para" quando preservar a finalidade; explique anglicismo dispensável.
+- **Não adotar:** números e atribuições que alguns exemplos acrescentam ao original, nem troca aleatória de conectivos.
+- **Fonte:** [Humanizer PT-BR, SKILL.md fixado](https://raw.githubusercontent.com/rpiochi/humanizer-pt-br/5c9a33abf0aec254c97d7a2a9c1fab8fb3f3b191/SKILL.md).
 
-## Fontes comerciais: geradoras de hipóteses
+### `linguagem-simples`
+- **Aplicar:** priorize informação, ordem direta e verbo de ação; explique siglas; use uma ideia por parágrafo e teste compreensão com o público.
+- **Não adotar:** sinônimo impreciso ou corte de condição. A norma rege comunicação pública com a população, não todo gênero literário ou especializado.
+- **Fonte:** [Lei 15.263/2025, arts. 4 e 5](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/lei/l15263.htm), fonte normativa brasileira.
 
-| ID | Página consultada | Candidatos úteis | O que não adotar |
-|---|---|---|---|
-| `undetectable` | [Palavras comuns em IA](https://undetectable.ai/blog/br/palavras-comuns-em-ia/) | Vocabulário abstrato e frases intercambiáveis entre temas. | Identificação de autoria por palavra, promessa de indetectabilidade e afirmações promocionais de desempenho. |
-| `justdone` | [Palavras e frases comuns de IA](https://justdone.com/pt/blog/ai/common-ai-words) | Aberturas genéricas, ressalvas vazias, robustez sem critério e jargão. | Generalizações regionais sobre brasileiros, troca mecânica de conectivos e redução de termos técnicos a sinônimos vagos. |
-| `winston` | [Palavras mais comuns do ChatGPT](https://gowinston.ai/pt-br/most-common-chatgpt-words/) | Repetição estrutural e alerta de que palavras isoladas não provam autoria. | Precisão comercial anunciada, probabilidades de detector e recomendação de impor opiniões ou experiências. |
+## Pesquisa e evidência empírica
 
-Esses fornecedores vendem produtos relacionados ao problema descrito. As páginas consultadas não sustentam uma estimativa reproduzível de prevalência no universo PT-BR, controlada por gênero, fonte e modelo. Concordância entre blogs não é replicação independente. Toda regra derivada permanece `heuristica_editorial`.
+### `meta-unslop`
+- **Aplicar:** dê função a cada seção; selecione o detalhe necessário; revise rubricas que premiam comprimento, cobertura repetida e polimento.
+- **Não adotar:** ganhos de RL-XAR como resultado desta skill ou ranking válido em PT-BR. É relato dos próprios autores, não reprodução independente.
+- **Fonte:** [Meta RAM, Unslopping AI](https://facebookresearch.github.io/RAM/blogs/unslop/), [texto fixado](https://raw.githubusercontent.com/facebookresearch/RAM/b7a60be6c5b66c32839738016ef00df0adf500be/blogs/unslop/README.md).
 
-## Dados candidatos
+### `sadasivan-deteccao`
+- **Aplicar:** avalie preservação de conteúdo separadamente da fluência; compare invariantes após paráfrases e conserve histórico de edições.
+- **Não adotar:** receita de evasão ou impossibilidade universal de detecção. O limite teórico depende das distribuições; paráfrase pode degradar qualidade.
+- **Fonte:** [Sadasivan et al., Can AI-Generated Text be Reliably Detected?, v4](https://arxiv.org/html/2303.11156v4), seções 2 e 4, pesquisa empírica e teórica.
 
-### PTDetect
+### `liang-vies-deteccao`
+- **Aplicar:** julgue clareza, fidelidade e registro, não riqueza lexical ou variação obrigatória como sinal de autenticidade.
+- **Não adotar:** taxa universal de erro ou extrapolação de autores não nativos em inglês para PT-BR e detectores atuais.
+- **Fonte:** [Liang et al., GPT detectors are biased against non-native English writers, v3](https://arxiv.org/html/2304.02819v3), estudo empírico.
 
-Fonte: [GSalimp/PTDetect](https://github.com/GSalimp/PTDetect), [README](https://raw.githubusercontent.com/GSalimp/PTDetect/main/README.md).
+## Fontes comerciais, somente hipóteses
 
-O projeto descreve artigos jornalísticos humanos, gerados e reescritos por IA, com classes 0, 1 e 2. A distinção de reescrita é útil: textos derivados do mesmo original não são observações independentes. Separar por artigo-fonte, manter humano e derivados na mesma partição e procurar duplicatas aproximadas antes de medir.
+Os fornecedores abaixo vendem produtos relacionados. Suas listas não medem prevalência controlada em PT-BR; concordância entre blogs não é replicação. Regras derivadas continuam `heuristica_editorial`.
 
-O README menciona `Articles/`, mas a consulta ao endpoint público desse diretório retornou 404; a árvore `main` consultada não apresentou arquivos CSV ou JSON. Portanto, não houve exploração de linhas de PTDetect nesta etapa. A existência descrita de dados não demonstra disponibilidade nem direitos de redistribuição. A licença MIT indicada pelo projeto não deve ser presumida para os artigos jornalísticos de terceiros.
+### `undetectable`
+- **Aplicar:** corte adjetivos intercambiáveis, metáforas decorativas e abstrações sem referente.
+- **Não adotar:** garantia de SEO, indetectabilidade, erros propositais ou anedota inventada.
+- **Fonte:** [Palavras comuns de IA](https://undetectable.ai/blog/br/palavras-comuns-em-ia/).
 
-Vieses esperados a investigar, não medir por suposição: veículo, tema, época, tamanho, prompts e modelos de geração, procedimentos de reescrita, seleção editorial e possível vazamento entre splits. Não extrapolar jornalismo para email, literatura ou documentação técnica.
+### `justdone`
+- **Aplicar:** abra pelo assunto; retire "é importante notar" sem apagar advertência; exija critério para "robusto" e "significativo".
+- **Não adotar:** informalidade obrigatória, generalização regional ou sinônimo igualmente vago. Preserve significância estatística definida.
+- **Fonte:** [Palavras e frases comuns de IA](https://justdone.com/pt/blog/ai/common-ai-words).
 
-### Corpus PT-BR v1
+### `winston`
+- **Aplicar:** inspecione aberturas iguais, cadência repetida e transições sem função; preserve anáfora deliberada.
+- **Não adotar:** precisão promocional, score como prova de autoria ou reescrita para baixar nota de detector.
+- **Fonte:** [Palavras mais comuns do ChatGPT](https://gowinston.ai/pt-br/most-common-chatgpt-words/).
 
-Fonte: [Madras1/corpus-ptbr-v1](https://huggingface.co/datasets/Madras1/corpus-ptbr-v1), [dataset card](https://huggingface.co/datasets/Madras1/corpus-ptbr-v1/raw/main/README.md).
+## Dados candidatos, não regras de escrita
 
-A card apresenta `text`, `source`, `subset`, `word_count`, `char_count` e `language`, configuração `default` e split `train`. Descreve `real` proveniente de C4/FineWeb2 e `synthetic` de vários modelos e pipelines. Esses são rótulos de proveniência do fornecedor, não autenticação de autoria de cada documento. Web pode conter IA; dados sintéticos podem reproduzir trechos humanos.
+### `ptdetect`
+- **Aplicar:** se os dados estiverem disponíveis, mantenha original e derivados do mesmo artigo na mesma partição; registre duplicatas e procedência.
+- **Não adotar:** disponibilidade descrita como comprovada. A árvore consultada não contém `Articles/` nem CSV/JSON; a MIT não concede direitos sobre notícias de terceiros.
+- **Fonte:** [GSalimp/PTDetect, README fixado](https://raw.githubusercontent.com/GSalimp/PTDetect/bc64bdac2ba5b780b702d1b16db0324f3850a552/README.md).
 
-A card relata filtragem SBERT orientada por rótulos de juiz LLM no material real, geração sintética por prompts e deduplicação exata por hash. Isso introduz seleção e assimetria entre subsets; não torna os grupos comparáveis. Hash exato não detecta paráfrases, espelhos, republicações ou derivados. O schema apresentado não basta para recuperar autor, URL, prompt e par original de toda linha; registrar ausências, não inventá-las.
+### `madras1-corpus`
+- **Aplicar:** em avaliação autorizada, limite linhas e bytes, fixe revisão e examine origem, filtragem SBERT/juiz LLM e deduplicação exata.
+- **Não adotar:** `real` como autenticidade garantida ou hash exato como ausência de duplicatas aproximadas. Só card/API foram reconsultadas; confira ODC-By e direitos upstream antes de redistribuir.
+- **Fonte:** [Madras1/corpus-ptbr-v1, card fixada](https://huggingface.co/datasets/Madras1/corpus-ptbr-v1/raw/aa8466e4bbe9782fc753565cd7277dbe317c0f40/README.md).
 
-Licença declarada: ODC-By 1.0. Trata-se de licença de base de dados, não de cessão indiscriminada dos direitos autorais de páginas web incorporadas. Conferir atribuição, termos upstream, finalidade, privacidade e direitos de redistribuição antes de publicar amostras. Acesso público não equivale a domínio público.
+## Auxiliares e próximos aprimoramentos
 
-Não baixar o corpus inteiro como pré-requisito. Usar preview ou streaming estritamente limitado por linhas e bytes, registrando revisão, seleção e falhas. A consulta inicial ao endpoint `/rows` com cinco linhas retornou HTTP 500; isso não prova indisponibilidade permanente. A exploração limitada permanece no [histórico anterior à revisão](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/historico-20260929/exploracao-amostral.json): amostra de conveniência apenas de `real`/`c4_pt`, sem grupo sintético comparável. Não republica texto original. Seus valores são descritivos e não calibram o catálogo.
-
-## Decisões de adaptação
-
-- Não há blacklist. Termos técnicos, citações, procedimentos e vozes autorais têm exceções explícitas.
-- Regras sinalizam ocorrências para inspeção, sem score de autoria, peso de suspeita ou remoção automática.
-- Exemplos inventados demonstram formas linguísticas. Não reutilizar seus detalhes como informação verificada.
-- Nenhum ganho de custo, qualidade ou ranking é inferido das fontes. Qualquer alegação futura exige execução registrada.
-- Esta documentação é original e atribui suas referências. Licenças de projetos citados não licenciam automaticamente este pacote ou textos de terceiros.
+- **Implementado, `rhythm`:** comprimentos de frases/parágrafos e recorrência dos dois primeiros tokens. Contagem aproximada inclui código e citações; interprete-os separadamente, sem meta de variância ou score de autoria.
+- **Implementado, `verify`:** diferenças e inventário protegido. Unidades/termos adicionais exigem `--protect`; a rotina não reconhece todas as entidades nem prova equivalência semântica.
+- **Sugestões futuras:** posições dos trechos no relatório de ritmo, segmentação que exclua código/citações e comparação de número com unidade. Priorize esses apoios antes de qualquer score. Justificativa: `blader`, `aboudjem`, `rpiochi`, `sadasivan-deteccao`.
+- **Validação:** teste abreviações, decimais, URLs, anáfora, citações e código; revise causalidade, escopo e omissões por leitura. Na pesquisa, registre URL, data UTC, status, revisão e SHA256.

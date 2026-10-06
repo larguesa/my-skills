@@ -1,61 +1,62 @@
-# Humanizador PT-BR
+# Humanizador PT-BR 0.4.0
 
-Skill de redação e revisão em português brasileiro. Ajuda a escrever com clareza, ritmo e voz coerente a partir de um briefing, ou a revisar um texto existente sem perder precisão.
+Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são consultados antes de escrever.
 
-## Uso
+## Instalação e uso
 
-Copie a pasta completa para o diretório de skills do agente e carregue [SKILL.md](SKILL.md). Não é necessário fornecer um rascunho para redigir.
+Copie a pasta completa para o diretório de skills do agente e carregue [SKILL.md](SKILL.md). Para escrever do zero, forneça o briefing; para revisar, forneça o texto. O script requer Python 3 e usa apenas a biblioteca padrão, sem API ou serviço.
 
-Exemplos:
+> Redija uma explicação de cache para iniciantes com humanizador-pt-br.
+>
+> Revise este artigo preservando fatos e voz: [...]. Use humanizador-pt-br.
+>
+> Diagnostique os vícios deste texto, sem reescrever: [...].
 
-> Escreva uma explicação de cache para quem está começando a programar. Use humanizador-pt-br.
+## Ferramentas no fluxo de redação
 
-> Redija um e-mail para negociar o prazo com a cliente usando estes dados: [...]. Use humanizador-pt-br.
+Execute na pasta da skill, pelo terminal do agente:
 
-> Revise este artigo com humanizador-pt-br: [...].
+```text
+python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
+python3 scripts/humanizar.py styles --query jornalistico --genre noticia
+python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --breadth 2
+```
 
-> Avalie a clareza deste texto, sem reescrevê-lo: [...].
+Leia os retornos e organize os dados do briefing nos blocos do plano. Só então escreva. Para variar escolhas opcionais, acrescente `--randomness 0.4 --seed 17`; `--breadth` limita cobertura opcional, preservando os blocos obrigatórios. Seed reproduz o plano local, não o texto de um modelo. O script não inventa fatos nem gera prosa pronta.
 
-As regras de fidelidade factual estão na própria skill: usar o contexto disponível, não inventar fontes ou experiências, preservar citações e distinguir fatos, hipóteses e opiniões. Ficção permite invenção compatível com o pedido, sem transformar a cena em um fato real.
+Consultas `--query` ignoram acentos e maiúsculas; `--genre` exige o identificador exato, como `relatorio` ou `noticia`. Consulte todos os perfis com `styles --limit 20`; encontre uma regra por ID com `catalog --query PTBR-21`. Os retornos incluem instruções e exceções, não apenas uma lista de nomes.
 
-## Recursos
-
-- [SKILL.md](SKILL.md): procedimento para redigir, revisar ou diagnosticar.
-- [Catálogo editorial](references/catalogo.json): fórmulas a evitar ou inspecionar, com exceções contextuais.
-- [Estilos](references/estilos.json): orientação de registro e ritmo, sem personas sorteadas.
-- [Fontes e limites](references/fontes.md): origem e limites das heurísticas, não referências factuais para qualquer texto.
-- [Script local](scripts/humanizar.py): inspeção e aplicação conservadora de edições aprovadas, sem chamadas externas.
-- [results/](results/README.md): preparação dos novos testes e, após autorização, seus resultados.
-
-## Script opcional
-
-A skill não exige Python para escrever. O script usa somente a biblioteca padrão e pode inspecionar tanto um novo rascunho quanto um texto recebido. Ele não é um gerador de textos, verificador de fontes ou detector de IA.
-
-Na pasta da skill:
+## Auditoria e edição
 
 ```text
 python3 scripts/humanizar.py audit rascunho.txt
+python3 scripts/humanizar.py rhythm rascunho.txt
+python3 scripts/humanizar.py replace rascunho.txt --from "com o intuito de" --to "para"
 python3 scripts/humanizar.py suggest rascunho.txt --profile neutro-claro --seed 17
+python3 scripts/humanizar.py apply rascunho.txt --plan plano-aprovado.json --output revisado.txt
 python3 scripts/humanizar.py verify rascunho.txt revisado.txt
-python3 scripts/humanizar.py apply rascunho.txt --plan plano.json --output revisado.txt
 ```
 
-`audit` não altera o texto. `suggest` retorna recomendações, uma ênfase do perfil e eventuais edições com `approved: false`; com o catálogo editorial atual, é normal retornar `edits: []`. Uma orientação editorial não vira substituição literal automaticamente.
+`audit` localiza regras e repetições. `rhythm` descreve comprimentos e aberturas repetidas, sem nota de autoria. `replace` propõe substituição literal em trechos não protegidos; `suggest` usa variantes cadastradas, se houver. Ambos devolvem JSON com `approved: false`, sem alterar a entrada.
 
-`apply` exige o SHA256 da entrada, índices de caracteres Unicode (fim exclusivo), trecho exato e aprovação por edição. O destino deve ser novo. Formato de plano para a entrada literal `vale destacar: ação.`, sujeito à revisão contextual:
+Salve o JSON retornado com a ferramenta de arquivos do agente. Leia cada trecho e seu contexto; marque `approved: true` somente nas edições aprovadas. `apply` exige hash da entrada, offsets Unicode (fim exclusivo), trecho exato e arquivo de destino novo. Exemplo de edição para a entrada literal `com o intuito de validar.`:
 
 ```json
-{"input_sha256":"HASH_DA_ENTRADA_OBTIDO_NA_AUDITORIA","edits":[{"start":0,"end":13,"original":"vale destacar","replacement":"destaco","approved":true}]}
+{"input_sha256":"HASH_RETORNADO_PELO_SCRIPT","edits":[{"start":0,"end":16,"original":"com o intuito de","replacement":"para","approved":true}]}
 ```
 
-`--protect "termo"` acrescenta proteção. Números, possíveis nomes, código, citações e condições têm bloqueios heurísticos conservadores, não reconhecimento completo de entidades. `verify` compara versões, mas não comprova equivalência semântica nem veracidade. Toda alteração relevante precisa de leitura contextual.
+`--protect "kg"` acrescenta proteção de termo ou unidade. Números, possíveis nomes, código, citações e condições recebem bloqueios heurísticos conservadores. A rotina pode recusar uma edição legítima; não contorne a proteção para forçá-la. A redação contextual pelo agente continua possível, seguida de leitura de fidelidade.
 
-## Novos testes
+Travessão não tem substituição universal: escolha ponto, vírgula ou parênteses pela função da frase. Preserve o símbolo quando pertence a uma citação literal ou código original. `verify` verifica diferenças e inventários protegidos, não equivalência semântica nem veracidade.
 
-A pasta `tests/` foi retirada desta versão. Os materiais anteriores permanecem no histórico do Git, no [commit anterior à revisão](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests).
+## Recursos
 
-Os [prompts propostos](results/PROMPTS.md) aguardam aprovação. Não houve nova geração de textos nem nova avaliação por modelos nesta revisão.
+- [Skill](SKILL.md): regras explícitas e procedimento.
+- [Catálogo](references/catalogo.json): padrões pesquisáveis, sugestões e exceções.
+- [Estilos e estruturas](references/estilos.json): perfis e planos de redação.
+- [Fontes compiladas](references/fontes.md): instruções de aplicação, origem e limites.
+- [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
+- [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
+- [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
 
-A comparação proposta usa o mesmo pedido em duas chamadas independentes do mesmo modelo, uma sem a skill e outra com a skill. Nenhuma resposta serve de entrada à outra. O protocolo completo e a execução serão definidos após aprovação.
-
-Não há resultado novo, ganho demonstrado ou promessa de proteção contra detectores. O objetivo é avaliar a qualidade da escrita, não provar autoria.
+Não há ganho de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). A nova avaliação com modelos aguarda aprovação da skill e do protocolo.
