@@ -1,4 +1,4 @@
-# Humanizador PT-BR 0.4.0
+# Humanizador PT-BR 0.5.0
 
 Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são consultados antes de escrever.
 
@@ -53,7 +53,8 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 
 - [Skill](SKILL.md): regras explícitas e procedimento.
 - [Catálogo](references/catalogo.json): padrões pesquisáveis, sugestões e exceções.
-- [Estilos e estruturas](references/estilos.json): perfis e planos de redação.
+- [Estilos e estruturas](references/estilos.json): 12 perfis e planos de redação.
+- [Práticas dos novos estilos](references/praticas-estilos.md): coloquial, informal e caricato, com fontes, exemplos e critérios de revisão.
 - [Fontes compiladas](references/fontes.md): instruções de aplicação, origem e limites.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.

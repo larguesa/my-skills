@@ -292,6 +292,60 @@ class CatalogTests(unittest.TestCase):
 
 
 class StyleTests(unittest.TestCase):
+    def test_documented_profiles_match_registered_profiles(self):
+        import re
+        skill = (SCRIPT.parent.parent / 'SKILL.md').read_text(encoding='utf-8')
+        lines = re.findall(r'^Perfis: (.+)$', skill, re.MULTILINE)
+        self.assertEqual(len(lines), 1, 'A skill deve declarar uma única lista de perfis')
+        documented = re.findall(r'`([a-z0-9-]+)`', lines[0])
+        self.assertTrue(documented, 'A lista documentada não pode estar vazia')
+        self.assertEqual(len(documented), len(set(documented)), 'Perfil documentado duplicado')
+        data = json.loads((SCRIPT.parent.parent / 'references/estilos.json').read_text(encoding='utf-8'))
+        registered = [profile['id'] for profile in data['profiles']]
+        self.assertEqual(len(registered), len(set(registered)), 'Perfil cadastrado duplicado')
+        self.assertEqual(set(documented), set(registered),
+                         'Os perfis da skill e do JSON precisam corresponder')
+
+    def test_new_profiles_work_through_lookup_structure_and_suggestion_cli(self):
+        h = module()
+        profiles = h.load_profiles()
+        with tempfile.TemporaryDirectory() as folder:
+            source = Path(folder) / 'entrada.txt'
+            original = 'vale destacar que o cadastro mudou. “ação” custa 20 reais.\r\n'
+            source.write_bytes(original.encode('utf-8'))
+            for profile_id in ['coloquial', 'informal', 'caricato']:
+                with self.subTest(profile=profile_id):
+                    lookup = subprocess.run(
+                        [sys.executable, '-W', 'error', str(SCRIPT), 'styles',
+                         '--query', profile_id.upper()], capture_output=True, text=True)
+                    self.assertEqual(lookup.returncode, 0, lookup.stderr)
+                    matches = json.loads(lookup.stdout)
+                    self.assertIn(profile_id, [profile['id'] for profile in matches],
+                                  'O novo perfil precisa aparecer na busca')
+                    guidance = profiles[profile_id]
+                    for genre in guidance['genres']:
+                        planned = subprocess.run(
+                            [sys.executable, '-W', 'error', str(SCRIPT), 'structure',
+                             '--profile', profile_id, '--genre', genre,
+                             '--breadth', '0', '--randomness', '1', '--seed', '17'],
+                            capture_output=True, text=True)
+                        self.assertEqual(planned.returncode, 0, planned.stderr)
+                        plan = json.loads(planned.stdout)
+                        self.assertEqual(plan, h.generate_structure(profile_id, genre, 0, 1, 17))
+                        self.assertTrue(plan['blocks'])
+                        self.assertTrue(all(block['required'] for block in plan['blocks']))
+                    suggested = subprocess.run(
+                        [sys.executable, '-W', 'error', str(SCRIPT), 'suggest', str(source),
+                         '--profile', profile_id, '--seed', '17'], capture_output=True, text=True)
+                    self.assertEqual(suggested.returncode, 0, suggested.stderr)
+                    suggestion = json.loads(suggested.stdout)
+                    self.assertEqual(suggestion['profile'], profile_id)
+                    self.assertEqual(suggestion['profile_guidance'], guidance)
+                    self.assertIn(suggestion['style_focus'], guidance['adjustments'])
+                    self.assertEqual(suggestion['edits'], [])
+                    self.assertTrue(suggestion['recommendations'])
+                    self.assertEqual(source.read_bytes(), original.encode('utf-8'))
+
     def test_styles_search_and_cli(self):
         h = module()
         self.assertTrue(hasattr(h, 'search_styles'), 'Falta busca local de estilos')

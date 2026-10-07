@@ -2,7 +2,7 @@
 
 Os [24 prompts](PROMPTS.md) foram aprovados por Ricardo em 06/10/2026. Seus pedidos permanecem literais. H1 e H2 foram descartados.
 
-A versão 0.4.0 da skill e o protocolo de avaliação ainda aguardam aprovação. Nenhuma nova geração de textos, voto de juiz ou chamada de benchmark foi iniciada. Não há novo ganho de qualidade ou custo demonstrado.
+A atualização 0.5.0 dos perfis coloquial, informal e caricato foi autorizada por Ricardo em 07/10/2026. O protocolo de avaliação com modelos ainda aguarda aprovação. Nenhuma nova geração de benchmark, voto de juiz ou chamada de avaliação paga foi iniciada. Não há novo ganho de qualidade ou custo demonstrado.
 
 A comparação futura usará o mesmo pedido em chamadas independentes do mesmo modelo e configuração, variando apenas a presença da skill aprovada. Nenhuma resposta será entregue à outra condição. O protocolo deve definir como as consultas ao catálogo, estilos e planos serão executadas ou injetadas, sem dar ferramentas ou contexto adicionais apenas a um braço por acidente.
 

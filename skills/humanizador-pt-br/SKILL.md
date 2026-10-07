@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
 description: Humanize e redija textos em PT-BR sem fórmulas de IA.
-version: 0.4.0
+version: 0.5.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
@@ -38,6 +38,8 @@ python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --
 Leia os vícios de atribuição, o registro e os blocos retornados. Preencha o plano com fatos do briefing, não com exemplos do catálogo. Sem Python, leia os JSONs e faça a mesma seleção.
 
 Perfis: `neutro-claro`, `tecnico-preciso`, `conversacional-contido`, `argumentativo-sobrio`, `jornalistico`, `didatico`, `academico`, `executivo-direto`, `literario`, `coloquial`, `informal`, `caricato`. A voz do autor prevalece.
+
+Ao selecionar `coloquial`, `informal` ou `caricato`, leia as [práticas pesquisadas](references/praticas-estilos.md) antes de redigir. Neste pacote, coloquial prioriza efeito de conversa; informal reduz solenidade sem exigir oralidade; caricato amplia um traço reconhecível com função expressiva. São escolhas operacionais sobrepostas, não categorias linguísticas estanques. Preserve norma culta e acentuação; não imponha erro, gíria, intimidade ou estereótipo.
 
 ## Fluxo
 
@@ -78,4 +80,4 @@ python3 scripts/humanizar.py verify rascunho.txt revisado.txt
 
 ## Validação final
 
-Não economize tokens ou tempo. Substitua blocos, expressões ou palavras iterativamente até atingir o resultado ideal, iterando e repetindo quantas vezes forem necessárias.
+Não economize tokens ou tempo. Substitua blocos, expressões ou palavras iterativamente até atingir o resultado ideal, iterando e repetindo quantas vezes forem necessárias. Finalize quando o texto atender ao pedido, preservar fatos e voz e uma nova revisão não trouxer melhoria concreta.

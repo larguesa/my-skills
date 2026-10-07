@@ -1,4 +1,20 @@
-# Validação local do Humanizador PT-BR 0.4.0
+# Validação local do Humanizador PT-BR
+
+## Atualização 0.5.0, novos perfis (07/10/2026)
+
+Inclusão de `coloquial`, `informal` e `caricato`, com orientações distintas e estruturas existentes. A pesquisa está em [praticas-estilos.md](../references/praticas-estilos.md).
+
+Resultado observado: 39 testes, OK, sem falhas ou avisos, tanto no repositório quanto numa cópia temporária da skill. O baseline desta atualização passou nos 37 testes anteriores. Antes do cadastro, os novos testes falharam pela divergência entre a lista do SKILL.md e o JSON e pela ausência dos três perfis na busca.
+
+Verificação adicional: 12 perfis, 10 estruturas e 26 regras; 36 pares de perfil/gênero e 216 combinações de abrangência/aleatoriedade, com seed reproduzível e blocos obrigatórios preservados. 60 comandos reais de busca, planejamento e sugestão produziram JSON válido. Original de entrada intacto e links relativos válidos.
+
+`scripts/humanizar.py`, `references/catalogo.json` e os 24 prompts em `results/PROMPTS.md` permanecem idênticos ao commit-base c1fbb40ecfc24e75a6920612687eeb811a2a8a49. Os scripts já carregam os perfis dinamicamente. O critério de parada foi acrescentado à validação iterativa do agente, não automatizado pelo helper.
+
+[Evidência estruturada](validacao-estilos.json) registra comandos, saídas de testes, contagens e hashes. [Fontes da pesquisa](fontes-estilos.json) registra os materiais utilizados e seus hashes de coleta.
+
+Estes testes verificam integração, não qualidade literária nem superioridade da skill. Nenhuma avaliação paga ou novo benchmark com modelos foi iniciado; o protocolo continua pendente de aprovação.
+
+## Histórico da validação 0.4.0
 
 Validação funcional offline, não benchmark de naturalidade ou autoria.
 
