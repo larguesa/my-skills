@@ -12,7 +12,7 @@ metadata:
 
 # Humanizador PT-BR
 
-Redija do zero, revise ou diagnostique em português brasileiro. Diagnóstico não autoriza reescrita. Não detecta autoria nem promete enganar detectores.
+Escreva em português brasileiro.
 
 ## Evite explicitamente
 
@@ -37,11 +37,11 @@ python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --
 
 Leia os vícios de atribuição, o registro e os blocos retornados. Preencha o plano com fatos do briefing, não com exemplos do catálogo. Sem Python, leia os JSONs e faça a mesma seleção.
 
-Perfis: `neutro-claro`, `tecnico-preciso`, `conversacional-contido`, `argumentativo-sobrio`, `jornalistico`, `didatico`, `academico`, `executivo-direto`, `literario`. A voz do autor prevalece.
+Perfis: `neutro-claro`, `tecnico-preciso`, `conversacional-contido`, `argumentativo-sobrio`, `jornalistico`, `didatico`, `academico`, `executivo-direto`, `literario`, `coloquial`, `informal`, `caricato`. A voz do autor prevalece.
 
 ## Fluxo
 
-1. Identifique gênero, leitor, objetivo, extensão e voz. Pergunte só pelo indispensável. Redação parte do briefing, sem exigir rascunho ou resposta de outra chamada.
+1. Identifique gênero, leitor, objetivo, extensão e voz. Redação parte do briefing, sem exigir rascunho ou resposta de outra chamada.
 2. Consulte catálogo e estilo. Na redação, gere um plano compatível. `--breadth` limita cobertura opcional, nunca blocos obrigatórios. `--randomness 0` é determinístico; até `1`, varia escolhas opcionais. `--seed 17` reproduz o plano local, não o texto de um modelo.
 3. Escreva pelo assunto, ação ou conflito. Use detalhes úteis, ritmo adequado e termos estáveis. Não imponha informalidade, metáforas, gírias, erros ou personalidade.
 4. Audite o texto, leia ocorrências no contexto e corte redundâncias. Não persiga contagem zero à custa de precisão. Entregue só o artefato pedido, sem bastidores; não publique nem sobrescreva original sem autorização.
@@ -72,6 +72,10 @@ python3 scripts/humanizar.py verify rascunho.txt revisado.txt
 ## Fidelidade e verificação
 
 - Use fatos, fontes e atribuições fornecidos ou verificados para a tarefa. Não invente estudos, entrevistas, links, números, clientes, experiências ou sentimentos. Exemplos editoriais não são fatos reutilizáveis.
-- Preserve negações, condições, unidades, incerteza e posição do autor. Não converta associação em causa, estimativa em garantia ou ausência de confirmação em ausência. Ficção permite invenção no gênero pedido, não depoimento falso.
+- Preserve negações, condições, unidades, incerteza e posição do autor. Não converta associação em causa, estimativa em garantia ou ausência de confirmação em ausência. Ficção permite invenção no gênero pedido.
 - Confira requisitos, voz e cada ocorrência evitada; desfaça edição que prejudique sentido. `verify` compara inventários, não prova equivalência semântica nem verdade. [fontes.md](references/fontes.md) traz instruções para aprofundar a revisão.
 - Não envie texto confidencial a terceiros. Avaliações com modelos exigem aprovação da skill e do protocolo; aprovar prompts não inicia execução.
+
+## Validação final
+
+Não economize tokens ou tempo. Substitua blocos, expressões ou palavras iterativamente até atingir o resultado ideal, iterando e repetindo quantas vezes forem necessárias.
