@@ -4,9 +4,9 @@ Os [24 prompts](PROMPTS.md) foram aprovados por Ricardo em 06/10/2026. Seus pedi
 
 A atualização 0.5.0 dos perfis coloquial, informal e caricato foi autorizada por Ricardo em 07/10/2026. Em 10/10/2026, Ricardo autorizou iniciar os novos testes e solicitou a remoção de duas referências textuais do pacote. A versão 0.5.1 remove esses arquivos e suas dependências de leitura, preservando catálogo, estilos, script e pedidos aprovados.
 
-Estado desta atualização: preparação da nova execução. Ainda não há geração nova ou voto de juiz publicado. Não há novo ganho de qualidade ou custo demonstrado.
+Estado: piloto real concluído, com duas gerações independentes e três chamadas de juízes válidas. A execução completa foi iniciada, preservando esses registros. Os resultados consolidados ainda estão pendentes; não há ganho geral de qualidade demonstrado.
 
-A comparação futura usará o mesmo pedido em chamadas independentes do mesmo modelo e configuração, variando apenas a presença da skill aprovada. Nenhuma resposta será entregue à outra condição. O protocolo deve definir como as consultas ao catálogo, estilos e planos serão executadas ou injetadas, sem dar ferramentas ou contexto adicionais apenas a um braço por acidente.
+O [protocolo congelado](PROTOCOLO.md) descreve os 24 pedidos, 14 modelos e 19 configurações. A comparação usa chamadas independentes, variando apenas a presença da skill e de seu apoio local documentado. Nenhuma resposta é entregue à outra condição. O [runner](scripts/generation_eval.py) mantém respostas e custos separados das sondagens de disponibilidade, sem repetir chamadas automaticamente.
 
 ## Validação local do script
 

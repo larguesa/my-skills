@@ -58,4 +58,4 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
 
-Não há ganho de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). Ricardo autorizou iniciar a nova avaliação em 10/10/2026; o andamento será registrado em [results](results/README.md).
+Não há ganho geral de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). A nova avaliação autorizada em 10/10/2026 já concluiu um piloto real de geração independente e iniciou a matriz completa. Consulte o [protocolo](results/PROTOCOLO.md) e o [andamento](results/README.md).
