@@ -1,4 +1,4 @@
-# Humanizador PT-BR 0.5.0
+# Humanizador PT-BR 0.5.1
 
 Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são consultados antes de escrever.
 
@@ -54,10 +54,8 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 - [Skill](SKILL.md): regras explícitas e procedimento.
 - [Catálogo](references/catalogo.json): padrões pesquisáveis, sugestões e exceções.
 - [Estilos e estruturas](references/estilos.json): 12 perfis e planos de redação.
-- [Práticas dos novos estilos](references/praticas-estilos.md): coloquial, informal e caricato, com fontes, exemplos e critérios de revisão.
-- [Fontes compiladas](references/fontes.md): instruções de aplicação, origem e limites.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
 
-Não há ganho de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). A nova avaliação com modelos aguarda aprovação da skill e do protocolo.
+Não há ganho de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). Ricardo autorizou iniciar a nova avaliação em 10/10/2026; o andamento será registrado em [results](results/README.md).

@@ -1,8 +1,14 @@
-# Validação local do Humanizador PT-BR
+# Validação local
+
+## Limpeza 0.5.1 (10/10/2026)
+
+Remoção de `references/praticas-estilos.md` e `references/fontes.md`, conforme solicitação de Ricardo. Links ativos e instruções de leitura ajustados; catálogo, perfis, script e textos dos 24 prompts preservados.
+
+Resultado observado: 39 testes passaram, com avisos tratados como erros. `git diff --check` não apontou problemas. São verificações funcionais, não avaliação de qualidade literária.
 
 ## Atualização 0.5.0, novos perfis (07/10/2026)
 
-Inclusão de `coloquial`, `informal` e `caricato`, com orientações distintas e estruturas existentes. A pesquisa está em [praticas-estilos.md](../references/praticas-estilos.md).
+Inclusão de `coloquial`, `informal` e `caricato`, com orientações distintas e estruturas existentes. A pesquisa desta validação histórica permanece no [commit original](https://github.com/larguesa/my-skills/blob/9893dbc7f4c39d6e694c4482038e04bf95c216eb/skills/humanizador-pt-br/references/praticas-estilos.md). Ricardo solicitou sua remoção do pacote em 10/10/2026.
 
 Resultado observado: 39 testes, OK, sem falhas ou avisos, tanto no repositório quanto numa cópia temporária da skill. O baseline desta atualização passou nos 37 testes anteriores. Antes do cadastro, os novos testes falharam pela divergência entre a lista do SKILL.md e o JSON e pela ausência dos três perfis na busca.
 

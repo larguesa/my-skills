@@ -1,6 +1,6 @@
 # Prompts aprovados
 
-Status: 24 prompts aprovados por Ricardo em 06/10/2026; sem execução. H1 e H2 descartados. Aprovação da versão revisada da skill e do protocolo permanece pendente.
+Status: 24 prompts aprovados por Ricardo em 06/10/2026. H1 e H2 descartados. Início da nova avaliação autorizado em 10/10/2026; o andamento está em [README.md](README.md).
 
 Os briefings com nomes, eventos e dados específicos são cenários de avaliação, não apuração jornalística, estudos reais ou registros de clientes. Essa informação pertence à documentação do experimento, não será acrescentada aos prompts dos candidatos nem aos textos finais.
 
@@ -12,7 +12,7 @@ Os briefings com nomes, eventos e dados específicos são cenários de avaliaç�
 - Não fornecer rascunho, resposta, crítica ou nota de uma condição à outra. A revisão interna do próprio rascunho não é reescrita da saída de outra chamada.
 - Não herdar memória, preferências pessoais, instruções desta sessão ou regras de pontuação do assistente nos candidatos. Qualquer mensagem técnica obrigatória deve ser igual e registrada nas duas condições.
 - Os prompts não contêm instruções de humanização, proibição de pontuação, avisos de ficção ou regras genéricas contra invenção de fontes. Dados, condições técnicas e informações indisponíveis fazem parte do briefing, não de uma rubrica escondida.
-- Configurações, referências injetadas, repetições, juízes e regras de avaliação serão definidos antes da execução, depois da aprovação. Nada aqui autoriza chamadas pagas ou retomada automática.
+- Configurações, referências injetadas, repetições, juízes e regras de avaliação serão congelados antes da execução autorizada. A aprovação isolada destes prompts não autoriza chamadas pagas ou retomada automática.
 
 ## 24 casos da ampliação
 
