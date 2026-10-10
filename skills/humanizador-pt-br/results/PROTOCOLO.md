@@ -25,7 +25,7 @@ Antes de qualquer candidato, MiMo Pro e Flash passaram de DeepInfra FP8 para Xia
 
 ## Execução verificada
 
-O piloto real completou duas gerações independentes da primeira configuração e três chamadas de juízes, sem respostas inválidas. Seus registros pertencem à matriz completa e não serão gerados novamente. A execução completa foi iniciada em seguida.
+O piloto real completou duas gerações independentes da primeira configuração e três chamadas de juízes, sem respostas inválidas. Seus registros pertencem à matriz completa e não foram gerados novamente. A execução completa começou em seguida, mas parou por falha de comunicação na chamada do MiMo Pro com skill, preservando 11 textos válidos. Consulte o [resultado parcial](runs/2026-10-10/README.md).
 
 Validação do software: 39 testes funcionais da skill e seis testes offline do runner passaram. Dados sintéticos desses testes não são resultados de modelos. O [runner](scripts/generation_eval.py) preserva intenções antes do envio, respostas brutas, hashes, custos e julgamentos, e permite retomar somente registros seguros, sem repetir chamadas.
 

@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "scope": "Availability probes only, before candidate freeze",
+  "amendments": [
+    {
+      "model": "xiaomi/mimo-v2.6-pro",
+      "original_provider": "deepinfra/fp8",
+      "effective_provider": "xiaomi/fp8",
+      "modes": [
+        "off",
+        "on"
+      ],
+      "reason": "Original route returned definitive upstream HTTP 429, engine_overloaded, on the reasoning-on probe. No candidate generation had started. Known probe costs equal dedicated-key ledger: USD 0.00304119. Use the model's official provider for both candidate arms and modes, subject to new availability probes. Preserve the rejected original probe; do not retry it.",
+      "model_changed": false,
+      "candidate_outputs_replayed": false
+    },
+    {
+      "model": "xiaomi/mimo-v2.6-flash",
+      "original_provider": "deepinfra/fp8",
+      "effective_provider": "xiaomi/fp8",
+      "modes": [
+        "off",
+        "on"
+      ],
+      "reason": "Original reasoning-off probe returned definitive upstream HTTP 429, engine_overloaded. Before any candidate generation, known probe costs equal the dedicated-key ledger: USD 0.003629230. Use the official model provider for both modes and candidate arms, subject to new availability probes. Preserve the original rejected probe without retry.",
+      "model_changed": false,
+      "candidate_outputs_replayed": false
+    },
+    {
+      "model": "qwen/qwen3.8-flash",
+      "original_provider": "alibaba",
+      "effective_provider": "alibaba/us-east-1",
+      "modes": [
+        "off",
+        "on"
+      ],
+      "reason": "Original reasoning-off probe and one repeated same-route preflight probe returned HTTP 429. The repetition was an operator mistake while naming the alternate endpoint, not a candidate retry; both source records are preserved. Ledger reconciliation after both rejections equals USD 0.003716390 in known probe costs. Before any candidate generation, select the genuinely distinct regional Alibaba endpoint for both modes and arms, subject to new probes. No model version change.",
+      "model_changed": false,
+      "candidate_outputs_replayed": false
+    }
+  ]
+}

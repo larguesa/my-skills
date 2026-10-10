@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Humanizador PT-BR 0.5.1](skills/humanizador-pt-br/README.md): redação e revisão com regras explícitas contra travessão e fórmulas de IA. 12 perfis cadastrados, incluindo coloquial, informal e caricato. Consulta ativa de catálogo e estilos, planos estruturais e edição conservadora, com Python padrão e sem API. [24 prompts aprovados](skills/humanizador-pt-br/results/PROMPTS.md), sem H1/H2. A [validação local e o status](skills/humanizador-pt-br/results/README.md) distinguem testes funcionais de avaliação de escrita.
+[Humanizador PT-BR 0.5.1](skills/humanizador-pt-br/README.md): redação e revisão com regras explícitas contra travessão e fórmulas de IA. 12 perfis cadastrados, incluindo coloquial, informal e caricato. Consulta ativa de catálogo e estilos, planos estruturais e edição conservadora, com Python padrão e sem API. [24 prompts aprovados](skills/humanizador-pt-br/results/PROMPTS.md), sem H1/H2. A [validação local](skills/humanizador-pt-br/results/README.md) distingue testes funcionais de avaliação de escrita. A nova [avaliação prática](skills/humanizador-pt-br/results/runs/2026-10-10/README.md) foi interrompida por falha de comunicação: 11 textos válidos, três chamadas de juízes e USD 0.500359267 registrados. Apenas um par foi julgado; não há conclusão geral de superioridade.
 
 ## Telegraphist
 
