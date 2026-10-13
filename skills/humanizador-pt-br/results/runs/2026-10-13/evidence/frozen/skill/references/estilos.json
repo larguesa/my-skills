@@ -1,0 +1,677 @@
+{
+  "schema_version": "1.1",
+  "purpose": "Selecionar registro e plano antes de redigir; preservar voz, fatos e termos na revisão.",
+  "voice_invariants": [
+    "Fatos, fontes e grau de certeza",
+    "Registro solicitado ou amostra do autor",
+    "Termos técnicos, citações e condições",
+    "Experiências e posições autorizadas"
+  ],
+  "seed_policy": {
+    "scope": "Variar somente instruções opcionais e alternativas de estrutura, nunca fatos, pessoa ou certeza.",
+    "record": [
+      "seed",
+      "profile_id",
+      "structure_id",
+      "breadth",
+      "randomness"
+    ],
+    "limits": "Seed reproduz a seleção local, não a resposta de um modelo. Preferência explícita prevalece."
+  },
+  "forbidden": [
+    "Experiência pessoal inventada",
+    "Erro deliberado",
+    "Regionalismo presumido",
+    "Mudança de opinião para criar personalidade",
+    "Sinônimos aleatórios para termos técnicos"
+  ],
+  "profiles": [
+    {
+      "id": "neutro-claro",
+      "genres": [
+        "artigo",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Começar pela informação útil",
+        "Variar frases sem forçar cadência",
+        "Cortar comentários de importância"
+      ],
+      "avoid": [
+        "Intimidade imposta",
+        "Substituir toda repetição"
+      ],
+      "structure_ids": [
+        "explicacao",
+        "relatorio"
+      ]
+    },
+    {
+      "id": "tecnico-preciso",
+      "genres": [
+        "tecnico",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Conservar terminologia e qualificadores",
+        "Aproximar condições da afirmação",
+        "Usar listas e exemplos para consulta"
+      ],
+      "avoid": [
+        "Metáforas decorativas",
+        "Apagar hipótese ou método"
+      ],
+      "structure_ids": [
+        "procedimento",
+        "relatorio"
+      ]
+    },
+    {
+      "id": "conversacional-contido",
+      "genres": [
+        "email",
+        "post",
+        "roteiro"
+      ],
+      "adjustments": [
+        "Usar o tratamento indicado",
+        "Preferir transições simples",
+        "Usar contrações só se combinarem com a voz"
+      ],
+      "avoid": [
+        "Gíria sorteada",
+        "Humor imposto",
+        "Primeira pessoa sem autorização"
+      ],
+      "structure_ids": [
+        "mensagem",
+        "post",
+        "roteiro"
+      ]
+    },
+    {
+      "id": "argumentativo-sobrio",
+      "genres": [
+        "artigo",
+        "post",
+        "ensaio"
+      ],
+      "adjustments": [
+        "Explicitar a tese solicitada",
+        "Ligar razões a ressalvas",
+        "Terminar no último argumento útil"
+      ],
+      "avoid": [
+        "Contraste inventado",
+        "Frase de efeito obrigatória",
+        "Certeza maior que a fonte"
+      ],
+      "structure_ids": [
+        "argumento",
+        "post"
+      ]
+    },
+    {
+      "id": "jornalistico",
+      "genres": [
+        "noticia",
+        "reportagem"
+      ],
+      "adjustments": [
+        "Abrir pelo fato principal",
+        "Identificar quem afirma cada alegação",
+        "Distinguir confirmação de lacuna"
+      ],
+      "avoid": [
+        "Editorializar notícia",
+        "Autoridade vaga",
+        "Aspas inventadas"
+      ],
+      "structure_ids": [
+        "noticia"
+      ]
+    },
+    {
+      "id": "didatico",
+      "genres": [
+        "didatico",
+        "artigo"
+      ],
+      "adjustments": [
+        "Definir conceito antes de usar jargão",
+        "Explicar exemplo com dados fornecidos",
+        "Mostrar limite da analogia"
+      ],
+      "avoid": [
+        "Pergunta retórica automática",
+        "Simplificação falsa"
+      ],
+      "structure_ids": [
+        "explicacao"
+      ]
+    },
+    {
+      "id": "academico",
+      "genres": [
+        "academico",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Separar método, resultado e interpretação",
+        "Conservar incerteza e limites",
+        "Usar precisão em vez de solenidade"
+      ],
+      "avoid": [
+        "Causalidade sem desenho adequado",
+        "Significância estatística inventada"
+      ],
+      "structure_ids": [
+        "relatorio"
+      ]
+    },
+    {
+      "id": "executivo-direto",
+      "genres": [
+        "proposta",
+        "negocios",
+        "relatorio"
+      ],
+      "adjustments": [
+        "Abrir pela decisão ou escopo",
+        "Explicitar custos e condições",
+        "Fechar com próximo passo autorizado"
+      ],
+      "avoid": [
+        "Promessa total",
+        "Jargão sem ação"
+      ],
+      "structure_ids": [
+        "proposta",
+        "relatorio"
+      ]
+    },
+    {
+      "id": "literario",
+      "genres": [
+        "conto",
+        "cronica"
+      ],
+      "adjustments": [
+        "Sustentar o ponto de vista",
+        "Usar detalhes que movem a cena",
+        "Deixar subtexto sem explicação obrigatória"
+      ],
+      "avoid": [
+        "Moral final imposta",
+        "Metáfora em toda frase",
+        "Travessão em diálogo novo"
+      ],
+      "structure_ids": [
+        "cena"
+      ]
+    },
+    {
+      "id": "coloquial",
+      "genres": [
+        "conto",
+        "cronica",
+        "roteiro",
+        "post",
+        "email"
+      ],
+      "adjustments": [
+        "Criar efeito de conversa com léxico cotidiano e sintaxe legível, mantendo a norma culta",
+        "Selecionar marcas de oralidade com função na cena ou na relação com o leitor, sem transcrever todos os hesitantes da fala",
+        "Variar ritmo, pausas e extensão das frases conforme a ação, sem fabricar tiques",
+        "Manter tratamento, ponto de vista e voz distintos para narrador e personagens",
+        "Usar detalhes cotidianos autorizados e deixar gestos ou falas carregar subtexto",
+        "Ler em voz alta e retirar repetições ou explicações que não contribuam para a interação"
+      ],
+      "avoid": [
+        "Confundir efeito de oralidade com erro deliberado ou transcrição bruta",
+        "Gíria, sotaque, regionalismo ou intimidade presumidos",
+        "Vocativos e bordões repetidos para simular conversa",
+        "Experiência pessoal inventada em não ficção",
+        "Explicar o subtexto ou impor moral no encerramento"
+      ],
+      "structure_ids": [
+        "cena",
+        "roteiro",
+        "post",
+        "mensagem"
+      ]
+    },
+    {
+      "id": "informal",
+      "genres": [
+        "email",
+        "post",
+        "artigo",
+        "conto",
+        "cronica",
+        "roteiro"
+      ],
+      "adjustments": [
+        "Reduzir solenidade e distância social, sem exigir efeito de fala nem perder a norma culta",
+        "Abrir pelo assunto e usar palavras correntes, verbos diretos e tratamento compatível com a relação",
+        "Organizar informação e contexto para o leitor, preservando a coerência do gênero",
+        "Em ficção, revelar personagens e relações por ações e detalhes, sem uniformizar suas vozes",
+        "Preservar precisão, condições, datas, compromissos e termos técnicos necessários",
+        "Usar proximidade, primeira pessoa ou humor apenas quando autorizados e adequados ao contexto"
+      ],
+      "avoid": [
+        "Burocratês ou cerimônia sem função",
+        "Confundir informalidade com desorganização, infantilização ou descuido",
+        "Intimidade imposta, piada obrigatória ou vocabulário de grupo presumido",
+        "Trocar termo preciso por expressão vaga",
+        "Retirar ressalvas ou inventar vivência para parecer próximo"
+      ],
+      "structure_ids": [
+        "mensagem",
+        "post",
+        "explicacao",
+        "cena",
+        "roteiro"
+      ]
+    },
+    {
+      "id": "caricato",
+      "genres": [
+        "conto",
+        "cronica",
+        "roteiro",
+        "post"
+      ],
+      "adjustments": [
+        "Selecionar um traço reconhecível de comportamento, linguagem ou situação e ampliá-lo com função expressiva",
+        "Mostrar o traço por ações, gestos, escolhas e falas coerentes, em vez de acumular adjetivos",
+        "Construir incongruência entre expectativa e ação sem perder a lógica interna da cena",
+        "Dosar hipérbole e repetição com variação ou consequência, sem exigir piada em toda frase",
+        "Definir se há apenas caricatura, crítica satírica ou paródia de uma forma, sem confundir os efeitos",
+        "Em não ficção, manter fatos e atribuições literais; deixar o exagero claramente figurado",
+        "Sustentar ponto de vista e ritmo cômico sem explicar a graça nem impor moral final"
+      ],
+      "avoid": [
+        "Exagero aleatório que apaga o traço reconhecível",
+        "Estereótipo identitário ou ridicularização de deficiência como atalho cômico",
+        "Inventar fala, conduta ou acusação de pessoa real",
+        "Alterar números ou certeza para intensificar uma alegação",
+        "Tratar toda caricatura como sátira, paródia ou humor garantido",
+        "Bordão sem progressão, metáfora em toda frase ou explicação da piada"
+      ],
+      "structure_ids": [
+        "cena",
+        "roteiro",
+        "post"
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "explicacao",
+      "genres": [
+        "artigo",
+        "relatorio",
+        "didatico"
+      ],
+      "blocks": [
+        {
+          "id": "conceito",
+          "required": true,
+          "instruction": "Defina o conceito ou assunto principal com precisão.",
+          "alternatives": []
+        },
+        {
+          "id": "desenvolvimento",
+          "required": true,
+          "instruction": "Explique o mecanismo ou raciocínio usando os dados do pedido.",
+          "alternatives": []
+        },
+        {
+          "id": "limite",
+          "required": true,
+          "instruction": "Mantenha condições, incertezas e limites relevantes.",
+          "alternatives": []
+        },
+        {
+          "id": "analogia",
+          "required": false,
+          "instruction": "Se ajudar o leitor, use uma analogia e delimite onde ela deixa de servir.",
+          "alternatives": [
+            "Use um exemplo cotidiano compatível com o pedido."
+          ]
+        },
+        {
+          "id": "retomada",
+          "required": false,
+          "instruction": "Retome a ideia apenas se isso resolver uma dúvida real.",
+          "alternatives": []
+        }
+      ]
+    },
+    {
+      "id": "relatorio",
+      "genres": [
+        "artigo",
+        "relatorio",
+        "tecnico",
+        "academico",
+        "negocios"
+      ],
+      "blocks": [
+        {
+          "id": "objetivo",
+          "required": true,
+          "instruction": "Declare o objetivo e o contexto fornecido.",
+          "alternatives": []
+        },
+        {
+          "id": "metodo",
+          "required": true,
+          "instruction": "Descreva dados e método disponíveis; marque os ausentes sem inventá-los.",
+          "alternatives": []
+        },
+        {
+          "id": "resultado",
+          "required": true,
+          "instruction": "Apresente observações e cálculos verificáveis.",
+          "alternatives": []
+        },
+        {
+          "id": "interpretacao",
+          "required": true,
+          "instruction": "Separe interpretação de resultado e preserve limitações.",
+          "alternatives": []
+        },
+        {
+          "id": "decisao",
+          "required": false,
+          "instruction": "Inclua recomendação somente se pedida e sustentada pelo material.",
+          "alternatives": [
+            "Se o pedido exigir uma decisão, apresente a opção sustentada e sua condição de validade."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "procedimento",
+      "genres": [
+        "tecnico",
+        "relatorio"
+      ],
+      "blocks": [
+        {
+          "id": "contrato",
+          "required": true,
+          "instruction": "Defina finalidade, entradas, pré-requisitos e restrições.",
+          "alternatives": []
+        },
+        {
+          "id": "execucao",
+          "required": true,
+          "instruction": "Mostre comandos ou etapas na ordem de execução.",
+          "alternatives": []
+        },
+        {
+          "id": "verificacao",
+          "required": true,
+          "instruction": "Indique saída esperada, falhas e como verificar o resultado.",
+          "alternatives": []
+        },
+        {
+          "id": "exemplo",
+          "required": false,
+          "instruction": "Acrescente um exemplo mínimo consistente com o contrato.",
+          "alternatives": [
+            "Mostre um caso de uso que exercite entradas e saída documentadas."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mensagem",
+      "genres": [
+        "email"
+      ],
+      "blocks": [
+        {
+          "id": "motivo",
+          "required": true,
+          "instruction": "Diga o motivo da mensagem sem preâmbulo.",
+          "alternatives": []
+        },
+        {
+          "id": "proposta",
+          "required": true,
+          "instruction": "Apresente pedido, proposta ou informação com condições explícitas.",
+          "alternatives": []
+        },
+        {
+          "id": "acao",
+          "required": true,
+          "instruction": "Indique a resposta ou próximo passo realmente necessário.",
+          "alternatives": []
+        },
+        {
+          "id": "contexto",
+          "required": false,
+          "instruction": "Inclua contexto adicional só se mudar a decisão do destinatário.",
+          "alternatives": [
+            "Explique a dependência que muda o prazo ou o aceite, sem repetir o motivo."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "post",
+      "genres": [
+        "post"
+      ],
+      "blocks": [
+        {
+          "id": "ponto",
+          "required": true,
+          "instruction": "Comece pelo fato, posição ou experiência autorizados.",
+          "alternatives": []
+        },
+        {
+          "id": "desenvolvimento",
+          "required": true,
+          "instruction": "Desenvolva a observação sem fabricar vivência ou causalidade.",
+          "alternatives": []
+        },
+        {
+          "id": "ressalva",
+          "required": true,
+          "instruction": "Mantenha as ressalvas que mudam a interpretação.",
+          "alternatives": []
+        },
+        {
+          "id": "fecho",
+          "required": false,
+          "instruction": "Finalize com aprendizado específico, sem chamar engajamento por hábito.",
+          "alternatives": [
+            "Pare quando a observação estiver completa."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "roteiro",
+      "genres": [
+        "roteiro"
+      ],
+      "blocks": [
+        {
+          "id": "abertura",
+          "required": true,
+          "instruction": "Apresente o problema dentro do tempo pedido.",
+          "alternatives": []
+        },
+        {
+          "id": "fala",
+          "required": true,
+          "instruction": "Explique em falas pronunciáveis, preservando os conceitos.",
+          "alternatives": []
+        },
+        {
+          "id": "visual",
+          "required": true,
+          "instruction": "Associe sugestões visuais às falas quando o pedido exigir.",
+          "alternatives": []
+        },
+        {
+          "id": "fecho",
+          "required": false,
+          "instruction": "Feche com a orientação prática sustentada pelo conteúdo.",
+          "alternatives": [
+            "Retome o cuidado que o público consegue aplicar após assistir."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "argumento",
+      "genres": [
+        "artigo",
+        "post",
+        "ensaio"
+      ],
+      "blocks": [
+        {
+          "id": "tese",
+          "required": true,
+          "instruction": "Formule a posição autorizada pelo pedido.",
+          "alternatives": []
+        },
+        {
+          "id": "razoes",
+          "required": true,
+          "instruction": "Desenvolva razões com dados, exemplos ou raciocínio adequados.",
+          "alternatives": []
+        },
+        {
+          "id": "contraponto",
+          "required": true,
+          "instruction": "Considere objeções reais e os limites da posição.",
+          "alternatives": []
+        },
+        {
+          "id": "consequencia",
+          "required": false,
+          "instruction": "Conclua com consequência específica, sem slogan.",
+          "alternatives": [
+            "Termine na questão concreta que continua em aberto."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "noticia",
+      "genres": [
+        "noticia",
+        "reportagem"
+      ],
+      "blocks": [
+        {
+          "id": "fato",
+          "required": true,
+          "instruction": "Abra pelo fato principal, com agente e data disponíveis.",
+          "alternatives": []
+        },
+        {
+          "id": "detalhes",
+          "required": true,
+          "instruction": "Ordene informações por relevância para o leitor.",
+          "alternatives": []
+        },
+        {
+          "id": "atribuicao",
+          "required": true,
+          "instruction": "Identifique fontes e preserve falas literais e lacunas.",
+          "alternatives": []
+        },
+        {
+          "id": "contexto",
+          "required": false,
+          "instruction": "Inclua contexto verificado que esclareça o fato.",
+          "alternatives": [
+            "Explique a consequência documentada para o público da notícia."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "proposta",
+      "genres": [
+        "proposta",
+        "negocios"
+      ],
+      "blocks": [
+        {
+          "id": "escopo",
+          "required": true,
+          "instruction": "Defina entrega, exclusões e responsável pelo aceite.",
+          "alternatives": []
+        },
+        {
+          "id": "condicoes",
+          "required": true,
+          "instruction": "Apresente preço, prazo, pagamentos e dependências fornecidos.",
+          "alternatives": []
+        },
+        {
+          "id": "proximo",
+          "required": true,
+          "instruction": "Indique o próximo passo autorizado.",
+          "alternatives": []
+        },
+        {
+          "id": "opcional",
+          "required": false,
+          "instruction": "Separe itens opcionais sem expandir o escopo.",
+          "alternatives": [
+            "Apresente manutenção ou suporte opcionais separados da entrega principal."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cena",
+      "genres": [
+        "conto",
+        "cronica"
+      ],
+      "blocks": [
+        {
+          "id": "situacao",
+          "required": true,
+          "instruction": "Situe narrador, ação e espaço respeitando o pedido.",
+          "alternatives": []
+        },
+        {
+          "id": "desencontro",
+          "required": true,
+          "instruction": "Desenvolva o conflito por ações e detalhes, mantendo o ponto de vista.",
+          "alternatives": []
+        },
+        {
+          "id": "final",
+          "required": true,
+          "instruction": "Respeite o tipo de final solicitado; não acrescente moral automática.",
+          "alternatives": []
+        },
+        {
+          "id": "subtexto",
+          "required": false,
+          "instruction": "Deixe uma fala ou detalhe carregar o subtexto sem explicá-lo depois.",
+          "alternatives": [
+            "Use um gesto ou silêncio compatível com a cena para sugerir o que não foi dito.",
+            "Retome discretamente um objeto da cena, sem explicar seu significado."
+          ]
+        }
+      ]
+    }
+  ],
+  "implementation_status": "humanizar.py busca perfis e gera planos estruturais locais. O agente redige o texto, sem sortear fatos nem experiências."
+}

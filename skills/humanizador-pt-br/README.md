@@ -58,4 +58,16 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
 
-Não há ganho geral de qualidade demonstrado nesta revisão nem promessa contra detectores. As avaliações históricas permanecem no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests). A nova avaliação de geração independente começou em 10/10/2026, mas foi interrompida por falha de comunicação. Há [11 textos válidos e três chamadas de juízes preservadas](results/runs/2026-10-10/README.md), com custo total registrado de USD 0.500359267. Apenas um par foi julgado, sem conclusão geral de qualidade. Veja os textos completos e faça sua avaliação humana.
+## Resultado prático mais recente
+
+A [retomada de 13/10/2026](results/runs/2026-10-13/README.md) continua incompleta, devido ao limite temporário do Qwen Flash. Resultados parciais de uma notícia:
+
+| Indicador | Sem skill | Com skill | Variação |
+|---|---:|---:|---:|
+| Humanização percebida, índice médio de 0 a 100 | 40,03 | 38,52 | −1,52 pontos (−3,79%) |
+| Tokens totais por geração, média | 601,47 | 19.438,47 | +3.131,84% |
+| Tempo da chamada de redação, média em segundos | 10,92 | 9,47 | −13,28% |
+
+Humanização: 11 pares com Jev, Astra e Opus. Tokens e tempo: 15 pares de respostas completas, incluindo duas saídas que entregaram comandos de ferramenta em vez de texto. O índice é 100 menos a impressão de IA do juiz, não uma probabilidade de autoria humana. A preparação local da skill não foi cronometrada. Não houve melhora média nesta amostra; ela não sustenta uma conclusão geral.
+
+Veja o [relatório objetivo](results/runs/2026-10-13/OBJETIVO.md), os [textos completos](results/runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) e as limitações antes de adotar. A skill não foi ajustada para favorecer os votos. Os [resultados de 10/10](results/runs/2026-10-10/README.md) e as avaliações históricas no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests) permanecem preservados. Faça também sua avaliação humana.

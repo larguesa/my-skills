@@ -10,7 +10,7 @@ Code/documentation licensing and brand/font exclusions are scoped to that packag
 
 ## Humanizador PT-BR
 
-[Humanizador PT-BR 0.5.1](skills/humanizador-pt-br/README.md): redação e revisão com regras explícitas contra travessão e fórmulas de IA. 12 perfis cadastrados, incluindo coloquial, informal e caricato. Consulta ativa de catálogo e estilos, planos estruturais e edição conservadora, com Python padrão e sem API. [24 prompts aprovados](skills/humanizador-pt-br/results/PROMPTS.md), sem H1/H2. A [validação local](skills/humanizador-pt-br/results/README.md) distingue testes funcionais de avaliação de escrita. A nova [avaliação prática](skills/humanizador-pt-br/results/runs/2026-10-10/README.md) foi interrompida por falha de comunicação: 11 textos válidos, três chamadas de juízes e USD 0.500359267 registrados. Apenas um par foi julgado; não há conclusão geral de superioridade.
+[Humanizador PT-BR 0.5.1](skills/humanizador-pt-br/README.md): redação e revisão com catálogo, 12 perfis e ferramentas locais em Python. Na [retomada de 13/10](skills/humanizador-pt-br/results/runs/2026-10-13/README.md), a humanização percebida média foi de 40,03 para 38,52/100 (queda relativa de 3,79%), os tokens aumentaram 3.131,84% e o tempo das chamadas caiu 13,28%. Amostra parcial de um pedido: 11 pares com três juízes e 15 pares com telemetria, incluindo duas respostas com comandos em vez de texto. O limite temporário do Qwen Flash impediu concluir a matriz dos [24 prompts aprovados](skills/humanizador-pt-br/results/PROMPTS.md). Não há benefício geral demonstrado. [Validação local](skills/humanizador-pt-br/results/README.md) e [resultados anteriores preservados](skills/humanizador-pt-br/results/runs/2026-10-10/README.md).
 
 ## Telegraphist
 
