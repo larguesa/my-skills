@@ -1,6 +1,6 @@
-# Humanizador PT-BR 0.6.0
+# Humanizador PT-BR 0.7.0
 
-Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
+Redação, revisão e diagnóstico em português brasileiro. A versão 0.7.0 põe a orientação editorial positiva antes dos vetos: escrever para o leitor, reescrever o pedido em vez de copiá-lo, entregar o gênero completo, ser concreto e dar ritmo pelo sentido. Mantém regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
 
 ## Instalação e uso
 
@@ -20,7 +20,7 @@ Execute na pasta da skill, pelo terminal do agente:
 python3 scripts/humanizar.py brief --profile jornalistico --genre noticia
 ```
 
-`brief` devolve em texto curto as 28 regras do catálogo (vício, alternativa, exceção), o perfil, o plano de blocos e o contrato de entrega. Ocupa cerca de um quarto dos dois JSONs e substitui a injeção integral deles. `--format json` entrega o mesmo conteúdo para ferramentas. Para aprofundar:
+`brief` devolve, nesta ordem: o ofício do gênero, o plano de funções do texto, o perfil, a regra de material (fatos, opinião ou ficção), os vícios mais comuns no gênero com exemplo de vício e de forma preferida, as demais regras do catálogo por termos explícitos e o contrato de entrega. Cada gênero tem plano próprio: notícia com título e lide, reportagem com vozes e limites, nota executiva com conclusão primeiro, ensaio, crônica e conto separados. `--format json` entrega o mesmo conteúdo para ferramentas. Para aprofundar:
 
 ```text
 python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
@@ -28,7 +28,7 @@ python3 scripts/humanizar.py styles --query jornalistico --genre noticia
 python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --breadth 2
 ```
 
-Organize os dados do pedido nos blocos do plano e só então escreva. Para variar escolhas opcionais, acrescente `--randomness 0.4 --seed 17`; `--breadth` limita cobertura opcional, preservando os blocos obrigatórios. Seed reproduz o plano local, não o texto de um modelo. O script não inventa fatos nem gera prosa pronta.
+Os blocos do plano são funções do texto, não seções obrigatórias. Para variar escolhas opcionais, acrescente `--randomness 0.4 --seed 17`; `--breadth` limita cobertura opcional, preservando os blocos obrigatórios. Seed reproduz o plano local, não o texto de um modelo. O script não inventa fatos nem gera prosa pronta.
 
 Consultas `--query` ignoram acentos e maiúsculas; `--genre` exige o identificador exato, como `relatorio` ou `noticia`. Consulte todos os perfis com `styles --limit 20`; encontre uma regra por ID com `catalog --query PTBR-21`.
 
@@ -67,21 +67,23 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 
 ## Recursos
 
-- [Skill](SKILL.md): regras explícitas e procedimento.
-- [Catálogo](references/catalogo.json): 28 padrões pesquisáveis, sugestões e exceções.
-- [Estilos e estruturas](references/estilos.json): 12 perfis e planos de redação.
+- [Skill](SKILL.md): orientação editorial, regras explícitas e procedimento.
+- [Catálogo](references/catalogo.json): 32 padrões pesquisáveis, com termos, exemplos de vício e forma preferida, sugestões e exceções.
+- [Estilos e estruturas](references/estilos.json): 12 perfis, 15 planos por gênero com ofício e vícios típicos, regras de material.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
-- [Revisão 0.6.0](results/REVISAO-2026-10-19.md) e [protocolo da avaliação](results/PROTOCOLO-0.6.0.md).
+- [Revisão 0.7.0](results/REVISAO-0.7.0.md) e [protocolo 0.7.0](results/PROTOCOLO-0.7.0.md); [revisão 0.6.0](results/REVISAO-2026-10-19.md) e [protocolo 0.6.0](results/PROTOCOLO-0.6.0.md).
 
 ## Resultado prático mais recente
 
-A [avaliação de 19/10/2026 da versão 0.6.0](results/runs/2026-10-19/README.md) produziu 31 respostas completas. Nos 9 pares avaliados pelos três juízes, H passou de 42,04 para 49,19. Nos 15 pares de geração, os tokens médios passaram de 628,33 para 6.253,07 e o tempo de API de 6,91 para 7,37 segundos. Nenhuma das 15 respostas com skill entregou apenas comandos. O Qwen Flash voltou a limitar a execução; a amostra cobre somente parte do primeiro dos 24 pedidos. Os 84 testes de software passaram.
+Após a revisão com Claude Code Opus 5.5 max, o teste parcial de 19/10 mostrou: H passou de 26,74 para 40,27 nos 22 pares do Opus avaliados pelos três juízes; preferência de 35 a 31 pela skill. Foram 117 gerações submetidas, com 107 respostas completas e 66 julgamentos. A indisponibilidade do Grok interrompeu a matriz. Os 121 testes de software passaram. Veja [resultados, textos e consumo](results/runs/2026-10-19-max/README.md).
+
+### Histórico 0.6.0
+
+A [avaliação de 19/10/2026 da versão 0.6.0](results/runs/2026-10-19/README.md) produziu 31 respostas completas. Nos 9 pares avaliados pelos três juízes, H passou de 42,04 para 49,19, mas a preferência geral ficou em 13 votos para o baseline, 11 para a skill e 3 empates. Nos 15 pares de geração, os tokens médios passaram de 628,33 para 6.253,07 e o tempo de API de 6,91 para 7,37 segundos. Nenhuma das 15 respostas com skill entregou apenas comandos. A amostra cobre somente parte do primeiro dos 24 pedidos.
 
 ### Histórico 0.5.1
-
-Os números abaixo são da versão 0.5.1, preservados para consulta.
 
 A [retomada de 13/10/2026](results/runs/2026-10-13/README.md) continua incompleta, devido ao limite temporário do Qwen Flash. Resultados parciais de uma notícia:
 
@@ -91,6 +93,6 @@ A [retomada de 13/10/2026](results/runs/2026-10-13/README.md) continua incomplet
 | Tokens totais por geração, média | 601,47 | 19.438,47 | +3.131,84% |
 | Tempo da chamada de redação, média em segundos | 10,92 | 9,47 | −13,28% |
 
-Humanização: 11 pares com Jev, Astra e Opus. Tokens e tempo: 15 pares de respostas completas, incluindo duas saídas que entregaram comandos de ferramenta em vez de texto. O índice é 100 menos a impressão de IA do juiz, não uma probabilidade de autoria humana. A preparação local da skill não foi cronometrada. Não houve melhora média nesta amostra; ela não sustenta uma conclusão geral.
+Humanização: 11 pares com Jev, Astra e Opus. Tokens e tempo: 15 pares de respostas completas, incluindo duas saídas que entregaram comandos de ferramenta em vez de texto. O índice é 100 menos a impressão de IA do juiz, não uma probabilidade de autoria humana. Não houve melhora média nesta amostra; ela não sustenta uma conclusão geral.
 
 Veja o [relatório objetivo](results/runs/2026-10-13/OBJETIVO.md), os [textos completos](results/runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) e as limitações antes de adotar. A skill não foi ajustada para favorecer os votos. Os [resultados de 10/10](results/runs/2026-10-10/README.md) e as avaliações históricas no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests) permanecem preservados. Faça também sua avaliação humana.

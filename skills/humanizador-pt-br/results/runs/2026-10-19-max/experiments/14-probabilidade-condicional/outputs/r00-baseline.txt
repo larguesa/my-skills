@@ -1,0 +1,104 @@
+# Peças defeituosas e o sensor: um problema de Teorema de Bayes
+
+## 1. Os dados do problema
+
+| Informação | Valor |
+|---|---|
+| Total de peças | 10.000 |
+| Proporção de peças defeituosas | 2% |
+| Sensor sinaliza peças **defeituosas** (sensibilidade) | 90% |
+| Sensor sinaliza peças **sem defeito** (falso positivo) | 5% |
+
+**Pergunta:** se uma peça foi sinalizada, qual a probabilidade de ela ser realmente defeituosa?
+
+Em linguagem de probabilidade, queremos **P(Defeituosa | Sinalizada)**.
+
+## 2. Montando a tabela de contagens
+
+A estratégia mais clara é trabalhar com **números absolutos** em vez de porcentagens.
+
+**Passo 1: separar as peças pelo estado real**
+- Defeituosas: 2% de 10.000 = **200**
+- Sem defeito: 10.000 − 200 = **9.800**
+
+**Passo 2: aplicar o sensor a cada grupo**
+- Defeituosas sinalizadas: 90% de 200 = **180**
+- Defeituosas não sinalizadas: 200 − 180 = **20**
+- Sem defeito sinalizadas: 5% de 9.800 = **490**
+- Sem defeito não sinalizadas: 9.800 − 490 = **9.310**
+
+**Tabela de contingência:**
+
+| | **Sinalizada** | **Não sinalizada** | **Total** |
+|---|---:|---:|---:|
+| **Defeituosa** | 180 *(verdadeiro positivo)* | 20 *(falso negativo)* | 200 |
+| **Sem defeito** | 490 *(falso positivo)* | 9.310 *(verdadeiro negativo)* | 9.800 |
+| **Total** | **670** | **9.330** | **10.000** |
+
+## 3. Respondendo à pergunta
+
+A pergunta restringe nosso universo **apenas às peças sinalizadas**, ou seja, à coluna "Sinalizada", com 670 peças. Dessas, 180 são realmente defeituosas:
+
+$$
+P(\text{Defeituosa} \mid \text{Sinalizada}) = \frac{180}{670} \approx 0{,}2687
+$$
+
+> ### ✅ Resposta: aproximadamente **26,9%** das peças sinalizadas são realmente defeituosas.
+
+## 4. A mesma conta pelo Teorema de Bayes
+
+Sejam:
+- **D** = a peça é defeituosa
+- **S** = a peça é sinalizada
+
+Dados:
+- P(D) = 0,02 e P(Dᶜ) = 0,98
+- P(S | D) = 0,90
+- P(S | Dᶜ) = 0,05
+
+**Probabilidade total de ser sinalizada:**
+
+$$
+P(S) = P(S \mid D)\,P(D) + P(S \mid D^c)\,P(D^c) = 0{,}90 \cdot 0{,}02 + 0{,}05 \cdot 0{,}98 = 0{,}018 + 0{,}049 = 0{,}067
+$$
+
+**Teorema de Bayes:**
+
+$$
+P(D \mid S) = \frac{P(S \mid D)\,P(D)}{P(S)} = \frac{0{,}018}{0{,}067} \approx 0{,}2687
+$$
+
+Os números da tabela são exatamente essas probabilidades multiplicadas por 10.000:
+- 0,018 × 10.000 = 180
+- 0,049 × 10.000 = 490
+- 0,067 × 10.000 = 670
+
+## 5. Por que o resultado é tão baixo?
+
+Muitos alunos esperam algo perto de 90%, porque "o sensor acerta 90% das defeituosas". Esse erro é conhecido como **falácia da taxa-base**.
+
+O ponto central é que **as peças sem defeito são muito mais numerosas**:
+
+- Há **49 vezes** mais peças boas (9.800) do que defeituosas (200).
+- Uma taxa de erro de apenas 5% sobre um grupo enorme gera **490 alarmes falsos**.
+- Uma taxa de acerto alta (90%) sobre um grupo pequeno gera só **180 alarmes verdadeiros**.
+
+Ou seja, entre as peças sinalizadas, os **falsos positivos superam os verdadeiros positivos** em uma proporção de quase 3 para 1.
+
+## 6. Não confunda as duas probabilidades condicionais
+
+| Expressão | Significado | Valor |
+|---|---|---|
+| P(S \| D) | Dado que é defeituosa, chance de ser sinalizada | 90% |
+| P(D \| S) | Dado que foi sinalizada, chance de ser defeituosa | ≈ 26,9% |
+
+**A ordem da condição muda completamente o resultado!**
+
+## 7. Observações para discussão em aula
+
+1. **Valor do sensor:** mesmo com 26,9%, o sensor é útil. Antes dele, a chance de uma peça ser defeituosa era 2%. Depois de sinalizada, passa a quase 27%, cerca de **13 vezes maior**.
+2. **Peças não sinalizadas:** P(D | não S) = 20 / 9.330 ≈ 0,21%. O sensor é ótimo para **descartar** defeitos.
+3. **Aplicação prática:** as peças sinalizadas deveriam passar por uma **segunda inspeção**, em vez de serem descartadas automaticamente.
+4. **Conexão com outras áreas:** o mesmo raciocínio aparece em testes médicos para doenças raras, filtros de spam e detecção de fraudes.
+
+> 💡 **Dica para os alunos:** sempre que um problema envolver probabilidades condicionais "invertidas", converta tudo para **contagens em uma população hipotética** (como 10.000) e monte a tabela. Isso torna o raciocínio visual e evita erros.

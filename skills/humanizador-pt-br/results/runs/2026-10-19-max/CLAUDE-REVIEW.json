@@ -1,0 +1,105 @@
+{
+  "observed_at": "2026-10-19T16:20:31.758306+00:00",
+  "tool": "Claude Code 2.1.303",
+  "authentication": "Claude.ai Max subscription",
+  "invocations": [
+    {
+      "session_id": "2ec1b90a-6f9a-41c6-b0c9-9a92f9a8a437",
+      "subtype": "error_max_turns",
+      "terminal_reason": "max_turns",
+      "num_turns": 66,
+      "duration_ms": 1737981,
+      "duration_api_ms": 1591432,
+      "modelUsage": {
+        "claude-opus-5-5": {
+          "inputTokens": 130,
+          "outputTokens": 175214,
+          "cacheReadInputTokens": 11016826,
+          "cacheCreationInputTokens": 355804,
+          "webSearchRequests": 0,
+          "costUSD": 8.5545972,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "thinkingTokens": 127907,
+          "canonicalModel": "claude-opus-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "total_cost_usd": 8.5545972,
+      "result": null,
+      "requested_model": "claude-opus-5-5",
+      "requested_effort": "max",
+      "max_turns": 65,
+      "prompt_sha256": "64b244b1a253003e5a989351c070a681f9b926667f0b156d0512ce2f5425afa4",
+      "raw_log_sha256": "6c86b1ef75a6865b879e754ad8094efad34a181b0b9593d085ea4616f8fbda2b"
+    },
+    {
+      "session_id": "2ec1b90a-6f9a-41c6-b0c9-9a92f9a8a437",
+      "subtype": "success",
+      "terminal_reason": "completed",
+      "num_turns": 48,
+      "duration_ms": 956996,
+      "duration_api_ms": 2238777,
+      "modelUsage": {
+        "claude-opus-5-5": {
+          "inputTokens": 188,
+          "outputTokens": 254980,
+          "thinkingTokens": 171370,
+          "cacheReadInputTokens": 23783325,
+          "cacheCreationInputTokens": 485111,
+          "webSearchRequests": 0,
+          "costUSD": 13.737905000000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "canonicalModel": "claude-opus-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "total_cost_usd": 13.737905000000001,
+      "result": "A versão 0.7.0 está implementada e as três suítes offline passam (66, 15 e 15 testes). A avaliação de escrita ainda não foi feita, então não há ganho medido. Não fiz commit nem chamei nenhuma API, e o runner continua igual: basta `--packaging v2-brief --skill-version 0.7.0`.\n\n## Por que a 0.6.0 melhorou pouco\n\nNas respostas de 19/10, os juízes descreveram os textos com skill como \"quase repete o pedido\", \"seca\", \"protocolar\" e \"sem título\". Numa leitura local, a fração de palavras copiadas do pedido em sequências de seis palavras teve mediana de 0,85 com skill e cerca de 0,36 sem. Encontrei quatro causas:\n\n- **Quase só vetos.** As regras ocupavam uns 8.500 dos 11.000 caracteres do briefing, e os exemplos \"Prefira\" ensinavam a apagar (\"É um aviso.\").\n- **Planos trocados.** Relatórios científicos recebiam o plano de documentação técnica (\"mostre comandos\"), a nota de negócios recebia o de proposta, e a notícia não tinha título.\n- **Ficção proibida.** O briefing mandava usar \"só fatos do pedido\" e proibia \"fala ou vivência\" até em conto e crônica.\n- **Fidelidade virou secura.** A proibição genérica de \"orientação\" impedia transformar um fato fornecido em instrução ao leitor.\n\n## O que mudou\n\n- **`SKILL.md`**: nova seção \"Como escrever bem\" antes dos vetos (escrever para o leitor, tratar o pedido como matéria-prima, entregar o gênero completo, ser concreto, dar ritmo). Fidelidade agora depende do tipo de texto: fatos, opinião ou ficção. A lista explícita de vícios, a proibição do travessão, os 12 perfis e o bloco \"Validação final\" literal foram mantidos.\n- **`brief`**: nova ordem, com o ofício do gênero primeiro, depois o plano tratado como funções do texto (não seções), o perfil, a regra de material, os seis vícios típicos do gênero com exemplos, as demais regras por termos e a entrega no fim.\n- **`estilos.json`**: 15 planos por gênero, com reportagem, nota executiva, ensaio, acadêmico e crônica próprios, e título na notícia.\n- **`catalogo.json`**: 32 regras, todas com termos explícitos e exemplos \"Prefira\" concretos. Quatro são novas: verbo-suporte, finalidade presumida, clichê narrativo e calco do inglês.\n- **Tamanho**: o tratamento (SKILL.md mais briefing) caiu de 19.143–19.308 para 15.927–16.483 caracteres nos pares do runner.\n\nCada etapa teve os testes escritos e vistos falhando antes da implementação; os resultados reais estão em `results/REVISAO-0.7.0.md`. Para não ampliar o escopo, não implementei no `check` o alerta de \"eco do pedido\" nem a conferência de dia da semana.\n\nArquivos alterados: `SKILL.md`, `scripts/humanizar.py`, `references/catalogo.json`, `references/estilos.json`, `results/test_humanizar.py`, `README.md` da skill, `results/README.md`, `results/VALIDACAO.md`, o `README.md` da raiz e `skills/index.md`. Criei `results/REVISAO-0.7.0.md`.\n\n## Riscos que pedem sua decisão\n\n1. **Textos mais longos.** Em 19/10, Astra achou linha fina e quadro de serviço repetitivos numa notícia curta, e Opus os valorizou. O briefing deixa o serviço opcional, mas não resolve essa divergência.\n2. **Pequenas inferências.** Permitir transformar fato em orientação aumenta o risco de ampliar o alcance, como escrever \"em qualquer unidade\".\n3. **Tamanho ainda alto.** Reduzir mais o tratamento exigiria tirar do briefing as regras que não são do gênero, que hoje garantem a lista explícita.\n4. **Alertas não comparáveis.** As regras novas geram mais alertas no `check`; os bloqueios não mudaram, mas as contagens de alertas de 0.7.0 não se comparam às de 0.6.0.\n5. **Planos novos.** Sete seletores do runner trocam de plano, então a comparação pedido a pedido com 0.6.0 mistura o efeito do plano com o da orientação.\n6. **Pendência no Git.** O teste de análise de 13/10 cria `results/runs/2026-10-13/analysis/__pycache__/` e o `rm -r` foi recusado pela permissão. Ele aparece como não rastreado: apague-o ou ignore-o.\n\nO `results/PROTOCOLO-0.7.0.md` é do controlador. Só passei a apontar para ele na revisão e nos READMEs, sem alterá-lo.",
+      "requested_model": "claude-opus-5-5",
+      "requested_effort": "max",
+      "max_turns": 60,
+      "prompt_sha256": "c300d67bf1d2e21cae49a3015bffdee25742be615bd3493f1a656d702299a975",
+      "raw_log_sha256": "183bcce01383d329487ecbef618bc5dd56c4795d5f88768122afe7d89e049345"
+    },
+    {
+      "session_id": "2ec1b90a-6f9a-41c6-b0c9-9a92f9a8a437",
+      "subtype": "success",
+      "terminal_reason": "completed",
+      "num_turns": 25,
+      "duration_ms": 472844,
+      "duration_api_ms": 2580807,
+      "modelUsage": {
+        "claude-opus-5-5": {
+          "inputTokens": 206,
+          "outputTokens": 295068,
+          "thinkingTokens": 197409,
+          "cacheReadInputTokens": 28451782,
+          "cacheCreationInputTokens": 533641,
+          "webSearchRequests": 0,
+          "costUSD": 15.861668400000001,
+          "contextWindow": 1000000,
+          "maxOutputTokens": 128000,
+          "canonicalModel": "claude-opus-5-5",
+          "provider": "firstParty",
+          "costBasis": "list"
+        }
+      },
+      "total_cost_usd": 15.861668400000001,
+      "result": "Corrigi os dois pontos, cada um com teste escrito antes e visto falhando (3 testes, 4 falhas). A suíte da skill passa com 69 testes OK. Também rodei a suíte do runner, porque o texto do `brief` mudou: 15 OK. A suíte de análise de 13/10 não foi reexecutada, já que não lê os arquivos corrigidos. Runner, seletores e controlador ficaram intocados. Sem commit, push ou chamadas de API.\n\n**1. Exemplo de PTBR-30.** O par agora mostra só a retirada da finalidade inventada, mantendo todos os fatos:\n- Evite: \"A feira abre no sábado com produtores da região. A iniciativa busca fortalecer o comércio local.\"\n- Prefira: \"A feira abre no sábado com produtores da região.\"\n\nO teste novo exige que toda palavra da forma preferida já esteja no exemplo de vício e que a regra não a detecte. Os testes anteriores do catálogo continuam valendo para as 32 regras.\n\n**2. Material é padrão, não ordem.**\n- **No `brief`:** a seção abre com \"o tipo de texto pedido (fato, opinião ou ficção) prevalece\". A regra do gênero aparece marcada como \"Padrão do gênero\", seguida das regras condicionais dos outros dois tipos, por exemplo \"Se o pedido for ficção: invente dentro da premissa, sem usar pessoas reais.\"\n- **Na `SKILL.md`:** a seção Fidelidade abre com \"O pedido define se o texto é fato, opinião ou ficção e prevalece sobre o padrão do gênero (crônica pode ser relato real; roteiro, ficção).\"\n- **Padrões da matriz:** continuam iguais (roteiro em fato, crônica em ficção), sem opção de linha de comando nova.\n- **Testes:** os testes novos não usam dados dos prompts. Eles verificam, nos briefings de roteiro e crônica, o padrão preservado, a precedência do pedido, as regras condicionais e que nenhuma ordem de inventar ou de se limitar aos fatos fique incondicional.\n\nCom o texto novo, o par mais longo (`caricato/roteiro`) passou do limite de tamanho por 3 caracteres (17.003 contra 17.000). Em vez de afrouxar o limite, tirei as aspas dos termos das demais regras no `brief` e encurtei duas frases, sem retirar conteúdo. O maior tratamento entre os 36 pares agora tem 16.985 caracteres.\n\nAs duas correções estão documentadas em `results/REVISAO-0.7.0.md`, junto com os números atualizados (tratamento cerca de 15% menor) e um sexto risco. Também ajustei os números em `VALIDACAO.md` e em `results/README.md`.\n\nO sexto risco precisa da sua decisão: outros pares \"Evite/Prefira\" ainda acrescentam detalhes que não estão no exemplo de vício. O mais sensível é PTBR-06 (autoridade vaga), que também é uma regra de fidelidade. Pelo escopo pedido, só corrigi PTBR-30.\n\nContinua pendente o `__pycache__` não rastreado em `results/runs/2026-10-13/analysis`, criado pela suíte de análise. O `rm -r` foi recusado pela permissão, então apague-o ou ignore-o.",
+      "requested_model": "claude-opus-5-5",
+      "requested_effort": "max",
+      "max_turns": 18,
+      "prompt_sha256": "84dc5cb26b9fdb7aaf615b67100b204814c066ed75d4fd3695922d95d3458aa8",
+      "raw_log_sha256": "a7e73a91d5911f2dbc9f07d341d7aeae6dfbc05c566395064888782d105f328c"
+    }
+  ],
+  "requested_effort_all_invocations": "max",
+  "actual_model_all_invocations": "claude-opus-5-5",
+  "cost_basis": "list, subscription estimate, not verified additional charge",
+  "cumulative_cost_usd_latest": 15.861668400000001,
+  "do_not_sum_resumed_usage": true
+}

@@ -1,0 +1,107 @@
+## O bug: argumento padrão mutável
+
+Em Python, **os valores padrão dos parâmetros são avaliados uma única vez, quando o `def` é executado**, e não a cada chamada. A lista vazia `[]` é criada nesse momento e guardada no próprio objeto da função:
+
+```python
+def collect(item, bucket=[]):
+    bucket.append(item)
+    return bucket
+
+print(collect.__defaults__)   # ([],)
+collect("A")
+print(collect.__defaults__)   # (['A'],)  ← o padrão foi alterado!
+```
+
+Toda chamada sem `bucket` reutiliza **a mesma lista**, que vai acumulando itens entre as chamadas. Por isso `collect("B")` retorna `["A", "B"]`. Há ainda um efeito colateral mais grave: todos os valores retornados são o mesmo objeto.
+
+```python
+x = collect("A")
+y = collect("B")
+print(x is y)  # True: x também "virou" ['A', 'B']
+```
+
+## A correção: usar `None` como sentinela
+
+```python
+def collect(item, bucket=None):
+    """Acrescenta `item` a `bucket` e retorna a lista.
+
+    Se `bucket` não for informado, uma nova lista é criada a cada chamada.
+    Se for informado, a própria lista do chamador é modificada e retornada.
+    """
+    if bucket is None:
+        bucket = []
+    bucket.append(item)
+    return bucket
+```
+
+Use `if bucket is None` e **não** `bucket = bucket or []`. Com `or`, uma lista vazia passada pelo chamador seria considerada "falsa" e trocada por uma lista nova. Isso violaria o requisito de modificar e retornar a lista do chamador:
+
+```python
+minha = []
+collect_errado("X", minha)  # com `or`: retorna ['X'], mas `minha` continua []
+```
+
+## Testes (pytest)
+
+```python
+import pytest
+from meu_modulo import collect
+
+
+def test_chamadas_sem_bucket_sao_independentes():
+    assert collect("A") == ["A"]
+    assert collect("B") == ["B"]          # antes do fix: ['A', 'B']
+
+
+def test_chamadas_sem_bucket_retornam_objetos_distintos():
+    x = collect("A")
+    y = collect("B")
+    assert x is not y
+    assert x == ["A"]                     # x não foi alterado pela 2ª chamada
+
+
+def test_padrao_da_funcao_nao_e_alterado():
+    collect("A")
+    collect("B")
+    assert collect.__defaults__ == (None,)
+
+
+def test_lista_do_chamador_e_modificada_e_retornada():
+    minha = ["X"]
+    resultado = collect("Y", minha)
+    assert resultado is minha             # mesmo objeto, não uma cópia
+    assert minha == ["X", "Y"]
+
+
+def test_lista_vazia_do_chamador_e_respeitada():
+    # Garante que não usamos `bucket or []`
+    minha = []
+    resultado = collect("A", minha)
+    assert resultado is minha
+    assert minha == ["A"]
+
+
+def test_acumula_em_chamadas_sucessivas_com_mesma_lista():
+    minha = []
+    collect("A", minha)
+    collect("B", minha)
+    assert collect("C", minha) is minha
+    assert minha == ["A", "B", "C"]
+
+
+def test_listas_diferentes_nao_se_misturam():
+    a, b = [], []
+    collect(1, a)
+    collect(2, b)
+    assert a == [1]
+    assert b == [2]
+```
+
+Execute com:
+
+```bash
+pytest -v
+```
+
+**Regra geral:** nunca use objetos mutáveis (`list`, `dict`, `set`, instâncias de classes mutáveis) como valor padrão de parâmetro. Use `None` e crie o objeto dentro da função. Ferramentas como `pylint` (aviso `W0102 dangerous-default-value`) e `ruff`/`flake8-bugbear` (regra `B006`) detectam esse padrão automaticamente.

@@ -799,30 +799,37 @@ class BriefTests(unittest.TestCase):
     """Briefing compacto: catálogo e estilo aplicados sem despejar JSONs integrais."""
 
     def test_brief_text_contains_every_rule_profile_plan_and_delivery_contract(self):
+        # 0.7.0: exemplos só nas regras típicas do gênero; as demais aparecem por termos explícitos.
         h = module()
         rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
-        result = cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia')
-        self.assertEqual(result.returncode, 0, result.stderr)
-        text = result.stdout
-        for rule in rules:
-            self.assertIn(rule['id'], text)
-            self.assertIn(rule['positive_example'], text)
-            self.assertIn(rule['negative_example'], text)
-        for item in h.load_profiles()['jornalistico']['adjustments'] + h.load_profiles()['jornalistico']['avoid']:
-            self.assertIn(item, text)
-        for block in h.generate_structure('jornalistico', 'noticia', 2, 0, None)['blocks']:
-            self.assertIn(block['instruction'], text)
-        self.assertIn('crucial', text)
-        self.assertIn('não repita comandos', text.casefold())
-        self.assertIn('somente com o artefato', text.casefold())
-        self.assertNotIn('—', text)
-        sizes = sum(len((SKILL_DIR / 'references' / n).read_text(encoding='utf-8')) for n in ('catalogo.json', 'estilos.json'))
-        self.assertLess(len(text), sizes / 4, 'O briefing deve ser compacto')
+        for profile_id, profile in h.load_profiles().items():
+            for genre in profile['genres']:
+                with self.subTest(profile=profile_id, genre=genre):
+                    result = cli_run('brief', '--profile', profile_id, '--genre', genre)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    text = result.stdout
+                    focus = h.brief(profile_id, genre)['focus']
+                    for rule in rules:
+                        self.assertIn(f"{rule['id']} {rule['name']}", text)
+                        for term in rule['avoid']:
+                            self.assertIn(term, text)
+                        if rule['id'] in focus:
+                            self.assertIn(f'Evite: "{rule["positive_example"]}"', text)
+                            self.assertIn(f'Prefira: "{rule["negative_example"]}"', text)
+                    for item in profile['adjustments'] + profile.get('avoid', []):
+                        self.assertIn(item, text)
+                    for block in h.generate_structure(profile_id, genre, 2, 0, None)['blocks']:
+                        self.assertIn(block['instruction'], text)
+                    self.assertIn('crucial', text)
+                    self.assertIn('não repita comandos', text.casefold())
+                    self.assertIn('somente com o artefato', text.casefold())
+                    self.assertNotIn('—', text)
+                    self.assertLessEqual(len(text), 8500, 'O briefing deve ser compacto')
 
     def test_brief_labels_examples_by_role_not_by_test_polarity(self):
         text = cli_run('brief', '--profile', 'neutro-claro').stdout
-        line = next(l for l in text.splitlines() if l.startswith('- PTBR-01'))
-        self.assertLess(line.index('Evite: "Na sociedade atual'), line.index('Prefira: "O cadastro exige'))
+        line = next(l for l in text.splitlines() if l.startswith('- PTBR-25'))
+        self.assertLess(line.index('Evite: "Você já se perguntou'), line.index('Prefira: "O cadastro falha quando'))
         self.assertNotIn('positive_example', text)
 
     def test_skill_material_does_not_copy_approved_prompts(self):
@@ -836,7 +843,10 @@ class BriefTests(unittest.TestCase):
         approved = set().union(*map(grams, prompts))
         material = [(SKILL_DIR / name).read_text(encoding='utf-8')
                     for name in ('SKILL.md', 'references/catalogo.json', 'references/estilos.json')]
-        material.append(cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia').stdout)
+        h = module()
+        # Todo briefing que pode entrar no tratamento, não só o da notícia.
+        material += [h.brief_text(h.brief(p, g, 2, 0, 17))
+                     for p, profile in h.load_profiles().items() for g in profile['genres']]
         for text in material:
             self.assertEqual(grams(text) & approved, set())
         self.assertNotIn('Vila Clara', ''.join(material))
@@ -1009,6 +1019,259 @@ class Documentation20261019Tests(unittest.TestCase):
                                             capture_output=True, text=True, cwd=SKILL_DIR)
                     self.assertEqual(result.returncode, 0, result.stderr)
                     self.assertTrue(result.stdout.strip())
+
+
+VAGUE_PREFERENCE = r'(?i)\b(?:informad[oa]s?|descrit[oa]s?|indicad[oa]s?|citad[oa]s?|acompanhad[oa]s?|briefing)\b'
+
+
+class Catalog070Tests(unittest.TestCase):
+    """0.7.0: termos explícitos, forma preferida concreta e lacunas de naturalidade."""
+
+    def rules(self):
+        return module().load_catalog(SKILL_DIR / 'references/catalogo.json')
+
+    def count(self, text, rule_id):
+        return module().audit(text, self.rules())['rule_counts'][rule_id]['count']
+
+    def test_every_rule_lists_terms_and_a_concrete_preferred_form(self):
+        import re
+        h = module()
+        rules = self.rules()
+        self.assertEqual(len(rules), 32)
+        described = {'PTBR-21', 'PTBR-26'}  # o vício é descrito, sem o símbolo no texto
+        for rule in rules:
+            with self.subTest(rule=rule['id']):
+                self.assertTrue(rule.get('avoid'), 'Toda regra precisa de termos explícitos')
+                self.assertTrue(all(isinstance(t, str) and t.strip() for t in rule['avoid']))
+                self.assertIsNone(re.search(VAGUE_PREFERENCE, rule['negative_example']),
+                                  'A forma preferida deve dizer algo concreto, sem remeter a dado "informado"')
+                self.assertEqual(h.audit(rule['negative_example'], rules)['findings'], [],
+                                 'A forma preferida não pode conter vício do catálogo')
+                if rule['id'] not in described:
+                    self.assertGreaterEqual(h.audit(rule['positive_example'], [rule])['rule_counts'][rule['id']]['count'], 1,
+                                            'O exemplo de vício precisa ser detectado pela própria regra')
+
+    def test_naturalness_gaps_are_detected_without_literal_false_positives(self):
+        cases = {
+            'PTBR-29': (['Para realizar o pagamento, acesse o aplicativo.', 'A loja efetuou a entrega ontem.',
+                         'Ela realizou uma análise dos dados.', 'O time trabalhou de forma eficiente.'],
+                        ['Ela realizou o sonho de viajar.', 'O pagamento saiu ontem.', 'Trabalhou de forma isolada.']),
+            'PTBR-30': (['A iniciativa visa fortalecer o comércio local.', 'O projeto busca incentivar a leitura.',
+                         'A campanha tem como objetivo ampliar o acesso.', 'A feira abriu, reforçando o compromisso com o bairro.'],
+                        ['A feira abre no sábado e reúne produtores da região.', 'Ele busca o filho na escola.']),
+            'PTBR-31': (['Um silêncio pesado tomou a sala.', 'O tempo pareceu parar.', 'Senti um nó na garganta.',
+                         'E foi ali que eu entendi tudo.', 'Ela soltou o ar que nem sabia que prendia.'],
+                        ['O silêncio durou dois minutos.', 'O relógio parou às três.', 'Ali eu deixei a chave.']),
+            'PTBR-32': (['A equipe vai endereçar o problema na próxima versão.', 'Ela aplicou para a vaga de analista.',
+                         'O anúncio performou bem.'],
+                        ['O envelope foi endereçado ao cliente.', 'Ela aplicou a tinta na parede.',
+                         'A performance do servidor caiu.']),
+        }
+        for rule_id, (positives, negatives) in cases.items():
+            for text in positives:
+                with self.subTest(rule=rule_id, text=text):
+                    self.assertGreaterEqual(self.count(text, rule_id), 1)
+            for text in negatives:
+                with self.subTest(rule=rule_id, text=text):
+                    self.assertEqual(self.count(text, rule_id), 0)
+
+    def test_common_variants_of_existing_vices_are_detected(self):
+        for text, rule_id in [('Vale lembrar que o prazo acabou.', 'PTBR-03'),
+                              ('Nesse contexto, o prazo acabou.', 'PTBR-04'),
+                              ('O app não é só um cadastro, mas uma vitrine.', 'PTBR-05'),
+                              ('O setor desempenha um papel essencial.', 'PTBR-07'),
+                              ('O botão mudou, reforçando a marca.', 'PTBR-12'),
+                              ('Desvendando os segredos do cadastro.', 'PTBR-23')]:
+            with self.subTest(text=text):
+                self.assertEqual(self.count(text, rule_id), 1)
+
+    def test_service_box_is_a_listed_exception_for_labeled_lists(self):
+        h = module()
+        self.assertIn('PTBR-20', [r['id'] for r in h.search_catalog(self.rules(), 'quadro de serviço')])
+
+    def test_purpose_rule_example_keeps_exactly_the_facts(self):
+        import re
+        rule = next(r for r in self.rules() if r['id'] == 'PTBR-30')
+
+        def words(text):
+            return set(re.findall(r'\w+', text.casefold()))
+        self.assertLessEqual(words(rule['negative_example']), words(rule['positive_example']),
+                             'A forma preferida de finalidade-presumida não pode acrescentar fato ausente do vício')
+        self.assertEqual(module().audit(rule['negative_example'], [rule])['rule_counts']['PTBR-30']['count'], 0)
+
+
+# Pares perfil/gênero fixados pelo runner (SELECTORS), mais um par neutro de relatório.
+GENRE_PLANS = {('jornalistico', 'noticia'): 'noticia', ('jornalistico', 'reportagem'): 'reportagem',
+               ('tecnico-preciso', 'tecnico'): 'procedimento', ('tecnico-preciso', 'relatorio'): 'relatorio',
+               ('didatico', 'didatico'): 'explicacao', ('academico', 'academico'): 'academico',
+               ('executivo-direto', 'proposta'): 'proposta', ('executivo-direto', 'negocios'): 'nota-executiva',
+               ('executivo-direto', 'relatorio'): 'nota-executiva', ('conversacional-contido', 'email'): 'mensagem',
+               ('argumentativo-sobrio', 'artigo'): 'argumento', ('argumentativo-sobrio', 'ensaio'): 'ensaio',
+               ('conversacional-contido', 'post'): 'post', ('conversacional-contido', 'roteiro'): 'roteiro',
+               ('literario', 'conto'): 'cena', ('literario', 'cronica'): 'cronica',
+               ('neutro-claro', 'relatorio'): 'relatorio'}
+
+
+class Structure070Tests(unittest.TestCase):
+    """0.7.0: cada gênero recebe plano próprio, com ofício, vícios típicos e regra de material."""
+
+    def test_each_genre_gets_its_own_plan(self):
+        h = module()
+        for (profile, genre), expected in GENRE_PLANS.items():
+            with self.subTest(profile=profile, genre=genre):
+                self.assertEqual(h.generate_structure(profile, genre, 2, 0, 17)['structure_id'], expected)
+        for profile in h.load_profiles().values():
+            if 'relatorio' in profile['genres']:
+                with self.subTest(profile=profile['id']):
+                    self.assertNotEqual(h.generate_structure(profile['id'], 'relatorio')['structure_id'], 'procedimento',
+                                        'Relatório não pode receber o plano de comandos da documentação técnica')
+        self.assertEqual(h.generate_structure('jornalistico', 'noticia', 0)['blocks'][0]['id'], 'titulo')
+
+    def test_every_structure_carries_craft_focus_and_material(self):
+        data = json.loads((SKILL_DIR / 'references/estilos.json').read_text(encoding='utf-8'))
+        rules = {r['id'] for r in module().load_catalog(SKILL_DIR / 'references/catalogo.json')}
+        self.assertEqual(set(data['material']), {'fatos', 'opiniao', 'ficcao'})
+        self.assertTrue(all(isinstance(v, str) and v.strip() for v in data['material'].values()))
+        for structure in data['structures']:
+            with self.subTest(structure=structure['id']):
+                self.assertTrue(structure.get('name'))
+                self.assertTrue(3 <= len(structure.get('craft', [])) <= 6)
+                self.assertTrue(all(isinstance(c, str) and c.strip() for c in structure['craft']))
+                self.assertTrue(3 <= len(structure.get('focus', [])) <= 6)
+                self.assertLessEqual(set(structure['focus']), rules)
+                self.assertIn(structure.get('material'), data['material'])
+        material = {s['id']: s['material'] for s in data['structures']}
+        self.assertEqual({k for k, v in material.items() if v == 'ficcao'}, {'cena', 'cronica'})
+        self.assertEqual({k for k, v in material.items() if v == 'opiniao'}, {'argumento', 'ensaio'})
+        invented = [item for item in data['forbidden'] if 'inventada' in item]
+        self.assertTrue(invented and all('não ficção' in item for item in invented),
+                        'A proibição de vivência inventada vale para não ficção, não para conto e crônica')
+
+
+class Brief070Tests(unittest.TestCase):
+    """0.7.0: o briefing começa pelo ofício do gênero e termina no contrato de entrega."""
+
+    def pairs(self):
+        return [(p, g) for p, profile in module().load_profiles().items() for g in profile['genres']]
+
+    def test_brief_leads_with_genre_craft_and_ends_with_delivery(self):
+        h = module()
+        data = json.loads((SKILL_DIR / 'references/estilos.json').read_text(encoding='utf-8'))
+        structures = {s['id']: s for s in data['structures']}
+        for profile, genre in self.pairs():
+            with self.subTest(profile=profile, genre=genre):
+                brief = h.brief(profile, genre, 2, 0, 17)
+                text = h.brief_text(brief)
+                structure = structures[brief['structure_id']]
+                self.assertEqual(brief['craft'], structure['craft'])
+                self.assertEqual(brief['material'], structure['material'])
+                for item in structure['craft']:
+                    self.assertIn(item, text)
+                self.assertIn(data['material'][structure['material']], text)
+                marks = ['Ofício do gênero: ' + structure['name'], 'Plano:', 'Perfil ' + profile,
+                         'Vícios mais comuns neste gênero', 'Demais regras do catálogo', '\nEntrega\n']
+                positions = [text.index(mark) for mark in marks]
+                self.assertEqual(positions, sorted(positions))
+                self.assertIn('não seções', text)
+                self.assertTrue(text.rstrip().endswith('melhoria concreta.'))
+
+    def test_fiction_invites_invention_and_nonfiction_keeps_fidelity(self):
+        for profile, genre in [('literario', 'conto'), ('literario', 'cronica'),
+                               ('coloquial', 'conto'), ('caricato', 'cronica')]:
+            with self.subTest(profile=profile, genre=genre):
+                text = cli_run('brief', '--profile', profile, '--genre', genre).stdout
+                self.assertIn('Invente cena', text)
+                self.assertNotIn('só com fatos do pedido', text)
+                self.assertNotIn('fala ou vivência ausentes', text)
+                self.assertIn('em não ficção', text)
+        news = cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia').stdout
+        self.assertIn('Use só fatos', news)
+        self.assertIn('dia da semana', news)
+        self.assertNotIn('Invente cena', news)
+        essay = cli_run('brief', '--profile', 'argumentativo-sobrio', '--genre', 'ensaio').stdout
+        self.assertIn('apresentados como hipótese', essay)
+
+    def test_focus_rules_follow_the_genre_priority(self):
+        h = module()
+        brief = h.brief('jornalistico', 'noticia')
+        text = h.brief_text(brief)
+        self.assertEqual(brief['focus'][0], 'PTBR-30')
+        positions = [text.index(f'- {rule_id} ') for rule_id in brief['focus']]
+        self.assertEqual(positions, sorted(positions))
+        self.assertTrue(all(r['foco'] == (r['id'] in brief['focus']) for r in brief['rules']))
+        self.assertLess(positions[-1], text.index('Demais regras do catálogo'))
+
+
+class Material070Tests(unittest.TestCase):
+    """Material por gênero é padrão; o tipo pedido (fato, opinião ou ficção) prevalece."""
+
+    def test_brief_marks_default_material_and_states_conditional_rules(self):
+        h = module()
+        data = json.loads((SKILL_DIR / 'references/estilos.json').read_text(encoding='utf-8'))
+        for profile, genre, default in [('conversacional-contido', 'roteiro', 'fatos'),
+                                        ('literario', 'cronica', 'ficcao')]:
+            with self.subTest(profile=profile, genre=genre):
+                brief = h.brief(profile, genre, 2, 0, 17)
+                self.assertEqual(brief['material'], default, 'O padrão da matriz aprovada não muda')
+                text = h.brief_text(brief)
+                self.assertIn('o tipo de texto pedido (fato, opinião ou ficção) prevalece', text)
+                lines = text.splitlines()
+                default_line = next(l for l in lines if data['material'][default] in l)
+                self.assertTrue(default_line.startswith('- Padrão do gênero, ' + data['material_types'][default]['label']))
+                for other, kind in data['material_types'].items():
+                    if other != default:
+                        self.assertIn('- ' + kind['when_requested'], lines)
+                # Nenhuma ordem de inventar ou de restringir aos fatos fica incondicional.
+                for line in lines:
+                    if 'invente' in line.casefold() or 'use só' in line.casefold():
+                        self.assertTrue(line.startswith('- Padrão do gênero') or line.startswith('- Se o pedido for'), line)
+
+    def test_skill_states_that_the_request_sets_the_material(self):
+        skill = (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
+        section = skill[skill.index('## Fidelidade'):skill.index('## Catálogo e estilo')]
+        self.assertIn('O pedido define se o texto é fato, opinião ou ficção', section)
+        self.assertIn('prevalece', section)
+        for label in ['- Fato:', '- Opinião:', '- Ficção:']:
+            self.assertIn(label, section)
+
+
+class Skill070Tests(unittest.TestCase):
+    """0.7.0: orientação editorial positiva antes dos vetos, contrato de Ricardo preservado."""
+
+    FINAL_VALIDATION = ('Não economize tokens ou tempo. Substitua blocos, expressões ou palavras iterativamente '
+                        'até atingir o resultado ideal, iterando e repetindo quantas vezes forem necessárias. '
+                        'Finalize quando o texto atender ao pedido, preservar fatos e voz e uma nova revisão '
+                        'não trouxer melhoria concreta.')
+
+    def skill(self):
+        return (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
+
+    def test_positive_craft_comes_before_the_explicit_vice_list(self):
+        skill = self.skill()
+        self.assertLess(skill.index('## Como escrever bem'), skill.index('## Evite explicitamente'))
+        craft = skill[skill.index('## Como escrever bem'):skill.index('## Evite explicitamente')]
+        for idea in ['leitor', 'matéria-prima', 'gênero completo', 'ritmo', 'concreto']:
+            self.assertIn(idea, craft)
+
+    def test_required_contract_survives_the_rewrite(self):
+        skill = self.skill()
+        self.assertRegex(skill, r'(?m)^version: 0\.7\.0$')
+        self.assertIn('NÃO USE travessão U+2014 na prosa produzida', skill)
+        self.assertIn('## Validação final\n\n' + self.FINAL_VALIDATION, skill)
+        self.assertTrue(skill.rstrip().endswith(self.FINAL_VALIDATION))
+        for item in ['Redação:', 'Revisão:', 'Diagnóstico:', 'Ficção', 'Exemplos editoriais não são fatos reutilizáveis',
+                     'references/catalogo.json', 'references/estilos.json']:
+            self.assertIn(item, skill)
+        self.assertLessEqual(len(skill), 8800)
+
+    def test_treatment_is_smaller_than_in_0_6_0(self):
+        # 0.6.0: SKILL.md com 8.312 caracteres e briefing da notícia com 10.975.
+        h = module()
+        skill = len(self.skill())
+        for profile, data in h.load_profiles().items():
+            for genre in data['genres']:
+                with self.subTest(profile=profile, genre=genre):
+                    self.assertLess(skill + len(h.brief_text(h.brief(profile, genre, 2, 0, 17))), 17000)
 
 
 if __name__ == '__main__':

@@ -1,0 +1,77 @@
+# API de tarefas — Criar tarefa
+
+Cria uma tarefa e a coloca na fila de processamento.
+
+## Endpoint
+
+```http
+POST https://api.example.com/v1/jobs
+```
+
+## Cabeçalhos
+
+| Cabeçalho | Obrigatório | Descrição |
+|---|---|---|
+| `Authorization` | Sim | Token de autenticação no formato `Bearer <TOKEN>`. |
+| `Content-Type` | Sim | Deve ser `application/json`. |
+| `Idempotency-Key` | Não | Chave para evitar a criação duplicada de tarefas ao repetir uma requisição. |
+
+## Corpo da requisição
+
+Envie um objeto JSON:
+
+```json
+{
+  "name": "backup"
+}
+```
+
+| Campo | Tipo | Obrigatório | Validação |
+|---|---|---|---|
+| `name` | string | Sim | Não pode ser vazio e deve ter no máximo 80 caracteres. |
+
+## Exemplo com curl
+
+Substitua `<TOKEN>` pelo seu token de autenticação. O exemplo inclui o cabeçalho opcional `Idempotency-Key`.
+
+```bash
+curl -X POST 'https://api.example.com/v1/jobs' \
+  -H 'Authorization: Bearer <TOKEN>' \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: backup-001' \
+  -d '{"name":"backup"}'
+```
+
+## Resposta de sucesso
+
+**HTTP 201**
+
+```json
+{
+  "id": "job_123",
+  "status": "queued"
+}
+```
+
+- `id`: identificador da tarefa.
+- `status`: `queued` indica que a tarefa entrou na fila, não que o processamento foi concluído.
+
+## Idempotência
+
+O cabeçalho `Idempotency-Key` é opcional. Durante uma janela de **24 horas**:
+
+- Requisições com a **mesma chave e o mesmo corpo** retornam a tarefa existente.
+- Requisições com a **mesma chave e um corpo diferente** retornam **HTTP 409**.
+
+Ao repetir uma requisição para evitar duplicação, reutilize a chave e mantenha o corpo inalterado.
+
+## Erros e limite de requisições
+
+| Código HTTP | Motivo |
+|---|---|
+| `400 Bad Request` | O campo `name` é inválido: ausente, não é uma string, está vazio ou excede 80 caracteres. |
+| `401 Unauthorized` | Token ausente ou inválido. |
+| `409 Conflict` | A mesma `Idempotency-Key` foi usada com um corpo diferente dentro da janela de 24 horas. |
+| `429 Too Many Requests` | O limite de **60 requisições por minuto por token** foi ultrapassado. |
+
+Na resposta `429`, o cabeçalho `Retry-After` informa, em **segundos**, quanto tempo aguardar antes de tentar novamente.

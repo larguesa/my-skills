@@ -1,0 +1,67 @@
+`collect` acrescenta `item` ao final de uma lista e devolve essa lista. Use-a para acumular itens numa lista do chamador ou para receber uma lista nova quando nenhuma lista for passada.
+
+O padrão `bucket=[]` é avaliado uma vez, na definição. Em um processo novo, a primeira chamada sem lista devolve `["A"]`; a seguinte devolve `["A", "B"]`.
+
+```python
+def collect(item, bucket=[]):
+    bucket.append(item)
+    return bucket
+
+print(collect("A"))
+print(collect("B"))
+```
+
+```text
+["A"]
+["A", "B"]
+```
+
+O objeto criado por `[]` fica em `collect.__defaults__`. Toda chamada que omite `bucket` recebe esse mesmo objeto. `append` o altera no lugar, então `"A"` continua na lista quando `collect("B")` roda.
+
+Se o chamador passar uma lista, o parâmetro já aponta para ela. O acúmulo nessa lista e a devolução do mesmo objeto são o comportamento pedido e já ocorrem no código original. O defeito está no valor padrão compartilhado.
+
+Troque o padrão mutável por `None`. Crie a lista dentro da função só quando `bucket` for `None`.
+
+```python
+def collect(item, bucket=None):
+    if bucket is None:
+        bucket = []
+    bucket.append(item)
+    return bucket
+```
+
+Não teste com `if not bucket`. Uma lista vazia é falsa nesse teste. A função criaria outra lista, deixaria a do chamador intacta e devolveria um objeto diferente.
+
+Parâmetros:
+
+- `item`: objeto, obrigatório. Vai para o final de `bucket`.
+- `bucket`: `list` ou `None`, opcional. Lista de destino. Se for omitido ou `None`, a chamada cria e devolve uma lista nova. Se for uma lista, inclusive vazia, recebe `item` e é o objeto devolvido.
+
+`bucket` diferente de `None` precisa ter `append`. Sem esse método, a chamada levanta `AttributeError`. A função não copia a lista recebida.
+
+Depois da correção, as mesmas duas chamadas sem lista deixam de compartilhar estado:
+
+```python
+print(collect("A"))
+print(collect("B"))
+```
+
+```text
+["A"]
+["B"]
+```
+
+Confira também a lista do chamador e o padrão da função:
+
+```python
+destino = []
+
+assert collect("A") == ["A"]
+assert collect("B") == ["B"]
+assert collect("A", destino) is destino
+assert collect("B", destino) == ["A", "B"]
+assert destino == ["A", "B"]
+assert collect.__defaults__ == (None,)
+```
+
+Nenhum `assert` deve falhar. `collect("A")` e `collect("B")` devolvem listas distintas. As chamadas com `destino` devolvem esse mesmo objeto, que termina em `["A", "B"]`. Antes da correção, `collect.__defaults__` contém a lista compartilhada; depois, contém `(None,)`.

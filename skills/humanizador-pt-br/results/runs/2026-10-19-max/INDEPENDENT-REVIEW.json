@@ -1,0 +1,107 @@
+{
+  "passed": true,
+  "security_concerns": [],
+  "logic_errors": [
+    {
+      "id": "SCHED-01",
+      "severity": "low",
+      "blocking": false,
+      "file": "/home/hermes/entregas/humanizador-avaliacao-0.7.0/schedule_run.py",
+      "lines": "226, 229-242, 249-251, 259-261",
+      "finding": "Retomada com max_new_calls=0 apaga do runtime-summary.json os grupos já conhecidos como sem julgamento. skipped é reiniciado vazio e o limite interrompe o percurso antes de reconstruir as omissões.",
+      "evidence": {
+        "pilot_skipped_chunks": [
+          {
+            "case": "01-noticia-bibliotecas",
+            "chunk": 0,
+            "slots": [
+              "g.01-noticia-bibliotecas.r00.skill",
+              "g.01-noticia-bibliotecas.r00.baseline"
+            ],
+            "reason": "frozen_chunk_not_regrouped; missing/invalid candidate"
+          }
+        ],
+        "resumed_skipped_chunks": [],
+        "resumed_invalid": 1,
+        "resumed_new_calls": 0,
+        "stop_reason": "requested_call_boundary"
+      },
+      "impact": "Regressão de relatório de progresso. O candidato inválido continua preservado; nenhuma chamada foi repetida. A omissão volta a aparecer quando o percurso alcança o grupo.",
+      "suggestion": "Derivar os grupos impossíveis dos registros auditados antes do primeiro summary, ou preservar as omissões confirmadas ao parar antes de percorrer o schedule."
+    }
+  ],
+  "observations": [
+    {
+      "kind": "verdict",
+      "text": "Sem bloqueador encontrado na execução da matriz declarada. Aprovação de código com ressalvas não bloqueantes, não aprovação de resultado de escrita nem do freeze final ainda não examinado."
+    },
+    {
+      "kind": "tests",
+      "suite": "controlador externo",
+      "status": "passed",
+      "count": 22,
+      "seconds": 102.67,
+      "details": "Suíte executada em cópia temporária: matriz OFFLINE_FAKE completa, renderer, cobertura, igualdade de payloads, grupos cegos, lock, retomada sem duplicação, intent ambíguo, erros, adulteração e separação de modos. Rede e leitura de inference-key.json bloqueadas pela suíte. Fixture histórica copiada para tempfile; nenhuma API paga."
+    },
+    {
+      "kind": "tests",
+      "suite": "humanizador 0.7.0",
+      "status": "passed_targeted",
+      "count": 65,
+      "seconds": 16.93,
+      "details": "Todos os testes locais da cópia, exceto test_real_command_only_outputs_are_blocked_and_real_texts_pass, que exige 30 respostas históricas. Inclui catálogo real, todos os perfis/gêneros, seleção de estruturas, CLI, preservação de conteúdo e ausência de interseção de 5 palavras entre tratamento e os 24 prompts."
+    },
+    {
+      "kind": "test_harness_intervention",
+      "text": "Primeira execução de 66 testes na cópia incompleta terminou com 1 falha por falta das 30 respostas históricas e 1 erro por README não copiado. Não são defeitos do produto. Layout e READMEs foram completados somente em tempfile; a execução direcionada posterior passou 65 testes, sem ler o histórico de respostas. O teste histórico restante não foi reivindicado como aprovado."
+    },
+    {
+      "kind": "catalog_usage",
+      "text": "brief seleciona de fato a estrutura compatível, carrega craft, material, foco e ajustes do estilo, incorpora as 32 regras e muda o plano conforme o gênero. Não é apenas metadado decorativo. Nenhuma coincidência literal de exemplos com os prompts foi encontrada no rastreio adicional de sequências de 6 ou mais palavras; o teste de 5 palavras também passou."
+    },
+    {
+      "kind": "editorial_caveat",
+      "severity": "medium",
+      "blocking": false,
+      "file": "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/scripts/humanizar.py",
+      "lines": "408-420",
+      "text": "O formato texto deixa de emitir como e excecoes específicos que permanecem no JSON. Na notícia, PTBR-30 mostra como Prefira uma feira que reúne produtores da região, informação ausente do exemplo Evite, e omite a instrução de atribuir finalidade quando fornecida. SKILL.md proíbe reutilizar exemplos como fatos, portanto não há invenção observada; ainda assim o par demonstra edição com acréscimo factual e é uma tensão editorial concreta. Não é substituição automática nem contaminação pelos prompts."
+    },
+    {
+      "kind": "editorial_caveat",
+      "severity": "medium",
+      "blocking": false,
+      "file": "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/references/estilos.json",
+      "text": "A estrutura roteiro fixa material=fatos para todos os perfis. O brief de caricato/roteiro exige usar só falas do pedido, embora SKILL.md permita criar falas em ficção e o perfil caricato trabalhe personagens e cenas. Roteiro ficcional recebe orientações conflitantes; não demonstra falha nos roteiros explicativos da matriz atual. De modo simétrico, cronica sempre usa ficcao, mesmo que o pedido seja memória factual. O modo de material não pode ser selecionado pela CLI."
+    },
+    {
+      "kind": "freeze_scope",
+      "text": "Controlador conferido contra funções dos runners congelados em 19/10, com hashes idênticos aos pinos. Testes usam esse fixture, não o futuro freeze 0.7.0. O pai deve validar novamente o manifest, os briefings locais e os payloads da preparação final antes da execução. Código exige inventário exato, hashes, probes reconciliadas, plano cego rederivado e comparação do SCHEDULE na retomada."
+    },
+    {
+      "kind": "concurrency",
+      "recheck_required": false,
+      "changes": {},
+      "text": "Hashes registrados correspondem aos bytes capturados e usados nos testes. Nenhuma mudança nos arquivos capturados foi detectada na conferência final. Docs criados depois da captura inicial não integram esta revisão."
+    },
+    {
+      "kind": "scope",
+      "text": "Checkout e árvores congeladas não foram escritos. Credenciais não foram lidas. Não foi produzido INDEPENDENT-REVIEW-FINAL.json. Sem resultados de escrita novos, sem alegação de ganho. Arquivos temporários e testes estão em /tmp/humanizador-independent-a0blxyo9."
+    }
+  ],
+  "reviewed_file_sha256": {
+    "/home/hermes/projects/my-skills-humanizador/README.md": "75ecc012cd85bca4c6b61cda258bfca7688cf2964afe5d7b3f3a7a3355ee0943",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/SKILL.md": "fe166398805ed8c6b724016ba75e44faefa0615a18893d1cb4669393125504c8",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/scripts/humanizar.py": "d52a12d34e3813c9ecc1adfce0d28833fc84563f972f7dd9058c8c2db0b9148e",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/references/catalogo.json": "c747f4cae2e0bc2003fb97adf9e8c85fe6d7fbb6a7e2638f2d3ff94b65382676",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/references/estilos.json": "408002ee25095ca4bb918edbac1216a77bdd80f2a2fc211e7fec1de336c26605",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/results/test_humanizar.py": "54454a8922ad31beb0d2d8c6f556ea3434ecc405c6cfaae0ac43a577bcd4aef2",
+    "/home/hermes/entregas/humanizador-avaliacao-0.7.0/schedule_run.py": "6a4a5146abaaf67fc4b8aca6db47a6af21ebaf6f7e65111588841e2b5fe4d4d6",
+    "/home/hermes/entregas/humanizador-avaliacao-0.7.0/SCHEDULE-POLICY.md": "ea9f9e3f63b36d1e2f73b5aa9c63ec2c7b8eb2d27e949bb08751e12bfc59195d",
+    "/home/hermes/entregas/humanizador-avaliacao-0.7.0/test_schedule_run.py": "17fcc0533fd2c61d6b51a62fb5302be56ea099053c2c7dc272814b131d02a149",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/results/runs/2026-10-19/evidence/frozen/runner/generation_eval.py": "0126708df64c853067e1114b82703049e3d88cff446f5a2fee175f054e86186f",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/results/runs/2026-10-19/evidence/frozen/runner/eval_store.py": "f7b50c117f210ff14bca4602182f1a07e6d7033e4eb5d41a6ef4fb3d587f6bc1",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/results/PROMPTS.md": "1d332124d556e1ae13d131479d43958814423d4ec3ea445a5c6b0e9262efbaa0",
+    "/home/hermes/projects/my-skills-humanizador/skills/humanizador-pt-br/README.md": "cb71dc74ac430ac3365cdffa65f39e1ff7b804e816e5decb5b0dfd42a0b9e521"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1",
-  "purpose": "Selecionar registro e plano antes de redigir; preservar voz, fatos e termos na revisão.",
+  "schema_version": "1.2",
+  "purpose": "Selecionar registro, ofício do gênero e plano antes de redigir; preservar voz, fatos e termos na revisão.",
   "voice_invariants": [
     "Fatos, fontes e grau de certeza",
     "Registro solicitado ou amostra do autor",
@@ -19,12 +19,31 @@
     "limits": "Seed reproduz a seleção local, não a resposta de um modelo. Preferência explícita prevalece."
   },
   "forbidden": [
-    "Experiência pessoal inventada",
+    "Experiência pessoal inventada em não ficção",
     "Erro deliberado",
     "Regionalismo presumido",
     "Mudança de opinião para criar personalidade",
     "Sinônimos aleatórios para termos técnicos"
   ],
+  "material": {
+    "fatos": "Use só fatos, números, fontes e falas do pedido; calcule apenas o que ele manda calcular. Reorganizar, explicar e transformar um fato em orientação prática é permitido; acrescentar dado, finalidade, previsão, dia da semana, data relativa, fonte, serviço ou experiência não é.",
+    "opiniao": "Posição, raciocínio e exemplos hipotéticos, apresentados como hipótese, são seus; dados, estudos, citações e experiências reais só se estiverem no pedido.",
+    "ficcao": "Invente cena, gestos, objetos, personagens secundários e falas coerentes com a premissa; preserve o que o pedido fixa (narrador, frase literal, situação, tipo de final) e não use pessoas reais."
+  },
+  "material_types": {
+    "fatos": {
+      "label": "fato",
+      "when_requested": "Se o pedido for fato real: use só o material dele, sem acrescentar dados, fontes ou vivências."
+    },
+    "opiniao": {
+      "label": "opinião",
+      "when_requested": "Se o pedido for opinião: posição e exemplos hipotéticos são seus; dados e citações, só do pedido."
+    },
+    "ficcao": {
+      "label": "ficção",
+      "when_requested": "Se o pedido for ficção: invente dentro da premissa, sem usar pessoas reais."
+    }
+  },
   "profiles": [
     {
       "id": "neutro-claro",
@@ -34,7 +53,8 @@
       ],
       "adjustments": [
         "Começar pela informação útil",
-        "Variar frases sem forçar cadência",
+        "Escolher a palavra comum quando ela for exata",
+        "Variar frases pelo sentido, sem forçar cadência",
         "Cortar comentários de importância"
       ],
       "avoid": [
@@ -55,7 +75,8 @@
       "adjustments": [
         "Conservar terminologia e qualificadores",
         "Aproximar condições da afirmação",
-        "Usar listas e exemplos para consulta"
+        "Mostrar exemplo, cálculo ou comando antes da explicação longa",
+        "Usar listas e tabelas para consulta"
       ],
       "avoid": [
         "Metáforas decorativas",
@@ -74,14 +95,16 @@
         "roteiro"
       ],
       "adjustments": [
+        "Soar como uma pessoa competente falando com outra",
         "Usar o tratamento indicado",
         "Preferir transições simples",
-        "Usar contrações só se combinarem com a voz"
+        "Escrever frases que funcionem lidas em voz alta"
       ],
       "avoid": [
         "Gíria sorteada",
         "Humor imposto",
-        "Primeira pessoa sem autorização"
+        "Primeira pessoa sem autorização",
+        "Cordialidade empilhada"
       ],
       "structure_ids": [
         "mensagem",
@@ -97,17 +120,20 @@
         "ensaio"
       ],
       "adjustments": [
-        "Explicitar a tese solicitada",
-        "Ligar razões a ressalvas",
+        "Explicitar cedo a posição e o limite que ela aceita",
+        "Ancorar cada razão em exemplo ou situação concreta",
+        "Responder à objeção mais forte",
         "Terminar no último argumento útil"
       ],
       "avoid": [
         "Contraste inventado",
         "Frase de efeito obrigatória",
-        "Certeza maior que a fonte"
+        "Certeza maior que a fonte",
+        "Simetria automática entre um lado e outro"
       ],
       "structure_ids": [
         "argumento",
+        "ensaio",
         "post"
       ]
     },
@@ -120,16 +146,18 @@
       "adjustments": [
         "Abrir pelo fato principal",
         "Identificar quem afirma cada alegação",
-        "Distinguir confirmação de lacuna"
+        "Distinguir confirmação de lacuna",
+        "Usar verbos de ação, sem adjetivos de avaliação"
       ],
       "avoid": [
         "Editorializar notícia",
         "Autoridade vaga",
         "Aspas inventadas",
-        "Dia da semana, data relativa, previsão ou orientação ausentes do briefing"
+        "Finalidade, dia da semana, data relativa, previsão ou orientação que o pedido não sustenta"
       ],
       "structure_ids": [
-        "noticia"
+        "noticia",
+        "reportagem"
       ]
     },
     {
@@ -139,13 +167,15 @@
         "artigo"
       ],
       "adjustments": [
+        "Partir de situação concreta antes da definição",
         "Definir conceito antes de usar jargão",
         "Explicar exemplo com dados fornecidos",
         "Mostrar limite da analogia"
       ],
       "avoid": [
         "Pergunta retórica automática",
-        "Simplificação falsa"
+        "Simplificação falsa",
+        "Tom infantilizado"
       ],
       "structure_ids": [
         "explicacao"
@@ -160,13 +190,16 @@
       "adjustments": [
         "Separar método, resultado e interpretação",
         "Conservar incerteza e limites",
-        "Usar precisão em vez de solenidade"
+        "Usar precisão em vez de solenidade",
+        "Preferir verbos que dizem o que foi feito"
       ],
       "avoid": [
         "Causalidade sem desenho adequado",
-        "Significância estatística inventada"
+        "Significância estatística inventada",
+        "Referência inventada"
       ],
       "structure_ids": [
+        "academico",
         "relatorio"
       ]
     },
@@ -178,17 +211,18 @@
         "relatorio"
       ],
       "adjustments": [
-        "Abrir pela decisão ou escopo",
-        "Explicitar custos e condições",
+        "Abrir pela decisão, conclusão ou escopo",
+        "Explicitar custos, prazos e condições",
         "Fechar com próximo passo autorizado"
       ],
       "avoid": [
         "Promessa total",
-        "Jargão sem ação"
+        "Jargão sem ação",
+        "Contexto genérico de mercado"
       ],
       "structure_ids": [
         "proposta",
-        "relatorio"
+        "nota-executiva"
       ]
     },
     {
@@ -199,16 +233,19 @@
       ],
       "adjustments": [
         "Sustentar o ponto de vista",
-        "Usar detalhes que movem a cena",
+        "Usar detalhes específicos que movem a cena",
+        "Dar a cada personagem um modo próprio de falar",
         "Deixar subtexto sem explicação obrigatória"
       ],
       "avoid": [
         "Moral final imposta",
         "Metáfora em toda frase",
+        "Emoção pronta no lugar de gesto",
         "Travessão em diálogo novo"
       ],
       "structure_ids": [
-        "cena"
+        "cena",
+        "cronica"
       ]
     },
     {
@@ -237,6 +274,7 @@
       ],
       "structure_ids": [
         "cena",
+        "cronica",
         "roteiro",
         "post",
         "mensagem"
@@ -272,6 +310,7 @@
         "post",
         "explicacao",
         "cena",
+        "cronica",
         "roteiro"
       ]
     },
@@ -302,6 +341,7 @@
       ],
       "structure_ids": [
         "cena",
+        "cronica",
         "roteiro",
         "post"
       ]
@@ -310,22 +350,44 @@
   "structures": [
     {
       "id": "explicacao",
+      "name": "Explicação didática",
       "genres": [
         "artigo",
-        "relatorio",
         "didatico"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Comece pelo que o leitor já conhece ou pelo problema que o conceito resolve; a definição vem quando o termo aparece.",
+        "Um passo de raciocínio por vez; mostre contas com unidades e diga o que cada número significa.",
+        "Use a comparação cotidiana para iluminar o mecanismo e diga onde ela deixa de valer.",
+        "Antecipe a dúvida mais comum e responda com o próprio exemplo.",
+        "Fale com o leitor de forma direta, sem infantilizar nem anunciar o que vai explicar."
+      ],
+      "focus": [
+        "PTBR-25",
+        "PTBR-02",
+        "PTBR-03",
+        "PTBR-15",
+        "PTBR-24",
+        "PTBR-29"
       ],
       "blocks": [
         {
+          "id": "situacao",
+          "required": true,
+          "instruction": "Comece por uma situação concreta, pelo exemplo do pedido ou pela pergunta que o conceito responde.",
+          "alternatives": []
+        },
+        {
           "id": "conceito",
           "required": true,
-          "instruction": "Defina o conceito ou assunto principal com precisão.",
+          "instruction": "Defina o conceito em linguagem simples quando ele aparecer, com os termos exatos.",
           "alternatives": []
         },
         {
           "id": "desenvolvimento",
           "required": true,
-          "instruction": "Explique o mecanismo ou raciocínio usando os dados do pedido.",
+          "instruction": "Explique o mecanismo ou raciocínio passo a passo usando os dados do pedido.",
           "alternatives": []
         },
         {
@@ -346,12 +408,15 @@
           "id": "retomada",
           "required": false,
           "instruction": "Retome a ideia apenas se isso resolver uma dúvida real.",
-          "alternatives": []
+          "alternatives": [
+            "Antecipe a confusão mais comum e desfaça-a com o próprio exemplo."
+          ]
         }
       ]
     },
     {
       "id": "relatorio",
+      "name": "Relatório ou nota de análise",
       "genres": [
         "artigo",
         "relatorio",
@@ -359,11 +424,27 @@
         "academico",
         "negocios"
       ],
+      "material": "fatos",
+      "craft": [
+        "Diga logo o que foi analisado e o resultado principal; o leitor não deve esperar o fim para saber.",
+        "Mostre os cálculos com unidades; use tabela quando houver várias medidas ou grupos.",
+        "Arredonde de acordo com a incerteza e explique em palavras o que a diferença ou a variação significam.",
+        "Nomeie o que falta para uma conclusão mais forte e o que essa falta impede afirmar.",
+        "Seções com título só quando o texto for longo ou o pedido exigir; em nota curta, parágrafos encadeados bastam."
+      ],
+      "focus": [
+        "PTBR-10",
+        "PTBR-12",
+        "PTBR-03",
+        "PTBR-13",
+        "PTBR-29",
+        "PTBR-24"
+      ],
       "blocks": [
         {
           "id": "objetivo",
           "required": true,
-          "instruction": "Declare o objetivo e o contexto fornecido.",
+          "instruction": "Diga o que foi medido ou analisado e com que finalidade, usando o contexto fornecido.",
           "alternatives": []
         },
         {
@@ -375,7 +456,7 @@
         {
           "id": "resultado",
           "required": true,
-          "instruction": "Apresente observações e cálculos verificáveis.",
+          "instruction": "Apresente valores e cálculos verificáveis, com unidades e arredondamento coerente com a incerteza.",
           "alternatives": []
         },
         {
@@ -396,21 +477,37 @@
     },
     {
       "id": "procedimento",
+      "name": "Documentação técnica",
       "genres": [
-        "tecnico",
-        "relatorio"
+        "tecnico"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Abra com o que o recurso faz e quando usar, em uma ou duas frases.",
+        "Mostre cedo um exemplo executável; código, requisições e respostas em blocos com a linguagem indicada.",
+        "Parâmetros, códigos de erro e limites em tabela ou lista, um item por linha, com tipo, obrigatoriedade e efeito.",
+        "Use imperativo direto e termos estáveis: o mesmo nome para a mesma coisa do início ao fim.",
+        "Explique os casos de borda pela consequência para quem chama, sem adjetivos."
+      ],
+      "focus": [
+        "PTBR-02",
+        "PTBR-03",
+        "PTBR-09",
+        "PTBR-29",
+        "PTBR-13",
+        "PTBR-17"
       ],
       "blocks": [
         {
           "id": "contrato",
           "required": true,
-          "instruction": "Defina finalidade, entradas, pré-requisitos e restrições.",
+          "instruction": "Diga o que o recurso faz e defina entradas, pré-requisitos e restrições.",
           "alternatives": []
         },
         {
           "id": "execucao",
           "required": true,
-          "instruction": "Mostre comandos ou etapas na ordem de execução.",
+          "instruction": "Mostre comandos, chamadas ou etapas na ordem de execução, com valores do pedido.",
           "alternatives": []
         },
         {
@@ -431,26 +528,43 @@
     },
     {
       "id": "mensagem",
+      "name": "E-mail ou mensagem profissional",
       "genres": [
         "email"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Assunto específico, que diga a mudança ou o pedido.",
+        "Saudação pelo nome; na primeira frase, o motivo; logo depois, a proposta.",
+        "Explique a causa com fatos, sem culpar ninguém, sem admitir falha que o material não aponta e sem prometer além do autorizado.",
+        "Datas exatas e condições claras; diga o que depende de quem.",
+        "Feche com a ação esperada e a assinatura de quem escreve, sem fórmulas de cortesia empilhadas."
+      ],
+      "focus": [
+        "PTBR-17",
+        "PTBR-18",
+        "PTBR-03",
+        "PTBR-29",
+        "PTBR-14",
+        "PTBR-16"
       ],
       "blocks": [
         {
           "id": "motivo",
           "required": true,
-          "instruction": "Diga o motivo da mensagem sem preâmbulo.",
+          "instruction": "Diga o motivo da mensagem na primeira frase, sem preâmbulo.",
           "alternatives": []
         },
         {
           "id": "proposta",
           "required": true,
-          "instruction": "Apresente pedido, proposta ou informação com condições explícitas.",
+          "instruction": "Apresente pedido, proposta ou informação com datas exatas e condições explícitas.",
           "alternatives": []
         },
         {
           "id": "acao",
           "required": true,
-          "instruction": "Indique a resposta ou próximo passo realmente necessário.",
+          "instruction": "Indique a resposta ou próximo passo realmente necessário e de quem ele depende.",
           "alternatives": []
         },
         {
@@ -465,8 +579,25 @@
     },
     {
       "id": "post",
+      "name": "Post em rede profissional ou social",
       "genres": [
         "post"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Primeira linha com o fato concreto, o número ou a decisão, sem suspense nem pergunta.",
+        "Conte o que foi feito e observado com números exatos e contexto suficiente para outra pessoa entender o que mudou.",
+        "Diga com franqueza o que os dados não provam; isso sustenta a credibilidade do relato.",
+        "Parágrafos curtos de prosa; lista só para passos reais; sem emoji decorativo nem pergunta final para engajamento.",
+        "Feche com um aprendizado específico, que outra equipe consiga aplicar."
+      ],
+      "focus": [
+        "PTBR-19",
+        "PTBR-26",
+        "PTBR-20",
+        "PTBR-05",
+        "PTBR-16",
+        "PTBR-10"
       ],
       "blocks": [
         {
@@ -499,26 +630,43 @@
     },
     {
       "id": "roteiro",
+      "name": "Roteiro de vídeo ou fala",
       "genres": [
         "roteiro"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Separe o que se vê do que se ouve, em blocos ou colunas, com tempo aproximado de cada trecho.",
+        "Escreva para o ouvido: frases curtas, uma ideia por frase, palavras fáceis de pronunciar; leia em voz alta.",
+        "Meça pela fala: cerca de 130 a 150 palavras por minuto de narração.",
+        "Indique o que aparece na tela com precisão, nunca como imagem ilustrativa genérica.",
+        "Termine com uma ação que o público consiga fazer, sem slogan."
+      ],
+      "focus": [
+        "PTBR-25",
+        "PTBR-19",
+        "PTBR-02",
+        "PTBR-16",
+        "PTBR-23",
+        "PTBR-05"
       ],
       "blocks": [
         {
           "id": "abertura",
           "required": true,
-          "instruction": "Apresente o problema dentro do tempo pedido.",
+          "instruction": "Apresente o problema com uma imagem ou situação nos primeiros segundos, dentro do tempo pedido.",
           "alternatives": []
         },
         {
           "id": "fala",
           "required": true,
-          "instruction": "Explique em falas pronunciáveis, preservando os conceitos.",
+          "instruction": "Explique em falas curtas e pronunciáveis, preservando os conceitos.",
           "alternatives": []
         },
         {
           "id": "visual",
           "required": true,
-          "instruction": "Associe sugestões visuais às falas quando o pedido exigir.",
+          "instruction": "Associe a cada fala uma indicação visual concreta quando o pedido exigir.",
           "alternatives": []
         },
         {
@@ -533,16 +681,32 @@
     },
     {
       "id": "argumento",
+      "name": "Artigo de opinião",
       "genres": [
         "artigo",
-        "post",
-        "ensaio"
+        "post"
+      ],
+      "material": "opiniao",
+      "craft": [
+        "Posição clara no primeiro parágrafo; o leitor precisa saber logo o que você defende e até onde.",
+        "Cada razão ancorada em exemplo concreto ou situação reconhecível; hipóteses aparecem como hipóteses.",
+        "Objeção na sua versão mais forte, respondida com argumento, não com concessão vaga.",
+        "Voz de autor: primeira pessoa quando natural, frases de tamanhos variados, sem simetria automática entre um lado e outro.",
+        "Termine numa consequência prática ou numa proposta, não num resumo."
+      ],
+      "focus": [
+        "PTBR-05",
+        "PTBR-19",
+        "PTBR-23",
+        "PTBR-06",
+        "PTBR-24",
+        "PTBR-04"
       ],
       "blocks": [
         {
           "id": "tese",
           "required": true,
-          "instruction": "Formule a posição autorizada pelo pedido.",
+          "instruction": "Formule a posição autorizada pelo pedido e o limite que ela aceita.",
           "alternatives": []
         },
         {
@@ -568,22 +732,95 @@
       ]
     },
     {
-      "id": "noticia",
+      "id": "ensaio",
+      "name": "Ensaio",
       "genres": [
-        "noticia",
-        "reportagem"
+        "ensaio"
+      ],
+      "material": "opiniao",
+      "craft": [
+        "Comece pela cena ou pelo caso, não por definição nem por generalização sobre as pessoas.",
+        "Pense em voz alta: examine alternativas, admita custos e mude de direção quando o exemplo pedir.",
+        "Primeira pessoa ensaística quando couber, com observações precisas e exemplos miúdos.",
+        "Varie o ritmo: um parágrafo longo de raciocínio pode vir seguido de uma frase curta.",
+        "Termine numa ideia aberta ou num critério de escolha, sem fórmula de conclusão."
+      ],
+      "focus": [
+        "PTBR-05",
+        "PTBR-25",
+        "PTBR-19",
+        "PTBR-23",
+        "PTBR-24",
+        "PTBR-31"
       ],
       "blocks": [
         {
-          "id": "fato",
+          "id": "situacao",
           "required": true,
-          "instruction": "Abra pelo fato principal, com agente e data disponíveis, na forma em que foram informados.",
+          "instruction": "Parta de uma situação concreta e da tensão que ela revela.",
+          "alternatives": []
+        },
+        {
+          "id": "caminhos",
+          "required": true,
+          "instruction": "Examine caminhos diferentes, com o que cada um ganha e custa.",
+          "alternatives": []
+        },
+        {
+          "id": "posicao",
+          "required": true,
+          "instruction": "Assuma uma posição nuançada ou um critério de escolha, sem fingir que a tensão desaparece.",
+          "alternatives": []
+        },
+        {
+          "id": "abertura",
+          "required": false,
+          "instruction": "Termine numa pergunta concreta ou numa imagem, sem resumo.",
+          "alternatives": [
+            "Volte à situação inicial e mostre o que mudou no olhar."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "noticia",
+      "name": "Notícia",
+      "genres": [
+        "noticia"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Título com o fato principal e verbo no presente; linha fina opcional com o segundo dado mais útil.",
+        "Lide completo: quem fez o quê, quando e onde, com o dado que mais interessa ao leitor; o restante em ordem decrescente de importância.",
+        "Reescreva o material com frases próprias e verbos de ação; não siga a ordem nem as frases do pedido.",
+        "Dados práticos (prazos, local, público, custo) em frases completas ou num quadro de serviço curto.",
+        "Atribua as informações à fonte; o que não foi divulgado entra uma vez, sem previsão de quando sairá."
+      ],
+      "focus": [
+        "PTBR-30",
+        "PTBR-07",
+        "PTBR-06",
+        "PTBR-12",
+        "PTBR-16",
+        "PTBR-27"
+      ],
+      "blocks": [
+        {
+          "id": "titulo",
+          "required": true,
+          "instruction": "Escreva um título informativo com o fato principal e verbo, sem adjetivo de avaliação.",
+          "alternatives": []
+        },
+        {
+          "id": "lide",
+          "required": true,
+          "instruction": "Abra pelo fato principal, com quem fez e quando; mantenha a data informada, sem trocá-la por dia da semana.",
           "alternatives": []
         },
         {
           "id": "detalhes",
           "required": true,
-          "instruction": "Ordene informações por relevância para o leitor.",
+          "instruction": "Ordene condições, prazos, público e local pelo uso que o leitor fará deles.",
           "alternatives": []
         },
         {
@@ -593,9 +830,17 @@
           "alternatives": []
         },
         {
+          "id": "servico",
+          "required": false,
+          "instruction": "Se houver vários dados práticos, feche com um quadro de serviço curto.",
+          "alternatives": [
+            "Reúna os dados práticos num parágrafo final de serviço."
+          ]
+        },
+        {
           "id": "contexto",
           "required": false,
-          "instruction": "Inclua contexto verificado que esclareça o fato.",
+          "instruction": "Inclua só contexto fornecido que esclareça o fato.",
           "alternatives": [
             "Explique a consequência documentada para o público da notícia."
           ]
@@ -603,10 +848,89 @@
       ]
     },
     {
-      "id": "proposta",
+      "id": "reportagem",
+      "name": "Reportagem explicativa",
       "genres": [
-        "proposta",
-        "negocios"
+        "reportagem"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Título e linha fina que prometam a explicação que o texto entrega.",
+        "Abra por um fato concreto ou situação; explique o funcionamento depois, com números e unidades.",
+        "Falas literais entre aspas, atribuídas com disse, afirmou ou segundo; contraste as fontes sem tomar partido.",
+        "Separe o que os documentos mostram do que não mostram; a lacuna é parte da notícia.",
+        "Intertítulos só em texto longo; termine numa fala, num dado ou na questão em aberto."
+      ],
+      "focus": [
+        "PTBR-06",
+        "PTBR-30",
+        "PTBR-12",
+        "PTBR-10",
+        "PTBR-07",
+        "PTBR-24"
+      ],
+      "blocks": [
+        {
+          "id": "titulo",
+          "required": true,
+          "instruction": "Escreva título e linha fina que digam o que a reportagem explica.",
+          "alternatives": []
+        },
+        {
+          "id": "abertura",
+          "required": true,
+          "instruction": "Abra pelo fato ou situação que torna o assunto relevante para o leitor.",
+          "alternatives": []
+        },
+        {
+          "id": "explicacao",
+          "required": true,
+          "instruction": "Explique o funcionamento e os números com os dados fornecidos.",
+          "alternatives": []
+        },
+        {
+          "id": "vozes",
+          "required": true,
+          "instruction": "Dê voz às fontes com falas literais entre aspas e atribuição clara.",
+          "alternatives": []
+        },
+        {
+          "id": "limites",
+          "required": true,
+          "instruction": "Diga o que os dados e documentos não mostram.",
+          "alternatives": []
+        },
+        {
+          "id": "fecho",
+          "required": false,
+          "instruction": "Termine numa fala, num dado ou na questão em aberto, sem resumo.",
+          "alternatives": [
+            "Feche com o próximo passo informado pelas fontes."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "proposta",
+      "name": "Proposta comercial",
+      "genres": [
+        "proposta"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Abra pelo que será entregue e pelo resultado para o cliente, na linguagem dele.",
+        "Escopo com inclusões e exclusões explícitas; prazo com o marco que o inicia.",
+        "Preço, parcelas e condições sem ambiguidade; tabela quando houver vários valores.",
+        "Itens opcionais separados da entrega principal, com preço e limite próprios.",
+        "Feche com o próximo passo concreto e quem precisa agir; tom de parceiro competente, sem superlativos."
+      ],
+      "focus": [
+        "PTBR-08",
+        "PTBR-11",
+        "PTBR-22",
+        "PTBR-09",
+        "PTBR-16",
+        "PTBR-29"
       ],
       "blocks": [
         {
@@ -638,10 +962,141 @@
       ]
     },
     {
-      "id": "cena",
+      "id": "nota-executiva",
+      "name": "Nota executiva ou comunicado",
       "genres": [
-        "conto",
-        "cronica"
+        "negocios",
+        "relatorio"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Primeira frase com a conclusão, a recomendação ou a situação atual, e a condição de que ela depende.",
+        "Mostre a conta ou a linha do tempo que sustenta a abertura; tabela quando comparar opções ou períodos.",
+        "Diga o que ainda não se sabe e o que não foi incluído, sem minimizar nem dramatizar.",
+        "Próximo passo com responsável e momento, quando informados.",
+        "Frases curtas, para quem decide ou é afetado; sem contexto genérico nem agradecimentos de praxe."
+      ],
+      "focus": [
+        "PTBR-08",
+        "PTBR-11",
+        "PTBR-10",
+        "PTBR-03",
+        "PTBR-24",
+        "PTBR-29"
+      ],
+      "blocks": [
+        {
+          "id": "abertura",
+          "required": true,
+          "instruction": "Abra pelo que o leitor precisa saber agora: conclusão, recomendação ou situação atual.",
+          "alternatives": []
+        },
+        {
+          "id": "dados",
+          "required": true,
+          "instruction": "Apresente os números e fatos que sustentam a abertura, comparados em tabela quando houver opções ou períodos.",
+          "alternatives": []
+        },
+        {
+          "id": "condicoes",
+          "required": true,
+          "instruction": "Diga premissas, exclusões e o que ainda está em apuração, e como isso pode mudar a conclusão.",
+          "alternatives": []
+        },
+        {
+          "id": "proximo",
+          "required": true,
+          "instruction": "Indique o próximo passo e quando haverá nova informação, se informados.",
+          "alternatives": []
+        },
+        {
+          "id": "historico",
+          "required": false,
+          "instruction": "Inclua a sequência dos fatos só se ela ajudar a decisão.",
+          "alternatives": [
+            "Resuma o que já foi feito, sem repetir os números."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "academico",
+      "name": "Texto acadêmico",
+      "genres": [
+        "academico"
+      ],
+      "material": "fatos",
+      "craft": [
+        "Precisão em vez de solenidade: frases diretas, termos definidos e verbos que dizem o que foi feito (comparou, mediu, obteve).",
+        "Resumo em parágrafo único: objetivo, método, resultados com números e conclusão proporcional, sem citações nem siglas soltas.",
+        "Discussão: interprete os resultados pelo desenho do estudo e diga o que as limitações impedem concluir.",
+        "Calibre a certeza pela evidência; ausência de dado é limitação declarada, não detalhe a esconder.",
+        "Não invente referências, testes estatísticos, valores de p ou intervalos."
+      ],
+      "focus": [
+        "PTBR-10",
+        "PTBR-06",
+        "PTBR-15",
+        "PTBR-14",
+        "PTBR-29",
+        "PTBR-07"
+      ],
+      "blocks": [
+        {
+          "id": "objetivo",
+          "required": true,
+          "instruction": "Situe a questão e o objetivo do estudo em poucas frases.",
+          "alternatives": []
+        },
+        {
+          "id": "metodo",
+          "required": true,
+          "instruction": "Descreva desenho, participantes, intervenção e medidas disponíveis; declare os ausentes.",
+          "alternatives": []
+        },
+        {
+          "id": "resultados",
+          "required": true,
+          "instruction": "Apresente os resultados com números e comparações, sem testes que não foram feitos.",
+          "alternatives": []
+        },
+        {
+          "id": "interpretacao",
+          "required": true,
+          "instruction": "Interprete pelo desenho: o que os resultados sustentam, o que não sustentam e por quê.",
+          "alternatives": []
+        },
+        {
+          "id": "implicacao",
+          "required": false,
+          "instruction": "Indique o que um próximo estudo precisaria medir, sem recomendar além dos dados.",
+          "alternatives": [
+            "Termine na conclusão proporcional ao desenho, sem extrapolar para outras populações."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cena",
+      "name": "Conto",
+      "genres": [
+        "conto"
+      ],
+      "material": "ficcao",
+      "craft": [
+        "Comece dentro da cena, com um gesto, um objeto ou um som concreto do lugar.",
+        "Ponto de vista firme: o narrador só sabe o que vê, ouve e lembra, e fala com vocabulário próprio.",
+        "Detalhes específicos do lugar e do trabalho das personagens, que não caberiam em outro conto.",
+        "Diálogo curto entre aspas, com disse ou sem verbo de elocução; nunca travessão.",
+        "Tensão por ação e silêncio, sem nomear sentimentos; final no tipo pedido, sem moral nem epifania explicada."
+      ],
+      "focus": [
+        "PTBR-31",
+        "PTBR-12",
+        "PTBR-22",
+        "PTBR-16",
+        "PTBR-25",
+        "PTBR-28"
       ],
       "blocks": [
         {
@@ -672,7 +1127,58 @@
           ]
         }
       ]
+    },
+    {
+      "id": "cronica",
+      "name": "Crônica",
+      "genres": [
+        "cronica"
+      ],
+      "material": "ficcao",
+      "craft": [
+        "Primeira pessoa próxima do leitor, como conversa de quem observa bem.",
+        "Cena concreta do cotidiano, com objetos, sons e falas curtas entre aspas.",
+        "Digressões curtas e humor que nasce do detalhe observado, não de piada pronta.",
+        "Personagens definidas por um gesto ou uma fala, sem descrição longa.",
+        "O fato pequeno sugere algo maior; feche numa imagem ou fala, sem moral."
+      ],
+      "focus": [
+        "PTBR-31",
+        "PTBR-16",
+        "PTBR-12",
+        "PTBR-22",
+        "PTBR-25",
+        "PTBR-24"
+      ],
+      "blocks": [
+        {
+          "id": "episodio",
+          "required": true,
+          "instruction": "Parta de um episódio miúdo do cotidiano, num lugar concreto, na voz do narrador.",
+          "alternatives": []
+        },
+        {
+          "id": "observacao",
+          "required": true,
+          "instruction": "Alterne cena e comentário, com humor ou ironia que nascem da observação.",
+          "alternatives": []
+        },
+        {
+          "id": "virada",
+          "required": true,
+          "instruction": "Deixe o pequeno fato sugerir algo maior sem anunciar a lição.",
+          "alternatives": []
+        },
+        {
+          "id": "fecho",
+          "required": false,
+          "instruction": "Termine num gesto, numa fala ou numa imagem, com leveza.",
+          "alternatives": [
+            "Volte ao objeto ou à frase do início com um sentido levemente novo."
+          ]
+        }
+      ]
     }
   ],
-  "implementation_status": "humanizar.py busca perfis e gera planos estruturais locais. O agente redige o texto, sem sortear fatos nem experiências."
+  "implementation_status": "humanizar.py busca perfis, gera planos estruturais e monta o briefing com ofício do gênero, regra de material e vícios típicos. O agente redige o texto, sem sortear fatos nem experiências."
 }

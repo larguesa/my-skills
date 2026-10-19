@@ -1,5 +1,9 @@
 # Validação local
 
+## Revisão 0.7.0 (19/10/2026)
+
+Detalhes na [revisão](REVISAO-0.7.0.md). Suíte da skill: 69 testes OK com avisos tratados como erros (54 anteriores, três deles adaptados ao formato 0.7.0 do briefing, e 15 novos, incluindo os das duas correções da revisão independente; cada etapa falhou antes da implementação). Runner offline: 15 testes OK, sem mudança no runner. Análise de 13/10: 15 testes OK. Também passaram os 22 testes do controlador, totalizando 121. Essas verificações são funcionais; o [teste real parcial](runs/2026-10-19-max/README.md) registra a qualidade de escrita separadamente.
+
 ## Revisão 0.6.0 (19/10/2026)
 
 Detalhes na [revisão](REVISAO-2026-10-19.md). Suíte da skill: 54 testes OK com avisos tratados como erros (39 anteriores e 15 novos; os 12 primeiros novos falharam antes da implementação). Runner offline: 15 testes OK (6 anteriores, agora sobre o snapshot 0.5.1, e 9 novos, incluindo adulteração e destino em evidência). Análise de 13/10: 15 testes OK. O modo v1 reproduz byte a byte o plano congelado de 13/10. Verificações funcionais, não avaliação de qualidade literária; o teste de escrita segue o [protocolo 0.6.0](PROTOCOLO-0.6.0.md), não executado.

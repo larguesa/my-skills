@@ -1,0 +1,27 @@
+O bug é o argumento padrão mutável. A expressão `bucket=[]` é avaliada uma única vez, na definição da função, e não a cada chamada. Todas as chamadas que omitem `bucket` compartilham o mesmo objeto lista, então o estado vaza de uma chamada para a seguinte.
+
+Quando o chamador passa uma lista, `append` já altera esse objeto. O problema aparece só no valor padrão.
+
+```python
+def collect(item, bucket=None):
+    if bucket is None:
+        bucket = []
+    bucket.append(item)
+    return bucket
+```
+
+`None` é imutável e serve só como sentinela. Uma lista nova é criada apenas quando o chamador não passa uma.
+
+```python
+assert collect("A") == ["A"]
+assert collect("B") == ["B"]  # não reutiliza ["A"]
+
+shared = []
+assert collect("A", shared) is shared
+assert collect("B", shared) == ["A", "B"]
+assert shared == ["A", "B"]
+
+other = ["X"]
+assert collect("Y", other) == ["X", "Y"]
+assert shared == ["A", "B"]  # listas distintas não se misturam
+```

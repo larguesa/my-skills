@@ -1,0 +1,10 @@
+### Roteiro — Por que não guardar senhas em texto aberto?
+**Duração aproximada: 1 minuto**
+
+| Tempo | Fala | Sugestão visual |
+|---|---|---|
+| **0–10s** | “Se um serviço guarda senhas em texto aberto, um vazamento entrega todas elas prontas para uso — inclusive em outras contas onde foram repetidas.” | Banco de dados com senhas legíveis. Um alerta de vazamento surge, com setas apontando para outras contas. |
+| **10–22s** | “Criptografar permite recuperar a senha com uma chave. Já o hash não foi feito para ser revertido: no login, o serviço calcula o hash da tentativa e compara com o armazenado.” | Criptografia: caixa que abre com uma chave. Hash: seta de mão única; dois resultados iguais recebem um sinal de confirmação. |
+| **22–35s** | “Cada senha deve receber um salt: um valor aleatório individual, guardado junto ao hash. Assim, senhas iguais produzem resultados diferentes, dificultando ataques com tabelas pré-calculadas.” | Duas senhas idênticas recebem salts diferentes e geram hashes distintos. Legenda: **“Salt não precisa ser secreto.”** |
+| **35–50s** | “Mas atacantes ainda podem testar palpites. Por isso, use uma função própria para senhas, como Argon2id, com custo adequado de memória e processamento. Esse trabalho deliberadamente caro torna ataques em massa mais difíceis.” | Muitos palpites entram em uma máquina; cada tentativa consome tempo e memória. Destaque para **Argon2id**. |
+| **50–60s** | “Hashes rápidos, como SHA-256 sozinho, não bastam. A regra é: nunca guardar a senha original; guardar salt, parâmetros e hash, usando uma biblioteca confiável.” | Checklist final: **sem texto aberto · salt individual · função própria para senhas · custo bem configurado**. |

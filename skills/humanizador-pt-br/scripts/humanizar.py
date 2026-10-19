@@ -27,7 +27,7 @@ def verify(original, revised, protected_terms=()):
     return {'input_sha256': sha256(original), 'output_sha256': sha256(revised), 'unchanged': original == revised, 'semantic_review_needed': original != revised, 'protected_content_preserved': inventories[0] == inventories[1], 'differences': differences, 'aviso': 'A comparação mecânica não garante fidelidade semântica. Toda alteração exige revisão humana de fatos, intenção e contexto.'}
 
 REFERENCES = Path(__file__).resolve().parents[1] / 'references'
-VERSION = '0.6.0'
+VERSION = '0.7.0'
 
 
 def load_profiles(path=None):
@@ -350,51 +350,82 @@ def rhythm(text):
 
 
 DELIVERY = [
-    'Responda somente com o artefato pedido: sem preâmbulo ("Aqui está"), bastidores ou oferta final. Comandos, JSON ou plano só quando o pedido exigir esse formato.',
+    'Responda somente com o artefato pedido: sem preâmbulo ("Aqui está"), bastidores, nota ao solicitante ou oferta final. Comandos, JSON ou plano só quando o pedido exigir esse formato.',
     'Estes retornos já foram calculados pela skill: não repita comandos nem chamadas de ferramenta.',
     'Prosa sem travessão (U+2014) e sem traço substituto (meia-risca ou hífen entre espaços): use ponto, vírgula, dois-pontos ou parênteses; diálogo novo vai entre aspas.',
     'Norma culta e acentuação em todos os perfis, inclusive coloquial, informal e caricato.',
-    'Fatos só do pedido ou de fonte verificada: não acrescente dia da semana, data relativa, previsão, orientação, fonte, número, fala ou vivência ausentes.',
-    'Releia contra o plano e o catálogo; termine quando uma nova revisão não trouxer melhoria concreta.',
+    'Antes de entregar, leia como o leitor: o gênero está completo? As frases são suas, e não cópia do pedido (salvo citações e termos exatos)? Tudo o que o pedido fixa continua igual?',
+    'Termine quando uma nova revisão não trouxer melhoria concreta.',
 ]
 
 
 def brief(profile='neutro-claro', genre=None, breadth=2, randomness=0, seed=None, rules=None):
-    """Perfil, plano e catálogo inteiro em instruções curtas, sem gerar prosa."""
+    """Ofício do gênero, plano, perfil e catálogo inteiro em instruções curtas, sem gerar prosa."""
     plan = generate_structure(profile, genre, breadth, randomness, seed)
     data = json.loads((REFERENCES / 'estilos.json').read_bytes().decode('utf-8'))
     guidance = load_profiles()[profile]
     rules = load_catalog(REFERENCES / 'catalogo.json') if rules is None else rules
+    structure = next(s for s in data['structures'] if s['id'] == plan['structure_id'])
+    focus = structure.get('focus', [])
+    if not set(focus) <= {r['id'] for r in rules}:
+        raise ValueError('focus cita regra ausente do catálogo.')
+    material = structure.get('material', 'fatos')
+    # O material do gênero é só o padrão: o tipo pedido (fato, opinião ou ficção) prevalece.
+    types = data.get('material_types', {})
+    alternatives = [kind['when_requested'] for key, kind in types.items() if key != material]
     # positive/negative_example seguem a polaridade do detector; aqui recebem o papel editorial.
-    compact = [{'id': r['id'], 'name': r.get('name', ''), 'evite': r.get('positive_example'),
-                'prefira': r.get('negative_example'), 'como': r.get('suggestion'),
-                'termos': r.get('avoid', []), 'excecoes': r.get('exceptions', [])} for r in rules]
+    compact = [{'id': r['id'], 'name': r.get('name', ''), 'foco': r['id'] in focus,
+                'evite': r.get('positive_example'), 'prefira': r.get('negative_example'),
+                'como': r.get('suggestion'), 'termos': r.get('avoid', []),
+                'excecoes': r.get('exceptions', [])} for r in rules]
     return {'kind': 'writing_brief', 'version': VERSION, 'profile': profile, 'genre': plan['genre'],
-            'structure_id': plan['structure_id'], 'breadth': breadth, 'randomness': randomness,
-            'seed': seed, 'adjustments': guidance['adjustments'], 'avoid': guidance.get('avoid', []),
+            'genre_name': structure.get('name', plan['genre']), 'structure_id': plan['structure_id'],
+            'breadth': breadth, 'randomness': randomness, 'seed': seed,
+            'craft': structure.get('craft', []), 'material': material,
+            'material_label': types.get(material, {}).get('label', material),
+            'material_policy': data.get('material', {}).get(material, ''),
+            'material_alternatives': alternatives,
+            'adjustments': guidance['adjustments'], 'avoid': guidance.get('avoid', []),
             'plan': plan['blocks'], 'voice_invariants': data.get('voice_invariants', []),
-            'forbidden': data.get('forbidden', []), 'rules': compact, 'delivery': DELIVERY}
+            'forbidden': data.get('forbidden', []), 'focus': focus, 'rules': compact,
+            'delivery': DELIVERY}
 
 
 def brief_text(data):
+    """Ofício primeiro, contrato de entrega por último, perto do pedido."""
     lines = [f"Briefing editorial humanizador-pt-br {data['version']}: perfil {data['profile']}, "
-             f"gênero {data['genre']}, estrutura {data['structure_id']}.", '', 'Entrega']
-    lines += [f'- {item}' for item in data['delivery']]
-    lines += ['', 'Perfil', 'Faça: ' + '; '.join(data['adjustments']) + '.',
-              'Evite: ' + '; '.join(data['avoid']) + '.', '',
-              'Plano: preencha cada bloco só com fatos do pedido']
+             f"gênero {data['genre']}, estrutura {data['structure_id']}.", '']
+    if data['craft']:
+        lines += [f"Ofício do gênero: {data['genre_name']}"] + [f'- {item}' for item in data['craft']] + ['']
+    lines.append('Plano: funções do texto, não seções nem parágrafos obrigatórios. Funda, divida ou reordene '
+                 'quando o gênero pedir e não use os nomes dos blocos como títulos.')
     lines += [f"{i}. {b['id']}, {'obrigatório' if b['required'] else 'opcional'}: {b['instruction']}"
               for i, b in enumerate(data['plan'], 1)]
-    lines += ['', 'Preserve: ' + '; '.join(data['voice_invariants']) + '.',
-              'Nunca: ' + '; '.join(data['forbidden']) + '.', '',
-              f"Catálogo ({len(data['rules'])} regras): evite o vício, prefira a forma direta, respeite a exceção"]
+    lines += ['', f"Perfil {data['profile']}", 'Faça: ' + '; '.join(data['adjustments']) + '.']
+    if data['avoid']:
+        lines.append('Evite: ' + '; '.join(data['avoid']) + '.')
+    lines.append('')
+    if data['material_policy']:
+        lines += ['Material: o tipo de texto pedido (fato, opinião ou ficção) prevalece.',
+                  f"- Padrão do gênero, {data['material_label']}. {data['material_policy']}"]
+        lines += [f'- {item}' for item in data['material_alternatives']]
+    lines += ['Preserve: ' + '; '.join(data['voice_invariants']) + '.',
+              'Nunca: ' + '; '.join(data['forbidden']) + '.', '']
+    by_id = {r['id']: r for r in data['rules']}
+    if data['focus']:
+        lines.append('Vícios mais comuns neste gênero')
+        for r in (by_id[rule_id] for rule_id in data['focus']):
+            line = f"- {r['id']} {r['name']}. Evite: \"{r['evite']}\" Prefira: \"{r['prefira']}\""
+            if r['termos']:
+                line += ' Termos: ' + '; '.join(r['termos']) + '.'
+            lines.append(line)
+        lines.append('')
+    lines.append(f"Demais regras do catálogo ({len(data['rules'])} no total): evite as expressões, "
+                 'salvo termo técnico, citação literal ou uso pedido')
     for r in data['rules']:
-        line = f"- {r['id']} {r['name']}. Evite: \"{r['evite']}\" Prefira: \"{r['prefira']}\" {r['como']}"
-        if r['termos']:
-            line += ' Termos: ' + ', '.join(r['termos']) + '.'
-        if r['excecoes']:
-            line += ' Exceção: ' + ' '.join(r['excecoes'])
-        lines.append(line)
+        if not r['foco']:
+            lines.append(f"- {r['id']} {r['name']}: " + '; '.join(r['termos'] or [r['evite']]) + '.')
+    lines += ['', 'Entrega'] + [f'- {item}' for item in data['delivery']]
     return '\n'.join(lines) + '\n'
 
 
