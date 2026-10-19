@@ -1,5 +1,9 @@
 # Validação local
 
+## Revisão 0.8.0 (19/10/2026)
+
+Detalhes na [revisão](REVISAO-0.8.0.md). Execução final, depois de todas as alterações: suíte da skill com 87 testes OK, avisos tratados como erros (69 anteriores, seis deles ajustados ao contrato 0.8.0, um renomeado, e 18 novos, todos falhando antes da implementação); runner offline com 15 testes OK, sem mudança no runner, inclusive o limite de 40% do tratamento e a leitura da evidência de 13/10; análise de 13/10 com 15 testes OK; `git diff --check` sem apontamentos. Verificação independente repetida: 117 testes OK, 11 reproduções corrigidas e 1.546 arquivos congelados sem alteração. O [teste funcional de redação](reviews/0.8.0/SMOKE.md) produziu cinco textos sem bloqueio mecânico, com problemas editoriais registrados, e uma recusa temporária do provedor.
+
 ## Revisão 0.7.0 (19/10/2026)
 
 Detalhes na [revisão](REVISAO-0.7.0.md). Suíte da skill: 69 testes OK com avisos tratados como erros (54 anteriores, três deles adaptados ao formato 0.7.0 do briefing, e 15 novos, incluindo os das duas correções da revisão independente; cada etapa falhou antes da implementação). Runner offline: 15 testes OK, sem mudança no runner. Análise de 13/10: 15 testes OK. Também passaram os 22 testes do controlador, totalizando 121. Essas verificações são funcionais; o [teste real parcial](runs/2026-10-19-max/README.md) registra a qualidade de escrita separadamente.

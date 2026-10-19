@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
 description: Redija, revise e diagnostique textos em PT-BR com ofício editorial, fidelidade e sem fórmulas de IA.
-version: 0.7.0
+version: 0.8.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
@@ -17,8 +17,8 @@ Escreva em português brasileiro, com norma culta e acentuação. A resposta fin
 ## Modo
 
 - Redação: pedido com briefing e sem texto-base. Escreva do zero com os fatos fornecidos, sem exigir rascunho ou resposta de outra chamada.
-- Revisão: pedido com texto do usuário. Altere só o que melhora clareza, ritmo ou precisão; preserve fatos, estrutura útil e voz.
-- Diagnóstico: análise sem reescrita. Aponte trechos e motivos, sem entregar versão nova.
+- Revisão: pedido com texto do usuário. Altere só o que melhora clareza, ritmo ou precisão, no escopo pedido; preserve fatos, estrutura útil, voz e frases que já funcionam.
+- Diagnóstico: análise sem reescrita. Aponte trechos, motivos e prioridades, sem versão nova.
 
 ## Como escrever bem
 
@@ -41,26 +41,25 @@ Escreva em português brasileiro, com norma culta e acentuação. A resposta fin
 - NA FICÇÃO, EVITE emoção pronta: "um silêncio pesado", "o tempo pareceu parar", "um nó na garganta", "e foi ali que eu entendi". Mostre gesto, objeto ou fala.
 - NÃO ACRESCENTE preâmbulo ("Aqui está o texto:"), elogio automático, "espero que isso ajude", oferta do assistente, emoji decorativo, negrito repetitivo, tríade obrigatória ou slogan final.
 
-Preserve termos técnicos e usos literais (ecossistema biológico, estatística robusta, otimização com critério). Citação, código e dado original são intocáveis, mesmo com item evitado; sinalize a exceção. Síntese, contraste, lista ou quadro necessários ao gênero não são defeitos automáticos. Estas regras orientam edição, não identificam autoria.
+Preserve termos técnicos e usos literais (ecossistema biológico, estatística robusta, jornada de trabalho, otimização com critério). Citação, código e dado original são intocáveis, mesmo com item evitado; a exceção se aponta no diagnóstico, não no texto entregue. Síntese, contraste, lista ou quadro necessários ao gênero não são defeitos automáticos. Estas regras orientam edição, não identificam autoria.
 
 ## Fidelidade
 
 O pedido define se o texto é fato, opinião ou ficção e prevalece sobre o padrão do gênero (crônica pode ser relato real; roteiro, ficção).
 
-- Fato: use só fatos, fontes e atribuições fornecidos ou verificados. Reorganizar, explicar, calcular o que o pedido manda e transformar fato em orientação ("o formulário aceita só PDF" vira "envie o arquivo em PDF") é escrever bem; acrescentar estudo, entrevista, link, número, cliente, finalidade, previsão, serviço, experiência ou sentimento não é.
+- Fato: nomes, datas, números, resultados, falas e atribuições só do pedido, do texto-base ou de fonte verificada nesta tarefa. Conceito geral pode ser explicado; exemplo numérico didático entra como hipótese, não como caso real. Reorganizar, explicar, calcular o que o pedido manda e transformar fato em orientação ("o formulário aceita só PDF" vira "envie o arquivo em PDF") é escrever bem; acrescentar estudo, entrevista, link, número, cliente, finalidade, previsão, serviço, experiência ou sentimento não é.
 - Não amplie nem restrinja o alcance ("todos", "qualquer", "apenas", "previsto", público). Preserve negações, condições, unidades, incerteza e posição do autor; não converta associação em causa, estimativa em garantia ou ausência de confirmação em ausência.
-- Não calcule dia da semana nem troque data por referência relativa ("nesta quinta", "hoje") sem conferência. Diga a lacuna uma vez, como informação, sem prever quando será resolvida.
-- Opinião: posição, raciocínio e exemplos hipotéticos, apresentados como hipótese, são seus; dados, estudos, citações e experiências reais só se fornecidos.
+- Não calcule dia da semana nem troque data por referência relativa ("nesta quinta", "hoje") sem conferência. Escreva "não divulgado" só quando o material disser; lacuna essencial aparece uma vez, sem previsão.
+- Opinião: posição, raciocínio e exemplos hipotéticos, apresentados como hipótese, são seus; dados, estudos, citações e experiências reais só do pedido ou de fonte verificada.
 - Ficção: invente cena, gestos, objetos e falas coerentes com a premissa; preserve o que o pedido fixa (narrador, frase literal, tipo de final) e não use pessoas reais.
 - Exemplos editoriais não são fatos reutilizáveis. Não envie texto confidencial a terceiros. Avaliações com modelos exigem aprovação da skill e do protocolo.
 
 ## Catálogo e estilo ANTES de escrever
 
-Aplique o [catálogo](references/catalogo.json) e um [estilo](references/estilos.json) antes da primeira frase; não deixe essa etapa como sugestão. Com terminal, na pasta da skill (Python 3, sem dependências), gere o briefing:
+Aplique o [catálogo](references/catalogo.json) e um [estilo](references/estilos.json) antes da primeira frase. Com terminal, na pasta da skill (Python 3, sem dependências), gere o briefing:
 
 ```text
 python3 scripts/humanizar.py brief --profile jornalistico --genre noticia
-python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
 ```
 
 Sem terminal, ou com esses retornos já no contexto, não escreva comandos: leia os retornos ou os dois JSONs, faça a mesma seleção e siga para o texto. Nunca responda apenas com comandos, chamadas de ferramenta, JSON ou plano, salvo quando o pedido exigir explicitamente esse formato como artefato.
@@ -73,8 +72,8 @@ Coloquial busca efeito de conversa; informal reduz solenidade sem exigir oralida
 
 1. Identifique modo, gênero, leitor, objetivo, extensão e voz.
 2. Rode `brief` com perfil e gênero compatíveis, ou leia os JSONs. Os blocos do plano são funções do texto, não seções nem parágrafos obrigatórios.
-3. Escreva o texto inteiro na voz do perfil. Não imponha informalidade, gíria, erro, metáfora decorativa ou personalidade; na ficção, imagens precisas são bem-vindas.
-4. Releia como leitor e como editor: complete o que falta ao gênero, corte o que repete, reescreva frases copiadas do pedido e confira cada fato. Com terminal, rode `check`.
+3. Escreva o texto inteiro na voz do perfil, sem impor informalidade, gíria, erro, metáfora decorativa ou personalidade; na ficção, imagens precisas são bem-vindas. Na revisão, mexa só no que se justifica; no diagnóstico, pare na lista de trechos e motivos.
+4. Releia como leitor e como editor: complete o que falta ao gênero, corte o que repete, reescreva frases copiadas do pedido (na redação) e confira cada fato. Com terminal, rode `check`.
 5. Entregue só o artefato pedido, sem bastidores. Não publique nem sobrescreva original sem autorização.
 
 ## Verificação e ferramentas
@@ -83,7 +82,7 @@ Coloquial busca efeito de conversa; informal reduz solenidade sem exigir oralida
 python3 scripts/humanizar.py check texto.txt --briefing pedido.txt
 ```
 
-Código 1 indica bloqueio: saída só com comandos, chamada de ferramenta ou travessão fora de código e citação fechados, ou preâmbulo na primeira linha. Corrija e verifique de novo. Se o pedido exigir explicitamente só código, comando ou JSON, use `--artifact codigo`. Os alertas (catálogo, traço substituto, número só no texto ou só no pedido, dia da semana ou data relativa ausentes do pedido) pedem leitura no contexto; `check` não prova fidelidade nem qualidade.
+Código 1 bloqueia comandos, chamada de ferramenta ou JSON no lugar do texto, preâmbulo de entrega e travessão na prosa. O travessão só passa em código ou em citação, nome ou frase conferidos na fonte; na revisão, `--original` com o texto do usuário libera a frase mantida. Pedido de só código, comando ou JSON: `--artifact codigo`. Alertas pedem leitura; `check` não prova fidelidade nem qualidade.
 
 Para revisar texto existente, use `audit`, `rhythm`, `replace`, `suggest`, `apply` e `verify` conforme o [README](README.md); só edições aprovadas são aplicadas, em arquivo novo.
 

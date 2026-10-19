@@ -1,0 +1,314 @@
+[
+  {
+    "input": {
+      "text": "ls",
+      "briefing": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "c7b68ac37f364473e922936708e7f43c293dd07b295171566c07ff5fe024fab9",
+      "briefing_sha256": null,
+      "original_sha256": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "code": "saida_somente_comandos",
+          "message": "A resposta traz comandos em vez do artefato pedido."
+        }
+      ],
+      "review": [],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "curl https://exemplo.test",
+      "briefing": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "6f5d040d53cddb038ba47aaf59c236d8b4a97e5a57f7b6f3429a9aee6138b2b3",
+      "briefing_sha256": null,
+      "original_sha256": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "code": "saida_somente_comandos",
+          "message": "A resposta traz comandos em vez do artefato pedido."
+        }
+      ],
+      "review": [],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "Execute:\n```sh\nls -la\n```",
+      "briefing": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "code": "saida_somente_comandos",
+          "message": "A resposta traz comandos em vez do artefato pedido."
+        }
+      ],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "78ae56b0a6b3121e1673213928c05fee4f36ad72d11f3f9eabaf62004837d491",
+      "briefing_sha256": null,
+      "original_sha256": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": [],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "“Agora — espere.”",
+      "briefing": "Escreva um diálogo novo.",
+      "deliverable": true,
+      "blocking": [],
+      "review": [
+        {
+          "code": "travessao_protegido",
+          "start": 7,
+          "end": 8,
+          "original": "—"
+        }
+      ]
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "d41daceef8aafd7392fc019d7bc92761695c26f80bd5a9794a657d3bdf671eeb",
+      "briefing_sha256": "341e8dbd111474e83daa9c67c9cf255f1627590c320a0c85523ef63f95067814",
+      "original_sha256": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "code": "travessao",
+          "start": 7,
+          "end": 8,
+          "original": "—"
+        }
+      ],
+      "review": [],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "Saldo: 20 reais.",
+      "briefing": "Saldo: -20 reais.",
+      "deliverable": true,
+      "blocking": [],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "cf061ec1fce4d988906d541a8c38b79fa020c1c479f2c100786e1a85418623ad",
+      "briefing_sha256": "39d7c5c3624b7ebdee02883bcd37610caf82184c7f418d71a2dbf4ee6c595e43",
+      "original_sha256": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": [
+        {
+          "code": "acrescimo_numerico",
+          "start": 7,
+          "end": 9,
+          "original": "20"
+        },
+        {
+          "code": "omissao_numerica",
+          "start": 7,
+          "end": 10,
+          "original": "-20",
+          "source": "briefing"
+        }
+      ],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "A entrega será domingo.",
+      "briefing": "Domingos revisou o aviso.",
+      "deliverable": true,
+      "blocking": [],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "f6a452a4a9b257a1caed9c2b6522d8a00127decd87c0ab21be49287ba5d5605e",
+      "briefing_sha256": "853a47265d87cd9d7d044505de96b2c308b5f2000dc8572654d67462ca121090",
+      "original_sha256": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": [
+        {
+          "code": "data_inferida",
+          "start": 15,
+          "end": 22,
+          "original": "domingo"
+        }
+      ],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "Seguem os documentos:\n- contrato\n- recibo",
+      "briefing": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "rule_id": "PTBR-27",
+          "start": 0,
+          "end": 21,
+          "original": "Seguem os documentos:",
+          "protected": true,
+          "code": "preambulo_de_entrega"
+        }
+      ],
+      "review": []
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "edc02f294806f44c4ccbd024c4d5a9dd979ba04d40f397308f15b670625e1fe0",
+      "briefing_sha256": null,
+      "original_sha256": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": [
+        {
+          "rule_id": "PTBR-27",
+          "start": 0,
+          "end": 21,
+          "original": "Seguem os documentos:",
+          "protected": true,
+          "code": "catalogo",
+          "suggestion": "Comece pela primeira linha útil do artefato."
+        }
+      ],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "text": "Claro!\nAqui está a notícia:\nO cadastro foi aberto.",
+      "briefing": null,
+      "deliverable": true,
+      "blocking": [],
+      "review": [
+        {
+          "rule_id": "PTBR-27",
+          "start": 7,
+          "end": 27,
+          "original": "Aqui está a notícia:",
+          "protected": true,
+          "code": "catalogo",
+          "suggestion": "Entregue o artefato a partir da primeira linha útil. Apague a frase que apresenta o texto ao solicitante."
+        }
+      ]
+    },
+    "after": {
+      "kind": "delivery_check",
+      "version": "0.8.0",
+      "artifact": "prosa",
+      "input_sha256": "2658f52549e6f1c1a5c3a8227cd17e472c7859a490509bdb0cd9ffbc4777955d",
+      "briefing_sha256": null,
+      "original_sha256": null,
+      "deliverable": false,
+      "blocking": [
+        {
+          "rule_id": "PTBR-27",
+          "start": 7,
+          "end": 27,
+          "original": "Aqui está a notícia:",
+          "protected": true,
+          "code": "preambulo_de_entrega"
+        }
+      ],
+      "review": [],
+      "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+    }
+  },
+  {
+    "input": {
+      "protected_input": "``vale destacar``",
+      "spans": [
+        {
+          "start": 0,
+          "end": 2,
+          "kind": "código"
+        },
+        {
+          "start": 15,
+          "end": 17,
+          "kind": "código"
+        }
+      ]
+    },
+    "after": [
+      {
+        "start": 0,
+        "end": 17,
+        "kind": "código"
+      }
+    ]
+  },
+  {
+    "input": {
+      "protected_input": "não aceito.",
+      "spans": []
+    },
+    "after": [
+      {
+        "start": 0,
+        "end": 11,
+        "kind": "negação/condição"
+      }
+    ]
+  },
+  {
+    "input": {
+      "protected_input": "se o sr. pedir, aceite.",
+      "spans": [
+        {
+          "start": 0,
+          "end": 7,
+          "kind": "negação/condição"
+        }
+      ]
+    },
+    "after": [
+      {
+        "start": 0,
+        "end": 22,
+        "kind": "negação/condição"
+      }
+    ]
+  }
+]

@@ -1,0 +1,13 @@
+Imagine uma página que mostra o preço de um produto vindo de uma API. Toda vez que alguém abre a página, o código consulta a API e recebe o valor atual. Sem cache, cada visita gera uma consulta nova, mesmo que duas pessoas acessem a página com um segundo de diferença.
+
+Cache é guardar uma resposta para reutilizá-la por um tempo, em vez de refazer o trabalho que a gerou. Nesse exemplo, a página guarda o preço por até 30 segundos. Enquanto o prazo não vence, qualquer consulta lê o valor guardado e não chama a API. Passados os 30 segundos, a próxima consulta descarta o valor guardado, busca o preço na API e guarda a resposta nova, que volta a valer por mais 30 segundos.
+
+Uma comparação cotidiana ajuda a entender o mecanismo. Pense em uma placa de preço na porta de uma loja. Um funcionário sai à rua a cada 30 minutos, confere o preço no mercado e atualiza a placa. Enquanto ele não volta, quem olha a placa vê sempre o mesmo valor. Isso é rápido e resolve bem o caso de quem quer só saber o preço para decidir a compra.
+
+A vantagem está aí: a página responde rápido, porque ler o valor guardado é mais barato do que fazer uma chamada de rede, e a API recebe menos consultas, o que alivia o servidor e evita custo desnecessário. Se 100 pessoas abrem a página em 30 segundos, a API é consultada uma vez.
+
+O risco também está na placa. Se o preço na rua muda cinco minutos depois da última atualização, a placa continua mostrando o valor antigo até o funcionário voltar. Do mesmo modo, o cache não recebe notificação quando o preço muda na API. Ele só percebe a mudança quando o prazo de 30 segundos vence e a consulta seguinte vai até a API. Nesse intervalo, o usuário pode comprar com base em um preço que já não vale. Quanto maior o prazo do cache, maior a economia e maior a chance de mostrar dado desatualizado.
+
+Note onde a comparação deixa de valer: a placa física pode ser atualizada no momento exato da mudança, se alguém avisar o funcionário. O cache que você descreveu não tem esse aviso; a única forma de atualizar o valor é esperar o prazo e consultar de novo.
+
+Por isso, a escolha do tempo do cache depende do preço do erro. Para um catálogo de livros, 30 segundos é pouco. Para uma cotação que alguém usa para fechar negócio, pode ser muito: nesse caso, convém reduzir o prazo, ou avisar o usuário de que aquele preço pode não ser o mais recente.

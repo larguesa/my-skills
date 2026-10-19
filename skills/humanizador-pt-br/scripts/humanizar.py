@@ -27,7 +27,7 @@ def verify(original, revised, protected_terms=()):
     return {'input_sha256': sha256(original), 'output_sha256': sha256(revised), 'unchanged': original == revised, 'semantic_review_needed': original != revised, 'protected_content_preserved': inventories[0] == inventories[1], 'differences': differences, 'aviso': 'A comparação mecânica não garante fidelidade semântica. Toda alteração exige revisão humana de fatos, intenção e contexto.'}
 
 REFERENCES = Path(__file__).resolve().parents[1] / 'references'
-VERSION = '0.7.0'
+VERSION = '0.8.0'
 
 
 def load_profiles(path=None):
@@ -71,25 +71,126 @@ def sha256(text):
     return hashlib.sha256(text.encode('utf-8')).hexdigest()
 
 
+FENCE_OPEN = re.compile(r'(?m)^[ \t]{0,3}(`{3,}|~{3,})(.*)$')
+BACKTICKS = re.compile(r'`+')
+PARAGRAPH_BREAK = re.compile(r'\n[ \t]*\r?\n')
+QUOTE_CLOSERS = {'“': '”', '«': '»', '‘': '’', '"': '"', "'": "'"}
+BLOCKQUOTE = re.compile(r'(?m)^[ \t]*>[^\n]*')
+
+
+def literal_spans(text):
+    """Código Markdown e citações, num só reconhecedor para edição, comparação e entrega.
+
+    Cerca fecha com o mesmo caractere e comprimento igual ou maior; crases inline fecham
+    com sequência do mesmo tamanho; aspas fecham no mesmo parágrafo (aspas retas simples,
+    na mesma linha, sem confundir apóstrofo). closed=False marca trecho aberto: a edição o
+    protege de forma conservadora, mas a entrega não o trata como literal.
+    """
+    spans, gaps, position = [], [], 0
+    while True:
+        opening = FENCE_OPEN.search(text, position)
+        while opening and opening.group(1)[0] == '`' and '`' in opening.group(2):
+            opening = FENCE_OPEN.search(text, opening.end() + 1)  # crases na linha: código inline
+        if not opening:
+            break
+        marker = opening.group(1)
+        closer = re.compile(r'(?m)^[ \t]{0,3}' + re.escape(marker[0]) + '{%d,}[ \t]*\r?$' % len(marker))
+        closing = closer.search(text, opening.end())
+        gaps.append((position, opening.start()))
+        end = closing.end() if closing else len(text)
+        spans.append({'start': opening.start(), 'end': end, 'kind': 'código', 'closed': bool(closing)})
+        position = end
+        if not closing:
+            break
+    gaps.append((position, len(text)))
+    for start, stop in gaps:
+        _inline_literals(text, start, stop, spans)
+        for match in BLOCKQUOTE.finditer(text, start, stop):
+            spans.append({'start': match.start(), 'end': match.end(), 'kind': 'citação', 'closed': True})
+    return sorted(spans, key=lambda s: (s['start'], s['end']))
+
+
+def _inline_literals(text, start, stop, spans):
+    i = start
+    while i < stop:
+        character = text[i]
+        brk = PARAGRAPH_BREAK.search(text, i, stop)
+        paragraph_end = brk.start() if brk else stop
+        line_end = text.find('\n', i, stop)
+        line_end = stop if line_end < 0 else line_end
+        if character == '`':
+            size = len(BACKTICKS.match(text, i).group())
+            closing = next((m for m in BACKTICKS.finditer(text, i + size, paragraph_end) if len(m.group()) == size), None)
+            if closing:
+                spans.append({'start': i, 'end': closing.end(), 'kind': 'código', 'closed': True})
+                i = closing.end()
+            else:
+                spans.append({'start': i, 'end': line_end, 'kind': 'código', 'closed': False})
+                i += size
+            continue
+        if character in QUOTE_CLOSERS and not (character in '"\'' and i > 0 and _word_character(text[i - 1])):
+            closer, limit, k = QUOTE_CLOSERS[character], (line_end if character == "'" else paragraph_end), i + 1
+            while True:
+                k = text.find(closer, k, limit)
+                if k < 0 or closer not in '’\'' or k + 1 >= len(text) or not _word_character(text[k + 1]):
+                    break
+                k += 1  # apóstrofo dentro da palavra, como em d’água
+            closed = k >= 0
+            spans.append({'start': i, 'end': k + 1 if closed else limit, 'kind': 'citação', 'closed': closed})
+            i = k + 1 if closed else i + 1
+            continue
+        i += 1
+
+
+def _folded(text):
+    """Texto sem acentos e em minúsculas, com o índice original de cada caractere (NFC ou NFD)."""
+    chars, index = [], []
+    for i, character in enumerate(text):
+        for base in unicodedata.normalize('NFD', character):
+            if not unicodedata.combining(base):
+                for folded in base.casefold():
+                    chars.append(folded)
+                    index.append(i)
+    return ''.join(chars), index
+
+
+NEGATION = re.compile(r'\b(?:nao|nunca|jamais|nem|sem|se|caso|desde que|contanto que|a menos que|exceto|salvo|somente se|apenas se)\b')
+ABBREVIATION = re.compile(r'(?i)(?<!\w)(?:sr|sra|srta|dr|dra|prof|profa|av|p|ex|etc|art|inc|ltda|cia|pág|vol|cap|fig|obs|aprox|jr)$')
+
+
+def _boundaries(text, literals):
+    """Fins de oração: ponto de abreviação, ponto decimal e pontuação dentro de literal não contam."""
+    marks = []
+    for match in re.finditer(r'[!?\n]|(?<!\d)\.|\.(?!\d)', text):
+        p = match.start()
+        if text[p] == '.' and ABBREVIATION.search(text, max(0, p - 6), p):
+            continue
+        if not any(s['start'] <= p < s['end'] for s in literals):
+            marks.append(p)
+    return marks
+
+
 def protected_spans(text, protected_terms=()):
     """Bloqueio heurístico conservador, não reconhecimento completo de entidades."""
     patterns = {
-        'número': r'[+−-]?\d+(?:[.,:/%-]\d+)*(?:[^\S\r\n]*%)?',
+        'número': r'[+−-]?\d+(?:[.,:/%-]\d+)*[ºª°]?(?:[^\S\r\n]*%)?',
         'URL': r'(?:https?://|www\.)[^\s<>]+',
-        'código': r'```[\s\S]*?(?:```|\Z)|~~~[\s\S]*?(?:~~~|\Z)|`[^`\n]*(?:`|$)',
-        'citação': r'“[^”]*(?:”|\Z)|"[^"]*(?:"|\Z)|‘[^’]*(?:’|\Z)|\x27[^\x27\n]*\x27|(?m:^\s*>[^\n]*)',
-        'negação/condição': r'(?i:\b(?:não|nunca|jamais|nem|sem|se|caso|desde que|contanto que|a menos que|exceto|salvo|somente se|apenas se)\b)',
     }
     spans = []
     for kind, pattern in patterns.items():
-        for match in re.finditer(pattern, text):
-            start, end = match.span()
-            if kind == 'negação/condição':
-                # Conservar a oração inteira evita inverter seu alcance.
-                boundaries = [m.start() for m in re.finditer(r'[!?\n]|(?<!\d)\.|\.(?!\d)', text)]
-                start = max((p for p in boundaries if p < start), default=-1) + 1
-                end = min((p for p in boundaries if p >= end), default=len(text))
-            spans.append({'start': start, 'end': end, 'kind': kind})
+        spans.extend({'start': m.start(), 'end': m.end(), 'kind': kind} for m in re.finditer(pattern, text))
+    literals = literal_spans(text)
+    spans.extend({'start': s['start'], 'end': s['end'], 'kind': s['kind']} for s in literals)
+    folded, index = _folded(text)
+    boundaries = None
+    for match in NEGATION.finditer(folded):
+        start, end = index[match.start()], index[match.end() - 1] + 1
+        if boundaries is None:
+            boundaries = _boundaries(text, literals)
+        # Conservar a oração inteira evita inverter seu alcance.
+        start = max((p for p in boundaries if p < start), default=-1) + 1
+        end = min((p for p in boundaries if p >= end), default=len(text))
+        spans.append({'start': start, 'end': end, 'kind': 'negação/condição'})
     for match in re.finditer(r'\b\w+\b', text):
         if any(c.isupper() for c in match.group()):
             spans.append({'start': match.start(), 'end': match.end(), 'kind': 'possível nome'})
@@ -354,7 +455,10 @@ DELIVERY = [
     'Estes retornos já foram calculados pela skill: não repita comandos nem chamadas de ferramenta.',
     'Prosa sem travessão (U+2014) e sem traço substituto (meia-risca ou hífen entre espaços): use ponto, vírgula, dois-pontos ou parênteses; diálogo novo vai entre aspas.',
     'Norma culta e acentuação em todos os perfis, inclusive coloquial, informal e caricato.',
-    'Antes de entregar, leia como o leitor: o gênero está completo? As frases são suas, e não cópia do pedido (salvo citações e termos exatos)? Tudo o que o pedido fixa continua igual?',
+    'Redação: frases próprias, com fatos, citações e termos exatos do pedido. Revisão: só vício, clareza ou precisão, '
+    'no escopo pedido; não troque a voz nem a estrutura que funciona. Diagnóstico: trecho, motivo e prioridade, '
+    'sem versão nova.',
+    'Antes de entregar, leia como o leitor: o gênero está completo? Tudo o que o pedido fixa continua igual?',
     'Termine quando uma nova revisão não trouxer melhoria concreta.',
 ]
 
@@ -409,46 +513,106 @@ def brief_text(data):
         lines += ['Material: o tipo de texto pedido (fato, opinião ou ficção) prevalece.',
                   f"- Padrão do gênero, {data['material_label']}. {data['material_policy']}"]
         lines += [f'- {item}' for item in data['material_alternatives']]
-    lines += ['Preserve: ' + '; '.join(data['voice_invariants']) + '.',
-              'Nunca: ' + '; '.join(data['forbidden']) + '.', '']
+    # voice_invariants seguem no JSON; no texto, a seção Fidelidade da SKILL.md já os declara.
+    lines += ['Nunca: ' + '; '.join(data['forbidden']) + '.', '']
     by_id = {r['id']: r for r in data['rules']}
+
+    def salvo(r):
+        return ' Salvo: ' + ' '.join(r['excecoes']) if r['excecoes'] else ''
     if data['focus']:
-        lines.append('Vícios mais comuns neste gênero')
+        lines.append('Pontos de atenção do gênero (a forma preferida só retira o vício)')
         for r in (by_id[rule_id] for rule_id in data['focus']):
-            line = f"- {r['id']} {r['name']}. Evite: \"{r['evite']}\" Prefira: \"{r['prefira']}\""
+            line = f"- {r['id']} {r['name']}. Evite: \"{' '.join(r['evite'].split())}\" Prefira: \"{r['prefira']}\""
             if r['termos']:
                 line += ' Termos: ' + '; '.join(r['termos']) + '.'
-            lines.append(line)
+            if r['como']:
+                line += ' Como: ' + r['como']
+            lines.append(line + salvo(r))
         lines.append('')
-    lines.append(f"Demais regras do catálogo ({len(data['rules'])} no total): evite as expressões, "
-                 'salvo termo técnico, citação literal ou uso pedido')
-    for r in data['rules']:
-        if not r['foco']:
-            lines.append(f"- {r['id']} {r['name']}: " + '; '.join(r['termos'] or [r['evite']]) + '.')
+    others = [r for r in data['rules'] if not r['foco']]
+    lines.append(f'Demais regras do catálogo ({len(others)}): evite os termos, salvo citação, código, '
+                 'termo técnico, uso pedido ou exceção da regra')
+    for r in others:
+        lines.append(f"- {r['id']} {r['name']}: " + '; '.join(r['termos'] or [r['evite']]) + '.' + salvo(r))
     lines += ['', 'Entrega'] + [f'- {item}' for item in data['delivery']]
     return '\n'.join(lines) + '\n'
 
 
 TOOL_BLOCK = re.compile(r'<tool_call>[\s\S]*?(?:</tool_call>|\Z)|<invoke\b[\s\S]*?(?:</invoke>|\Z)', re.I)
 TOOL_MARKUP = re.compile(r'</?tool_call>|<function=|</?invoke\b|"tool_calls"\s*:', re.I)
-COMMAND_LINE = re.compile(r'(?m)^[ \t]*(?:\$[ \t]*)?(?:python3?|cd|bash|sh|ls|cat|pip3?|npm|git)[ \t][^\n]*$')
-FENCE = re.compile(r'```[^\n]*\n[\s\S]*?(?:```|\Z)|~~~[^\n]*\n[\s\S]*?(?:~~~|\Z)')
+COMMAND_LINE = re.compile(r'(?m)^[ \t]*(?:\$[ \t]*)?(?:python3?|cd|bash|sh|zsh|ls|cat|pip3?|npm|npx|node|git|curl|wget'
+                          r'|docker|make|sudo|echo|export|mkdir|rm|cp|mv|chmod|grep|sed|awk|apt(?:-get)?|brew|yarn|pnpm'
+                          r'|pytest|uv)(?:[ \t][^\n]*)?$')
+SKILL_COMMAND = re.compile(r'\bhumanizar\.py\b')
+WEEKDAY = r'(?:(?:segunda|ter[cç]a|quarta|quinta|sexta)(?:-feira)?|s[aá]bado|domingo)'
 RELATIVE_DATE = re.compile(
-    r'(?i)\b(?:(?:nesta|neste|nessa|nesse|na|no|próxima|próximo|última|último)[ \t]+)?'
-    r'(?:(?:segunda|terça|quarta|quinta|sexta)-feira|sábado|domingo)\b'
-    r'|\b(?:hoje|ontem|amanhã|anteontem)\b|\bn(?:est|ess)[ae][ \t]+(?:semana|manhã|tarde|noite)\b')
-NUMBER = re.compile(r'\d+(?:[.,]\d+)*')
+    r'(?i)\b(?:(?:nesta|neste|nessa|nesse|esta|este|essa|esse|pr[oó]xim[oa]|[uú]ltim[oa]|passad[oa])[ \t]+' + WEEKDAY
+    + r'|(?:na|no)[ \t]+' + WEEKDAY + r'(?![ \t]+(?:etapa|vers[aã]o|fase|linha|s[eé]rie|vez|parte|edi[cç][aã]o|chamada'
+    r'|rodada|op[cç][aã]o|tentativa|semana|colocad[oa]|posi[cç][aã]o)\b)'
+    r'|(?:segunda|ter[cç]a|quarta|quinta|sexta)-feira|s[aá]bado|domingo|hoje|ontem|amanh[aã]|anteontem'
+    r'|(?:n?est|n?ess)[ae][ \t]+(?:semana|manh[aã]|tarde|noite)|semana[ \t]+(?:que[ \t]+vem|passada)'
+    r'|(?:pr[oó]xima|[uú]ltima)[ \t]+semana)\b')
+NUMBER = re.compile(r'(?<![\w.,])[+−-]?\d+(?:[.,]\d+)*(?:[ºª°]|[^\S\r\n]?%)?')
 ARTIFACTS = ('prosa', 'codigo')
-CLOSED_CODE = r'```[^\n]*\n[\s\S]*?\n[ \t]*```|~~~[^\n]*\n[\s\S]*?\n[ \t]*~~~|`[^`\n]+`'
-CLOSED_LITERAL = re.compile(CLOSED_CODE + r'|“[^”\n]*”|"[^"\n]*"|(?m:^[ \t]*>[^\n]*)')
-CLOSED_CODE = re.compile(CLOSED_CODE)
+COURTESY_LINE = re.compile(r'(?i)^[ \t]*[*_]*(?:claro|certo|perfeito|pronto|ok|beleza|ótimo|com certeza|certamente'
+                           r'|sem problemas|entendido)[!.,]*[*_]*[ \t]*\r?$')
+# Anúncio do próprio artefato ao solicitante. "Seguem os documentos:" pode pertencer à mensagem.
+PREAMBLE_OBJECT = re.compile(r'(?i)^[\W_]*(?:(?:claro|certo|perfeito|pronto|com certeza)\W+)?(?:aqui\b|(?:seguem?|abaixo'
+                             r'(?:[ \t]+(?:está|estão|segue|seguem))?)[\W_]*:|.*\b(?:revisad|reescrit|corrigid|ajustad'
+                             r'|solicitad|pedid)|.*\b(?:texto|versão|versões|resposta|rascunho|sugestão|sugestões|revisão'
+                             r'|revisões|notícia|matéria|reportagem|reportagens|artigo|post|roteiro|conto|crônica|ensaio'
+                             r'|redação|explicação|comunicado)s?\b)')
 
 
-def check(text, rules, briefing=None, artifact='prosa'):
+def _normalized(value):
+    return ' '.join(unicodedata.normalize('NFC', value).split())
+
+
+def _number(value):
+    return re.sub(r'\s+', '', value).replace('−', '-')
+
+
+def _blank(text, spans):
+    chars = list(text)
+    for span in spans:
+        chars[span['start']:span['end']] = ' ' * (span['end'] - span['start'])
+    return ''.join(chars)
+
+
+def _dash_origin(text, position, closed, sources, original):
+    """Motivo pelo qual um travessão é conteúdo original, ou None se for prosa produzida."""
+    around = [s for s in closed if s['start'] <= position < s['end']]
+    if any(s['kind'] == 'código' for s in around):
+        return 'código'
+    found = [_normalized(s) for s in sources]
+    for span in (s for s in around if s['kind'] == 'citação'):
+        body = text[span['start']:span['end']]
+        body = re.sub(r'^[ \t]*>', '', body) if body.lstrip().startswith('>') else body[1:-1]
+        if _normalized(body) and any(_normalized(body) in source for source in found):
+            return 'citação conferida na fonte'
+    left, right = position, position + 1
+    while left > 0 and not text[left - 1].isspace():
+        left -= 1
+    while right < len(text) and not text[right].isspace():
+        right += 1
+    token = text[left:right].strip('.,;:!?()[]“”"«»‘’\'')
+    if re.search(r'\w—\w', token) and any(token in source for source in found):
+        return 'dado literal conferido na fonte'
+    if original is not None:
+        marks = _boundaries(text, closed)
+        start = max((p for p in marks if p < position), default=-1) + 1
+        end = min((p for p in marks if p > position), default=len(text))
+        if _normalized(text[start:end]) and _normalized(text[start:end]) in _normalized(original):
+            return 'trecho mantido do original'
+    return None
+
+
+def check(text, rules, briefing=None, artifact='prosa', original=None):
     """Verificação final da entrega; alertas exigem leitura, não provam defeito.
 
     artifact='codigo' é contrato explícito do pedido (só código, comando ou JSON):
     o texto inteiro vale como literal. O padrão é prosa; a intenção não é adivinhada.
+    original é o texto do usuário numa revisão: frase mantida dele conserva o travessão.
     """
     blocking, review = [], []
 
@@ -464,50 +628,70 @@ def check(text, rules, briefing=None, artifact='prosa'):
     if not text.strip():
         item(blocking, 'texto_vazio')
     # Só trechos fechados contam como literais: marcação crua ou aberta continua bloqueando.
-    literal = ([(0, len(text))] if artifact == 'codigo'
-               else [m.span() for m in CLOSED_LITERAL.finditer(text)])
+    literals = literal_spans(text)
+    closed = ([{'start': 0, 'end': len(text), 'kind': 'código', 'closed': True}] if artifact == 'codigo'
+              else [s for s in literals if s['closed']])
+    code = [s for s in closed if s['kind'] == 'código']
 
-    def inside(match):
-        return any(start <= match.start() and match.end() <= end for start, end in literal)
+    def inside(match, spans=closed):
+        return any(s['start'] <= match.start() and match.end() <= s['end'] for s in spans)
     for match in TOOL_MARKUP.finditer(text):
         if inside(match):
             item(review, 'chamada_de_ferramenta_literal', match)
         else:
             item(blocking, 'chamada_de_ferramenta', match)
-    had_commands = bool(TOOL_MARKUP.search(text) or COMMAND_LINE.search(text))
-    prose = COMMAND_LINE.sub(' ', FENCE.sub(' ', TOOL_BLOCK.sub(' ', CLOSED_CODE.sub(' ', text))))
+    # Comando em bloco de código fechado é documentação; comando da própria skill nunca é o artefato.
+    had_commands = bool(TOOL_MARKUP.search(text) or COMMAND_LINE.search(_blank(text, code))
+                        or SKILL_COMMAND.search(text))
+    prose = COMMAND_LINE.sub(' ', TOOL_BLOCK.sub(' ', _blank(text, [s for s in literals if s['kind'] == 'código'])))
     if artifact == 'prosa' and had_commands and len(re.findall(r'[^\W\d_]{2,}', prose)) < 8:
         item(blocking, 'saida_somente_comandos', message='A resposta traz comandos em vez do artefato pedido.')
+    if artifact == 'prosa' and text.strip()[:1] in '{[':
+        try:
+            structured = isinstance(json.loads(text), (dict, list))
+        except ValueError:
+            structured = False
+        if structured:
+            item(blocking, 'saida_somente_json', message='A resposta é JSON em vez do artefato pedido.')
+    sources = [s for s in (briefing, original) if s is not None]
     for match in re.finditer('—', text):
-        item(review if inside(match) else blocking,
-             'travessao_protegido' if inside(match) else 'travessao', match)
-    first_line = re.search(r'\S[^\n]*', text)
+        reason = 'código' if artifact == 'codigo' else _dash_origin(text, match.start(), closed, sources, original)
+        if reason:
+            item(review, 'travessao_protegido', match, motivo=reason)
+        else:
+            item(blocking, 'travessao', match)
+    lines = [m for m in re.finditer(r'[^\n]*', text) if m.group().strip()]
+    opening = next((m for m in lines if not COURTESY_LINE.match(m.group())), None)
     for finding in audit(text, rules)['findings'] if text else []:
         if finding['rule_id'] == 'PTBR-21':
             continue
         entry = {k: finding[k] for k in ('rule_id', 'start', 'end', 'original', 'protected')}
-        if finding['rule_id'] == 'PTBR-27' and first_line and finding['start'] <= first_line.start() < finding['end'] + 1:
+        if (finding['rule_id'] == 'PTBR-27' and opening and finding['start'] <= opening.end()
+                and PREAMBLE_OBJECT.match(finding['original'].strip())):
             blocking.append(dict(entry, code='preambulo_de_entrega'))
         elif artifact == 'prosa':
             review.append(dict(entry, code='catalogo', suggestion=finding['suggestion']))
     if briefing is not None:
-        source = {m.group() for m in NUMBER.finditer(briefing)}
-        produced = {m.group() for m in NUMBER.finditer(text)}
+        source = {_number(m.group()) for m in NUMBER.finditer(briefing)}
+        numbers = [m for m in NUMBER.finditer(text) if not inside(m, code)]
+        produced = {_number(m.group()) for m in numbers}
         seen = set()
-        for match in NUMBER.finditer(text):
-            if match.group() not in source and match.group() not in seen:
-                seen.add(match.group())
+        for match in numbers:
+            if _number(match.group()) not in source and _number(match.group()) not in seen:
+                seen.add(_number(match.group()))
                 item(review, 'acrescimo_numerico', match)
         for match in NUMBER.finditer(briefing):
-            if match.group() not in produced and match.group() not in seen:
-                seen.add(match.group())
+            if _number(match.group()) not in produced and _number(match.group()) not in seen:
+                seen.add(_number(match.group()))
                 item(review, 'omissao_numerica', match, source='briefing')
         known = _search_text(briefing)
         for match in RELATIVE_DATE.finditer(text):
-            if _search_text(match.group()) not in known:
+            expression = re.sub(r'^n[ao]\s+', '', _search_text(match.group()))
+            if not re.search(r'(?<!\w)' + re.escape(expression) + r'(?!\w)', known):
                 item(review, 'data_inferida', match)
     return {'kind': 'delivery_check', 'version': VERSION, 'artifact': artifact, 'input_sha256': sha256(text),
             'briefing_sha256': sha256(briefing) if briefing is not None else None,
+            'original_sha256': sha256(original) if original is not None else None,
             'deliverable': not blocking, 'blocking': blocking, 'review': review,
             'aviso': 'Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos.'}
 
@@ -554,6 +738,7 @@ def main(argv=None):
     sub = commands.add_parser('check', help='Verificar a entrega final; código 1 indica bloqueio')
     sub.add_argument('input', type=Path, help='Texto final em UTF-8')
     sub.add_argument('--briefing', type=Path, help='Pedido ou briefing em UTF-8, para comparar números e datas')
+    sub.add_argument('--original', type=Path, help='Texto do usuário numa revisão: frase mantida conserva o travessão')
     sub.add_argument('--catalog', type=Path, default=REFERENCES / 'catalogo.json', help='Catálogo JSON externo')
     sub.add_argument('--artifact', choices=ARTIFACTS, default='prosa',
                      help='codigo somente quando o pedido exige explicitamente código, comando ou JSON')
@@ -565,7 +750,9 @@ def main(argv=None):
             return 0
         if args.command == 'check':
             briefing = args.briefing.read_bytes().decode('utf-8') if args.briefing else None
-            result = check(args.input.read_bytes().decode('utf-8'), load_catalog(args.catalog), briefing, args.artifact)
+            original = args.original.read_bytes().decode('utf-8') if args.original else None
+            result = check(args.input.read_bytes().decode('utf-8'), load_catalog(args.catalog), briefing,
+                           args.artifact, original)
             print(json.dumps(result, ensure_ascii=False, indent=2))
             return 0 if result['deliverable'] else 1
         if args.command == 'structure':

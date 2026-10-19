@@ -1,0 +1,57 @@
+{
+  "case": {
+    "ordinal": 13,
+    "title": "Didático: cache",
+    "prompt": "Explique cache para quem está começando a programar. Use como exemplo uma página que guarda por até 30 segundos o preço recebido de uma API. Dentro desse período, ela pode reutilizar o valor guardado; depois do prazo, a próxima consulta busca o preço na API. Esse cache não recebe notificações quando o preço muda. Mostre a vantagem e o risco desse funcionamento com uma comparação cotidiana."
+  },
+  "http": 200,
+  "seconds": 21.705679698003223,
+  "model": "xiaomi/mimo-v2.6-pro",
+  "id": "gen-1792453377-sx7cgDAsFK6wsNtqNRKT",
+  "usage": {
+    "prompt_tokens": 5866,
+    "completion_tokens": 630,
+    "total_tokens": 6496,
+    "cost": 0.001995426,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 2560,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.001995426,
+      "upstream_inference_prompt_cost": 0.001447326,
+      "upstream_inference_completions_cost": 0.0005481
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  },
+  "finish_reason": "stop",
+  "check_exit": 0,
+  "check": {
+    "kind": "delivery_check",
+    "version": "0.8.0",
+    "artifact": "prosa",
+    "input_sha256": "4aa8742e55d3aa7cc7cec79df46a3b8ec3381d8145c3bcc9c6aadb4c9452348c",
+    "briefing_sha256": "6187e2036bb63a75e0443060bea809b89e1020c2e084fd0a35992800b7a974c1",
+    "original_sha256": null,
+    "deliverable": true,
+    "blocking": [],
+    "review": [
+      {
+        "code": "acrescimo_numerico",
+        "start": 1239,
+        "end": 1242,
+        "original": "100"
+      }
+    ],
+    "aviso": "Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos."
+  },
+  "text": "Imagine uma página que mostra o preço de um produto vindo de uma API. Toda vez que alguém abre a página, o código consulta a API e recebe o valor atual. Sem cache, cada visita gera uma consulta nova, mesmo que duas pessoas acessem a página com um segundo de diferença.\n\nCache é guardar uma resposta para reutilizá-la por um tempo, em vez de refazer o trabalho que a gerou. Nesse exemplo, a página guarda o preço por até 30 segundos. Enquanto o prazo não vence, qualquer consulta lê o valor guardado e não chama a API. Passados os 30 segundos, a próxima consulta descarta o valor guardado, busca o preço na API e guarda a resposta nova, que volta a valer por mais 30 segundos.\n\nUma comparação cotidiana ajuda a entender o mecanismo. Pense em uma placa de preço na porta de uma loja. Um funcionário sai à rua a cada 30 minutos, confere o preço no mercado e atualiza a placa. Enquanto ele não volta, quem olha a placa vê sempre o mesmo valor. Isso é rápido e resolve bem o caso de quem quer só saber o preço para decidir a compra.\n\nA vantagem está aí: a página responde rápido, porque ler o valor guardado é mais barato do que fazer uma chamada de rede, e a API recebe menos consultas, o que alivia o servidor e evita custo desnecessário. Se 100 pessoas abrem a página em 30 segundos, a API é consultada uma vez.\n\nO risco também está na placa. Se o preço na rua muda cinco minutos depois da última atualização, a placa continua mostrando o valor antigo até o funcionário voltar. Do mesmo modo, o cache não recebe notificação quando o preço muda na API. Ele só percebe a mudança quando o prazo de 30 segundos vence e a consulta seguinte vai até a API. Nesse intervalo, o usuário pode comprar com base em um preço que já não vale. Quanto maior o prazo do cache, maior a economia e maior a chance de mostrar dado desatualizado.\n\nNote onde a comparação deixa de valer: a placa física pode ser atualizada no momento exato da mudança, se alguém avisar o funcionário. O cache que você descreveu não tem esse aviso; a única forma de atualizar o valor é esperar o prazo e consultar de novo.\n\nPor isso, a escolha do tempo do cache depende do preço do erro. Para um catálogo de livros, 30 segundos é pouco. Para uma cotação que alguém usa para fechar negócio, pode ser muito: nesse caso, convém reduzir o prazo, ou avisar o usuário de que aquele preço pode não ser o mais recente.",
+  "editorial_observation": "Explica cache e desatualização, mas a comparação descreve atualização periódica a cada 30 minutos, diferente da consulta sob demanda após 30 segundos. O texto aponta outro limite da analogia, mas não essa diferença. O número 100 está numa hipótese explícita, não é fato inventado."
+}

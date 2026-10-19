@@ -814,7 +814,7 @@ class BriefTests(unittest.TestCase):
                         for term in rule['avoid']:
                             self.assertIn(term, text)
                         if rule['id'] in focus:
-                            self.assertIn(f'Evite: "{rule["positive_example"]}"', text)
+                            self.assertIn(f'Evite: "{" ".join(rule["positive_example"].split())}"', text)
                             self.assertIn(f'Prefira: "{rule["negative_example"]}"', text)
                     for item in profile['adjustments'] + profile.get('avoid', []):
                         self.assertIn(item, text)
@@ -824,7 +824,8 @@ class BriefTests(unittest.TestCase):
                     self.assertIn('não repita comandos', text.casefold())
                     self.assertIn('somente com o artefato', text.casefold())
                     self.assertNotIn('—', text)
-                    self.assertLessEqual(len(text), 8500, 'O briefing deve ser compacto')
+                    # 0.8.0: exceções de todas as regras e orientação das de foco entram no texto.
+                    self.assertLessEqual(len(text), 11500, 'O briefing deve ser compacto')
 
     def test_brief_labels_examples_by_role_not_by_test_polarity(self):
         text = cli_run('brief', '--profile', 'neutro-claro').stdout
@@ -909,10 +910,14 @@ class DeliveryCheckTests(unittest.TestCase):
         self.assertIn('não prova', report['aviso'])
 
     def test_em_dash_in_quotes_or_code_is_reported_without_blocking(self):
+        # 0.8.0: código basta; citação precisa estar na fonte (pedido ou original).
         h = module()
-        report = h.check('Ele citou: “prazo — curto”. Use `a—b`.', [])
+        text = 'Ele citou: “prazo — curto”. Use `a—b`.'
+        report = h.check(text, [], briefing='A fonte disse: “prazo — curto”.')
         self.assertEqual(report['blocking'], [])
-        self.assertIn('travessao_protegido', {r['code'] for r in report['review']})
+        self.assertEqual([r['motivo'] for r in report['review'] if r['code'] == 'travessao_protegido'],
+                         ['citação conferida na fonte', 'código'])
+        self.assertEqual([b['original'] for b in h.check(text, [])['blocking']], ['—'])
         self.assertFalse(h.check('', [])['deliverable'])
         self.assertFalse(h.check('<tool_call><function=terminal>ls</function></tool_call>', [])['deliverable'])
         mixed = 'Para instalar, rode o comando abaixo no terminal do projeto e confira a versão.\n\n```sh\npython3 -m pip install pacote\n```'
@@ -1038,7 +1043,7 @@ class Catalog070Tests(unittest.TestCase):
         h = module()
         rules = self.rules()
         self.assertEqual(len(rules), 32)
-        described = {'PTBR-21', 'PTBR-26'}  # o vício é descrito, sem o símbolo no texto
+        described = {'PTBR-21', 'PTBR-26', 'PTBR-28'}  # o vício é descrito, sem o símbolo no texto
         for rule in rules:
             with self.subTest(rule=rule['id']):
                 self.assertTrue(rule.get('avoid'), 'Toda regra precisa de termos explícitos')
@@ -1169,7 +1174,7 @@ class Brief070Tests(unittest.TestCase):
                     self.assertIn(item, text)
                 self.assertIn(data['material'][structure['material']], text)
                 marks = ['Ofício do gênero: ' + structure['name'], 'Plano:', 'Perfil ' + profile,
-                         'Vícios mais comuns neste gênero', 'Demais regras do catálogo', '\nEntrega\n']
+                         'Pontos de atenção do gênero', 'Demais regras do catálogo', '\nEntrega\n']
                 positions = [text.index(mark) for mark in marks]
                 self.assertEqual(positions, sorted(positions))
                 self.assertIn('não seções', text)
@@ -1255,23 +1260,319 @@ class Skill070Tests(unittest.TestCase):
 
     def test_required_contract_survives_the_rewrite(self):
         skill = self.skill()
-        self.assertRegex(skill, r'(?m)^version: 0\.7\.0$')
+        self.assertRegex(skill, r'(?m)^version: 0\.8\.0$')
         self.assertIn('NÃO USE travessão U+2014 na prosa produzida', skill)
         self.assertIn('## Validação final\n\n' + self.FINAL_VALIDATION, skill)
         self.assertTrue(skill.rstrip().endswith(self.FINAL_VALIDATION))
         for item in ['Redação:', 'Revisão:', 'Diagnóstico:', 'Ficção', 'Exemplos editoriais não são fatos reutilizáveis',
                      'references/catalogo.json', 'references/estilos.json']:
             self.assertIn(item, skill)
-        self.assertLessEqual(len(skill), 8800)
+        self.assertLessEqual(len(skill), 9100)
 
-    def test_treatment_is_smaller_than_in_0_6_0(self):
-        # 0.6.0: SKILL.md com 8.312 caracteres e briefing da notícia com 10.975.
+    def test_treatment_fits_the_frozen_runner_budget(self):
+        # 0.8.0: o runner congelado exige tratamento abaixo de 40% do v1 de 13/10 (48.850 caracteres).
+        # O teto geral evita inchaço nos pares fora do runner. Caracteres, não tokens.
         h = module()
+        legacy = SKILL_DIR / 'results/runs/2026-10-13/evidence/frozen/skill'
+        budget = 0.4 * sum(len((legacy / p).read_text(encoding='utf-8'))
+                           for p in ('SKILL.md', 'references/catalogo.json', 'references/estilos.json'))
+        runner = {('jornalistico', 'noticia'), ('jornalistico', 'reportagem'), ('tecnico-preciso', 'tecnico'),
+                  ('tecnico-preciso', 'relatorio'), ('didatico', 'didatico'), ('academico', 'academico'),
+                  ('executivo-direto', 'proposta'), ('executivo-direto', 'negocios'), ('executivo-direto', 'relatorio'),
+                  ('conversacional-contido', 'email'), ('conversacional-contido', 'post'),
+                  ('conversacional-contido', 'roteiro'), ('argumentativo-sobrio', 'artigo'),
+                  ('argumentativo-sobrio', 'ensaio'), ('literario', 'conto'), ('literario', 'cronica')}
         skill = len(self.skill())
         for profile, data in h.load_profiles().items():
             for genre in data['genres']:
                 with self.subTest(profile=profile, genre=genre):
-                    self.assertLess(skill + len(h.brief_text(h.brief(profile, genre, 2, 0, 17))), 17000)
+                    size = skill + len(h.brief_text(h.brief(profile, genre, 2, 0, 17)))
+                    self.assertLess(size, budget if (profile, genre) in runner else 20500)
+
+
+class Literal080Tests(unittest.TestCase):
+    """0.8.0: um único reconhecedor de literais para edição, comparação e entrega."""
+
+    def test_multi_backtick_code_and_long_fences_protect_their_content(self):
+        h = module()
+        self.assertEqual(h.plan_replacements('``vale destacar``', 'vale destacar', 'destaco')['edits'], [])
+        fence = '````md\n```\nvale destacar\n```\nvale destacar\n````\nvale destacar fora.'
+        plan = h.plan_replacements(fence, 'vale destacar', 'destaco')
+        self.assertEqual([e['start'] for e in plan['edits']], [fence.rindex('vale destacar')])
+        self.assertEqual(h.plan_replacements('«vale destacar»', 'vale destacar', 'destaco')['edits'], [])
+
+    def test_closed_quotes_recognized_by_check_are_the_ones_protected_in_editing(self):
+        h = module()
+        for text in ['‘prazo — curto’', '"prazo\n— curto"', '«prazo — curto»', '“O prazo\n— curto”']:
+            with self.subTest(text=text):
+                report = h.check(text, [], briefing=text)
+                self.assertTrue(report['deliverable'], report['blocking'])
+                self.assertIn('travessao_protegido', {r['code'] for r in report['review']})
+                start = text.index('—')
+                with self.assertRaises(ValueError):
+                    h.apply_edits(text, {'input_sha256': h.sha256(text), 'edits': [
+                        {'start': start, 'end': start + 1, 'original': '—', 'replacement': ',', 'approved': True}]})
+        # Aspas abertas e apóstrofos não viram literal fechado na entrega.
+        for text in ['Ela disse "prazo — curto', 'A caixa-d\'água — e a bomba — falharam no pau-d\'alho.']:
+            with self.subTest(text=text):
+                self.assertIn('travessao', {b['code'] for b in h.check(text, [], briefing=text)['blocking']})
+
+
+class Origin080Tests(unittest.TestCase):
+    """0.8.0: aspas delimitam, mas só a fonte comprova que o travessão é original."""
+
+    def test_new_dialogue_in_quotes_cannot_carry_an_em_dash(self):
+        h = module()
+        text = '“Agora — espere.”'
+        self.assertIn('travessao', {b['code'] for b in h.check(text, [], briefing='Escreva um diálogo novo.')['blocking']})
+        self.assertIn('travessao', {b['code'] for b in h.check(text, [])['blocking']})
+        quoted = h.check('A diretora disse: “Agora — espere.”', [], briefing='Fala da diretora: “Agora — espere.”')
+        self.assertTrue(quoted['deliverable'], quoted['blocking'])
+        self.assertIn('travessao_protegido', {r['code'] for r in quoted['review']})
+
+    def test_literal_name_and_unchanged_original_sentence_keep_their_dash(self):
+        h = module()
+        named = h.check('O protocolo A—B entra em teste.', [], briefing='Use o nome exato do protocolo A—B.')
+        self.assertTrue(named['deliverable'], named['blocking'])
+        original = 'O prazo — que já venceu — foi mantido. Vale destacar que a sala mudou.'
+        revised = 'O prazo — que já venceu — foi mantido. A sala mudou.'
+        kept = h.check(revised, [], original=original)
+        self.assertTrue(kept['deliverable'], kept['blocking'])
+        edited = h.check('O prazo — que venceu — foi mantido. A sala mudou.', [], original=original)
+        self.assertIn('travessao', {b['code'] for b in edited['blocking']})
+        added = h.check(revised + ' A equipe — enfim — voltou.', [], original=original)
+        self.assertEqual([b['original'] for b in added['blocking'] if b['code'] == 'travessao'], ['—', '—'])
+        self.assertIn('travessao', {b['code'] for b in h.check(original, [], briefing=original)['blocking']},
+                      'Prosa do pedido copiada não é citação; só o original da revisão comprova a frase inteira')
+
+    def test_check_cli_accepts_the_original_for_revisions(self):
+        with tempfile.TemporaryDirectory() as folder:
+            original, revised = Path(folder) / 'original.txt', Path(folder) / 'revisado.txt'
+            original.write_text('O prazo — que já venceu — foi mantido. Vale destacar que a sala mudou.', encoding='utf-8')
+            revised.write_text('O prazo — que já venceu — foi mantido. A sala mudou.', encoding='utf-8')
+            self.assertEqual(cli_run('check', revised).returncode, 1)
+            result = cli_run('check', revised, '--original', original)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
+class Delivery080Tests(unittest.TestCase):
+    """0.8.0: formato da entrega pelo conteúdo, não pela extensão da explicação."""
+
+    def rules(self):
+        return module().load_catalog(SKILL_DIR / 'references/catalogo.json')
+
+    def blocking(self, text, **options):
+        return {b['code'] for b in module().check(text, self.rules(), **options)['blocking']}
+
+    def test_bare_commands_other_executables_and_json_are_not_prose(self):
+        for text in ['ls', 'curl https://exemplo.test', 'git status\n']:
+            with self.subTest(text=text):
+                self.assertIn('saida_somente_comandos', self.blocking(text))
+        for text in ['{"titulo": "Cadastro"}', '[{"id": 1}]']:
+            with self.subTest(text=text):
+                self.assertIn('saida_somente_json', self.blocking(text))
+                self.assertEqual(self.blocking(text, artifact='codigo'), set())
+
+    def test_short_technical_answers_with_fenced_commands_are_deliverable(self):
+        for text in ['Execute:\n```sh\nls -la\n```', 'Rode o comando.\n\n```sh\npython3 -m pip install pacote\n```']:
+            with self.subTest(text=text):
+                self.assertEqual(self.blocking(text), set())
+        for text in ['Vou rodar:\n```sh\npython3 scripts/humanizar.py brief --profile jornalistico\n```',
+                     'Exemplo:\n\n```xml\n<tool_call>exemplo</tool_call>\n```\n']:
+            with self.subTest(text=text):
+                self.assertIn('saida_somente_comandos', self.blocking(text))
+
+    def test_preamble_after_courtesy_or_markdown_blocks_and_list_intro_does_not(self):
+        for text in ['Claro!\nAqui está a notícia:\nO cadastro foi aberto.',
+                     '**Aqui está a notícia:**\n\nO cadastro foi aberto.',
+                     'Segue o e-mail revisado:\nPrezada equipe,']:
+            with self.subTest(text=text):
+                self.assertIn('preambulo_de_entrega', self.blocking(text))
+        for text in ['Seguem os documentos:\n- contrato\n- recibo', 'Abaixo estão os horários:\n- 9h\n- 14h']:
+            with self.subTest(text=text):
+                report = module().check(text, self.rules())
+                self.assertTrue(report['deliverable'], report['blocking'])
+                self.assertIn('PTBR-27', {r.get('rule_id') for r in report['review']})
+
+    def test_relative_dates_signs_percentages_and_whole_words(self):
+        h = module()
+        briefing = 'O cadastro abre em 1º de outubro de 2026, com saldo de -20 reais e taxa de 20%.'
+
+        def review(text, source=briefing):
+            return {(r['code'], r['original']) for r in h.check(text, [], briefing=source)['review']}
+        for expression in ['nesta quinta', 'na terça', 'próxima sexta', 'esta semana', 'semana que vem',
+                           'na terca-feira', 'no sabado', 'hoje']:
+            with self.subTest(expression=expression):
+                self.assertIn(('data_inferida', expression), review(f'O cadastro abre {expression}.'))
+        for text in ['O cadastro vence na segunda etapa.', 'Ela está na quinta série.']:
+            with self.subTest(text=text):
+                self.assertNotIn('data_inferida', {code for code, _ in review(text)})
+        self.assertNotIn('data_inferida', {c for c, _ in review('Abre na quinta-feira.', 'Abre quinta-feira, 2/10.')})
+        self.assertIn(('data_inferida', 'domingo'), review('A entrega será domingo.', 'Domingos revisou o aviso.'))
+        numbers = review('Saldo de 20 reais e taxa de 20.')
+        self.assertIn(('omissao_numerica', '-20'), numbers)
+        self.assertIn(('omissao_numerica', '20%'), numbers)
+        self.assertIn(('acrescimo_numerico', '20'), numbers)
+        coded = review('A rota responde assim:\n\n```text\nHTTP 404\n```\n\nConfira o painel.', 'Explique a rota.')
+        self.assertNotIn(('acrescimo_numerico', '404'), coded)
+        self.assertIn(('acrescimo_numerico', '404'), review('A rota responde 404.', 'Explique a rota.'))
+
+
+class Protection080Tests(unittest.TestCase):
+    """0.8.0: negações em NFD, abreviações e ordinais continuam protegidos."""
+
+    def test_decomposed_negation_and_abbreviated_condition_keep_their_clause(self):
+        h = module()
+        self.assertEqual(h.plan_replacements('não aceito.', 'aceito', 'recuso')['edits'], [])
+        self.assertEqual(h.plan_replacements('se o sr. pedir, aceite.', 'aceite', 'recuse')['edits'], [])
+        self.assertEqual(h.plan_replacements('se ele disser "ok. pronto", aceite.', 'aceite', 'recuse')['edits'], [])
+        text = 'não aceito.'
+        self.assertFalse(h.verify(text, 'aceito.')['protected_content_preserved'])
+        self.assertEqual(len(h.plan_replacements('Ele aceitou. Depois aceite.', 'aceite', 'recuse')['edits']), 1)
+
+    def test_ordinal_and_degree_marks_belong_to_the_number(self):
+        h = module()
+        for text, mark in [('em 1º de outubro', 'º'), ('na 2ª chamada', 'ª'), ('a 20° de inclinação', '°')]:
+            start = text.index(mark)
+            with self.subTest(text=text), self.assertRaises(ValueError):
+                h.apply_edits(text, {'input_sha256': h.sha256(text), 'edits': [
+                    {'start': start, 'end': start + 1, 'original': mark, 'replacement': '', 'approved': True}]})
+
+
+NEW_FACT = (r'(?i)\d|\b(?:janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro'
+            r'|segunda|terça|quarta|quinta|sexta|sábado|domingo|hoje|amanhã|ontem|dois|duas|três|quatro|cinco|seis'
+            r'|sete|oito|nove|dez|cem|mil|metade|dobro|todas?|todos)\b')
+# Substitutos linguísticos admitidos na forma preferida: verbo no lugar da perífrase,
+# conector, cópula e contrações. Nenhum acrescenta fato.
+LINGUISTIC = {'há', 'também', 'além', 'da', 'do', 'para', 'é', 'pagar', 'tratar'}
+NEGATIONS = {'não', 'nunca', 'jamais', 'nem', 'sem'}
+MODALS = {'pode', 'podem', 'poderia', 'poderiam', 'possa', 'talvez', 'possivelmente', 'provavelmente', 'deve', 'devem'}
+
+
+class Catalog080Tests(unittest.TestCase):
+    """0.8.0: pares que só retiram o vício e detectores alinhados aos termos declarados."""
+
+    def rules(self):
+        return module().load_catalog(SKILL_DIR / 'references/catalogo.json')
+
+    def count(self, text, rule_id):
+        return module().audit(text, self.rules())['rule_counts'][rule_id]['count']
+
+    def test_preferred_form_only_removes_the_vice(self):
+        import re
+
+        def words(text):
+            return re.findall(r'\w+', text.casefold())
+        described = {'PTBR-21', 'PTBR-26', 'PTBR-28'}
+        creation = {'PTBR-31'}  # ficção: troca emoção pronta por gesto, sem número nem data novos
+        for rule in self.rules():
+            if rule['id'] in described:
+                continue
+            vice, preferred = words(rule['positive_example']), words(rule['negative_example'])
+            with self.subTest(rule=rule['id']):
+                fresh = set(preferred) - set(vice)
+                self.assertEqual({w for w in fresh if re.search(NEW_FACT, w)}, set(), 'número, data ou alcance novo')
+                if rule['id'] not in creation:
+                    self.assertLessEqual(fresh, LINGUISTIC, 'a forma preferida não pode trazer fato ausente do vício')
+                if rule['id'] != 'PTBR-05':  # o vício de PTBR-05 é a própria negação encenada
+                    self.assertEqual(sum(w in NEGATIONS for w in preferred), sum(w in NEGATIONS for w in vice))
+                self.assertEqual(set(preferred) & MODALS, set(vice) & MODALS, 'modalidade e certeza preservadas')
+
+    def test_declared_terms_are_detected_and_literal_uses_are_not(self):
+        schematic = {'PTBR-20', 'PTBR-21', 'PTBR-26', 'PTBR-28'}
+        h = module()
+        for rule in self.rules():
+            if rule['id'] in schematic:
+                continue
+            for term in rule['avoid']:
+                with self.subTest(rule=rule['id'], term=term):
+                    self.assertGreaterEqual(h.audit(term, [rule])['rule_counts'][rule['id']]['count'], 1)
+        for text, rule_id in [('Precisamos endereçar um problema.', 'PTBR-32'), ('Otimizamos o fluxo.', 'PTBR-11'),
+                              ('Potencializamos os resultados.', 'PTBR-11'), ('Processos otimizados.', 'PTBR-11'),
+                              ('O projeto foi fomentado.', 'PTBR-11'), ('Estudos recentes mostram que caiu.', 'PTBR-06'),
+                              ('Pesquisas indicam queda.', 'PTBR-06'), ('Para concluir, o prazo acabou.', 'PTBR-24'),
+                              ('- **Prazo:** O prazo é amanhã.', 'PTBR-20'), ('**Aqui está a notícia:**', 'PTBR-27')]:
+            with self.subTest(text=text):
+                self.assertGreaterEqual(self.count(text, rule_id), 1)
+        for text, rule_id in [('Para concluir o pagamento, abra o aplicativo.', 'PTBR-24'),
+                              ('- **Prazo:** 5 a 16 de outubro.', 'PTBR-20'), ('Explique de forma clara.', 'PTBR-29'),
+                              ('Guarde a senha de forma segura.', 'PTBR-29'), ('Estudos do instituto mostram queda.', 'PTBR-06'),
+                              ('A agência de fomento aprovou.', 'PTBR-11'), ('A otimização convexa converge.', 'PTBR-11')]:
+            with self.subTest(text=text):
+                self.assertEqual(self.count(text, rule_id), 0)
+
+
+class Brief080Tests(unittest.TestCase):
+    """0.8.0: orientação e exceções chegam ao texto; modos e lacunas sem pressão de reescrita."""
+
+    def test_text_brief_carries_guidance_and_exceptions_of_the_catalog(self):
+        h = module()
+        for profile, genre in [('jornalistico', 'noticia'), ('academico', 'academico'), ('literario', 'conto')]:
+            with self.subTest(profile=profile, genre=genre):
+                data = h.brief(profile, genre)
+                text = h.brief_text(data)
+                for rule in data['rules']:
+                    for exception in rule['excecoes']:
+                        self.assertIn(exception, text)
+                    if rule['foco']:
+                        self.assertIn('Como: ' + rule['como'], text)
+                self.assertIn('Pontos de atenção do gênero', text)
+                self.assertNotIn('Vícios mais comuns', text)
+                self.assertNotIn('–', text, 'meia-risca descrita, sem o glifo')
+                self.assertNotIn('equipe de suporte, os erros de cadastro caíram pela metade', text)
+        self.assertIn('estatística robusta', h.brief_text(h.brief('academico', 'academico')).casefold())
+        self.assertIn('ocorrência isolada', h.brief_text(h.brief('jornalistico', 'noticia')).casefold())
+
+    def test_delivery_contract_distinguishes_writing_revision_and_diagnosis(self):
+        h = module()
+        text = h.brief_text(h.brief('neutro-claro', 'artigo'))
+        delivery = text[text.index('\nEntrega\n'):]
+        for mode in ['Redação:', 'Revisão:', 'Diagnóstico:']:
+            self.assertIn(mode, delivery)
+        self.assertIn('não troque a voz', delivery)
+        self.assertNotIn('As frases são suas', delivery)
+        self.assertTrue(text.rstrip().endswith('melhoria concreta.'))
+
+    def test_factual_policy_is_the_same_in_skill_and_brief(self):
+        skill = (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
+        news = cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia').stdout
+        for text in [skill, news]:
+            with self.subTest(source=text[:30]):
+                self.assertIn('verificada nesta tarefa', text)
+        self.assertIn('não divulgado', skill)
+        self.assertIn('hipótese', skill[skill.index('## Fidelidade'):skill.index('## Catálogo e estilo')])
+
+
+class Structure080Tests(unittest.TestCase):
+    """0.8.0: instruções locais condicionadas ao material e pares de perfil compatíveis."""
+
+    def brief(self, profile, genre):
+        return module().brief_text(module().brief(profile, genre))
+
+    def test_blocks_do_not_demand_material_the_request_may_lack(self):
+        cases = [('jornalistico', 'reportagem', ['não invente aspas'], ['Dê voz às fontes com falas literais']),
+                 ('conversacional-contido', 'email', ['quando o pedido trouxer o nome'], ['Saudação pelo nome;']),
+                 ('didatico', 'didatico', ['conta só quando'], ['mostre contas com unidades']),
+                 ('academico', 'academico', ['texto teórico'], ['Apresente os resultados com números e']),
+                 ('literario', 'cronica', ['Pessoa narrativa do pedido'], ['Primeira pessoa próxima']),
+                 ('executivo-direto', 'proposta', ['só se o pedido o indicar'], ['Defina entrega, exclusões e responsável']),
+                 ('conversacional-contido', 'roteiro', ['em fala sem tela'], [])]
+        for profile, genre, present, absent in cases:
+            with self.subTest(profile=profile, genre=genre):
+                text = self.brief(profile, genre)
+                for item in present:
+                    self.assertIn(item, text)
+                for item in absent:
+                    self.assertNotIn(item, text)
+
+    def test_technical_email_and_argumentative_post_keep_genre_and_register(self):
+        h = module()
+        self.assertEqual(h.generate_structure('tecnico-preciso', 'email')['structure_id'], 'mensagem')
+        self.assertEqual(h.generate_structure('tecnico-preciso')['structure_id'], 'procedimento')
+        post = h.brief('argumentativo-sobrio', 'post')
+        self.assertEqual(post['genre'], 'post')
+        self.assertIn('post', post['genre_name'].casefold())
+        self.assertIn('Conservar terminologia e qualificadores', self.brief('tecnico-preciso', 'email'))
 
 
 if __name__ == '__main__':

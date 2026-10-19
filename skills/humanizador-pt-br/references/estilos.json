@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.2",
+  "schema_version": "1.3",
   "purpose": "Selecionar registro, ofício do gênero e plano antes de redigir; preservar voz, fatos e termos na revisão.",
   "voice_invariants": [
     "Fatos, fontes e grau de certeza",
@@ -26,8 +26,8 @@
     "Sinônimos aleatórios para termos técnicos"
   ],
   "material": {
-    "fatos": "Use só fatos, números, fontes e falas do pedido; calcule apenas o que ele manda calcular. Reorganizar, explicar e transformar um fato em orientação prática é permitido; acrescentar dado, finalidade, previsão, dia da semana, data relativa, fonte, serviço ou experiência não é.",
-    "opiniao": "Posição, raciocínio e exemplos hipotéticos, apresentados como hipótese, são seus; dados, estudos, citações e experiências reais só se estiverem no pedido.",
+    "fatos": "Use só fatos, números, fontes e falas do pedido ou de fonte verificada nesta tarefa; calcule apenas o que ele manda calcular. Reorganizar, explicar e transformar fato em orientação prática é permitido; acrescentar dado, finalidade, previsão, dia da semana, data relativa, fonte, serviço ou experiência não é.",
+    "opiniao": "Posição, raciocínio e exemplos hipotéticos, apresentados como hipótese, são seus; dados, estudos, citações e experiências reais só do pedido ou de fonte verificada nesta tarefa.",
     "ficcao": "Invente cena, gestos, objetos, personagens secundários e falas coerentes com a premissa; preserve o que o pedido fixa (narrador, frase literal, situação, tipo de final) e não use pessoas reais."
   },
   "material_types": {
@@ -37,7 +37,7 @@
     },
     "opiniao": {
       "label": "opinião",
-      "when_requested": "Se o pedido for opinião: posição e exemplos hipotéticos são seus; dados e citações, só do pedido."
+      "when_requested": "Se o pedido for opinião: posição e exemplos hipotéticos são seus; dados e citações, só do pedido ou de fonte verificada."
     },
     "ficcao": {
       "label": "ficção",
@@ -70,7 +70,8 @@
       "id": "tecnico-preciso",
       "genres": [
         "tecnico",
-        "relatorio"
+        "relatorio",
+        "email"
       ],
       "adjustments": [
         "Conservar terminologia e qualificadores",
@@ -84,7 +85,8 @@
       ],
       "structure_ids": [
         "procedimento",
-        "relatorio"
+        "relatorio",
+        "mensagem"
       ]
     },
     {
@@ -153,7 +155,7 @@
         "Editorializar notícia",
         "Autoridade vaga",
         "Aspas inventadas",
-        "Finalidade, dia da semana, data relativa, previsão ou orientação que o pedido não sustenta"
+        "Previsão ou orientação que o pedido não sustenta"
       ],
       "structure_ids": [
         "noticia",
@@ -358,7 +360,7 @@
       "material": "fatos",
       "craft": [
         "Comece pelo que o leitor já conhece ou pelo problema que o conceito resolve; a definição vem quando o termo aparece.",
-        "Um passo de raciocínio por vez; mostre contas com unidades e diga o que cada número significa.",
+        "Um passo de raciocínio por vez; conta só quando o pedido ou o exemplo a exigir, com unidades e o sentido de cada número.",
         "Use a comparação cotidiana para iluminar o mecanismo e diga onde ela deixa de valer.",
         "Antecipe a dúvida mais comum e responda com o próprio exemplo.",
         "Fale com o leitor de forma direta, sem infantilizar nem anunciar o que vai explicar."
@@ -534,11 +536,11 @@
       ],
       "material": "fatos",
       "craft": [
-        "Assunto específico, que diga a mudança ou o pedido.",
-        "Saudação pelo nome; na primeira frase, o motivo; logo depois, a proposta.",
+        "Assunto específico, quando o canal tiver assunto, que diga a mudança ou o pedido.",
+        "Saudação pelo nome quando o pedido trouxer o nome; na primeira frase, o motivo; logo depois, a proposta, se houver.",
         "Explique a causa com fatos, sem culpar ninguém, sem admitir falha que o material não aponta e sem prometer além do autorizado.",
         "Datas exatas e condições claras; diga o que depende de quem.",
-        "Feche com a ação esperada e a assinatura de quem escreve, sem fórmulas de cortesia empilhadas."
+        "Feche com a ação esperada, se houver, e a assinatura informada, sem fórmulas de cortesia empilhadas."
       ],
       "focus": [
         "PTBR-17",
@@ -585,11 +587,11 @@
       ],
       "material": "fatos",
       "craft": [
-        "Primeira linha com o fato concreto, o número ou a decisão, sem suspense nem pergunta.",
-        "Conte o que foi feito e observado com números exatos e contexto suficiente para outra pessoa entender o que mudou.",
-        "Diga com franqueza o que os dados não provam; isso sustenta a credibilidade do relato.",
+        "Primeira linha com o fato, a posição ou a decisão, sem suspense nem pergunta.",
+        "Em relato, conte o que foi feito e observado, com os números do material; em opinião ou anúncio, dê a razão ou o dado que sustenta a primeira linha.",
+        "Quando houver dados, diga com franqueza o que eles não provam.",
         "Parágrafos curtos de prosa; lista só para passos reais; sem emoji decorativo nem pergunta final para engajamento.",
-        "Feche com um aprendizado específico, que outra equipe consiga aplicar."
+        "Feche com algo que o leitor possa usar: aprendizado, próximo passo ou a posição numa frase."
       ],
       "focus": [
         "PTBR-19",
@@ -621,7 +623,7 @@
         {
           "id": "fecho",
           "required": false,
-          "instruction": "Finalize com aprendizado específico, sem chamar engajamento por hábito.",
+          "instruction": "Finalize com aprendizado, próximo passo ou posição, sem chamar engajamento por hábito.",
           "alternatives": [
             "Pare quando a observação estiver completa."
           ]
@@ -636,11 +638,11 @@
       ],
       "material": "fatos",
       "craft": [
-        "Separe o que se vê do que se ouve, em blocos ou colunas, com tempo aproximado de cada trecho.",
+        "Em vídeo, separe o que se vê do que se ouve, com tempo aproximado de cada trecho; em fala sem tela, só o texto falado e as pausas.",
         "Escreva para o ouvido: frases curtas, uma ideia por frase, palavras fáceis de pronunciar; leia em voz alta.",
-        "Meça pela fala: cerca de 130 a 150 palavras por minuto de narração.",
-        "Indique o que aparece na tela com precisão, nunca como imagem ilustrativa genérica.",
-        "Termine com uma ação que o público consiga fazer, sem slogan."
+        "Meça pela fala: cerca de 130 a 150 palavras por minuto, referência de cálculo que não entra no roteiro.",
+        "Quando houver tela, indique o que aparece com precisão, nunca como imagem ilustrativa genérica.",
+        "Termine com uma ação que o público consiga fazer, se o pedido tiver esse fim; em ficção, no final pedido; sem slogan."
       ],
       "focus": [
         "PTBR-25",
@@ -681,7 +683,7 @@
     },
     {
       "id": "argumento",
-      "name": "Artigo de opinião",
+      "name": "Artigo ou post de opinião",
       "genres": [
         "artigo",
         "post"
@@ -692,7 +694,8 @@
         "Cada razão ancorada em exemplo concreto ou situação reconhecível; hipóteses aparecem como hipóteses.",
         "Objeção na sua versão mais forte, respondida com argumento, não com concessão vaga.",
         "Voz de autor: primeira pessoa quando natural, frases de tamanhos variados, sem simetria automática entre um lado e outro.",
-        "Termine numa consequência prática ou numa proposta, não num resumo."
+        "Termine numa consequência prática ou numa proposta, não num resumo.",
+        "Em post, a posição vem na primeira linha e cada parágrafo curto leva uma razão, sem pergunta final para engajamento."
       ],
       "focus": [
         "PTBR-05",
@@ -790,7 +793,7 @@
       ],
       "material": "fatos",
       "craft": [
-        "Título com o fato principal e verbo no presente; linha fina opcional com o segundo dado mais útil.",
+        "Título com o fato principal e verbo no presente, sem mudar a data; linha fina opcional com o segundo dado mais útil.",
         "Lide completo: quem fez o quê, quando e onde, com o dado que mais interessa ao leitor; o restante em ordem decrescente de importância.",
         "Reescreva o material com frases próprias e verbos de ação; não siga a ordem nem as frases do pedido.",
         "Dados práticos (prazos, local, público, custo) em frases completas ou num quadro de serviço curto.",
@@ -857,7 +860,7 @@
       "craft": [
         "Título e linha fina que prometam a explicação que o texto entrega.",
         "Abra por um fato concreto ou situação; explique o funcionamento depois, com números e unidades.",
-        "Falas literais entre aspas, atribuídas com disse, afirmou ou segundo; contraste as fontes sem tomar partido.",
+        "Fala entre aspas só se o material a trouxer, com disse, afirmou ou segundo; sem fala, atribua ao documento; contraste as fontes sem tomar partido.",
         "Separe o que os documentos mostram do que não mostram; a lacuna é parte da notícia.",
         "Intertítulos só em texto longo; termine numa fala, num dado ou na questão em aberto."
       ],
@@ -891,7 +894,7 @@
         {
           "id": "vozes",
           "required": true,
-          "instruction": "Dê voz às fontes com falas literais entre aspas e atribuição clara.",
+          "instruction": "Atribua cada informação à fonte; fala entre aspas só se o material a trouxer; não invente aspas.",
           "alternatives": []
         },
         {
@@ -919,9 +922,9 @@
       "material": "fatos",
       "craft": [
         "Abra pelo que será entregue e pelo resultado para o cliente, na linguagem dele.",
-        "Escopo com inclusões e exclusões explícitas; prazo com o marco que o inicia.",
+        "Escopo com as inclusões e exclusões informadas; prazo com o marco que o inicia.",
         "Preço, parcelas e condições sem ambiguidade; tabela quando houver vários valores.",
-        "Itens opcionais separados da entrega principal, com preço e limite próprios.",
+        "Itens opcionais, se houver, separados da entrega principal, com preço e limite próprios.",
         "Feche com o próximo passo concreto e quem precisa agir; tom de parceiro competente, sem superlativos."
       ],
       "focus": [
@@ -936,7 +939,7 @@
         {
           "id": "escopo",
           "required": true,
-          "instruction": "Defina entrega, exclusões e responsável pelo aceite.",
+          "instruction": "Defina entrega e exclusões informadas; responsável pelo aceite só se o pedido o indicar.",
           "alternatives": []
         },
         {
@@ -1028,7 +1031,7 @@
       "material": "fatos",
       "craft": [
         "Precisão em vez de solenidade: frases diretas, termos definidos e verbos que dizem o que foi feito (comparou, mediu, obteve).",
-        "Resumo em parágrafo único: objetivo, método, resultados com números e conclusão proporcional, sem citações nem siglas soltas.",
+        "Siga a seção pedida: resumo em parágrafo único (objetivo, método, resultados e conclusão proporcional); em texto teórico, não invente método, participantes ou resultados.",
         "Discussão: interprete os resultados pelo desenho do estudo e diga o que as limitações impedem concluir.",
         "Calibre a certeza pela evidência; ausência de dado é limitação declarada, não detalhe a esconder.",
         "Não invente referências, testes estatísticos, valores de p ou intervalos."
@@ -1051,13 +1054,13 @@
         {
           "id": "metodo",
           "required": true,
-          "instruction": "Descreva desenho, participantes, intervenção e medidas disponíveis; declare os ausentes.",
+          "instruction": "Em estudo empírico, descreva desenho, participantes, intervenção e medidas disponíveis, e declare os ausentes; em texto teórico, o percurso do argumento.",
           "alternatives": []
         },
         {
           "id": "resultados",
           "required": true,
-          "instruction": "Apresente os resultados com números e comparações, sem testes que não foram feitos.",
+          "instruction": "Apresente os resultados do material, com os números disponíveis, sem testes que não foram feitos.",
           "alternatives": []
         },
         {
@@ -1085,10 +1088,10 @@
       "material": "ficcao",
       "craft": [
         "Comece dentro da cena, com um gesto, um objeto ou um som concreto do lugar.",
-        "Ponto de vista firme: o narrador só sabe o que vê, ouve e lembra, e fala com vocabulário próprio.",
+        "Ponto de vista firme e coerente com o narrador pedido: em primeira pessoa ou terceira limitada, ele só sabe o que vê, ouve e lembra.",
         "Detalhes específicos do lugar e do trabalho das personagens, que não caberiam em outro conto.",
         "Diálogo curto entre aspas, com disse ou sem verbo de elocução; nunca travessão.",
-        "Tensão por ação e silêncio, sem nomear sentimentos; final no tipo pedido, sem moral nem epifania explicada."
+        "Tensão por ação e silêncio, sem rotular o sentimento que a cena já mostra; final no tipo pedido, sem moral nem epifania explicada."
       ],
       "focus": [
         "PTBR-31",
@@ -1136,9 +1139,9 @@
       ],
       "material": "ficcao",
       "craft": [
-        "Primeira pessoa próxima do leitor, como conversa de quem observa bem.",
+        "Pessoa narrativa do pedido; sem indicação, primeira pessoa próxima do leitor, como conversa de quem observa bem.",
         "Cena concreta do cotidiano, com objetos, sons e falas curtas entre aspas.",
-        "Digressões curtas e humor que nasce do detalhe observado, não de piada pronta.",
+        "Digressões curtas; humor ou ironia, se o assunto admitir, nascem do detalhe observado, não de piada pronta.",
         "Personagens definidas por um gesto ou uma fala, sem descrição longa.",
         "O fato pequeno sugere algo maior; feche numa imagem ou fala, sem moral."
       ],
@@ -1160,7 +1163,7 @@
         {
           "id": "observacao",
           "required": true,
-          "instruction": "Alterne cena e comentário, com humor ou ironia que nascem da observação.",
+          "instruction": "Alterne cena e comentário; humor ou ironia, se couberem, nascem da observação.",
           "alternatives": []
         },
         {
@@ -1172,7 +1175,7 @@
         {
           "id": "fecho",
           "required": false,
-          "instruction": "Termine num gesto, numa fala ou numa imagem, com leveza.",
+          "instruction": "Termine num gesto, numa fala ou numa imagem, no tom do texto.",
           "alternatives": [
             "Volte ao objeto ou à frase do início com um sentido levemente novo."
           ]
