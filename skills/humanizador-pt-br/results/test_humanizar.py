@@ -729,5 +729,287 @@ class LocalContractTests(unittest.TestCase):
             self.assertTrue(json.loads(result.stdout))
 
 
+SKILL_DIR = SCRIPT.parent.parent
+RUN_13 = SKILL_DIR / 'results/runs/2026-10-13/evidence/requests'
+PROMPT_01 = ('Redija uma notícia curta para um portal local. A Prefeitura de Vila Clara anunciou '
+             'em 1º de outubro de 2026 a abertura de 1.200 vagas gratuitas em oficinas de leitura '
+             'nas seis bibliotecas municipais. As inscrições vão de 5 a 16 de outubro, '
+             'presencialmente nas bibliotecas, para pessoas a partir de 12 anos. As oficinas '
+             'começam em 3 de novembro. Os horários e a distribuição das vagas por unidade ainda '
+             'não foram divulgados.')
+
+
+def cli_run(*args):
+    return subprocess.run([sys.executable, '-W', 'error', str(SCRIPT), *map(str, args)],
+                          capture_output=True, text=True)
+
+
+def generated_13_10():
+    """Textos reais preservados de 13/10, lidos sem alteração."""
+    texts = {}
+    for folder in sorted(RUN_13.glob('g.*')):
+        result = json.loads((folder / 'result.json').read_text(encoding='utf-8'))
+        if isinstance(result.get('text'), str):
+            texts[folder.name] = result['text']
+    return texts
+
+
+class CatalogGaps20261019Tests(unittest.TestCase):
+    """Lacunas observadas nas saídas de 13/10 e na lista de vetos da skill."""
+
+    def rule_count(self, text, rule_id):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        return h.audit(text, rules)['rule_counts'].get(rule_id, {}).get('count')
+
+    def test_delivery_preamble_is_flagged_only_as_its_own_line(self):
+        for text in ['Aqui está a notícia:\n\n**Título**', 'Aqui está uma sugestão de notícia para o portal:\n\nTexto.',
+                     'Segue o e-mail revisado:\nPrezada equipe,']:
+            with self.subTest(text=text):
+                self.assertEqual(self.rule_count(text, 'PTBR-27'), 1)
+        for text in ['Aqui está o problema: a fila não andou.', 'O texto segue: duas partes.', 'Introdução: Aqui está o texto']:
+            with self.subTest(text=text):
+                self.assertEqual(self.rule_count(text, 'PTBR-27'), 0)
+
+    def test_dash_substitutes_in_prose_are_flagged_but_ranges_and_lists_are_not(self):
+        for text in ['**VILA CLARA** – A Prefeitura anunciou.', 'O prazo - que já venceu - foi mantido.', 'Ela saiu ― e voltou.']:
+            with self.subTest(text=text):
+                self.assertGreaterEqual(self.rule_count(text, 'PTBR-28'), 1)
+        for text in ['Inscrições de 5–16 de outubro.', '- item de lista\n  - subitem', 'bem-estar e pré-requisito']:
+            with self.subTest(text=text):
+                self.assertEqual(self.rule_count(text, 'PTBR-28'), 0)
+
+    def test_vetoed_vocabulary_matches_plural_and_conjugated_forms(self):
+        for text, rule_id in [('Dois pontos cruciais.', 'PTBR-22'), ('Etapas fundamentais.', 'PTBR-22'),
+                              ('A equipe está otimizando o fluxo.', 'PTBR-11'),
+                              ('O curso potencializa resultados.', 'PTBR-11'),
+                              ('A campanha alavancou vendas.', 'PTBR-11'),
+                              ('Em resumo, o prazo acabou.', 'PTBR-24'),
+                              ('Em síntese, o prazo acabou.', 'PTBR-24'),
+                              ('Neste artigo, vamos ver o cadastro.', 'PTBR-02')]:
+            with self.subTest(text=text):
+                self.assertEqual(self.rule_count(text, rule_id), 1)
+        for text, rule_id in [('A agência de fomento aprovou.', 'PTBR-11'),
+                              ('A otimização convexa tem restrições.', 'PTBR-11')]:
+            with self.subTest(text=text):
+                self.assertEqual(self.rule_count(text, rule_id), 0)
+
+
+class BriefTests(unittest.TestCase):
+    """Briefing compacto: catálogo e estilo aplicados sem despejar JSONs integrais."""
+
+    def test_brief_text_contains_every_rule_profile_plan_and_delivery_contract(self):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        result = cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        text = result.stdout
+        for rule in rules:
+            self.assertIn(rule['id'], text)
+            self.assertIn(rule['positive_example'], text)
+            self.assertIn(rule['negative_example'], text)
+        for item in h.load_profiles()['jornalistico']['adjustments'] + h.load_profiles()['jornalistico']['avoid']:
+            self.assertIn(item, text)
+        for block in h.generate_structure('jornalistico', 'noticia', 2, 0, None)['blocks']:
+            self.assertIn(block['instruction'], text)
+        self.assertIn('crucial', text)
+        self.assertIn('não repita comandos', text.casefold())
+        self.assertIn('somente com o artefato', text.casefold())
+        self.assertNotIn('—', text)
+        sizes = sum(len((SKILL_DIR / 'references' / n).read_text(encoding='utf-8')) for n in ('catalogo.json', 'estilos.json'))
+        self.assertLess(len(text), sizes / 4, 'O briefing deve ser compacto')
+
+    def test_brief_labels_examples_by_role_not_by_test_polarity(self):
+        text = cli_run('brief', '--profile', 'neutro-claro').stdout
+        line = next(l for l in text.splitlines() if l.startswith('- PTBR-01'))
+        self.assertLess(line.index('Evite: "Na sociedade atual'), line.index('Prefira: "O cadastro exige'))
+        self.assertNotIn('positive_example', text)
+
+    def test_skill_material_does_not_copy_approved_prompts(self):
+        import re
+        prompts = re.findall(r'```text\n(.*?)\n```', (SKILL_DIR / 'results/PROMPTS.md').read_text(encoding='utf-8'), re.S)
+        self.assertEqual(len(prompts), 24)
+
+        def grams(text, size=5):
+            words = re.findall(r'\w+', text.casefold())
+            return {' '.join(words[i:i + size]) for i in range(len(words) - size + 1)}
+        approved = set().union(*map(grams, prompts))
+        material = [(SKILL_DIR / name).read_text(encoding='utf-8')
+                    for name in ('SKILL.md', 'references/catalogo.json', 'references/estilos.json')]
+        material.append(cli_run('brief', '--profile', 'jornalistico', '--genre', 'noticia').stdout)
+        for text in material:
+            self.assertEqual(grams(text) & approved, set())
+        self.assertNotIn('Vila Clara', ''.join(material))
+
+    def test_brief_json_and_every_profile_genre(self):
+        h = module()
+        for profile_id, profile in h.load_profiles().items():
+            for genre in profile['genres']:
+                with self.subTest(profile=profile_id, genre=genre):
+                    data = h.brief(profile_id, genre)
+                    self.assertEqual(data['profile'], profile_id)
+                    self.assertEqual(data['genre'], genre)
+                    self.assertEqual(len(data['rules']), len(h.load_catalog(SKILL_DIR / 'references/catalogo.json')))
+                    self.assertTrue(all(b['required'] for b in data['plan'] if b['required']))
+        result = cli_run('brief', '--profile', 'caricato', '--genre', 'cronica', '--format', 'json',
+                         '--randomness', '0.4', '--seed', '17')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertEqual(data, h.brief('caricato', 'cronica', 2, 0.4, 17))
+        self.assertEqual(data['kind'], 'writing_brief')
+        for args in [('--profile', 'ausente'), ('--profile', 'jornalistico', '--genre', 'conto'),
+                     ('--profile', 'jornalistico', '--format', 'xml')]:
+            failed = cli_run('brief', *args)
+            self.assertEqual(failed.returncode, 2)
+            self.assertNotIn('Traceback', failed.stderr)
+
+
+class DeliveryCheckTests(unittest.TestCase):
+    """Verificação final da entrega, com textos reais preservados de 13/10."""
+
+    def test_real_command_only_outputs_are_blocked_and_real_texts_pass(self):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        texts = generated_13_10()
+        self.assertEqual(len(texts), 30)
+        command_only = {slot for slot, text in texts.items()
+                        if 'saida_somente_comandos' in {b['code'] for b in h.check(text, rules)['blocking']}}
+        self.assertEqual(command_only, {'g.01-noticia-bibliotecas.r05.skill', 'g.01-noticia-bibliotecas.r12.skill'})
+        preamble = {slot for slot, text in texts.items()
+                    if 'preambulo_de_entrega' in {b['code'] for b in h.check(text, rules)['blocking']}}
+        self.assertEqual(preamble, {'g.01-noticia-bibliotecas.r05.baseline', 'g.01-noticia-bibliotecas.r11.skill'})
+        dashes = {slot for slot, text in texts.items()
+                  if 'travessao' in {b['code'] for b in h.check(text, rules)['blocking']}}
+        self.assertEqual(dashes, {'g.01-noticia-bibliotecas.r07.baseline', 'g.01-noticia-bibliotecas.r12.baseline',
+                                  'g.01-noticia-bibliotecas.r13.baseline'})
+        report = h.check(texts['g.01-noticia-bibliotecas.r00.skill'], rules, PROMPT_01)
+        self.assertTrue(report['deliverable'])
+        self.assertEqual(report['blocking'], [])
+
+    def test_briefing_comparison_flags_inferred_weekday_and_numbers(self):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        text = 'A Prefeitura anunciou nesta quarta-feira (1º/10) 1.300 vagas. As oficinas começam em 3 de novembro.'
+        report = h.check(text, rules, PROMPT_01)
+        codes = [(r['code'], r['original']) for r in report['review']]
+        self.assertIn(('data_inferida', 'nesta quarta-feira'), codes)
+        self.assertIn(('acrescimo_numerico', '1.300'), codes)
+        self.assertIn(('omissao_numerica', '1.200'), codes)
+        self.assertTrue(report['deliverable'])
+        self.assertIn('não prova', report['aviso'])
+
+    def test_em_dash_in_quotes_or_code_is_reported_without_blocking(self):
+        h = module()
+        report = h.check('Ele citou: “prazo — curto”. Use `a—b`.', [])
+        self.assertEqual(report['blocking'], [])
+        self.assertIn('travessao_protegido', {r['code'] for r in report['review']})
+        self.assertFalse(h.check('', [])['deliverable'])
+        self.assertFalse(h.check('<tool_call><function=terminal>ls</function></tool_call>', [])['deliverable'])
+        mixed = 'Para instalar, rode o comando abaixo no terminal do projeto e confira a versão.\n\n```sh\npython3 -m pip install pacote\n```'
+        self.assertTrue(h.check(mixed, [])['deliverable'])
+
+    def test_tool_markup_inside_closed_code_or_quote_is_literal_with_offsets(self):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        docs = ['A documentação mostra o formato aceito pelo agente no exemplo abaixo:\n\n'
+                '```xml\n<tool_call>exemplo</tool_call>\n```\n',
+                'O agente rejeita a marcação `<tool_call>` quando ela aparece fora de código no texto final.',
+                'O manual cita “<tool_call>exemplo</tool_call>” como formato que o leitor nunca deve copiar.']
+        for text in docs:
+            with self.subTest(text=text):
+                report = h.check(text, rules)
+                self.assertTrue(report['deliverable'], report['blocking'])
+                literal = [r for r in report['review'] if r['code'] == 'chamada_de_ferramenta_literal']
+                self.assertTrue(literal)
+                self.assertTrue(all(text[r['start']:r['end']] == r['original'] for r in literal))
+        raw = ['<tool_call><function=terminal>ls</function></tool_call>',
+               'A documentação mostra o formato aceito pelo agente:\n```xml\n<tool_call>sem fechamento</tool_call>',
+               'Texto com aspas abertas "<tool_call>exemplo</tool_call> e mais nada que feche',
+               'Exemplo:\n\n```xml\n<tool_call>exemplo</tool_call>\n```\n']
+        for text in raw:
+            with self.subTest(text=text):
+                report = h.check(text, rules)
+                self.assertFalse(report['deliverable'])
+                self.assertTrue(all(text[b['start']:b['end']] == b['original'] for b in report['blocking'] if 'start' in b))
+
+    def test_explicit_code_artifact_contract_is_opt_in(self):
+        h = module()
+        rules = h.load_catalog(SKILL_DIR / 'references/catalogo.json')
+        commands = 'python3 -m venv .venv\npip install pacote\n'
+        self.assertFalse(h.check(commands, rules)['deliverable'])
+        coded = h.check(commands, rules, artifact='codigo')
+        self.assertTrue(coded['deliverable'])
+        self.assertEqual(coded['artifact'], 'codigo')
+        payload = '{"tool_calls": [{"name": "busca"}]}'
+        self.assertFalse(h.check(payload, rules)['deliverable'])
+        literal = h.check(payload, rules, artifact='codigo')
+        self.assertTrue(literal['deliverable'])
+        self.assertIn('chamada_de_ferramenta_literal', {r['code'] for r in literal['review']})
+        self.assertFalse(h.check('Aqui está o script:\nls -la\n', rules, artifact='codigo')['deliverable'])
+        with self.assertRaises(ValueError):
+            h.check(commands, rules, artifact='json')
+        with tempfile.TemporaryDirectory() as folder:
+            source = Path(folder) / 'saida.txt'
+            source.write_text(commands, encoding='utf-8')
+            self.assertEqual(cli_run('check', source).returncode, 1)
+            self.assertEqual(cli_run('check', source, '--artifact', 'codigo').returncode, 0)
+            failed = cli_run('check', source, '--artifact', 'xml')
+            self.assertEqual(failed.returncode, 2)
+            self.assertNotIn('Traceback', failed.stderr)
+        brief = cli_run('brief', '--profile', 'tecnico-preciso', '--genre', 'tecnico').stdout
+        self.assertIn('só quando o pedido exigir esse formato', brief)
+        self.assertIn('salvo quando o pedido exigir explicitamente', (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8'))
+
+    def test_check_cli_exit_codes_and_readonly(self):
+        with tempfile.TemporaryDirectory() as folder:
+            good, bad, briefing = [Path(folder) / n for n in ('bom.txt', 'ruim.txt', 'pedido.txt')]
+            good.write_text('A Prefeitura abriu 1.200 vagas.', encoding='utf-8')
+            bad.write_text('python3 scripts/humanizar.py brief --profile jornalistico\n', encoding='utf-8')
+            briefing.write_text(PROMPT_01, encoding='utf-8')
+            ok = cli_run('check', good, '--briefing', briefing)
+            self.assertEqual(ok.returncode, 0, ok.stderr)
+            self.assertTrue(json.loads(ok.stdout)['deliverable'])
+            blocked = cli_run('check', bad)
+            self.assertEqual(blocked.returncode, 1, blocked.stderr)
+            self.assertFalse(json.loads(blocked.stdout)['deliverable'])
+            missing = cli_run('check', Path(folder) / 'ausente.txt')
+            self.assertEqual(missing.returncode, 2)
+            self.assertNotIn('Traceback', missing.stderr)
+            self.assertEqual(sorted(p.name for p in Path(folder).iterdir()), ['bom.txt', 'pedido.txt', 'ruim.txt'])
+
+
+class Documentation20261019Tests(unittest.TestCase):
+    """Contrato documental: sem saída só com comandos e versões coerentes."""
+
+    def test_skill_forbids_command_only_answers_and_handles_missing_terminal(self):
+        skill = (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
+        self.assertIn('scripts/humanizar.py brief', skill)
+        self.assertIn('scripts/humanizar.py check', skill)
+        self.assertRegex(skill, r'Sem terminal')
+        self.assertRegex(skill, r'Nunca responda apenas com comandos')
+        for profile in ['coloquial', 'informal', 'caricato']:
+            self.assertIn(f'`{profile}`', skill)
+        self.assertIn('norma culta', skill)
+        self.assertIn('nova revisão não trouxer melhoria concreta', skill)
+
+    def test_versions_and_documented_lookup_commands_are_consistent(self):
+        import re
+        skill = (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
+        version = re.search(r'^version: (\S+)$', skill, re.M).group(1)
+        self.assertEqual(module().VERSION, version)
+        self.assertIn(f'# Humanizador PT-BR {version}', (SKILL_DIR / 'README.md').read_text(encoding='utf-8'))
+        self.assertIn(f'Humanizador PT-BR {version}', (SKILL_DIR.parents[1] / 'README.md').read_text(encoding='utf-8'))
+        for doc in [SKILL_DIR / 'SKILL.md', SKILL_DIR / 'README.md']:
+            text = doc.read_text(encoding='utf-8')
+            self.assertNotIn('—', text)
+            for line in re.findall(r'^python3 scripts/humanizar\.py ((?:catalog|styles|structure|brief) .*)$', text, re.M):
+                with self.subTest(doc=doc.name, line=line):
+                    args = [a.strip('"') for a in re.findall(r'"[^"]*"|\S+', line)]
+                    result = subprocess.run([sys.executable, '-W', 'error', str(SCRIPT), *args],
+                                            capture_output=True, text=True, cwd=SKILL_DIR)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertTrue(result.stdout.strip())
+
+
 if __name__ == '__main__':
     unittest.main()

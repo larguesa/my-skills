@@ -6,7 +6,9 @@ A atualização 0.5.0 dos perfis coloquial, informal e caricato foi autorizada p
 
 Estado: a [retomada de 13/10/2026](runs/2026-10-13/README.md) avançou para 30 respostas de geração completas (28 textos e duas saídas apenas com comandos) e 12 chamadas de juízes, com 33 julgamentos sobre 11 pares. O limite temporário do Qwen Flash impediu concluir a matriz. Na amostra parcial, a humanização média percebida caiu 3,79%, os tokens aumentaram 3.131,84% e o tempo das chamadas caiu 13,28%, incluindo as duas falhas de entrega. Consulte as três respostas e seus denominadores no [relatório objetivo](runs/2026-10-13/OBJETIVO.md). Os [resultados de 10/10](runs/2026-10-10/README.md) permanecem intactos; não há ganho geral demonstrado.
 
-O [protocolo congelado](PROTOCOLO.md) descreve os 24 pedidos, 14 modelos e 19 configurações. A comparação usa chamadas independentes, variando apenas a presença da skill e de seu apoio local documentado. Nenhuma resposta é entregue à outra condição. O [runner](scripts/generation_eval.py) mantém respostas e custos separados das sondagens de disponibilidade, sem repetir chamadas automaticamente.
+Versão 0.6.0, 19/10/2026: [revisão](REVISAO-2026-10-19.md) com briefing compacto, verificação de entrega e modo de empacotamento `v2-brief` no runner. O [teste de 19/10/2026](runs/2026-10-19/README.md) executou parcialmente o [protocolo 0.6.0](PROTOCOLO-0.6.0.md): 31 respostas completas, 15 pares de geração e 27 julgamentos sobre 9 pares. H passou de 42,04 para 49,19; os tokens médios passaram de 628,33 para 6.253,07, e o tempo de 6,91 para 7,37 segundos. As 15 respostas com skill passaram na verificação mecânica de entrega, sem saídas apenas com comandos. O limite temporário do Qwen Flash voltou a interromper a matriz no primeiro pedido. Os 84 testes de software passaram.
+
+O [protocolo congelado](PROTOCOLO.md) de 0.5.1 descreve os 24 pedidos, 14 modelos e 19 configurações. A comparação usa chamadas independentes, variando apenas a presença da skill e de seu apoio local documentado. Nenhuma resposta é entregue à outra condição. O [runner](scripts/generation_eval.py) mantém respostas e custos separados das sondagens de disponibilidade, sem repetir chamadas automaticamente.
 
 ## Validação local do script
 
@@ -14,6 +16,7 @@ O [protocolo congelado](PROTOCOLO.md) descreve os 24 pedidos, 14 modelos e 19 co
 
 ```text
 python3 results/test_humanizar.py
+python3 -m unittest discover -s results/scripts -p test_generation_eval.py
 ```
 
 [VALIDACAO.md](VALIDACAO.md) registra a execução e os limites. Esta validação não mede naturalidade, preferência de leitores nem superioridade da skill.

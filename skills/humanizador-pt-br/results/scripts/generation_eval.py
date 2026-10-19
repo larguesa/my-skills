@@ -37,6 +37,8 @@ SELECTORS = [
     ('argumentativo-sobrio', 'artigo'), ('argumentativo-sobrio', 'ensaio'),
     ('conversacional-contido', 'post'), ('conversacional-contido', 'roteiro'),
     ('literario', 'conto'), ('literario', 'cronica')]
+# Treatment packaging. v1 is the frozen 0.5.1 study (absent key = v1); v2 is opt-in.
+PACKAGINGS = ('v1-full-json', 'v2-brief')
 
 
 def now():
@@ -146,6 +148,19 @@ def local_selection(skill, ordinal):
     return result
 
 
+def local_brief(skill, ordinal):
+    """v2: one compact brief per case, stored once and sent verbatim."""
+    profile, genre = SELECTORS[ordinal - 1]
+    args = ['brief', '--profile', profile, '--genre', genre, '--breadth', '2',
+            '--randomness', '0', '--seed', '17']
+    proc = subprocess.run([sys.executable, 'scripts/humanizar.py', *args], cwd=skill,
+                          capture_output=True, timeout=30)
+    if proc.returncode != 0 or not proc.stdout.strip():
+        raise ValueError('local brief unavailable for v2-brief packaging')
+    return dict(argv=['python3', 'scripts/humanizar.py', *args],
+                stdout_utf8=proc.stdout.decode('utf-8'))
+
+
 def apply_amendments(routes, amendments, endpoints):
     effective = json.loads(json.dumps(routes))
     seen = set()
@@ -203,8 +218,16 @@ def probe_coverage(routes, probes):
 
 
 def prepare(root, skill, history, catalog, endpoints, probes=(), amendments=None,
-            probe_dir=None, probes_accounting=None):
+            probe_dir=None, probes_accounting=None, packaging='v1-full-json', skill_version=None):
     """Materialize snapshots and a reviewable matrix; no network calls or API key."""
+    if packaging not in PACKAGINGS:
+        raise ValueError('unknown treatment packaging')
+    if packaging == 'v1-full-json':
+        if skill_version not in (None, '0.5.1'):
+            raise ValueError('v1-full-json packaging is frozen to SKILL.md 0.5.1')
+        skill_version = '0.5.1'
+    elif not isinstance(skill_version, str) or not re.fullmatch(r'\d+\.\d+\.\d+', skill_version):
+        raise ValueError('v2-brief requires an explicit --skill-version')
     root, skill = Path(root), Path(skill)
     root.mkdir(parents=True, exist_ok=False, mode=0o700)
     with locked(root):
@@ -224,8 +247,8 @@ def prepare(root, skill, history, catalog, endpoints, probes=(), amendments=None
         for name in sources:
             immutable(frozen / 'skill' / name, (skill / name).read_bytes())
         skill_text = (frozen / 'skill/SKILL.md').read_text('utf-8')
-        if not re.search(r'^version: 0\.5\.1$', skill_text, re.M):
-            raise ValueError('treatment must be exactly SKILL.md 0.5.1')
+        if not re.search(r'^version: ' + re.escape(skill_version) + '$', skill_text, re.M):
+            raise ValueError('treatment must be exactly SKILL.md ' + skill_version)
         immutable(frozen / 'history.json', Path(history).read_bytes())
         immutable(frozen / 'catalog.json', Path(catalog).read_bytes())
         immutable(frozen / 'endpoints.json', Path(endpoints).read_bytes())
@@ -264,15 +287,20 @@ def prepare(root, skill, history, catalog, endpoints, probes=(), amendments=None
             case['id'] = old['id']
             case['genre'] = case['title'].split(':')[0]
             # Old prompts/checks are provenance, never input to either candidate or judge.
-            local = local_selection(frozen / 'skill', case['ordinal'])
+            local = (local_selection if packaging == 'v1-full-json' else local_brief)(
+                frozen / 'skill', case['ordinal'])
             immutable(frozen / 'local' / (case['id'] + '.json'), local)
-        config = dict(schema=1, study='independent-generation', skill_version='0.5.1',
+        config = dict(schema=1, study='independent-generation', skill_version=skill_version,
                       cases=cases, routes=routes, historical_routes=historical['routes'], judges=judges, jev=jev,
                       max_tokens=historical['max_tokens'], judge_max_tokens=historical['judge_max_tokens'],
                       chunk_pairs=4, blind_seed='humanizador-0.5.1-independent-v1',
                       monetary_ceiling=None, automatic_retry=False,
                       pilot='first-case-first-route-singleton; same full-matrix slots',
                       rubric_provenance=HISTORY_COMMIT)
+        if packaging != 'v1-full-json':
+            # Absent key keeps v1 configs, payloads and blind maps byte-identical.
+            config.update(treatment_packaging=packaging,
+                          blind_seed=f'humanizador-{skill_version}-independent-{packaging}')
         immutable(frozen / 'config.json', config)
         plan = [dict(slot=c['slot'], payload_sha256=digest(c['payload']))
                 for c in generation_calls(root, config)]
@@ -298,6 +326,8 @@ def prepare(root, skill, history, catalog, endpoints, probes=(), amendments=None
                         'Offline tests are not model-writing evidence.',
                         'Catalog/route identity does not verify reasoning acceptance; separate raw probes required.',
                         'Same texts judged three times are descriptive votes, not independent experiments.'])
+        if packaging != 'v1-full-json':
+            manifest['treatment_packaging'] = packaging
         immutable(root / 'manifest.json', manifest)
         return manifest
 
@@ -334,10 +364,17 @@ def chat_payload(route, messages, max_tokens):
 
 def generation_calls(root, config):
     frozen = Path(root) / 'frozen'
+    packaging = config.get('treatment_packaging', 'v1-full-json')
+    if packaging not in PACKAGINGS:
+        raise ValueError('unknown treatment packaging')
+    names = (['SKILL.md', 'references/catalogo.json', 'references/estilos.json']
+             if packaging == 'v1-full-json' else ['SKILL.md'])
     context = [dict(role='system', content=(frozen / 'skill' / name).read_bytes().decode('utf-8'))
-               for name in ['SKILL.md', 'references/catalogo.json', 'references/estilos.json']]
+               for name in names]
     for case in config['cases']:
         local = (frozen / 'local' / (case['id'] + '.json')).read_bytes().decode('utf-8')
+        if packaging == 'v2-brief':
+            local = json.loads(local)['stdout_utf8']
         user = dict(role='user', content=case['prompt'])
         for index, route in enumerate(config['routes']):
             for arm in ARMS:
@@ -528,6 +565,13 @@ def main(argv=None):
     prep.add_argument('--amendments', type=Path)
     prep.add_argument('--probe-dir', type=Path)
     prep.add_argument('--probes-accounting', type=Path)
+    prep.add_argument('--packaging', choices=PACKAGINGS, default='v1-full-json',
+                      help='v1-full-json reproduces the frozen 0.5.1 study; v2-brief is opt-in')
+    prep.add_argument('--skill-version', help='required for v2-brief; must match SKILL.md')
+    check = subs.add_parser('delivery', help='read-only delivery check of stored generations')
+    check.add_argument('--root', type=Path, required=True)
+    check.add_argument('--output', type=Path, required=True, help='new JSON file, never overwritten')
+    check.add_argument('--checker', type=Path, help='humanizar.py with check(); default: current skill')
     execute = subs.add_parser('run', help='explicit paid generation/judging; no automatic retry')
     execute.add_argument('--root', type=Path, required=True)
     execute.add_argument('--execute-paid', action='store_true')
@@ -540,8 +584,13 @@ def main(argv=None):
     args = parser.parse_args(argv)
     if args.command == 'prepare':
         result = prepare(args.output, args.skill, args.history, args.catalog, args.endpoints,
-                         args.probe_evidence, args.amendments, args.probe_dir, args.probes_accounting)
+                         args.probe_evidence, args.amendments, args.probe_dir, args.probes_accounting,
+                         args.packaging, args.skill_version)
         print(json.dumps({k: v for k, v in result.items() if k != 'sha256'}, ensure_ascii=False))
+    elif args.command == 'delivery':
+        from eval_delivery import DEFAULT_CHECKER, delivery
+        result = delivery(args.root, args.output, args.checker or DEFAULT_CHECKER)
+        print(json.dumps(result['summary'], ensure_ascii=False))
     elif args.command == 'run':
         result = run(args.root, key=os.environ.get(args.key_env, ''),
                      execute_paid=args.execute_paid, pilot=args.pilot, max_new_calls=args.max_new_calls)

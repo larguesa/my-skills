@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
-description: Humanize e redija textos em PT-BR sem fórmulas de IA.
-version: 0.5.1
+description: Redija, revise e diagnostique textos em PT-BR sem fórmulas de IA.
+version: 0.6.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:
@@ -12,22 +12,34 @@ metadata:
 
 # Humanizador PT-BR
 
-Escreva em português brasileiro.
+Escreva em português brasileiro, com norma culta e acentuação. A resposta final é sempre o artefato pedido.
+
+## Modo
+
+- Redação: pedido com briefing e sem texto-base. Escreva do zero com os fatos fornecidos, sem exigir rascunho ou resposta de outra chamada.
+- Revisão: pedido com texto do usuário. Altere só o que melhora clareza, ritmo ou precisão; preserve fatos, estrutura útil e voz.
+- Diagnóstico: análise sem reescrita. Aponte trechos e motivos, sem entregar versão nova.
 
 ## Evite explicitamente
 
-- NÃO USE travessão U+2014 na prosa produzida, inclusive em diálogos novos. Use ponto, vírgula, parênteses ou aspas, não outro traço.
-- CORTE enchimentos: "é importante ressaltar que", "vale destacar que", "cabe destacar que", "faz-se necessário pontuar", "vamos mergulhar", "este artigo irá abordar", "em suma", "em conclusão".
+- NÃO USE travessão U+2014 na prosa produzida, inclusive em diálogos novos. Use ponto, vírgula, dois-pontos, parênteses ou aspas; não troque por meia-risca nem por hífen entre espaços.
+- CORTE enchimentos: "é importante ressaltar que", "vale destacar que", "cabe destacar que", "faz-se necessário pontuar", "vamos mergulhar", "este artigo irá abordar", "em suma", "em resumo", "em conclusão".
 - NÃO USE fórmulas: "no mundo atual", "na era digital", "no cenário atual", "em constante evolução", "o que ninguém te conta", "a verdade é que", "desbloquear o potencial", "divisor de águas", "novo patamar".
-- EVITE decoração: "crucial", "fundamental", "robusto", "inovador", "transformador", "disruptivo", "holístico", "vibrante", "multifacetado", "tessitura", "tapeçaria", "jornada", "ecossistema", "alavancar", "sinergia", "potencializar", "otimizar", "fomentar". Descreva a ação, função ou efeito.
+- EVITE decoração: "crucial", "fundamental", "robusto", "inovador", "transformador", "disruptivo", "holístico", "vibrante", "multifacetado", "tessitura", "tapeçaria", "jornada", "ecossistema", "alavancar", "sinergia", "potencializar", "otimizar", "fomentar", inclusive no plural ou conjugados. Descreva a ação, função ou efeito.
 - NÃO FABRIQUE autoridade: "especialistas afirmam", "estudos comprovam", "impacto significativo", "solução definitiva", "resultados revolucionários". Identifique fonte, medida e limites disponíveis ou omita a alegação dispensável.
-- NÃO ACRESCENTE elogio automático, "espero que isso ajude", oferta do assistente, emoji decorativo, negrito repetitivo, contraste "não é apenas X, mas Y", tríade obrigatória ou slogan final.
+- NÃO ACRESCENTE preâmbulo ("Aqui está o texto:"), elogio automático, "espero que isso ajude", oferta do assistente, emoji decorativo, negrito repetitivo, contraste "não é apenas X, mas Y", tríade obrigatória ou slogan final.
 
 Preserve termos técnicos e usos literais (ecossistema biológico, estatística robusta, otimização com critério). Citação, código e dado original são intocáveis, mesmo com item evitado; sinalize a exceção. Síntese, contraste ou lista necessários ao gênero não são defeitos automáticos. Estas regras orientam edição, não identificam autoria.
 
 ## Catálogo e estilo ANTES de escrever
 
-CONSULTE o [catálogo](references/catalogo.json), SELECIONE um [estilo](references/estilos.json) e aplique as instruções e exceções retornadas. Não deixe essa etapa apenas como sugestão. Use `terminal` na pasta da skill (Python 3, sem dependências):
+Aplique o [catálogo](references/catalogo.json) e um [estilo](references/estilos.json) antes da primeira frase; não deixe essa etapa como sugestão. Com terminal, na pasta da skill (Python 3, sem dependências), gere o briefing compacto:
+
+```text
+python3 scripts/humanizar.py brief --profile jornalistico --genre noticia
+```
+
+O retorno reúne as 28 regras (vício, alternativa, exceção), o perfil, o plano de blocos e o contrato de entrega, em cerca de um quarto do tamanho dos dois JSONs. Para aprofundar uma regra ou comparar perfis:
 
 ```text
 python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
@@ -35,7 +47,7 @@ python3 scripts/humanizar.py styles --query jornalistico --genre noticia
 python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --breadth 2
 ```
 
-Leia os vícios de atribuição, o registro e os blocos retornados. Preencha o plano com fatos do briefing, não com exemplos do catálogo. Sem Python, leia os JSONs e faça a mesma seleção.
+Sem terminal, ou com esses retornos já no contexto, não escreva comandos: leia os retornos ou os dois JSONs, faça a mesma seleção e siga para o texto. Nunca responda apenas com comandos, chamadas de ferramenta, JSON ou plano, salvo quando o pedido exigir explicitamente esse formato como artefato.
 
 Perfis: `neutro-claro`, `tecnico-preciso`, `conversacional-contido`, `argumentativo-sobrio`, `jornalistico`, `didatico`, `academico`, `executivo-direto`, `literario`, `coloquial`, `informal`, `caricato`. A voz do autor prevalece.
 
@@ -43,20 +55,26 @@ Neste pacote, coloquial prioriza efeito de conversa; informal reduz solenidade s
 
 ## Fluxo
 
-1. Identifique gênero, leitor, objetivo, extensão e voz. Redação parte do briefing, sem exigir rascunho ou resposta de outra chamada.
-2. Consulte catálogo e estilo. Na redação, gere um plano compatível. `--breadth` limita cobertura opcional, nunca blocos obrigatórios. `--randomness 0` é determinístico; até `1`, varia escolhas opcionais. `--seed 17` reproduz o plano local, não o texto de um modelo.
+1. Identifique modo, gênero, leitor, objetivo, extensão e voz.
+2. Rode `brief` com perfil e gênero compatíveis, ou leia os JSONs. Monte o plano com fatos do pedido, nunca com exemplos do catálogo. `--breadth` limita blocos opcionais, nunca os obrigatórios. `--randomness 0` é determinístico; até `1`, varia escolhas opcionais. `--seed 17` reproduz o plano local, não o texto de um modelo.
 3. Escreva pelo assunto, ação ou conflito. Use detalhes úteis, ritmo adequado e termos estáveis. Não imponha informalidade, metáforas, gírias, erros ou personalidade.
-4. Audite o texto, leia ocorrências no contexto e corte redundâncias. Não persiga contagem zero à custa de precisão. Entregue só o artefato pedido, sem bastidores; não publique nem sobrescreva original sem autorização.
+4. Verifique o texto com `check` (sem terminal, faça a mesma conferência pela leitura), examine cada alerta no contexto e corte redundâncias. Não persiga contagem zero à custa de precisão.
+5. Entregue só o artefato pedido, sem bastidores. Não publique nem sobrescreva original sem autorização.
 
-Exemplo técnico, execute antes de redigir a documentação:
+Documentação técnica e conto, respectivamente; no segundo, a seed varia o plano, nunca o enredo exigido:
 
 ```text
-python3 scripts/humanizar.py catalog --query robustez --genre tecnico
-python3 scripts/humanizar.py styles --query tecnico-preciso
-python3 scripts/humanizar.py structure --profile tecnico-preciso --genre tecnico --breadth 1
+python3 scripts/humanizar.py brief --profile tecnico-preciso --genre tecnico --breadth 1
+python3 scripts/humanizar.py brief --profile literario --genre conto --randomness 0.4 --seed 17
 ```
 
-Preencha contrato, execução e verificação com a API fornecida. Para conto, use `--profile literario --genre conto`; acrescente `--randomness 0.4 --seed 17` se quiser variar o plano, nunca o enredo exigido.
+## Verificação da entrega
+
+```text
+python3 scripts/humanizar.py check texto.txt --briefing pedido.txt
+```
+
+Código 1 indica bloqueio: saída só com comandos, chamada de ferramenta ou travessão fora de código e citação fechados, ou preâmbulo na primeira linha. Corrija e verifique de novo. Se o pedido exigir explicitamente só código, comando ou JSON, use `--artifact codigo`; o padrão é prosa. Os alertas apontam ocorrências do catálogo, traço substituto, números presentes só no texto ou só no pedido e dia da semana ou data relativa ausentes do pedido; confirme cada um no contexto. `check` não prova fidelidade nem qualidade.
 
 ## Auditoria e substituições
 
@@ -74,6 +92,7 @@ python3 scripts/humanizar.py verify rascunho.txt revisado.txt
 ## Fidelidade e verificação
 
 - Use fatos, fontes e atribuições fornecidos ou verificados para a tarefa. Não invente estudos, entrevistas, links, números, clientes, experiências ou sentimentos. Exemplos editoriais não são fatos reutilizáveis.
+- Não calcule dia da semana nem troque data por referência relativa ("nesta quinta", "hoje") sem confirmação. Não acrescente previsão ("serão divulgados em breve"), orientação ao leitor, fonte ou serviço ausentes do pedido.
 - Preserve negações, condições, unidades, incerteza e posição do autor. Não converta associação em causa, estimativa em garantia ou ausência de confirmação em ausência. Ficção permite invenção no gênero pedido.
 - Confira requisitos, voz e cada ocorrência evitada; desfaça edição que prejudique sentido. `verify` compara inventários, não prova equivalência semântica nem verdade.
 - Não envie texto confidencial a terceiros. Avaliações com modelos exigem aprovação da skill e do protocolo; aprovar prompts não inicia execução.

@@ -1,5 +1,9 @@
 # Validação local
 
+## Revisão 0.6.0 (19/10/2026)
+
+Detalhes na [revisão](REVISAO-2026-10-19.md). Suíte da skill: 54 testes OK com avisos tratados como erros (39 anteriores e 15 novos; os 12 primeiros novos falharam antes da implementação). Runner offline: 15 testes OK (6 anteriores, agora sobre o snapshot 0.5.1, e 9 novos, incluindo adulteração e destino em evidência). Análise de 13/10: 15 testes OK. O modo v1 reproduz byte a byte o plano congelado de 13/10. Verificações funcionais, não avaliação de qualidade literária; o teste de escrita segue o [protocolo 0.6.0](PROTOCOLO-0.6.0.md), não executado.
+
 ## Limpeza 0.5.1 (10/10/2026)
 
 Remoção de `references/praticas-estilos.md` e `references/fontes.md`, conforme solicitação de Ricardo. Links ativos e instruções de leitura ajustados; catálogo, perfis, script e textos dos 24 prompts preservados.

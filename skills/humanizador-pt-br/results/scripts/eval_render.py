@@ -5,6 +5,7 @@ import html
 import json
 from pathlib import Path
 import re
+import unicodedata
 import generation_eval as g
 from eval_store import Store
 
@@ -28,7 +29,17 @@ def fenced(text):
 
 
 def cell(text):
-    return '<pre>' + html.escape(text).replace('|', '&#124;').replace('\n', '&#10;').replace('\r', '&#13;') + '</pre>'
+    # Letters, digits and plain spaces stay literal; everything else becomes a numeric entity,
+    # so GitHub cannot read Markdown, table pipes or line breaks inside the <pre> cell.
+    return '<pre>' + ''.join(c if c == ' ' or unicodedata.category(c)[0] in 'LMN' else f'&#{ord(c)};'
+                             for c in text) + '</pre>'
+
+
+def treatment_label(config):
+    version = config.get('skill_version', '0.5.1')
+    if config.get('treatment_packaging', 'v1-full-json') == 'v2-brief':
+        return version, f'SKILL.md {version} e o briefing local compacto congelado por caso'
+    return version, f'SKILL.md {version}, JSONs completos de catálogo/estilos e consultas/plano locais congelados'
 
 
 def aggregate_telemetry(rows):
@@ -192,7 +203,7 @@ def render(root, reports):
             intro.append(f'- [{case["title"]}](experiments/{case["id"]}/REPORT.md)')
             report = ['# ' + case['title'], '', f'Execução: **{mode}**.', '', NOTICE, '',
                       '## Prompt literal', '', fenced(case['prompt']), '', '## Comparação completa', '',
-                      '| Modelo / modo | Baseline | Skill 0.5.1 | Jev | Astra | Opus |',
+                      f'| Modelo / modo | Baseline | Skill {treatment_label(config)[0]} | Jev | Astra | Opus |',
                       '|---|---|---|---|---|---|']
             case_dir = reports / 'experiments' / case['id']
             for index, route in enumerate(config['routes']):
@@ -233,7 +244,7 @@ def render(root, reports):
                               + ' | '.join(texts + judges) + ' |')
             report += ['', '## Protocolo e limitações', '',
                 'Chamadas novas e independentes. Baseline recebe só o prompt literal; tratamento recebe '
-                'SKILL.md 0.5.1, JSONs completos de catálogo/estilos e consultas/plano locais congelados. '
+                f'{treatment_label(config)[1]}. '
                 'Nenhum texto de outro braço, preferência pessoal ou feedback de juiz entra nos candidatos.',
                 'Mapeamento anônimo e grupos de até quatro pares são congelados; grupo com candidato '
                 'inválido fica sem julgamento, sem reagrupamento oportunista.',

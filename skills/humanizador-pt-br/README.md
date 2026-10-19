@@ -1,6 +1,6 @@
-# Humanizador PT-BR 0.5.1
+# Humanizador PT-BR 0.6.0
 
-Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são consultados antes de escrever.
+Redação, revisão e diagnóstico em português brasileiro. Regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
 
 ## Instalação e uso
 
@@ -17,14 +17,30 @@ Copie a pasta completa para o diretório de skills do agente e carregue [SKILL.m
 Execute na pasta da skill, pelo terminal do agente:
 
 ```text
+python3 scripts/humanizar.py brief --profile jornalistico --genre noticia
+```
+
+`brief` devolve em texto curto as 28 regras do catálogo (vício, alternativa, exceção), o perfil, o plano de blocos e o contrato de entrega. Ocupa cerca de um quarto dos dois JSONs e substitui a injeção integral deles. `--format json` entrega o mesmo conteúdo para ferramentas. Para aprofundar:
+
+```text
 python3 scripts/humanizar.py catalog --query autoridade --genre noticia --limit 5
 python3 scripts/humanizar.py styles --query jornalistico --genre noticia
 python3 scripts/humanizar.py structure --profile jornalistico --genre noticia --breadth 2
 ```
 
-Leia os retornos e organize os dados do briefing nos blocos do plano. Só então escreva. Para variar escolhas opcionais, acrescente `--randomness 0.4 --seed 17`; `--breadth` limita cobertura opcional, preservando os blocos obrigatórios. Seed reproduz o plano local, não o texto de um modelo. O script não inventa fatos nem gera prosa pronta.
+Organize os dados do pedido nos blocos do plano e só então escreva. Para variar escolhas opcionais, acrescente `--randomness 0.4 --seed 17`; `--breadth` limita cobertura opcional, preservando os blocos obrigatórios. Seed reproduz o plano local, não o texto de um modelo. O script não inventa fatos nem gera prosa pronta.
 
-Consultas `--query` ignoram acentos e maiúsculas; `--genre` exige o identificador exato, como `relatorio` ou `noticia`. Consulte todos os perfis com `styles --limit 20`; encontre uma regra por ID com `catalog --query PTBR-21`. Os retornos incluem instruções e exceções, não apenas uma lista de nomes.
+Consultas `--query` ignoram acentos e maiúsculas; `--genre` exige o identificador exato, como `relatorio` ou `noticia`. Consulte todos os perfis com `styles --limit 20`; encontre uma regra por ID com `catalog --query PTBR-21`.
+
+Sem terminal, o agente lê os JSONs e segue direto para o texto. A resposta só é comando, chamada de ferramenta, JSON ou plano quando o pedido exige esse formato.
+
+## Verificação da entrega
+
+```text
+python3 scripts/humanizar.py check texto.txt --briefing pedido.txt
+```
+
+Código 0: entregável. Código 1: bloqueio por saída só com comandos, chamada de ferramenta ou travessão fora de código e citação fechados, ou preâmbulo na primeira linha ("Aqui está a notícia:"). `--artifact codigo` é o contrato explícito para pedido de só código, comando ou JSON; o padrão é prosa. Código 2: erro de entrada. Alertas sem bloqueio listam ocorrências do catálogo, traço substituto, números presentes só no texto ou só no pedido e dia da semana ou data relativa ausentes do pedido. São pontos para leitura, não prova de defeito nem de fidelidade.
 
 ## Auditoria e edição
 
@@ -52,13 +68,20 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 ## Recursos
 
 - [Skill](SKILL.md): regras explícitas e procedimento.
-- [Catálogo](references/catalogo.json): padrões pesquisáveis, sugestões e exceções.
+- [Catálogo](references/catalogo.json): 28 padrões pesquisáveis, sugestões e exceções.
 - [Estilos e estruturas](references/estilos.json): 12 perfis e planos de redação.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
+- [Revisão 0.6.0](results/REVISAO-2026-10-19.md) e [protocolo da avaliação](results/PROTOCOLO-0.6.0.md).
 
 ## Resultado prático mais recente
+
+A [avaliação de 19/10/2026 da versão 0.6.0](results/runs/2026-10-19/README.md) produziu 31 respostas completas. Nos 9 pares avaliados pelos três juízes, H passou de 42,04 para 49,19. Nos 15 pares de geração, os tokens médios passaram de 628,33 para 6.253,07 e o tempo de API de 6,91 para 7,37 segundos. Nenhuma das 15 respostas com skill entregou apenas comandos. O Qwen Flash voltou a limitar a execução; a amostra cobre somente parte do primeiro dos 24 pedidos. Os 84 testes de software passaram.
+
+### Histórico 0.5.1
+
+Os números abaixo são da versão 0.5.1, preservados para consulta.
 
 A [retomada de 13/10/2026](results/runs/2026-10-13/README.md) continua incompleta, devido ao limite temporário do Qwen Flash. Resultados parciais de uma notícia:
 

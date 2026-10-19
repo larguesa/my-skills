@@ -29,12 +29,15 @@ python3 skills/humanizador-pt-br/results/scripts/generation_eval.py render \
   --root <run-privado> --reports skills/humanizador-pt-br/results
 ```
 
-`prepare`/`render` não fazem chamadas de rede. `run` é sequencial; `--pilot` executa somente as duas gerações do primeiro caso/configuração e seus três juízes, com IDs idênticos aos da matriz completa. `--max-new-calls` é limite de fronteira operacional, não monetário; uma interrupção por essa fronteira retorna código 2 e permite continuar apenas slots ainda não iniciados. Nenhum teto financeiro é implementado.
+`prepare`/`render`/`delivery` não fazem chamadas de rede. `delivery --root <run> --output <novo.json>` aplica `humanizar.py check` (padrão: script atual; `--checker` aceita o congelado no run) aos textos completos, com o pedido literal como briefing. Antes, confere manifest, config, plano de payloads, mapa anônimo e intent/raw/result, rederivando resultados em memória; não escreve nem reconstrói cache na fonte, recusa destino dentro da raiz (inclusive via symlink), não exclui nem reenvia saídas. Lê raízes históricas v1, como `runs/2026-10-13/evidence`, pelo mesmo contrato. `run` é sequencial; `--pilot` executa somente as duas gerações do primeiro caso/configuração e seus três juízes, com IDs idênticos aos da matriz completa. `--max-new-calls` é limite de fronteira operacional, não monetário; uma interrupção por essa fronteira retorna código 2 e permite continuar apenas slots ainda não iniciados. Nenhum teto financeiro é implementado.
 
 ## Freeze e segurança de retomada
 
 - Matriz corrigida: 24 casos, 19 configurações, **14 IDs de modelo**, 912 gerações, 432 chamadas de juízes, 1368 julgamentos de pares, 2736 escores de impressão. Não adiciona versões/modelos.
-- Baseline: única mensagem `user`, conteúdo literal extraído de PROMPTS.md. Tratamento: mensagens `system` contendo exatamente SKILL.md 0.5.1 e JSONs integrais; mais retornos locais de catalog/styles/structure, calculados e congelados por caso. Mesma mensagem `user`. Nenhuma resposta de outro braço, memória ou feedback entra nos candidatos.
+- Baseline: única mensagem `user`, conteúdo literal extraído de PROMPTS.md, igual em todos os modos. Nenhuma resposta de outro braço, memória ou feedback entra nos candidatos.
+- `--packaging v1-full-json` (padrão, estudo de 0.5.1): mensagens `system` com SKILL.md 0.5.1 e JSONs integrais, mais retornos locais de catalog/styles/structure congelados por caso. Exige SKILL.md 0.5.1; use `--skill runs/2026-10-13/evidence/frozen/skill` para reproduzir. Config sem `treatment_packaging` equivale a v1, preservando payloads e hashes antigos.
+- `--packaging v2-brief --skill-version X.Y.Z` (opt-in, [protocolo 0.6.0](../PROTOCOLO-0.6.0.md)): `system` com SKILL.md e `system` com o retorno literal de `humanizar.py brief` do caso, sem JSONs integrais. Semente de anonimização própria.
+- Execuções antigas usam o runner congelado em `frozen/runner`; o runner atual recusa raízes cujo código congelado difere.
 - Snapshot das fontes, seleção local, payload hashes, mapa anônimo e grupos fixos, histórico, catálogo/endpoints, amendments, probes e código. Hash divergente bloqueia execução. Prepare exige diretório novo; não sobrescreve freezes.
 - Amendments explícitos podem trocar só provider do mesmo modelo/versão/modo. Os originais ficam preservados. Não há fallback. O Jev 1.13 nativo não aparece no catálogo `/models`; sua identidade usa o endpoint datado exato, sem substituir pelo Jev Router.
 - Lock não bloqueante cobre execução inteira. Cada intent é publicado atomicamente e fsyncado **antes** do POST. Raw HTTP exato fica em base64 dentro de envelope imutável; cache derivado é comparado novamente ao raw.
@@ -45,7 +48,7 @@ python3 skills/humanizador-pt-br/results/scripts/generation_eval.py render \
 
 ## Relatórios e limites
 
-`SUMMARY.md`/`SUMMARY.json`: agregado por juiz/configuração, denominadores, deltas e preferências. `experiments/<caso>/REPORT.md`: prompt literal, textos completos lado a lado e colunas Jev/Astra/Opus. Cópias UTF-8 dos candidatos em `outputs/` preservam bytes. `TELEMETRY.json`: tokens, cache read/write, custos e tempos, separados de probes; desconhecidos ficam null, não zero. A contabilização não interrompe por gasto.
+`SUMMARY.md`/`SUMMARY.json`: agregado por juiz/configuração, denominadores, deltas e preferências. `experiments/<caso>/REPORT.md`: prompt literal, textos completos lado a lado e colunas Jev/Astra/Opus. Células `<pre>` usam entidades numéricas para todo caractere que não seja letra, dígito ou espaço, evitando interpretação de Markdown; cópias UTF-8 dos candidatos em `outputs/` preservam bytes. `TELEMETRY.json`: tokens, cache read/write, custos e tempos, separados de probes; desconhecidos ficam null, não zero. A contabilização não interrompe por gasto.
 
 Impressão de IA não prova autoria nem é probabilidade calibrada. Menor impressão não equivale a maior qualidade. Votos dos três juízes sobre o mesmo texto não são experimentos independentes. Alias retornado não comprova a versão; zero reasoning tokens não comprova ausência/presença da computação solicitada. Jev usa o payload histórico Decisions sem max_tokens artificial; chat candidates usam 4096 e chat judges 16384.
 

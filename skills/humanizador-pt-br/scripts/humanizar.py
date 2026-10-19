@@ -2,7 +2,8 @@
 """Auxílio local à redação e revisão em PT-BR, sobre rascunhos ou originais.
 
 Não gera prosa, consulta fontes ou identifica autoria. Use a skill para redigir;
-este script inspeciona o texto produzido e aplica apenas edições aprovadas.
+este script prepara o briefing editorial, inspeciona o texto produzido e aplica
+apenas edições aprovadas.
 """
 import hashlib
 import unicodedata
@@ -26,6 +27,7 @@ def verify(original, revised, protected_terms=()):
     return {'input_sha256': sha256(original), 'output_sha256': sha256(revised), 'unchanged': original == revised, 'semantic_review_needed': original != revised, 'protected_content_preserved': inventories[0] == inventories[1], 'differences': differences, 'aviso': 'A comparação mecânica não garante fidelidade semântica. Toda alteração exige revisão humana de fatos, intenção e contexto.'}
 
 REFERENCES = Path(__file__).resolve().parents[1] / 'references'
+VERSION = '0.6.0'
 
 
 def load_profiles(path=None):
@@ -347,6 +349,138 @@ def rhythm(text):
             'aviso': 'Descrição editorial de ritmo, sem score ou limiar: não identifica autoria nem comprova defeito. Repetições podem ser intencionais.'}
 
 
+DELIVERY = [
+    'Responda somente com o artefato pedido: sem preâmbulo ("Aqui está"), bastidores ou oferta final. Comandos, JSON ou plano só quando o pedido exigir esse formato.',
+    'Estes retornos já foram calculados pela skill: não repita comandos nem chamadas de ferramenta.',
+    'Prosa sem travessão (U+2014) e sem traço substituto (meia-risca ou hífen entre espaços): use ponto, vírgula, dois-pontos ou parênteses; diálogo novo vai entre aspas.',
+    'Norma culta e acentuação em todos os perfis, inclusive coloquial, informal e caricato.',
+    'Fatos só do pedido ou de fonte verificada: não acrescente dia da semana, data relativa, previsão, orientação, fonte, número, fala ou vivência ausentes.',
+    'Releia contra o plano e o catálogo; termine quando uma nova revisão não trouxer melhoria concreta.',
+]
+
+
+def brief(profile='neutro-claro', genre=None, breadth=2, randomness=0, seed=None, rules=None):
+    """Perfil, plano e catálogo inteiro em instruções curtas, sem gerar prosa."""
+    plan = generate_structure(profile, genre, breadth, randomness, seed)
+    data = json.loads((REFERENCES / 'estilos.json').read_bytes().decode('utf-8'))
+    guidance = load_profiles()[profile]
+    rules = load_catalog(REFERENCES / 'catalogo.json') if rules is None else rules
+    # positive/negative_example seguem a polaridade do detector; aqui recebem o papel editorial.
+    compact = [{'id': r['id'], 'name': r.get('name', ''), 'evite': r.get('positive_example'),
+                'prefira': r.get('negative_example'), 'como': r.get('suggestion'),
+                'termos': r.get('avoid', []), 'excecoes': r.get('exceptions', [])} for r in rules]
+    return {'kind': 'writing_brief', 'version': VERSION, 'profile': profile, 'genre': plan['genre'],
+            'structure_id': plan['structure_id'], 'breadth': breadth, 'randomness': randomness,
+            'seed': seed, 'adjustments': guidance['adjustments'], 'avoid': guidance.get('avoid', []),
+            'plan': plan['blocks'], 'voice_invariants': data.get('voice_invariants', []),
+            'forbidden': data.get('forbidden', []), 'rules': compact, 'delivery': DELIVERY}
+
+
+def brief_text(data):
+    lines = [f"Briefing editorial humanizador-pt-br {data['version']}: perfil {data['profile']}, "
+             f"gênero {data['genre']}, estrutura {data['structure_id']}.", '', 'Entrega']
+    lines += [f'- {item}' for item in data['delivery']]
+    lines += ['', 'Perfil', 'Faça: ' + '; '.join(data['adjustments']) + '.',
+              'Evite: ' + '; '.join(data['avoid']) + '.', '',
+              'Plano: preencha cada bloco só com fatos do pedido']
+    lines += [f"{i}. {b['id']}, {'obrigatório' if b['required'] else 'opcional'}: {b['instruction']}"
+              for i, b in enumerate(data['plan'], 1)]
+    lines += ['', 'Preserve: ' + '; '.join(data['voice_invariants']) + '.',
+              'Nunca: ' + '; '.join(data['forbidden']) + '.', '',
+              f"Catálogo ({len(data['rules'])} regras): evite o vício, prefira a forma direta, respeite a exceção"]
+    for r in data['rules']:
+        line = f"- {r['id']} {r['name']}. Evite: \"{r['evite']}\" Prefira: \"{r['prefira']}\" {r['como']}"
+        if r['termos']:
+            line += ' Termos: ' + ', '.join(r['termos']) + '.'
+        if r['excecoes']:
+            line += ' Exceção: ' + ' '.join(r['excecoes'])
+        lines.append(line)
+    return '\n'.join(lines) + '\n'
+
+
+TOOL_BLOCK = re.compile(r'<tool_call>[\s\S]*?(?:</tool_call>|\Z)|<invoke\b[\s\S]*?(?:</invoke>|\Z)', re.I)
+TOOL_MARKUP = re.compile(r'</?tool_call>|<function=|</?invoke\b|"tool_calls"\s*:', re.I)
+COMMAND_LINE = re.compile(r'(?m)^[ \t]*(?:\$[ \t]*)?(?:python3?|cd|bash|sh|ls|cat|pip3?|npm|git)[ \t][^\n]*$')
+FENCE = re.compile(r'```[^\n]*\n[\s\S]*?(?:```|\Z)|~~~[^\n]*\n[\s\S]*?(?:~~~|\Z)')
+RELATIVE_DATE = re.compile(
+    r'(?i)\b(?:(?:nesta|neste|nessa|nesse|na|no|próxima|próximo|última|último)[ \t]+)?'
+    r'(?:(?:segunda|terça|quarta|quinta|sexta)-feira|sábado|domingo)\b'
+    r'|\b(?:hoje|ontem|amanhã|anteontem)\b|\bn(?:est|ess)[ae][ \t]+(?:semana|manhã|tarde|noite)\b')
+NUMBER = re.compile(r'\d+(?:[.,]\d+)*')
+ARTIFACTS = ('prosa', 'codigo')
+CLOSED_CODE = r'```[^\n]*\n[\s\S]*?\n[ \t]*```|~~~[^\n]*\n[\s\S]*?\n[ \t]*~~~|`[^`\n]+`'
+CLOSED_LITERAL = re.compile(CLOSED_CODE + r'|“[^”\n]*”|"[^"\n]*"|(?m:^[ \t]*>[^\n]*)')
+CLOSED_CODE = re.compile(CLOSED_CODE)
+
+
+def check(text, rules, briefing=None, artifact='prosa'):
+    """Verificação final da entrega; alertas exigem leitura, não provam defeito.
+
+    artifact='codigo' é contrato explícito do pedido (só código, comando ou JSON):
+    o texto inteiro vale como literal. O padrão é prosa; a intenção não é adivinhada.
+    """
+    blocking, review = [], []
+
+    def item(target, code, match=None, **extra):
+        entry = {'code': code}
+        if match is not None:
+            entry.update(start=match.start(), end=match.end(), original=match.group())
+        entry.update(extra)
+        target.append(entry)
+
+    if artifact not in ARTIFACTS:
+        raise ValueError('artifact deve ser prosa ou codigo.')
+    if not text.strip():
+        item(blocking, 'texto_vazio')
+    # Só trechos fechados contam como literais: marcação crua ou aberta continua bloqueando.
+    literal = ([(0, len(text))] if artifact == 'codigo'
+               else [m.span() for m in CLOSED_LITERAL.finditer(text)])
+
+    def inside(match):
+        return any(start <= match.start() and match.end() <= end for start, end in literal)
+    for match in TOOL_MARKUP.finditer(text):
+        if inside(match):
+            item(review, 'chamada_de_ferramenta_literal', match)
+        else:
+            item(blocking, 'chamada_de_ferramenta', match)
+    had_commands = bool(TOOL_MARKUP.search(text) or COMMAND_LINE.search(text))
+    prose = COMMAND_LINE.sub(' ', FENCE.sub(' ', TOOL_BLOCK.sub(' ', CLOSED_CODE.sub(' ', text))))
+    if artifact == 'prosa' and had_commands and len(re.findall(r'[^\W\d_]{2,}', prose)) < 8:
+        item(blocking, 'saida_somente_comandos', message='A resposta traz comandos em vez do artefato pedido.')
+    for match in re.finditer('—', text):
+        item(review if inside(match) else blocking,
+             'travessao_protegido' if inside(match) else 'travessao', match)
+    first_line = re.search(r'\S[^\n]*', text)
+    for finding in audit(text, rules)['findings'] if text else []:
+        if finding['rule_id'] == 'PTBR-21':
+            continue
+        entry = {k: finding[k] for k in ('rule_id', 'start', 'end', 'original', 'protected')}
+        if finding['rule_id'] == 'PTBR-27' and first_line and finding['start'] <= first_line.start() < finding['end'] + 1:
+            blocking.append(dict(entry, code='preambulo_de_entrega'))
+        elif artifact == 'prosa':
+            review.append(dict(entry, code='catalogo', suggestion=finding['suggestion']))
+    if briefing is not None:
+        source = {m.group() for m in NUMBER.finditer(briefing)}
+        produced = {m.group() for m in NUMBER.finditer(text)}
+        seen = set()
+        for match in NUMBER.finditer(text):
+            if match.group() not in source and match.group() not in seen:
+                seen.add(match.group())
+                item(review, 'acrescimo_numerico', match)
+        for match in NUMBER.finditer(briefing):
+            if match.group() not in produced and match.group() not in seen:
+                seen.add(match.group())
+                item(review, 'omissao_numerica', match, source='briefing')
+        known = _search_text(briefing)
+        for match in RELATIVE_DATE.finditer(text):
+            if _search_text(match.group()) not in known:
+                item(review, 'data_inferida', match)
+    return {'kind': 'delivery_check', 'version': VERSION, 'artifact': artifact, 'input_sha256': sha256(text),
+            'briefing_sha256': sha256(briefing) if briefing is not None else None,
+            'deliverable': not blocking, 'blocking': blocking, 'review': review,
+            'aviso': 'Verificação mecânica da entrega: não prova fidelidade, qualidade nem autoria. Leia cada alerta no contexto; omissões e números podem ser legítimos.'}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description='Auxílio à redação e revisão: inspeciona rascunhos ou originais, sem gerar texto, verificar fontes ou detectar autoria.')
     commands = parser.add_subparsers(dest='command', required=True)
@@ -379,8 +513,30 @@ def main(argv=None):
     sub.add_argument('--breadth', type=int, default=3, help='Máximo de blocos opcionais; obrigatórios sempre preservados')
     sub.add_argument('--randomness', type=float, default=0, help='Probabilidade [0,1] de variar opções editoriais locais')
     sub.add_argument('--seed', type=int, help='Semente local reproduzível')
+    sub = commands.add_parser('brief', help='Briefing compacto antes de redigir: perfil, plano e catálogo inteiro')
+    sub.add_argument('--profile', default='neutro-claro')
+    sub.add_argument('--genre', help='Gênero exato compatível com o perfil e estrutura')
+    sub.add_argument('--breadth', type=int, default=2, help='Máximo de blocos opcionais; obrigatórios sempre preservados')
+    sub.add_argument('--randomness', type=float, default=0, help='Probabilidade [0,1] de variar opções editoriais locais')
+    sub.add_argument('--seed', type=int, help='Semente local reproduzível')
+    sub.add_argument('--format', choices=('texto', 'json'), default='texto', help='texto para leitura do redator; json para ferramentas')
+    sub = commands.add_parser('check', help='Verificar a entrega final; código 1 indica bloqueio')
+    sub.add_argument('input', type=Path, help='Texto final em UTF-8')
+    sub.add_argument('--briefing', type=Path, help='Pedido ou briefing em UTF-8, para comparar números e datas')
+    sub.add_argument('--catalog', type=Path, default=REFERENCES / 'catalogo.json', help='Catálogo JSON externo')
+    sub.add_argument('--artifact', choices=ARTIFACTS, default='prosa',
+                     help='codigo somente quando o pedido exige explicitamente código, comando ou JSON')
     args = parser.parse_args(argv)
     try:
+        if args.command == 'brief':
+            data = brief(args.profile, args.genre, args.breadth, args.randomness, args.seed)
+            print(brief_text(data) if args.format == 'texto' else json.dumps(data, ensure_ascii=False, indent=2), end='' if args.format == 'texto' else '\n')
+            return 0
+        if args.command == 'check':
+            briefing = args.briefing.read_bytes().decode('utf-8') if args.briefing else None
+            result = check(args.input.read_bytes().decode('utf-8'), load_catalog(args.catalog), briefing, args.artifact)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result['deliverable'] else 1
         if args.command == 'structure':
             result = generate_structure(args.profile, args.genre, args.breadth, args.randomness, args.seed)
             print(json.dumps(result, ensure_ascii=False, indent=2))
