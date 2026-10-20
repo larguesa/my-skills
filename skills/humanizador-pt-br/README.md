@@ -2,7 +2,7 @@
 
 Redação, revisão e diagnóstico em português brasileiro. A orientação editorial positiva vem antes dos vetos: escrever para o leitor, reescrever o pedido em vez de copiá-lo, entregar o gênero completo, ser concreto e dar ritmo pelo sentido. Há regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
 
-A versão 0.8.0 consolida três revisões independentes da 0.7.0. Cada forma preferida do catálogo só retira o vício, sem fato novo; o briefing em texto traz a orientação das regras de foco e a exceção de todas as regras; redação, revisão e diagnóstico têm instruções próprias; edição e entrega reconhecem código e citações do mesmo modo, e o travessão entre aspas só passa quando a citação está na fonte.
+Cada forma preferida do catálogo só retira o vício, sem fato novo; o briefing em texto traz a orientação das regras de foco e a exceção de todas as regras; redação, revisão e diagnóstico têm instruções próprias; edição e entrega reconhecem código e citações do mesmo modo, e o travessão entre aspas só passa quando a citação está na fonte.
 
 ## Instalação e uso
 
@@ -93,21 +93,21 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
 - [Regras de avaliação](AGENTS.md): meta, protocolo A/B e critérios para aceitar ou rejeitar cada versão.
 - [Resultados](results/README.md): tabelas por versão e por juiz, textos e votos de cada pedido e testes de software.
-- [Revisão 0.8.0](results/reviews/0.8.0/REVISAO.md): mudanças da versão atual e pareceres que as originaram.
 
 ## Avaliação
 
-Meta: aumentar a humanização percebida H pelos juízes Jev, Astra e Opus, sem perder fidelidade ao pedido. Protocolo A/B, padrão de julgamento e critérios para aceitar ou rejeitar cada versão estão em [AGENTS.md](AGENTS.md).
+Último teste da versão atual, com relatório e histórico completos nos links abaixo.
 
-<!-- tabela:inicio -->
-| Versão | Referência | Amostra julgada | H referência | H versão | Δ H | Votos versão / referência / empate | Situação | Textos e votos |
-|---|---|---|---:|---:|---:|---|---|---|
-| 0.2.0, 2 contos | sem skill | 38 de 38 pares; 2 contos; 19 configurações | 30,00 | 41,19 | +11,19 | 71 / 43 / 0 de 114 | Completa. Pedidos antigos, fora dos 24 aprovados. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
-| 0.2.0, 02/10 | sem skill | 308 de 456 pares; 24 de 24 pedidos; 19 de 19 configurações | 31,08 | 35,00 | +3,93 | 456 / 428 / 40 de 924 | Encerrada com 64 saídas inválidas e 102 pares sem juízes. Pedidos com texto antigo. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
-| 0.5.1, 10 e 13/10 | sem skill | 11 de 456 pares; pedido 01; 11 de 19 configurações | 40,03 | 38,52 | -1,52 | 14 / 17 / 2 de 33 | Parcial: parou no limite do Qwen Flash; 2 respostas com skill só trouxeram comandos. Sem decisão. | [textos e votos](results/runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](results/runs/2026-10-13/README.md), [início em 10/10](results/runs/2026-10-10/README.md) |
-| 0.6.0, 19/10 | sem skill | 9 de 456 pares; pedido 01; 9 de 19 configurações | 42,04 | 49,19 | +7,15 | 11 / 13 / 3 de 27 | Parcial: parou no limite do Qwen Flash. Sem decisão. | [textos e votos](results/runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](results/runs/2026-10-19/README.md) |
-| 0.7.0, 19/10 | sem skill | 22 de 456 pares; 22 de 24 pedidos; só claude-opus-5.5 | 26,74 | 40,27 | +13,53 | 35 / 31 / 0 de 66 | Parcial: parou sem capacidade do Grok. Sem decisão. | [textos e votos por pedido](results/README.md#textos-e-votos-por-pedido), [relatório](results/runs/2026-10-19-max/README.md) |
-| 0.8.0 | não se aplica | Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes | não medido | não medido | n/d | n/d | Candidata do primeiro ciclo A/B, pendente. | [teste funcional](results/reviews/0.8.0/SMOKE.md), [revisão](results/reviews/0.8.0/REVISAO.md) |
-<!-- tabela:fim -->
+<!-- resumo:inicio -->
+**0.8.0, 20/10: Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido.**
 
-H é 100 menos a impressão de IA dada pelo juiz, de 0 a 100. Cada linha compara a versão com a referência indicada, dentro da mesma rodada; a diferença entre linhas não mede evolução. Votos por juiz, cobertura e textos de cada pedido estão em [results/README.md](results/README.md).
+**H 47,33** com a skill, contra 31,67 na referência (sem skill). **ΔH +15,67 pontos**. H vai de 0 a 100: quanto maior, mais humano o texto pareceu aos juízes.
+
+Cobertura: 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5. Votos versão / referência / empate: 4 / 2 / 0 de 6.
+
+Tokens totais, média por texto (referência → versão): 1766,00 → 10264,50 (+481,23%); 2 de 456 pares.
+
+Tempo de geração na API, média por texto (referência → versão): 16,66 → 18,93 s (+13,62%); 2 de 456 pares.
+
+[Relatório](results/runs/2026-10-20-0.8.0/README.md) · [Histórico](results/README.md)
+<!-- resumo:fim -->

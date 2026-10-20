@@ -1,0 +1,95 @@
+# API de Tarefas: Criar tarefa
+
+Cria uma nova tarefa e a coloca na fila de processamento.
+
+```
+POST https://api.example.com/v1/jobs
+```
+
+## Autenticação
+
+Envie um token do tipo Bearer no cabeçalho `Authorization`:
+
+```
+Authorization: Bearer <TOKEN>
+```
+
+Se o token estiver ausente ou for inválido, a requisição retorna `401 Unauthorized`.
+
+## Cabeçalhos
+
+| Cabeçalho | Obrigatório | Descrição |
+|---|---|---|
+| `Authorization` | Sim | `Bearer <TOKEN>` |
+| `Content-Type` | Sim | `application/json` |
+| `Idempotency-Key` | Não | Chave para repetir a requisição com segurança. Veja [Idempotência](#idempotência). |
+
+## Corpo da requisição
+
+```json
+{
+  "name": "backup"
+}
+```
+
+| Campo | Tipo | Obrigatório | Regras |
+|---|---|---|---|
+| `name` | string | Sim | Não pode ser vazio. Máximo de 80 caracteres. |
+
+Se `name` não atender a essas regras, a requisição retorna `400 Bad Request`.
+
+## Exemplo de requisição
+
+```bash
+curl -X POST https://api.example.com/v1/jobs \
+  -H "Authorization: Bearer <TOKEN>" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: 6f1c2a9e-backup-001" \
+  -d '{"name":"backup"}'
+```
+
+O cabeçalho `Idempotency-Key` é opcional. Remova a linha correspondente se não precisar dele.
+
+## Resposta de sucesso
+
+**`201 Created`**
+
+```json
+{
+  "id": "job_123",
+  "status": "queued"
+}
+```
+
+| Campo | Descrição |
+|---|---|
+| `id` | Identificador da tarefa criada. |
+| `status` | Estado da tarefa. `queued` indica que a tarefa entrou na fila. |
+
+## Idempotência
+
+Use o cabeçalho `Idempotency-Key` para reenviar uma requisição com segurança, por exemplo após uma falha de rede, sem criar tarefas duplicadas. A chave vale por **24 horas**:
+
+- **Mesma chave e mesmo corpo:** a API retorna a tarefa já existente, sem criar uma nova.
+- **Mesma chave e corpo diferente:** a API retorna `409 Conflict`.
+
+Gere uma chave única, como um UUID, para cada tarefa que deseja criar.
+
+## Limite de requisições
+
+Cada token pode fazer até **60 requisições por minuto**. Acima desse limite, a API retorna `429 Too Many Requests` com o cabeçalho `Retry-After`, que indica quantos **segundos** esperar antes de tentar de novo.
+
+```
+HTTP/1.1 429 Too Many Requests
+Retry-After: 30
+```
+
+## Códigos de resposta
+
+| Código | Significado |
+|---|---|
+| `201 Created` | Tarefa criada e colocada na fila. |
+| `400 Bad Request` | `name` inválido: ausente, vazio, com mais de 80 caracteres ou de tipo diferente de string. |
+| `401 Unauthorized` | Token ausente ou inválido. |
+| `409 Conflict` | `Idempotency-Key` já usada nas últimas 24 horas com um corpo diferente. |
+| `429 Too Many Requests` | Limite de 60 requisições por minuto por token excedido. Consulte `Retry-After`. |

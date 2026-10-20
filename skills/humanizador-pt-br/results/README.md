@@ -10,10 +10,11 @@ Teste A/B de percepção: cada pedido de [PROMPTS.md](PROMPTS.md) é escrito dua
 | 0.5.1, 10 e 13/10 | sem skill | 11 de 456 pares; pedido 01; 11 de 19 configurações | 40,03 | 38,52 | -1,52 | 14 / 17 / 2 de 33 | Parcial: parou no limite do Qwen Flash; 2 respostas com skill só trouxeram comandos. Sem decisão. | [textos e votos](runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](runs/2026-10-13/README.md), [início em 10/10](runs/2026-10-10/README.md) |
 | 0.6.0, 19/10 | sem skill | 9 de 456 pares; pedido 01; 9 de 19 configurações | 42,04 | 49,19 | +7,15 | 11 / 13 / 3 de 27 | Parcial: parou no limite do Qwen Flash. Sem decisão. | [textos e votos](runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](runs/2026-10-19/README.md) |
 | 0.7.0, 19/10 | sem skill | 22 de 456 pares; 22 de 24 pedidos; só claude-opus-5.5 | 26,74 | 40,27 | +13,53 | 35 / 31 / 0 de 66 | Parcial: parou sem capacidade do Grok. Sem decisão. | [textos e votos por pedido](README.md#textos-e-votos-por-pedido), [relatório](runs/2026-10-19-max/README.md) |
-| 0.8.0 | não se aplica | Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes | não medido | não medido | n/d | n/d | Candidata do primeiro ciclo A/B, pendente. | [teste funcional](reviews/0.8.0/SMOKE.md), [revisão](reviews/0.8.0/REVISAO.md) |
+| 0.8.0 | não se aplica | Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes | não medido | não medido | n/d | n/d | Teste funcional concluído, sem avaliação de percepção. | [teste funcional](reviews/0.8.0/SMOKE.md), [revisão](reviews/0.8.0/REVISAO.md) |
+| 0.8.0, 20/10 | sem skill | 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5 | 31,67 | 47,33 | +15,67 | 4 / 2 / 0 de 6 | Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. | [textos e votos por pedido](README.md#textos-e-votos-por-pedido), [relatório](runs/2026-10-20-0.8.0/README.md) |
 <!-- tabela:fim -->
 
-Cada linha compara a versão com a referência indicada, dentro da mesma rodada; até aqui a referência foi sempre o texto sem skill. Pedidos, geradores e amostras mudam entre linhas, então a diferença entre linhas não mede evolução da skill. Nenhuma versão foi aceita ou rejeitada pelo protocolo de [AGENTS.md](../AGENTS.md), que vale a partir do próximo ciclo.
+Cada linha compara a versão com a referência indicada, dentro da mesma rodada; até aqui a referência foi sempre o texto sem skill. A 0.8.0 é o primeiro ciclo sob os critérios de [AGENTS.md](../AGENTS.md) e ficou inconclusiva por cobertura incompleta. As rodadas anteriores mantêm seu status histórico.
 
 <!-- detalhes:inicio -->
 ## Por juiz
@@ -31,6 +32,9 @@ Mesmos pares da tabela acima.
 | 0.7.0 | Jev | 32,77 | 40,91 | +8,14 | 0 / 22 / 0 de 22 | 0 / 0 de 22 |
 | 0.7.0 | Astra | 15,82 | 32,91 | +17,09 | 20 / 2 / 0 de 22 | 2 / 1 de 22 |
 | 0.7.0 | Opus | 31,64 | 47,00 | +15,36 | 15 / 7 / 0 de 22 | 0 / 0 de 22 |
+| 0.8.0 | Jev | 36,50 | 42,00 | +5,50 | 0 / 2 / 0 de 2 | 0 / 0 de 2 |
+| 0.8.0 | Astra | 21,00 | 45,00 | +24,00 | 2 / 0 / 0 de 2 | 1 / 0 de 2 |
+| 0.8.0 | Opus | 37,50 | 55,00 | +17,50 | 2 / 0 / 0 de 2 | 0 / 0 de 2 |
 
 ## Cobertura
 
@@ -41,45 +45,55 @@ Observado sobre planejado em cada rodada.
 | 0.5.1 | 31 de 912 | 30 de 912 | 15 de 456 | 12 de 432 | 11 de 456 |
 | 0.6.0 | 32 de 912 | 31 de 912 | 15 de 456 | 9 de 432 | 9 de 456 |
 | 0.7.0 | 117 de 912 | 107 de 912 | 49 de 456 | 66 de 432 | 22 de 456 |
+| 0.8.0 | 6 de 912 | 5 de 912 | 2 de 456 | 6 de 432 | 2 de 456 |
 
 ## Textos e votos por pedido
 
 Cada link abre o pedido literal, os textos completos lado a lado, da referência e da versão, e as notas de Jev, Astra e Opus, com as justificativas de Astra e Opus. A 0.2.0 usou outra redação dos pedidos e está no [índice antigo](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md).
 
-| Pedido | 0.5.1 | 0.6.0 | 0.7.0 |
-|---|---|---|---|
-| 01. Jornalístico: notícia sobre bibliotecas | [11 pares](runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) | [9 pares](runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md) | [1 par](runs/2026-10-19-max/experiments/01-noticia-bibliotecas/REPORT.md) |
-| 02. Jornalístico: reportagem sobre drenagem | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/02-reportagem-drenagem/REPORT.md) |
-| 03. Desenvolvimento: documentação de API | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/03-documentacao-api/REPORT.md) |
-| 04. Desenvolvimento: análise de bug | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/04-analise-bug/REPORT.md) |
-| 05. Física: movimento e energia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/05-energia-movimento/REPORT.md) |
-| 06. Física: medidas de período | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/06-experimento-periodo/REPORT.md) |
-| 07. Química: equilíbrio | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/07-equilibrio-quimico/REPORT.md) |
-| 08. Química: titulação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/08-titulacao/REPORT.md) |
-| 09. Biologia e meio ambiente: decomposição | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/09-decomposicao/REPORT.md) |
-| 10. Biologia e meio ambiente: estudo ambiental | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/10-estudo-ambiental/REPORT.md) |
-| 11. Acadêmico: resumo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/11-resumo-estudo/REPORT.md) |
-| 12. Acadêmico: discussão | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/12-discussao-estudo/REPORT.md) |
-| 13. Didático: cache | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/13-cache-iniciantes/REPORT.md) |
-| 14. Didático: probabilidade condicional | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/14-probabilidade-condicional/REPORT.md) |
-| 15. Negócios: proposta comercial | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/15-proposta-comercial/REPORT.md) |
-| 16. Negócios: comparação de infraestrutura | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/16-nota-investimento/REPORT.md) |
-| 17. Comunicação profissional: negociação de prazo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/17-email-prazo/REPORT.md) |
-| 18. Comunicação profissional: indisponibilidade | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/18-comunicado-indisponibilidade/REPORT.md) |
-| 19. Opinião e ensaio: IA na educação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/19-ia-educacao/REPORT.md) |
-| 20. Opinião e ensaio: concentração e disponibilidade | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/20-ensaio-produtividade/REPORT.md) |
-| 21. Redes sociais: aprendizado com deploys | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/21-linkedin-aprendizado/REPORT.md) |
-| 22. Redes sociais: roteiro sobre senhas | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/22-roteiro-hash/REPORT.md) |
-| 23. Literário: conto na oficina | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/23-conto-oficina/REPORT.md) |
-| 24. Literário: crônica na lavanderia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/24-cronica-lavanderia/REPORT.md) |
+| Pedido | 0.5.1 | 0.6.0 | 0.7.0 | 0.8.0 |
+|---|---|---|---|---|
+| 01. Jornalístico: notícia sobre bibliotecas | [11 pares](runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) | [9 pares](runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md) | [1 par](runs/2026-10-19-max/experiments/01-noticia-bibliotecas/REPORT.md) | [1 par](runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md) |
+| 02. Jornalístico: reportagem sobre drenagem | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/02-reportagem-drenagem/REPORT.md) | [1 par](runs/2026-10-20-0.8.0/experiments/02-reportagem-drenagem/REPORT.md) |
+| 03. Desenvolvimento: documentação de API | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/03-documentacao-api/REPORT.md) | [textos sem juízes](runs/2026-10-20-0.8.0/experiments/03-documentacao-api/REPORT.md) |
+| 04. Desenvolvimento: análise de bug | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/04-analise-bug/REPORT.md) | não rodou |
+| 05. Física: movimento e energia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/05-energia-movimento/REPORT.md) | não rodou |
+| 06. Física: medidas de período | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/06-experimento-periodo/REPORT.md) | não rodou |
+| 07. Química: equilíbrio | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/07-equilibrio-quimico/REPORT.md) | não rodou |
+| 08. Química: titulação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/08-titulacao/REPORT.md) | não rodou |
+| 09. Biologia e meio ambiente: decomposição | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/09-decomposicao/REPORT.md) | não rodou |
+| 10. Biologia e meio ambiente: estudo ambiental | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/10-estudo-ambiental/REPORT.md) | não rodou |
+| 11. Acadêmico: resumo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/11-resumo-estudo/REPORT.md) | não rodou |
+| 12. Acadêmico: discussão | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/12-discussao-estudo/REPORT.md) | não rodou |
+| 13. Didático: cache | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/13-cache-iniciantes/REPORT.md) | não rodou |
+| 14. Didático: probabilidade condicional | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/14-probabilidade-condicional/REPORT.md) | não rodou |
+| 15. Negócios: proposta comercial | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/15-proposta-comercial/REPORT.md) | não rodou |
+| 16. Negócios: comparação de infraestrutura | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/16-nota-investimento/REPORT.md) | não rodou |
+| 17. Comunicação profissional: negociação de prazo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/17-email-prazo/REPORT.md) | não rodou |
+| 18. Comunicação profissional: indisponibilidade | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/18-comunicado-indisponibilidade/REPORT.md) | não rodou |
+| 19. Opinião e ensaio: IA na educação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/19-ia-educacao/REPORT.md) | não rodou |
+| 20. Opinião e ensaio: concentração e disponibilidade | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/20-ensaio-produtividade/REPORT.md) | não rodou |
+| 21. Redes sociais: aprendizado com deploys | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/21-linkedin-aprendizado/REPORT.md) | não rodou |
+| 22. Redes sociais: roteiro sobre senhas | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/22-roteiro-hash/REPORT.md) | não rodou |
+| 23. Literário: conto na oficina | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/23-conto-oficina/REPORT.md) | não rodou |
+| 24. Literário: crônica na lavanderia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/24-cronica-lavanderia/REPORT.md) | não rodou |
 <!-- detalhes:fim -->
 
 ## Pendências
 
-- A 0.8.0 não teve A/B. É a candidata do primeiro ciclo, contra o texto sem skill.
-- Nenhuma rodada desde a 0.5.1 completou a matriz planejada. Só a 0.7.0 julgou vários pedidos, e com um único gerador; os pedidos 12 e 20 ficaram sem julgamento.
+- A 0.8.0 iniciou o A/B de 20/10: dois pares avaliados pelos três juízes. A execução foi interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. Falta concluir a matriz de 456 pares.
+- Nenhuma rodada desde a 0.5.1 completou a matriz planejada. A 0.7.0 julgou 22 pedidos com um gerador; a 0.8.0, dois pedidos com um gerador.
 - Avaliação humana de percepção não registrada nestes resultados.
 - O runner só usa o texto sem skill como referência. Depois da primeira versão aceita, ele precisa receber o pacote da referência.
+
+## Revisões e testes funcionais
+
+- **0.8.0**: [índice da revisão](reviews/0.8.0/README.md), [mudanças e pareceres](reviews/0.8.0/REVISAO.md), [teste funcional](reviews/0.8.0/SMOKE.md). Consolida três revisões independentes da 0.7.0. A situação da avaliação aparece na tabela acima.
+- Revisões anteriores: [histórico fora da árvore](#histórico-fora-da-árvore).
+
+## Atualização dos resultados
+
+As tabelas e os resumos são calculados por [tabela.py](tabela.py) a partir dos julgamentos publicados. O histórico fica nesta página; os READMEs de apresentação mostram apenas a última rodada. A rodada [2026-10-20-0.8.0](runs/2026-10-20-0.8.0/README.md) contém os textos recebidos, os votos, o consumo e a relação completa do que ficou pendente.
 
 ## Testes de software
 
@@ -90,6 +104,7 @@ python3 -B -W error skills/humanizador-pt-br/results/test_humanizar.py
 python3 -B -m unittest discover -s skills/humanizador-pt-br/results/scripts -p test_generation_eval.py
 python3 -B -m unittest discover -s skills/humanizador-pt-br/results/runs/2026-10-19-max/analysis -p test_objetivo.py
 python3 -B -m unittest discover -s skills/humanizador-pt-br/results/runs/2026-10-19-max/controller -p test_schedule_run.py
+python3 -B -W error skills/humanizador-pt-br/results/test_tabela.py
 python3 -B skills/humanizador-pt-br/results/tabela.py
 ```
 

@@ -21,7 +21,11 @@ OLD = ('https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe011
        '/skills/humanizador-pt-br/tests/README.md')
 
 # Uma linha por teste, sempre com "referencia" explícita: "sem skill", "não se aplica" ou a versão aceita.
+# Ordem de publicação: a última linha alimenta resumo_ultimo nos READMEs de entrada.
 # Rodada nova: acrescente pasta, referência e situação, depois rode --write.
+# Só acrescente uma ROW após publicar OBJETIVO.json, README.md,
+# relatórios por pedido e SHA256SUMS.
+# Preserve a linha funcional e informe a situação real, inclusive bloqueada/inconclusiva.
 # Linhas "fixo" não são recalculadas: a 0.2.0 traz valores históricos fixos, conferidos em 20/10/2026
 # contra os votos do commit d141746 (link da linha).
 ROWS = [
@@ -40,9 +44,11 @@ ROWS = [
          links=[('início em 10/10', 'runs/2026-10-10/README.md')]),
     dict(versao='0.6.0, 19/10', run='2026-10-19', referencia='sem skill', situacao='Parcial: parou no limite do Qwen Flash. Sem decisão.'),
     dict(versao='0.7.0, 19/10', run='2026-10-19-max', referencia='sem skill', situacao='Parcial: parou sem capacidade do Grok. Sem decisão.'),
-    dict(versao='0.8.0', referencia='não se aplica', situacao='Candidata do primeiro ciclo A/B, pendente.',
+    dict(versao='0.8.0', referencia='não se aplica', situacao='Teste funcional concluído, sem avaliação de percepção.',
          fixo=dict(amostra='Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes'),
          links=[('teste funcional', 'reviews/0.8.0/SMOKE.md'), ('revisão', 'reviews/0.8.0/REVISAO.md')]),
+    dict(versao='0.8.0, 20/10', run='2026-10-20-0.8.0', referencia='sem skill',
+         situacao='Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido.'),
 ]
 TARGETS = [(REPO / 'README.md', 'skills/humanizador-pt-br/results/'), (SKILL / 'README.md', 'results/'),
            (RESULTS / 'README.md', '')]
@@ -74,19 +80,21 @@ def summary(run):
         c = collections.Counter(p[j]['preference'] for p in full for j in judges)
         return c['skill'], c['baseline'], c['empate']
 
-    s = dict(data=data, n=len(full), h=(h('baseline'), h('skill')), votos=votes(),
+    s = dict(data=data, n=len(full), h=(h('baseline'), h('skill')) if full else None, votos=votes(),
              casos=collections.Counter(p['jev']['case'] for p in full), rotas=sorted({p['jev']['route'] for p in full}),
-             juizes={j: dict(h=(h('baseline', [j]), h('skill', [j])), votos=votes([j]),
+             juizes={j: dict(h=(h('baseline', [j]), h('skill', [j])) if full else None, votos=votes([j]),
                              criticas=(sum(p[j]['baseline_critical'] for p in full),
                                        sum(p[j]['skill_critical'] for p in full))) for j in JUDGES})
     # A tabela só sai se bater com os agregados que a análise da rodada gravou.
     rec = data['percepcao']['pares_tres_juizes']['humanizacao']
     assert data['cobertura']['pares_tres_juizes']['observado'] == rec['pares'] == s['n'], run
-    assert all(abs(rec[a]['media'] - v) < 1e-9 for a, v in zip(('baseline', 'skill'), s['h'])), run
+    assert all(rec[a]['media'] is None if v is None else abs(rec[a]['media'] - v) < 1e-9
+               for a, v in zip(('baseline', 'skill'), s['h'] or (None, None))), run
     for j in JUDGES:
         same = data['por_juiz'][j]['mesmos_pares_tres_juizes']
-        assert all(abs(same['humanizacao'][a]['media'] - v) < 1e-9
-                   for a, v in zip(('baseline', 'skill'), s['juizes'][j]['h'])), (run, j)
+        assert all(same['humanizacao'][a]['media'] is None if v is None
+                   else abs(same['humanizacao'][a]['media'] - v) < 1e-9
+                   for a, v in zip(('baseline', 'skill'), s['juizes'][j]['h'] or (None, None))), (run, j)
         p = same['preferencias']
         assert (p.get('skill', 0), p.get('baseline', 0), p.get('empate', 0)) == s['juizes'][j]['votos'], (run, j)
     return s
@@ -124,6 +132,44 @@ def sample(s):
     return f'{s["n"]} de {cob["pares_tres_juizes"]["esperado"]} pares; {pedidos}; {geradores}'
 
 
+def resumo_ultimo(prefix, rows=None, summaries=None):
+    """Resumo da última entrada publicada, sem montar a tabela histórica.
+
+    Uma candidata sem A/B continua pendente; nunca herda métricas anteriores.
+    ROWS segue a ordem de publicação. Acrescente a rodada só com evidência publicada.
+    """
+    row = (ROWS if rows is None else rows)[-1]
+    lines = [f'**{row["versao"]}: {row["situacao"]}**']
+    if 'run' in row:
+        s = (SUM if summaries is None else summaries)[row['run']]
+        h = s['h']
+        if h is None:
+            lines.append('H e ΔH não medidos: nenhum par com os três juízes.')
+        else:
+            lines.append(f'**H {num(h[1])}** com a skill, contra {num(h[0])} na referência '
+                         f'({row["referencia"]}). **ΔH {delta(h)} pontos**. '
+                         'H vai de 0 a 100: quanto maior, mais humano o texto pareceu aos juízes.')
+        lines.append(f'Cobertura: {sample(s)}. Votos versão / referência / empate: {votos(s["votos"])}.')
+        expected = s['data']['cobertura']['pares_tres_juizes']['esperado']
+        for section, key, label, unit in (
+                ('tokens', 'total', 'Tokens totais', ''),
+                ('tempo', 'geracao_api', 'Tempo de geração na API', ' s')):
+            metric = (s['data'].get(section) or {}).get(key)
+            if metric and metric.get('pares') and all(metric.get(a, {}).get('media') is not None
+                                                    for a in ('baseline', 'skill')):
+                percent = metric.get('variacao_percentual_razao_somas')
+                change = (' (' + f'{percent:+.2f}'.replace('.', ',') + '%)' if percent is not None else '')
+                lines.append(f'{label}, média por texto (referência → versão): '
+                             f'{num(metric["baseline"]["media"])} → {num(metric["skill"]["media"])}{unit}{change}; '
+                             f'{metric["pares"]} de {expected} pares.')
+        report = f'runs/{row["run"]}/README.md'
+    else:
+        lines.append(f'{row["fixo"]["amostra"]}. H e ΔH não medidos.')
+        report = next(target for title, target in row['links'] if title == 'teste funcional')
+    lines.append(link('Relatório', report, prefix) + ' · ' + link('Histórico', 'README.md', prefix))
+    return '\n\n'.join(lines)
+
+
 def main_table(prefix, rows=None):
     lines = ['| Versão | Referência | Amostra julgada | H referência | H versão | Δ H '
              '| Votos versão / referência / empate | Situação | Textos e votos |',
@@ -153,7 +199,9 @@ def details():
     for versao, run in runs:
         for j in JUDGES:
             d = SUM[run]['juizes'][j]
-            judges.append(f'| {versao} | {NAMES[j]} | {num(d["h"][0])} | {num(d["h"][1])} | {delta(d["h"])} '
+            metrics = (f'{num(d["h"][0])} | {num(d["h"][1])} | {delta(d["h"])}'
+                       if d['h'] is not None else 'não medido | não medido | n/d')
+            judges.append(f'| {versao} | {NAMES[j]} | {metrics} '
                           f'| {votos(d["votos"])} | {d["criticas"][0]} / {d["criticas"][1]} de {SUM[run]["n"]} |')
     keys = [('geracoes_submetidas', 'Gerações enviadas'), ('respostas_api_validadas', 'Respostas completas'),
             ('pares_geracao_validos', 'Pares completos'), ('chamadas_juizes_validas', 'Chamadas de juízes'),
@@ -190,7 +238,9 @@ def fill(text, name, body):
 def rendered():
     out = {}
     for path, prefix in TARGETS:
-        text = fill(path.read_text(encoding='utf-8'), 'tabela', main_table(prefix))
+        history = path == RESULTS / 'README.md'
+        text = fill(path.read_text(encoding='utf-8'), 'tabela' if history else 'resumo',
+                    main_table(prefix) if history else resumo_ultimo(prefix))
         out[path] = fill(text, 'detalhes', details()) if '<!-- detalhes:inicio -->' in text else text
     return out
 
