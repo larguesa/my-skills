@@ -1,6 +1,6 @@
 # Revisão 0.8.0 (19/10/2026)
 
-Pedido de Ricardo: consolidar e implementar as sugestões relevantes de três revisões independentes da versão 0.7.0 (commit-base `4433074e32085320c9cebc8ebace67833e321f92`): Codex CLI com `openai/gpt-6-astra` xhigh, `x-ai/grok-4.7` xhigh e `xiaomi/mimo-v2.6-pro` sem raciocínio. Cada achado foi lido como hipótese do revisor; os de comportamento foram reproduzidos no código antes de qualquer decisão. Escopo: `skills/humanizador-pt-br` (exceto `results/runs`, `results/PROMPTS.md` e `results/scripts`, congelados) e as menções à skill no README raiz e em `skills/index.md`. Durante a etapa de implementação, o Claude não fez chamadas externas adicionais, pesquisa, commit ou envio. Os relatórios completos e a proveniência das três revisões, arquivados pelo controlador, estão em [reviews/0.8.0](reviews/0.8.0/README.md).
+Pedido de Ricardo: consolidar e implementar as sugestões relevantes de três revisões independentes da versão 0.7.0 (commit-base `4433074e32085320c9cebc8ebace67833e321f92`): Codex CLI com `openai/gpt-6-astra` xhigh, `x-ai/grok-4.7` xhigh e `xiaomi/mimo-v2.6-pro` sem raciocínio. Cada achado foi lido como hipótese do revisor; os de comportamento foram reproduzidos no código antes de qualquer decisão. Escopo: `skills/humanizador-pt-br` (exceto `results/runs`, `results/PROMPTS.md` e `results/scripts`, congelados) e as menções à skill no README raiz e em `skills/index.md`. Durante a etapa de implementação, o Claude não fez chamadas externas adicionais, pesquisa, commit ou envio. Os relatórios completos e a proveniência das três revisões, arquivados pelo controlador, estão em [reviews/0.8.0](README.md).
 
 Estado: implementação e validação offline concluídas. A verificação independente confirmou 117 testes aprovados e 11 reproduções corrigidas. O teste funcional de redação produziu cinco textos e uma recusa do provedor, conforme a seção abaixo.
 
@@ -101,7 +101,7 @@ Tamanho do tratamento sem o pedido, em caracteres: 0.7.0, de 16.050 a 16.613 nos
 
 ## Teste de redação
 
-Após a consolidação, o controlador executou seis pedidos já aprovados com MiMo 2.6 Pro, sem raciocínio. Cinco produziram texto completo e passaram no verificador mecânico; a documentação de API foi recusada por limite temporário. A leitura editorial encontrou imprecisão temporal, analogia inadequada, acréscimos não fornecidos e problemas de linguagem e continuidade. Textos preservados, observações, tempos e custos no [relatório funcional](reviews/0.8.0/SMOKE.md). Não houve reescrita dos resultados nem comparação A/B. A matriz anterior permaneceu inalterada.
+Após a consolidação, o controlador executou seis pedidos já aprovados com MiMo 2.6 Pro, sem raciocínio. Cinco produziram texto completo e passaram no verificador mecânico; a documentação de API foi recusada por limite temporário. A leitura editorial encontrou imprecisão temporal, analogia inadequada, acréscimos não fornecidos e problemas de linguagem e continuidade. Textos preservados, observações, tempos e custos no [relatório funcional](SMOKE.md). Não houve reescrita dos resultados nem comparação A/B. A matriz anterior permaneceu inalterada.
 
 ## Hipóteses editoriais a medir
 

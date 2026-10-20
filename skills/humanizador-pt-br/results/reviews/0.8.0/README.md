@@ -14,4 +14,4 @@ As três respostas completas foram concatenadas, sem resumo ou seleção prévia
 
 [Teste funcional, textos completos e consumo](SMOKE.md): 117 testes de software aprovados, 11 reproduções corrigidas e cinco textos completos, com problemas editoriais descritos no relatório. Um pedido de redação foi recusado pelo provedor.
 
-Os relatórios registram os pareceres dos revisores, inclusive sugestões posteriormente rejeitadas. As decisões e a implementação ficam na [revisão consolidada 0.8.0](../../REVISAO-0.8.0.md). Apenas os links locais do parecer do Codex foram convertidos para links públicos fixados no commit original.
+Os relatórios registram os pareceres dos revisores, inclusive sugestões posteriormente rejeitadas. As decisões e a implementação ficam na [revisão consolidada 0.8.0](REVISAO.md). Apenas os links locais do parecer do Codex foram convertidos para links públicos fixados no commit original.

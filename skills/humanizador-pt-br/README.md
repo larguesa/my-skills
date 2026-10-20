@@ -91,31 +91,23 @@ Travessão não tem substituição universal: escolha ponto, vírgula ou parênt
 - [Estilos e estruturas](references/estilos.json): 12 perfis, 15 planos por gênero com ofício e pontos de atenção, regras de material.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
 - [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
-- [Status e validação](results/README.md): testes locais separados da avaliação de escrita.
-- [Revisão 0.8.0](results/REVISAO-0.8.0.md); [revisão 0.7.0](results/REVISAO-0.7.0.md) e [protocolo 0.7.0](results/PROTOCOLO-0.7.0.md); [revisão 0.6.0](results/REVISAO-2026-10-19.md) e [protocolo 0.6.0](results/PROTOCOLO-0.6.0.md).
+- [Regras de avaliação](AGENTS.md): meta, protocolo A/B e critérios para aceitar ou rejeitar cada versão.
+- [Resultados](results/README.md): tabelas por versão e por juiz, textos e votos de cada pedido e testes de software.
+- [Revisão 0.8.0](results/reviews/0.8.0/REVISAO.md): mudanças da versão atual e pareceres que as originaram.
 
 ## Avaliação
 
-A versão 0.8.0 passou em 117 testes de software, mais 11 reproduções independentes. No [teste funcional de redação](results/reviews/0.8.0/SMOKE.md), o MiMo produziu cinco textos sem bloqueio mecânico e teve um pedido recusado por limite temporário. A leitura editorial encontrou imprecisões, acréscimos não fornecidos e problemas de continuidade. Não houve comparação A/B nesta rodada.
+Meta: aumentar a humanização percebida H pelos juízes Jev, Astra e Opus, sem perder fidelidade ao pedido. Protocolo A/B, padrão de julgamento e critérios para aceitar ou rejeitar cada versão estão em [AGENTS.md](AGENTS.md).
 
-### Histórico 0.7.0
+<!-- tabela:inicio -->
+| Versão | Referência | Amostra julgada | H referência | H versão | Δ H | Votos versão / referência / empate | Situação | Textos e votos |
+|---|---|---|---:|---:|---:|---|---|---|
+| 0.2.0, 2 contos | sem skill | 38 de 38 pares; 2 contos; 19 configurações | 30,00 | 41,19 | +11,19 | 71 / 43 / 0 de 114 | Completa. Pedidos antigos, fora dos 24 aprovados. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
+| 0.2.0, 02/10 | sem skill | 308 de 456 pares; 24 de 24 pedidos; 19 de 19 configurações | 31,08 | 35,00 | +3,93 | 456 / 428 / 40 de 924 | Encerrada com 64 saídas inválidas e 102 pares sem juízes. Pedidos com texto antigo. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
+| 0.5.1, 10 e 13/10 | sem skill | 11 de 456 pares; pedido 01; 11 de 19 configurações | 40,03 | 38,52 | -1,52 | 14 / 17 / 2 de 33 | Parcial: parou no limite do Qwen Flash; 2 respostas com skill só trouxeram comandos. Sem decisão. | [textos e votos](results/runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](results/runs/2026-10-13/README.md), [início em 10/10](results/runs/2026-10-10/README.md) |
+| 0.6.0, 19/10 | sem skill | 9 de 456 pares; pedido 01; 9 de 19 configurações | 42,04 | 49,19 | +7,15 | 11 / 13 / 3 de 27 | Parcial: parou no limite do Qwen Flash. Sem decisão. | [textos e votos](results/runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](results/runs/2026-10-19/README.md) |
+| 0.7.0, 19/10 | sem skill | 22 de 456 pares; 22 de 24 pedidos; só claude-opus-5.5 | 26,74 | 40,27 | +13,53 | 35 / 31 / 0 de 66 | Parcial: parou sem capacidade do Grok. Sem decisão. | [textos e votos por pedido](results/README.md#textos-e-votos-por-pedido), [relatório](results/runs/2026-10-19-max/README.md) |
+| 0.8.0 | não se aplica | Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes | não medido | não medido | n/d | n/d | Candidata do primeiro ciclo A/B, pendente. | [teste funcional](results/reviews/0.8.0/SMOKE.md), [revisão](results/reviews/0.8.0/REVISAO.md) |
+<!-- tabela:fim -->
 
-Após a revisão com Claude Code Opus 5.5 max, o teste parcial de 19/10 mostrou: H passou de 26,74 para 40,27 nos 22 pares do Opus avaliados pelos três juízes; preferência de 35 a 31 pela skill. Foram 117 gerações submetidas, com 107 respostas completas e 66 julgamentos. A indisponibilidade do Grok interrompeu a matriz. Os 121 testes de software passaram. Veja [resultados, textos e consumo](results/runs/2026-10-19-max/README.md).
-
-### Histórico 0.6.0
-
-A [avaliação de 19/10/2026 da versão 0.6.0](results/runs/2026-10-19/README.md) produziu 31 respostas completas. Nos 9 pares avaliados pelos três juízes, H passou de 42,04 para 49,19, mas a preferência geral ficou em 13 votos para o baseline, 11 para a skill e 3 empates. Nos 15 pares de geração, os tokens médios passaram de 628,33 para 6.253,07 e o tempo de API de 6,91 para 7,37 segundos. Nenhuma das 15 respostas com skill entregou apenas comandos. A amostra cobre somente parte do primeiro dos 24 pedidos.
-
-### Histórico 0.5.1
-
-A [retomada de 13/10/2026](results/runs/2026-10-13/README.md) continua incompleta, devido ao limite temporário do Qwen Flash. Resultados parciais de uma notícia:
-
-| Indicador | Sem skill | Com skill | Variação |
-|---|---:|---:|---:|
-| Humanização percebida, índice médio de 0 a 100 | 40,03 | 38,52 | −1,52 pontos (−3,79%) |
-| Tokens totais por geração, média | 601,47 | 19.438,47 | +3.131,84% |
-| Tempo da chamada de redação, média em segundos | 10,92 | 9,47 | −13,28% |
-
-Humanização: 11 pares com Jev, Astra e Opus. Tokens e tempo: 15 pares de respostas completas, incluindo duas saídas que entregaram comandos de ferramenta em vez de texto. O índice é 100 menos a impressão de IA do juiz, não uma probabilidade de autoria humana. Não houve melhora média nesta amostra; ela não sustenta uma conclusão geral.
-
-Veja o [relatório objetivo](results/runs/2026-10-13/OBJETIVO.md), os [textos completos](results/runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) e as limitações antes de adotar. A skill não foi ajustada para favorecer os votos. Os [resultados de 10/10](results/runs/2026-10-10/README.md) e as avaliações históricas no [Git](https://github.com/larguesa/my-skills/tree/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests) permanecem preservados. Faça também sua avaliação humana.
+H é 100 menos a impressão de IA dada pelo juiz, de 0 a 100. Cada linha compara a versão com a referência indicada, dentro da mesma rodada; a diferença entre linhas não mede evolução. Votos por juiz, cobertura e textos de cada pedido estão em [results/README.md](results/README.md).
