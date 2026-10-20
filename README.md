@@ -1,34 +1,56 @@
 # my-skills
 
-Gerenciador de skills pessoais de Ricardo Pupo Larguesa. Compartilhamento multi-projeto.
+Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vários projetos. Cada skill funciona sozinha: copie a pasta para o diretório de skills do agente e carregue o `SKILL.md`. Catálogo completo: [skills/index.md](skills/index.md).
 
-## Featured package
-
-[**Animation Video Maker**](skills/animation-video-maker/README.md): an English-language creative-video workflow with 22 visual styles, original recipes, motion techniques, brand-neutral demos and 20 original T2S Tech service examples. Includes editable Canvas scenes, real MP4s, optional Jev selection and generative/hybrid planning guidance. See the [agent skill](skills/animation-video-maker/SKILL.md), [gallery source](skills/animation-video-maker/gallery.html) and [validation report](skills/animation-video-maker/references/validation.md). Download the package to run the HTML gallery locally.
-
-Code/documentation licensing and brand/font exclusions are scoped to that package; see its [license and notices](skills/animation-video-maker/NOTICE.md).
+| Skill | Para que serve | Idioma do pacote |
+|---|---|---|
+| [Humanizador PT-BR](#humanizador-pt-br) | Redigir, revisar e diagnosticar textos em português brasileiro, sem fórmulas de IA | Português |
+| [Animation Video Maker](#animation-video-maker) | Produzir vídeos animados com o agente, do brief ao MP4 | Inglês |
+| [Telegraphist](#telegraphist) | Obter respostas ultracurtas, com abreviações e símbolos | Inglês |
 
 ## Humanizador PT-BR
 
-[Humanizador PT-BR 0.8.0](skills/humanizador-pt-br/README.md): redação, revisão e diagnóstico em português brasileiro, com 32 regras, 12 perfis e ferramentas locais em Python. Avaliação A/B cega por Jev, Astra e Opus conforme o [protocolo da skill](skills/humanizador-pt-br/AGENTS.md).
+Escreve, revisa e diagnostica textos em português brasileiro com ofício de redator: corta os clichês que denunciam a IA, acerta o registro do gênero e preserva fatos e voz do autor. Traz 32 regras, 12 perfis de estilo, 15 planos por gênero e um verificador local em Python.
+
+Serve para notícia, documentação, e-mail, proposta, ensaio, conto ou crônica que precisa sair pronta para publicar. Peça, por exemplo: "Revise este artigo preservando fatos e voz: [...]. Use humanizador-pt-br."
+
+[Humanizador PT-BR 0.8.0: instalação e exemplos](skills/humanizador-pt-br/README.md) · [protocolo da skill](skills/humanizador-pt-br/AGENTS.md)
 
 <!-- resumo:inicio -->
-**0.8.0, 20/10: Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido.**
+**Na amostra avaliada, os textos escritos com a skill pareceram mais humanos aos juízes e receberam mais votos de preferência.**
 
-**H 47,33** com a skill, contra 31,67 na referência (sem skill). **ΔH +15,67 pontos**. H vai de 0 a 100: quanto maior, mais humano o texto pareceu aos juízes.
+Avaliação parcial de 20/10: 2 de 456 pares, gerados com Opus 5.5 e avaliados por Jev, Astra e Opus; ciclo ainda inconclusivo.
 
-Cobertura: 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5. Votos versão / referência / empate: 4 / 2 / 0 de 6.
+| Indicador | Sem skill | Com a skill 0.8.0 | Variação |
+|---|---:|---:|---:|
+| Humanização percebida, 0 a 100 | 31,67 | 47,33 | +15,67 pontos |
+| Preferência dos juízes, votos | 2 de 6 | 4 de 6 | +2 |
+| Falhas factuais críticas, julgamentos | 1 de 6 | 0 de 6 | -1 |
+| Tokens por texto, média | 1766,00 | 10264,50 | +481,23% |
+| Segundos de geração por texto, média | 16,66 | 18,93 | +13,62% |
 
-Tokens totais, média por texto (referência → versão): 1766,00 → 10264,50 (+481,23%); 2 de 456 pares.
+Humanização percebida é a nota de 0 a 100 que três modelos juízes dão a cada texto, sem saber qual usou a skill; maior é mais humano. Nos votos, cada juiz escolhe o texto que atende melhor ao pedido.
 
-Tempo de geração na API, média por texto (referência → versão): 16,66 → 18,93 s (+13,62%); 2 de 456 pares.
-
-[Relatório](skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/README.md) · [Histórico](skills/humanizador-pt-br/results/README.md)
+[Relatório legível](skills/humanizador-pt-br/results/README.md#avaliação-mais-recente) · [Evidência original da rodada](skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/README.md) · [Histórico](skills/humanizador-pt-br/results/README.md#histórico-das-avaliações)
 <!-- resumo:fim -->
+
+## Animation Video Maker
+
+Transforma uma explicação, um diagrama ou um fluxo de interface em vídeo curto. O agente escreve a cena em código, com texto e logos exatos, e a exporta para MP4 na sua máquina, sem API de geração de vídeo; a cena-fonte continua editável. Para imagens orgânicas, o pacote orienta rotas generativa e híbrida com um provedor configurado à parte.
+
+Inclui 22 estilos visuais, receitas criativas originais e técnicas de movimento, para vídeos explicativos, demonstrações de produto, tipografia animada e narrativa com dados. Peça, por exemplo: "Crie uma animação de 20 segundos explicando nossa abordagem de migração para gestores não técnicos. Use o fluxo do Animation Video Maker, sugira um estilo e entregue a cena editável e um MP4 validado."
+
+Para ver antes de usar: 20 exemplos originais, cada um com MP4, cena-fonte editável e guia do estilo, conferidos no [relatório de validação](skills/animation-video-maker/references/validation.md), e três demonstrações sem marca na [validação da 0.2.0](skills/animation-video-maker/references/validation-0.2.md).
+
+[Animation Video Maker](skills/animation-video-maker/README.md) (em inglês) · [skill do agente](skills/animation-video-maker/SKILL.md) · [galeria](skills/animation-video-maker/gallery.html), que roda localmente depois de baixar o pacote · [licença e avisos](skills/animation-video-maker/NOTICE.md)
 
 ## Telegraphist
 
-[Telegraphist](skills/telegraphist/SKILL.md): the supplied ultra-short reply prompt, with abbreviations and symbols. [English benchmark report](skills/telegraphist/tests/REPORT.md): seven current models, English/Portuguese prompts and Jev/Astra/Opus judges. The run stopped at an OpenRouter concurrent-request reservation limit: 67 of 336 planned candidate episodes started, nine valid judge votes, USD 1.860233450 reconciled spend. The current benchmark has no assistant-imposed monetary ceiling or quota; its dedicated key is enabled, and cost accounting is measurement only. OpenRouter's own reservation constraint is separate. The full comparison remains incomplete; no general token-saving or quality claim is justified. The skill root contains only `SKILL.md` and `tests/`; historical readable reports are translated into English and original evidence remains preserved.
+Faz o agente responder como um telegrafista: direto ao ponto, sem repetir a pergunta, em frases curtas, com abreviações e símbolos como `->`, `=` e `+`. Útil em consultas rápidas, quando você quer só o dado ou o próximo passo. A instrução é em inglês.
+
+Peça, por exemplo: "Use telegraphist: qual a diferença entre TCP e UDP?"
+
+Avaliação parcial: 67 de 336 episódios iniciados e 9 votos válidos de juízes, ainda insuficientes para comprovar economia de tokens. [Telegraphist](skills/telegraphist/SKILL.md) · [relatório do benchmark](skills/telegraphist/tests/REPORT.md) (em inglês)
 
 ## Estrutura
 

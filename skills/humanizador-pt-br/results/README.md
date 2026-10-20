@@ -1,6 +1,41 @@
 # Resultados do Humanizador PT-BR
 
-Teste A/B de percepção: cada pedido de [PROMPTS.md](PROMPTS.md) é escrito duas vezes pelo mesmo gerador, sem e com a skill, e os juízes Jev, Astra e Opus avaliam os textos sem saber a origem. H é 100 menos a impressão de IA dada pelo juiz, de 0 a 100; quanto maior, mais humano. Meta, protocolo, critérios de decisão e convenção de arquivos: [AGENTS.md](../AGENTS.md).
+Teste A/B de percepção: cada pedido de [PROMPTS.md](PROMPTS.md) é escrito duas vezes pelo mesmo gerador, sem e com a skill, e os juízes Jev, Astra e Opus avaliam os textos sem saber a origem. Meta, protocolo, critérios de decisão e convenção de arquivos: [AGENTS.md](../AGENTS.md).
+
+## Avaliação mais recente
+
+Relatório legível da última rodada publicada, calculado por [tabela.py](tabela.py) a partir do `OBJETIVO.json` da rodada. Termos usados:
+
+- **Par**: o mesmo pedido escrito pelo mesmo modelo, sem e com a skill.
+- **Humanização percebida (H)**: 100 menos a impressão de IA que o juiz atribui ao texto, de 0 a 100; quanto maior, mais humano o texto pareceu. Mede a percepção dos modelos juízes, não a autoria.
+- **Preferência**: o texto que cada juiz considera melhor pela qualidade e pelo atendimento ao pedido, nunca pela menor impressão de IA.
+- **Falha factual crítica**: dado central, unidade, negação ou citação alterados; fonte ou medição inventadas; ressalva que muda a conclusão retirada.
+
+<!-- atual:inicio -->
+**Na amostra avaliada, os textos escritos com a skill pareceram mais humanos aos juízes e receberam mais votos de preferência.**
+
+Amostra: 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5; juízes Jev, Astra e Opus. **Situação:** Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. A decisão exige os 456 pares planejados julgados pelos três juízes.
+
+| Indicador | Sem skill | Com a skill 0.8.0 | Variação |
+|---|---:|---:|---:|
+| Humanização percebida, 0 a 100 | 31,67 | 47,33 | +15,67 pontos |
+| Preferência dos juízes, votos | 2 de 6 | 4 de 6 | +2 |
+| Falhas factuais críticas, julgamentos | 1 de 6 | 0 de 6 | -1 |
+| Tokens por texto, média | 1766,00 | 10264,50 | +481,23% |
+| Segundos de geração por texto, média | 16,66 | 18,93 | +13,62% |
+
+Humanização percebida por juiz (sem a skill → com a skill): Jev 36,50 → 42,00 (+5,50); Astra 21,00 → 45,00 (+24,00); Opus 37,50 → 55,00 (+17,50).
+
+Recursos: 97,72% do acréscimo de tokens vem da entrada, onde vão as instruções da skill. O tempo de geração inclui eventual fila da API, sem juízes nem preparação local.
+
+Textos completos lado a lado, notas e justificativas: [01. Jornalístico: notícia sobre bibliotecas](runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md), [02. Jornalístico: reportagem sobre drenagem](runs/2026-10-20-0.8.0/experiments/02-reportagem-drenagem/REPORT.md).
+
+Evidência original: [relatório da rodada](runs/2026-10-20-0.8.0/README.md) · [dados objetivos](runs/2026-10-20-0.8.0/OBJETIVO.json) · [decisão](runs/2026-10-20-0.8.0/DECISION.json) · [SHA256SUMS](runs/2026-10-20-0.8.0/SHA256SUMS).
+<!-- atual:fim -->
+
+## Histórico das avaliações
+
+Todas as rodadas publicadas, em ordem. Δ H é a diferença de humanização percebida, em pontos, entre a versão e a referência.
 
 <!-- tabela:inicio -->
 | Versão | Referência | Amostra julgada | H referência | H versão | Δ H | Votos versão / referência / empate | Situação | Textos e votos |
@@ -17,7 +52,7 @@ Teste A/B de percepção: cada pedido de [PROMPTS.md](PROMPTS.md) é escrito dua
 Cada linha compara a versão com a referência indicada, dentro da mesma rodada; até aqui a referência foi sempre o texto sem skill. A 0.8.0 é o primeiro ciclo sob os critérios de [AGENTS.md](../AGENTS.md) e ficou inconclusiva por cobertura incompleta. As rodadas anteriores mantêm seu status histórico.
 
 <!-- detalhes:inicio -->
-## Por juiz
+### Por juiz
 
 Mesmos pares da tabela acima.
 
@@ -36,7 +71,7 @@ Mesmos pares da tabela acima.
 | 0.8.0 | Astra | 21,00 | 45,00 | +24,00 | 2 / 0 / 0 de 2 | 1 / 0 de 2 |
 | 0.8.0 | Opus | 37,50 | 55,00 | +17,50 | 2 / 0 / 0 de 2 | 0 / 0 de 2 |
 
-## Cobertura
+### Cobertura
 
 Observado sobre planejado em cada rodada.
 
@@ -47,7 +82,7 @@ Observado sobre planejado em cada rodada.
 | 0.7.0 | 117 de 912 | 107 de 912 | 49 de 456 | 66 de 432 | 22 de 456 |
 | 0.8.0 | 6 de 912 | 5 de 912 | 2 de 456 | 6 de 432 | 2 de 456 |
 
-## Textos e votos por pedido
+### Textos e votos por pedido
 
 Cada link abre o pedido literal, os textos completos lado a lado, da referência e da versão, e as notas de Jev, Astra e Opus, com as justificativas de Astra e Opus. A 0.2.0 usou outra redação dos pedidos e está no [índice antigo](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md).
 
@@ -93,7 +128,7 @@ Cada link abre o pedido literal, os textos completos lado a lado, da referência
 
 ## Atualização dos resultados
 
-As tabelas e os resumos são calculados por [tabela.py](tabela.py) a partir dos julgamentos publicados. O histórico fica nesta página; os READMEs de apresentação mostram apenas a última rodada. A rodada [2026-10-20-0.8.0](runs/2026-10-20-0.8.0/README.md) contém os textos recebidos, os votos, o consumo e a relação completa do que ficou pendente.
+As tabelas, o relatório da avaliação mais recente e os resumos são calculados por [tabela.py](tabela.py) a partir dos julgamentos publicados. O histórico fica nesta página; os READMEs de apresentação mostram apenas a última rodada, com link para a seção [Avaliação mais recente](#avaliação-mais-recente). A rodada [2026-10-20-0.8.0](runs/2026-10-20-0.8.0/README.md) contém os textos recebidos, os votos, o consumo e a relação completa do que ficou pendente.
 
 ## Testes de software
 

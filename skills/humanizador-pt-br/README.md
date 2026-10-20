@@ -1,8 +1,25 @@
 # Humanizador PT-BR 0.8.0
 
-Redação, revisão e diagnóstico em português brasileiro. A orientação editorial positiva vem antes dos vetos: escrever para o leitor, reescrever o pedido em vez de copiá-lo, entregar o gênero completo, ser concreto e dar ritmo pelo sentido. Há regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
+Skill para agentes de IA que redige, revisa e diagnostica textos em português brasileiro. Ela orienta o agente a entregar o texto que um bom redator do gênero entregaria: claro, natural, sem as fórmulas que denunciam a IA, com os fatos do pedido e a voz do autor preservados.
 
-Cada forma preferida do catálogo só retira o vício, sem fato novo; o briefing em texto traz a orientação das regras de foco e a exceção de todas as regras; redação, revisão e diagnóstico têm instruções próprias; edição e entrega reconhecem código e citações do mesmo modo, e o travessão entre aspas só passa quando a citação está na fonte.
+Na avaliação cega mais recente, ainda parcial, os textos escritos com a skill pareceram mais humanos aos modelos juízes do que os escritos sem ela. [Ver o resultado](#resultados).
+
+## O que a skill faz pelo seu texto
+
+- **Entrega o gênero completo.** Há 15 planos por gênero: notícia com título e lide, reportagem com atribuição e limites, nota executiva com a conclusão primeiro, além de planos próprios para ensaio, crônica, conto, proposta, e-mail, roteiro e texto acadêmico.
+- **Corta os clichês de IA.** São 32 regras pesquisáveis contra enchimento ("é importante ressaltar que"), fórmulas ("no mundo atual"), jargão decorativo ("robusto", "alavancar"), autoridade fabricada ("estudos comprovam") e travessão na prosa. Os usos legítimos ficam: "ecossistema biológico" e "estatística robusta" continuam valendo.
+- **Acerta o registro.** Os 12 perfis de estilo vão do técnico preciso ao literário, do executivo direto ao coloquial, cada um ligado aos gêneros em que funciona.
+- **Preserva fatos e voz.** Nomes, números, datas, citações e ressalvas vêm só do pedido ou do texto-base. Na revisão, a skill muda apenas o que melhora clareza, ritmo ou precisão e mantém as frases que já funcionam.
+- **Confere antes de entregar.** Um script local barra preâmbulo ("Aqui está a notícia:"), travessão e comando no lugar do texto, e aponta números e datas relativas que não estão no pedido.
+
+## Exemplo real
+
+Pedido 01 da avaliação de 20/10: uma notícia curta sobre 1.200 vagas em oficinas de leitura, anunciadas em 1º de outubro de 2026. O mesmo modelo, Claude Opus 5.5, escreveu as duas versões.
+
+- **Sem a skill**, o texto disse que a prefeitura anunciou "nesta quarta-feira (1º)", mas a data caiu numa quinta, e terminou com "O portal acompanhará o tema", promessa que o pedido não trazia.
+- **Com a skill**, o texto manteve "em 1º de outubro", registrou o que a prefeitura ainda não divulgou e não acrescentou compromisso. O juiz Opus o considerou "fiel a todos os dados".
+
+Astra e Opus preferiram a versão com a skill; Jev preferiu a outra. A regra que evita o erro está na skill: não calcular dia da semana sem conferência. [Os dois textos completos e os votos](results/runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md).
 
 ## Instalação e uso
 
@@ -14,7 +31,33 @@ Copie a pasta completa para o diretório de skills do agente e carregue [SKILL.m
 >
 > Diagnostique os vícios deste texto, sem reescrever: [...].
 
-## Ferramentas no fluxo de redação
+São três modos. Redação: briefing sem texto-base, escrito do zero com os fatos fornecidos. Revisão: texto do usuário, alterado só no escopo pedido. Diagnóstico: trechos, motivos e prioridades, sem versão nova.
+
+## Recursos
+
+- [Skill](SKILL.md): orientação editorial, regras explícitas e procedimento.
+- [Catálogo](references/catalogo.json): 32 padrões pesquisáveis, com termos, sugestões e exceções. `positive_example` é o vício detectado; `negative_example` é a forma preferida, que só o retira.
+- [Estilos e estruturas](references/estilos.json): 12 perfis, 15 planos por gênero com ofício e pontos de atenção, regras de material.
+- [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
+- [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
+- [Regras de avaliação](AGENTS.md): meta, protocolo A/B e critérios para aceitar ou rejeitar cada versão.
+- [Resultados](results/README.md): avaliação mais recente, histórico por versão e por juiz, textos e votos de cada pedido e testes de software.
+
+## Detalhes técnicos
+
+Referência das ferramentas locais. Clique para abrir cada parte.
+
+<details>
+<summary><strong>Como a skill orienta a escrita</strong></summary>
+
+A orientação editorial positiva vem antes dos vetos: escrever para o leitor, reescrever o pedido em vez de copiá-lo, entregar o gênero completo, ser concreto e dar ritmo pelo sentido. Há regras explícitas contra travessão e traço substituto na prosa produzida, enchimentos, jargão decorativo e fórmulas de IA. Catálogo e estilo são aplicados antes de escrever, e a entrega é verificada antes de sair.
+
+Cada forma preferida do catálogo só retira o vício, sem fato novo; o briefing em texto traz a orientação das regras de foco e a exceção de todas as regras; redação, revisão e diagnóstico têm instruções próprias; edição e entrega reconhecem código e citações do mesmo modo, e o travessão entre aspas só passa quando a citação está na fonte.
+
+</details>
+
+<details>
+<summary><strong>Ferramentas no fluxo de redação</strong></summary>
 
 Execute na pasta da skill, pelo terminal do agente:
 
@@ -51,7 +94,10 @@ Consultas `--query` ignoram acentos e maiúsculas; `--genre` exige o identificad
 
 Sem terminal, o agente lê os JSONs e segue direto para o texto. A resposta só é comando, chamada de ferramenta, JSON ou plano quando o pedido exige esse formato.
 
-## Verificação da entrega
+</details>
+
+<details>
+<summary><strong>Verificação da entrega</strong></summary>
 
 ```text
 python3 scripts/humanizar.py check texto.txt --briefing pedido.txt
@@ -61,7 +107,10 @@ Código 0: entregável. Código 1: bloqueio por comandos, chamada de ferramenta 
 
 Alertas sem bloqueio listam ocorrências do catálogo, números presentes só no texto ou só no pedido (com sinal, percentual e ordinal, fora de blocos de código; `start` e `end` da omissão referem-se ao pedido) e dia da semana ou data relativa ausentes do pedido ("nesta quinta", "semana que vem", comparados por palavra inteira). São pontos para leitura, não prova de defeito nem de fidelidade.
 
-## Auditoria e edição
+</details>
+
+<details>
+<summary><strong>Auditoria e edição</strong></summary>
 
 ```text
 python3 scripts/humanizar.py audit rascunho.txt
@@ -84,30 +133,26 @@ Salve o JSON retornado com a ferramenta de arquivos do agente. Leia cada trecho 
 
 Travessão não tem substituição universal: escolha ponto, vírgula ou parênteses pela função da frase. Preserve o símbolo quando pertence a uma citação literal ou código original. `verify` verifica diferenças e inventários protegidos, não equivalência semântica nem veracidade.
 
-## Recursos
+</details>
 
-- [Skill](SKILL.md): orientação editorial, regras explícitas e procedimento.
-- [Catálogo](references/catalogo.json): 32 padrões pesquisáveis, com termos, sugestões e exceções. `positive_example` é o vício detectado; `negative_example` é a forma preferida, que só o retira.
-- [Estilos e estruturas](references/estilos.json): 12 perfis, 15 planos por gênero com ofício e pontos de atenção, regras de material.
-- [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
-- [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
-- [Regras de avaliação](AGENTS.md): meta, protocolo A/B e critérios para aceitar ou rejeitar cada versão.
-- [Resultados](results/README.md): tabelas por versão e por juiz, textos e votos de cada pedido e testes de software.
+## Resultados
 
-## Avaliação
-
-Último teste da versão atual, com relatório e histórico completos nos links abaixo.
+Avaliação A/B cega: o mesmo modelo escreve cada pedido de [PROMPTS.md](results/PROMPTS.md) sem e com a skill, e os juízes avaliam os textos sem saber a origem. A versão é aceita ou rejeitada pelas [regras de avaliação](AGENTS.md).
 
 <!-- resumo:inicio -->
-**0.8.0, 20/10: Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido.**
+**Na amostra avaliada, os textos escritos com a skill pareceram mais humanos aos juízes e receberam mais votos de preferência.**
 
-**H 47,33** com a skill, contra 31,67 na referência (sem skill). **ΔH +15,67 pontos**. H vai de 0 a 100: quanto maior, mais humano o texto pareceu aos juízes.
+Avaliação parcial de 20/10: 2 de 456 pares, gerados com Opus 5.5 e avaliados por Jev, Astra e Opus; ciclo ainda inconclusivo.
 
-Cobertura: 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5. Votos versão / referência / empate: 4 / 2 / 0 de 6.
+| Indicador | Sem skill | Com a skill 0.8.0 | Variação |
+|---|---:|---:|---:|
+| Humanização percebida, 0 a 100 | 31,67 | 47,33 | +15,67 pontos |
+| Preferência dos juízes, votos | 2 de 6 | 4 de 6 | +2 |
+| Falhas factuais críticas, julgamentos | 1 de 6 | 0 de 6 | -1 |
+| Tokens por texto, média | 1766,00 | 10264,50 | +481,23% |
+| Segundos de geração por texto, média | 16,66 | 18,93 | +13,62% |
 
-Tokens totais, média por texto (referência → versão): 1766,00 → 10264,50 (+481,23%); 2 de 456 pares.
+Humanização percebida é a nota de 0 a 100 que três modelos juízes dão a cada texto, sem saber qual usou a skill; maior é mais humano. Nos votos, cada juiz escolhe o texto que atende melhor ao pedido.
 
-Tempo de geração na API, média por texto (referência → versão): 16,66 → 18,93 s (+13,62%); 2 de 456 pares.
-
-[Relatório](results/runs/2026-10-20-0.8.0/README.md) · [Histórico](results/README.md)
+[Relatório legível](results/README.md#avaliação-mais-recente) · [Evidência original da rodada](results/runs/2026-10-20-0.8.0/README.md) · [Histórico](results/README.md#histórico-das-avaliações)
 <!-- resumo:fim -->

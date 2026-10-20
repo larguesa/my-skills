@@ -21,7 +21,8 @@ OLD = ('https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe011
        '/skills/humanizador-pt-br/tests/README.md')
 
 # Uma linha por teste, sempre com "referencia" explícita: "sem skill", "não se aplica" ou a versão aceita.
-# Ordem de publicação: a última linha alimenta resumo_ultimo nos READMEs de entrada.
+# Ordem de publicação: a última linha alimenta resumo_ultimo nos READMEs de entrada
+# e relatorio_atual na seção "Avaliação mais recente" de results/README.md.
 # Rodada nova: acrescente pasta, referência e situação, depois rode --write.
 # Só acrescente uma ROW após publicar OBJETIVO.json, README.md,
 # relatórios por pedido e SHA256SUMS.
@@ -97,10 +98,20 @@ def summary(run):
                    for a, v in zip(('baseline', 'skill'), s['juizes'][j]['h'] or (None, None))), (run, j)
         p = same['preferencias']
         assert (p.get('skill', 0), p.get('baseline', 0), p.get('empate', 0)) == s['juizes'][j]['votos'], (run, j)
+    # Situação vem da decisão gravada pela rodada, quando existe; precisa bater com os mesmos pares.
+    decision = RESULTS / 'runs' / run / 'DECISION.json'
+    s['decisao'] = json.loads(decision.read_text(encoding='utf-8')) if decision.exists() else None
+    if s['decisao']:
+        d = s['decisao']
+        assert d['pares_tres_juizes'] == s['n'], run
+        assert (d['preferencias']['skill'], d['preferencias']['baseline'], d['preferencias']['empate']) == s['votos'], run
+        assert (d['falhas_criticas']['baseline'], d['falhas_criticas']['skill']) == tuple(
+            sum(s['juizes'][j]['criticas'][i] for j in JUDGES) for i in (0, 1)), run
     return s
 
 
 SUM = {row['run']: summary(row['run']) for row in ROWS if 'run' in row}
+TITLES = dict(re.findall(r'^### (\d\d)\. (.+)$', (RESULTS / 'PROMPTS.md').read_text(encoding='utf-8'), re.M))
 
 
 def num(x):
@@ -132,6 +143,84 @@ def sample(s):
     return f'{s["n"]} de {cob["pares_tres_juizes"]["esperado"]} pares; {pedidos}; {geradores}'
 
 
+def pct(x):
+    return f'{x:+.2f}'.replace('.', ',') + '%'
+
+
+# Nome de apresentação do gerador; modelo fora daqui aparece pelo identificador.
+MODELS = {'anthropic/claude-opus-5.5': 'Opus 5.5'}
+# Valores de status gravados em DECISION.json pelo publish.py da rodada.
+STATUS = dict(aceita='versão aceita', rejeitada='versão rejeitada', inconclusivo='ciclo ainda inconclusivo')
+JUIZES = ', '.join(NAMES[j] for j in JUDGES[:-1]) + ' e ' + NAMES[JUDGES[-1]]
+NOTA = ('Humanização percebida é a nota de 0 a 100 que três modelos juízes dão a cada texto, sem saber qual usou '
+        'a skill; maior é mais humano. Nos votos, cada juiz escolhe o texto que atende melhor ao pedido.')
+
+
+def metric_of(s, section, key):
+    """Métrica de recurso com médias nos dois braços, ou None; ausência não vira zero."""
+    metric = (s['data'].get(section) or {}).get(key)
+    if metric and metric.get('pares') and all(metric.get(a, {}).get('media') is not None for a in ('baseline', 'skill')):
+        return metric
+    return None
+
+
+def conclusao(s):
+    h, v = s['h'], s['votos']
+    if h is None:
+        return '**Humanização percebida não medida: nenhum par com os três juízes.**'
+    diff = h[1] - h[0]
+    word = 'mais humanos' if diff > 0 else 'menos humanos' if diff < 0 else 'igualmente humanos'
+    votes = ('receberam mais votos de preferência' if v[0] > v[1] else
+             'receberam menos votos de preferência' if v[0] < v[1] else 'empataram nos votos de preferência')
+    return f'**Na amostra avaliada, os textos escritos com a skill pareceram {word} aos juízes e {votes}.**'
+
+
+def situacao_curta(row, s):
+    """Cobertura e estado numa frase; denominadores e status vêm de OBJETIVO.json e DECISION.json."""
+    cob = s['data']['cobertura']
+    expected = cob['pares_tres_juizes']['esperado']
+    data = row['versao'].partition(', ')[2]
+    if len(s['rotas']) == 1:
+        modelo = next(c['modelo'] for c in s['data']['por_configuracao'] if c['indice'] == s['rotas'][0])
+        gerados = 'gerados com ' + MODELS.get(modelo, modelo.split('/')[-1])
+    else:
+        gerados = f'gerados por {len(s["rotas"])} de {cob["configuracoes_com_tres_juizes"]["esperado"]} configurações'
+    d = s.get('decisao')
+    status = STATUS.get(d['status'], 'situação ' + d['status']) if d else 'sem decisão registrada'
+    return (f'Avaliação {"parcial" if s["n"] < expected else "completa"}{" de " + data if data else ""}: '
+            f'{s["n"]} de {expected} pares, {gerados} e avaliados por {JUIZES}; {status}.')
+
+
+def tabela_simples(row, s):
+    """Cinco indicadores, referência, valor com skill e variação; linha sem dado fica fora."""
+    versao, ref, h, n = row['versao'].partition(', ')[0], row['referencia'], s['h'], s['n']
+    table = []
+    if h is not None:
+        v, total = s['votos'], n * len(JUDGES)
+        crit = [sum(s['juizes'][j]['criticas'][i] for j in JUDGES) for i in (0, 1)]
+        table += [('Humanização percebida, 0 a 100', num(h[0]), num(h[1]), f'{delta(h)} pontos'),
+                  ('Preferência dos juízes, votos', f'{v[1]} de {sum(v)}', f'{v[0]} de {sum(v)}', f'{v[0] - v[1]:+d}'),
+                  ('Falhas factuais críticas, julgamentos', f'{crit[0]} de {total}', f'{crit[1]} de {total}',
+                   f'{crit[1] - crit[0]:+d}')]
+    for section, key, label in (('tokens', 'total', 'Tokens por texto'),
+                                ('tempo', 'geracao_api', 'Segundos de geração por texto')):
+        metric = metric_of(s, section, key)
+        if metric:
+            percent = metric.get('variacao_percentual_razao_somas')
+            label += ', média' + (f' de {metric["pares"]} pares' if metric['pares'] != n else '')
+            table.append((label, num(metric['baseline']['media']), num(metric['skill']['media']),
+                          pct(percent) if percent is not None else 'n/d'))
+    if not table:
+        return None
+    head = ('Indicador', 'Sem skill' if ref == 'sem skill' else f'Referência {ref}', f'Com a skill {versao}', 'Variação')
+    return '\n'.join(['| ' + ' | '.join(head) + ' |', '|---|---:|---:|---:|',
+                      *('| ' + ' | '.join(r) + ' |' for r in table)])
+
+
+def pendente(row):
+    return [f'**{row["versao"]}: {row["situacao"]}**', f'{row["fixo"]["amostra"]}. Humanização percebida não medida.']
+
+
 def resumo_ultimo(prefix, rows=None, summaries=None):
     """Resumo da última entrada publicada, sem montar a tabela histórica.
 
@@ -139,34 +228,58 @@ def resumo_ultimo(prefix, rows=None, summaries=None):
     ROWS segue a ordem de publicação. Acrescente a rodada só com evidência publicada.
     """
     row = (ROWS if rows is None else rows)[-1]
-    lines = [f'**{row["versao"]}: {row["situacao"]}**']
+    links = [('Relatório legível', 'README.md#avaliação-mais-recente')]
     if 'run' in row:
         s = (SUM if summaries is None else summaries)[row['run']]
-        h = s['h']
-        if h is None:
-            lines.append('H e ΔH não medidos: nenhum par com os três juízes.')
-        else:
-            lines.append(f'**H {num(h[1])}** com a skill, contra {num(h[0])} na referência '
-                         f'({row["referencia"]}). **ΔH {delta(h)} pontos**. '
-                         'H vai de 0 a 100: quanto maior, mais humano o texto pareceu aos juízes.')
-        lines.append(f'Cobertura: {sample(s)}. Votos versão / referência / empate: {votos(s["votos"])}.')
-        expected = s['data']['cobertura']['pares_tres_juizes']['esperado']
-        for section, key, label, unit in (
-                ('tokens', 'total', 'Tokens totais', ''),
-                ('tempo', 'geracao_api', 'Tempo de geração na API', ' s')):
-            metric = (s['data'].get(section) or {}).get(key)
-            if metric and metric.get('pares') and all(metric.get(a, {}).get('media') is not None
-                                                    for a in ('baseline', 'skill')):
-                percent = metric.get('variacao_percentual_razao_somas')
-                change = (' (' + f'{percent:+.2f}'.replace('.', ',') + '%)' if percent is not None else '')
-                lines.append(f'{label}, média por texto (referência → versão): '
-                             f'{num(metric["baseline"]["media"])} → {num(metric["skill"]["media"])}{unit}{change}; '
-                             f'{metric["pares"]} de {expected} pares.')
-        report = f'runs/{row["run"]}/README.md'
+        table = tabela_simples(row, s)
+        lines = [conclusao(s), situacao_curta(row, s)] + ([table] if table else []) + ([NOTA] if s['h'] else [])
+        links.append(('Evidência original da rodada', f'runs/{row["run"]}/README.md'))
     else:
-        lines.append(f'{row["fixo"]["amostra"]}. H e ΔH não medidos.')
-        report = next(target for title, target in row['links'] if title == 'teste funcional')
-    lines.append(link('Relatório', report, prefix) + ' · ' + link('Histórico', 'README.md', prefix))
+        lines = pendente(row)
+        links.append(('Teste funcional', next(target for title, target in row['links'] if title == 'teste funcional')))
+    links.append(('Histórico', 'README.md#histórico-das-avaliações'))
+    lines.append(' · '.join(link(t, a, prefix) for t, a in links))
+    return '\n\n'.join(lines)
+
+
+def relatorio_atual(prefix, rows=None, summaries=None):
+    """Relatório legível da última entrada: situação completa, tabela, juízes, recursos, textos e evidência original."""
+    row = (ROWS if rows is None else rows)[-1]
+    if 'run' not in row:
+        target = next(target for title, target in row['links'] if title == 'teste funcional')
+        return '\n\n'.join(pendente(row) + [link('Teste funcional', target, prefix)])
+    run = row['run']
+    s = (SUM if summaries is None else summaries)[run]
+    expected = s['data']['cobertura']['pares_tres_juizes']['esperado']
+    context = f'Amostra: {sample(s)}; juízes {JUIZES}. **Situação:** {row["situacao"]}'
+    if s['n'] < expected:
+        context += f' A decisão exige os {expected} pares planejados julgados pelos três juízes.'
+    table = tabela_simples(row, s)
+    lines = [conclusao(s), context] + ([table] if table else [])
+    seen = [(j, s['juizes'][j]['h']) for j in JUDGES if s['juizes'][j]['h'] is not None]
+    if seen:
+        sem = 'sem a skill' if row['referencia'] == 'sem skill' else f'referência {row["referencia"]}'
+        lines.append(f'Humanização percebida por juiz ({sem} → com a skill): '
+                     + '; '.join(f'{NAMES[j]} {num(h[0])} → {num(h[1])} ({delta(h)})' for j, h in seen) + '.')
+    notes = []
+    tokens = metric_of(s, 'tokens', 'total')
+    entrada = ((s['data'].get('tokens') or {}).get('entrada') or {}).get('diferenca_soma')
+    if tokens and tokens.get('diferenca_soma') and entrada is not None:
+        notes.append(f'{num(100 * entrada / tokens["diferenca_soma"])}% do acréscimo de tokens vem da entrada, '
+                     'onde vão as instruções da skill.')
+    if metric_of(s, 'tempo', 'geracao_api'):
+        notes.append('O tempo de geração inclui eventual fila da API, sem juízes nem preparação local.')
+    if notes:
+        lines.append('Recursos: ' + ' '.join(notes))
+    casos = sorted(s['casos'])
+    if casos:
+        lines.append('Textos completos lado a lado, notas e justificativas: '
+                     + ', '.join(link(f'{c[:2]}. {TITLES.get(c[:2], c)}', f'runs/{run}/experiments/{c}/REPORT.md', prefix)
+                                 for c in casos) + '.')
+    evidence = [(t, f) for t, f in (('relatório da rodada', 'README.md'), ('dados objetivos', 'OBJETIVO.json'),
+                                    ('decisão', 'DECISION.json'), ('SHA256SUMS', 'SHA256SUMS'))
+                if f in ('README.md', 'OBJETIVO.json') or (RESULTS / 'runs' / run / f).exists()]
+    lines.append('Evidência original: ' + ' · '.join(link(t, f'runs/{run}/{f}', prefix) for t, f in evidence) + '.')
     return '\n\n'.join(lines)
 
 
@@ -221,9 +334,9 @@ def details():
                          else f'[textos sem juízes]({report})' if any(folder.glob('outputs/*.txt')) else 'não rodou')
         prompts.append(f'| {number}. {title} | ' + ' | '.join(cells) + ' |')
     return '\n\n'.join([
-        '## Por juiz', 'Mesmos pares da tabela acima.', '\n'.join(judges),
-        '## Cobertura', 'Observado sobre planejado em cada rodada.', '\n'.join(cover),
-        '## Textos e votos por pedido',
+        '### Por juiz', 'Mesmos pares da tabela acima.', '\n'.join(judges),
+        '### Cobertura', 'Observado sobre planejado em cada rodada.', '\n'.join(cover),
+        '### Textos e votos por pedido',
         'Cada link abre o pedido literal, os textos completos lado a lado, da referência e da versão, e as notas de Jev, Astra e '
         'Opus, com as justificativas de Astra e Opus. A 0.2.0 usou outra redação dos pedidos e está no '
         f'[índice antigo]({OLD}).', '\n'.join(prompts)])
@@ -241,6 +354,8 @@ def rendered():
         history = path == RESULTS / 'README.md'
         text = fill(path.read_text(encoding='utf-8'), 'tabela' if history else 'resumo',
                     main_table(prefix) if history else resumo_ultimo(prefix))
+        if history and '<!-- atual:inicio -->' in text:
+            text = fill(text, 'atual', relatorio_atual(prefix))
         out[path] = fill(text, 'detalhes', details()) if '<!-- detalhes:inicio -->' in text else text
     return out
 
