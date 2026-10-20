@@ -1,394 +1,66 @@
-# Telegraphist bilingual frontier benchmark
+# Telegraphist test report
 
-Status: STOPPED, INCOMPLETE. The approved corrected models were used, with English documentation and English/Portuguese prompts. No overall efficiency or accuracy conclusion is available.
+Purpose: economical communication with the agent, through telegraphic replies that keep the requested facts. Measured so far: shorter replies in an interrupted, unjudged sample; total tokens and cost were higher in that sample, and no test has checked that the current prompt keeps the needed information.
 
-## Spending and language clarification, 2026-10-02
+## Measurements
 
-The user explicitly reaffirmed that this benchmark has no spending ceiling, monetary quota or assistant-imposed budget enforcement. The dedicated key already had `limit: null` and `limit_reset: null` during the stopped run. Its post-stop disablement was removed, and both the exact Management API record and the inference-key endpoint were read back successfully. The active frontier runner has no cumulative-spend gate; older budget checks belong only to the historical pilot runner and are not called by the frontier run or judge commands. Token/cost accounting remains a requested benchmark measurement, not a mechanism that stops work at a monetary threshold.
+| Study | Prompt tested | Coverage | Result |
+|---|---|---|---|
+| Pilot, 2026-09-29 | [previous prompt](https://github.com/larguesa/my-skills/blob/5b958566d4b18905708bb18814182ee79ddcf6bb/skills/telegraphist/SKILL.md), not the current one | 96 of 96 generations; GPT-4.1 Mini and Claude Sonnet 4.5; 12 short tasks; one LLM reviewer | Output tokens -25.03% and -44.68%; total tokens +225.12% and +155.00%; billed cost +86.18% and +16.19% |
+| Frontier, 2026-10-02 | current `SKILL.md` body | stopped after 67 of 336 episodes; 1 of 112 baseline/skill pairs judged | No correctness result: the only judged pair is empty in both arms (Qwen spent all 8,192 tokens on reasoning) |
 
-The recorded rejection identifies `reason: in_flight_budget_exhausted` and `limit_source: openrouter_in_flight_budget`. This is OpenRouter's own request-reservation mechanism, not a key quota set by the assistant. Removing a key cap does not disable that service constraint, and automatic recharge does not by itself eliminate it. See the [official limits documentation](https://openrouter.ai/docs/api-reference/limits#in-flight-spending-budget).
+The frontier run stopped when OpenRouter rejected one concurrent request for its in-flight budget reservation; the frozen no-retry rule halted the batch, so 269 episodes never started and judges finished 3 episodes (9 votes).
 
-Repository documentation is English; email correspondence is Portuguese; test prompts and verbatim candidate evidence retain their English/Portuguese languages. Historical readable reports have English translations with immutable original sources linked below. No candidate or judge requests were submitted for this policy/documentation correction. The original frozen protocol, ledger, outputs and measurements remain unchanged, and the full benchmark is still incomplete.
+Unjudged token telemetry from that run. In 21 pairs both arms have a complete episode record (`valid_terminal`, first repetition only); a complete record is not a usable answer. In 3 of those pairs both arms stopped at the 8,192-token limit: Qwen on `long_deliverable_pt` returned an empty answer in each arm, and Gemini on `long_deliverable_en` and `long_deliverable_pt` returned truncated answers in each arm. The table uses the other 18 pairs, where both arms finished normally and passed the deterministic gates (format, word range, record reads); 7 models, 7 of 8 tasks:
 
-[Verified spending-policy clarification](results/spending-policy-2026-10-02.json).
-
-## Executive result
-
-The run encountered an OpenRouter in-flight request-budget reservation limit while concurrent requests were active. A subsequent funding check still showed positive account credits. This is a request-reservation constraint, not proof of an empty account or failed automatic recharge. The frozen no-retry rule stopped the batch; the remaining stages were not started.
-
-All seven exact candidate models produced preserved responses. 67 of 336 candidate episodes started: 63 have valid terminal records, three additional successful responses were flagged by the shared halt, and one request was rejected. 269 episodes were never started. Only three episodes received the full judge trio, yielding nine valid votes and one complete primary baseline/skill pair out of 112. Do not interpret unjudged outputs as correct or incorrect. A valid terminal is a fully recorded protocol outcome, not a correct answer: empty or truncated answers can be valid recorded failures.
-
-Measured total spend, including 21 availability/control probes, is USD 1.860233450. The dedicated-key ledger reconciled exactly to the same amount at the preserved post-stop reading, with zero unattributed spend. The rejected request has no native cost counter; reconciliation does not replace that missing field with a fabricated zero.
-
-The one fully judged primary pair, a Portuguese long memo generated by Qwen, failed in both arms: each consumed 8,192 completion tokens, all reported as reasoning, and returned no public answer. Empty output is failure, not useful compression. Its short-instruction control produced a 355-word memo and passed a two-of-three judge majority. This single scenario does not establish a general control advantage or Telegraphist benefit.
-
-## Frozen protocol and scope
-
-- Raw HTTPS OpenRouter calls, without Hermes SOUL, memory, plugins, other skills or project context.
-- Same neutral instruction, task, native tool interface, output ceiling and route within each model. Full SKILL.md added only to the skill arm; a separate short-concision instruction forms the diagnostic control.
-- Seven models x eight bilingual prompts x two repetitions x three arms = 336 episodes. Primary baseline/skill comparison: 112 matched pairs. Each planned episode has three independent judge requests, 1,008 votes in total.
-- Four source scenarios, each translated into English and Portuguese: grounded explanation, long decision memo, dependent-record investigation, and structured agentic delivery with public progress.
-- Native read_record is read-only, bounded to frozen records and dependency links. No external execution or real-world release decisions.
-- 8,192 completion tokens per request and at most eight requests per candidate episode. Requested reasoning settings are model-specific, preserved in protocol.json; they are not evidence of unlimited reasoning or equal computational effort across models.
-- Seeded randomized blocks; repetitions scheduled in separate phases. The second-repetition phase was never reached. Native caching was uncontrolled; first-use/repeated labels do not guarantee cold/warm caches.
-- Jev uses the native Decisions noul API and threshold 0.5. Astra and Opus use medium reasoning and strict JSON votes. A valid three-vote majority is separate from deterministic deliverable gates. No identity/arm labels were included in judge state, but anonymity does not prevent style-based identity inference.
-- The supplied skill remained byte-identical throughout execution. No post-freeze repair, replacement, retry, or tuning of candidate answers or scores occurred.
-
-Frozen at 2026-10-02T10:00:05.537851+00:00. Protocol, skill, fixtures and executable code hashes: [manifest.json](results/frontier-2026-10-02/manifest.json).
-
-## Per-model execution status
-
-| Exact candidate ID | Planned episodes | Started | Valid terminals | Full-trio judged |
-|---|---:|---:|---:|---:|
-| `anthropic/claude-opus-5.5` | 48 | 12 | 12 | 0 |
-| `openai/gpt-6-astra` | 48 | 15 | 12 | 0 |
-| `openai/gpt-6.1-sol` | 48 | 10 | 9 | 0 |
-| `openai/gpt-6-luna` | 48 | 3 | 3 | 0 |
-| `z-ai/glm-5.3-flash` | 48 | 9 | 9 | 0 |
-| `google/gemini-3.8-flash` | 48 | 12 | 12 | 0 |
-| `qwen/qwen3.8-flash` | 48 | 6 | 6 | 3 |
-
-## Six requested metrics, provisional complete pair only
-
-These values describe the sole fully judged primary pair, not all seven models or all captured outputs. Ratios are skill / baseline. Undefined means a zero baseline; missing means unavailable telemetry.
-
-| Metric | Baseline | Skill | Ratio |
+| Measure | Baseline | Skill | Change |
 |---|---:|---:|---:|
-| IN tokens | 391 | 655 | 1.6752 |
-| OUT tokens, including reasoning | 8192 | 8192 | 1.0000 |
-| Cache-read tokens | 0 | 0 | undefined |
-| Cache-write tokens | 0 | 0 | undefined |
-| Episode HTTP seconds | 96.7220 | 97.8831 | 1.0120 |
-| Whole-episode wall seconds | 96.7357 | 97.8916 | 1.0119 |
-| Actual candidate cost, USD | 0.00390889 | 0.00394849 | 1.0101 |
-| Three-judge majority successes | 0 / 1 | 0 / 1 | undefined |
-| Hard-gated successes | 0 / 1 | 0 / 1 | undefined |
+| Visible words in the answer | 4,607 | 2,727 | -40.8% |
+| Output tokens, reasoning included | 29,813 | 21,662 | -27.3% (lower in 14 of 18 pairs) |
+| Input tokens | 35,693 | 53,474 | +49.8% (higher in 18 of 18) |
+| Total tokens, input plus output | 65,506 | 75,136 | +14.7% (lower in 3 of 18 pairs) |
+| Billed cost, USD | 0.509252 | 0.517532 | +1.6% (lower in 8 of 18 pairs) |
 
-With one episode per arm, p50 and p95 coincide with that single observation and are not useful distribution estimates. Incomplete or unjudged pairs are excluded from quality-comparable ratios, while all consumed calls remain in accounting.
+No judge checked whether the shorter answers kept the required information.
 
-## Recovery and evidence
+## What follows
 
-The frozen original ledger and stop state are preserved. Three successful peer responses received invalid-terminal flags because the shared halt was set; the report does not silently promote them or rerun them. An explicitly approved recovery amendment would be needed to audit and retain those responses, reconcile the rejected submission and continue only unresolved slots at lower concurrency. The current complete matrix and final comparative verdict remain pending.
+- In these 18 pairs the answers were shorter, and total tokens were higher in 15. The instruction adds 248 to 387 input tokens to every request, depending on the tokenizer, and agentic episodes resend it on every tool call.
+- Not tested: information preservation of the current prompt, long multi-turn sessions, prompt caching, the second repetition.
 
-The existing script helper was corrected before freeze for Unicode JSONL record boundaries; known partial cache counters were retained through aggregation. Both fixes had failing regression reproductions followed by passing tests and independent re-verification. 60 offline tests passed twice. Offline checks validate packaging and code, not model quality.
+## Reproduce
 
-[summary.json](results/frontier-2026-10-02/summary.json), [completion-status.json](results/frontier-2026-10-02/completion-status.json), [evidence.json](results/frontier-2026-10-02/evidence.json) and [events.jsonl](results/frontier-2026-10-02/events.jsonl) preserve machine-readable coverage, native telemetry, all public outputs/tool traces and votes. Reflected account identifiers are redacted in the publication view; no experimental result is changed.
-
-## Coverage
-
-Planned: 336; executed: 67; judged: 3.
-
-| Task | Language | Primary complete | Baseline executed/planned | Skill executed/planned | Control executed/planned |
-|---|---|---:|---:|---:|---:|
-| grounded_explanation_en | en | 0 | 2/14 | 1/14 | 1/14 |
-| grounded_explanation_pt | pt | 0 | 3/14 | 3/14 | 3/14 |
-| long_deliverable_en | en | 0 | 4/14 | 4/14 | 4/14 |
-| long_deliverable_pt | pt | 1 | 3/14 | 3/14 | 3/14 |
-| agentic_investigation_en | en | 0 | 1/14 | 1/14 | 1/14 |
-| agentic_investigation_pt | pt | 0 | 4/14 | 4/14 | 4/14 |
-| agentic_structured_en | en | 0 | 3/14 | 3/14 | 3/14 |
-| agentic_structured_pt | pt | 0 | 3/14 | 3/14 | 3/14 |
-
-## baseline_vs_skill
-
-| Stratum | Pairs complete/planned | IN ratio | OUT ratio | Total ratio | Cost ratio | Summed HTTP ratio | Accuracy ratio |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| overall | 1/112 | 1.6752 | 1.0000 | 1.0308 | 1.0101 | 1.0120 | null |
-| model:anthropic/claude-opus-5.5 | 0/16 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | 0/16 | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 1/16 | 1.6752 | 1.0000 | 1.0308 | 1.0101 | 1.0120 | null |
-| model:z-ai/glm-5.3-flash | 0/16 | null | null | null | null | null | null |
-| language:en | 0/56 | null | null | null | null | null | null |
-| language:pt | 1/56 | 1.6752 | 1.0000 | 1.0308 | 1.0101 | 1.0120 | null |
-| category:agentic_investigation | 0/28 | null | null | null | null | null | null |
-| category:agentic_structured | 0/28 | null | null | null | null | null | null |
-| category:grounded_explanation | 0/28 | null | null | null | null | null | null |
-| category:long_deliverable | 1/28 | 1.6752 | 1.0000 | 1.0308 | 1.0101 | 1.0120 | null |
-| repetition:0 | 1/56 | 1.6752 | 1.0000 | 1.0308 | 1.0101 | 1.0120 | null |
-| repetition:1 | 0/56 | null | null | null | null | null | null |
-
-CACHED: absolute paired totals and ratios; first/second arms follow the comparison title.
-
-| Stratum | Read first | Read second | Read ratio | Write first | Write second | Write ratio |
-|---|---:|---:|---:|---:|---:|---:|
-| overall | 0 | 0 | null | 0 | 0 | null |
-| model:anthropic/claude-opus-5.5 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 0 | 0 | null | 0 | 0 | null |
-| model:z-ai/glm-5.3-flash | null | null | null | null | null | null |
-| language:en | null | null | null | null | null | null |
-| language:pt | 0 | 0 | null | 0 | 0 | null |
-| category:agentic_investigation | null | null | null | null | null | null |
-| category:agentic_structured | null | null | null | null | null | null |
-| category:grounded_explanation | null | null | null | null | null | null |
-| category:long_deliverable | 0 | 0 | null | 0 | 0 | null |
-| repetition:0 | 0 | 0 | null | 0 | 0 | null |
-| repetition:1 | null | null | null | null | null | null |
-
-Absolute paired totals and HTTP/wall p50/p95 are preserved in summary.json.
-
-Latency percentiles use per-episode summed HTTP time or whole-episode wall time, not pooled individual calls.
-
-| Stratum | HTTP p50 ratio | HTTP p95 ratio | Wall p50 ratio | Wall p95 ratio |
-|---|---:|---:|---:|---:|
-| overall | 1.0120 | 1.0120 | 1.0119 | 1.0119 |
-| model:anthropic/claude-opus-5.5 | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null |
-| model:qwen/qwen3.8-flash | 1.0120 | 1.0120 | 1.0119 | 1.0119 |
-| model:z-ai/glm-5.3-flash | null | null | null | null |
-| language:en | null | null | null | null |
-| language:pt | 1.0120 | 1.0120 | 1.0119 | 1.0119 |
-| category:agentic_investigation | null | null | null | null |
-| category:agentic_structured | null | null | null | null |
-| category:grounded_explanation | null | null | null | null |
-| category:long_deliverable | 1.0120 | 1.0120 | 1.0119 | 1.0119 |
-| repetition:0 | 1.0120 | 1.0120 | 1.0119 | 1.0119 |
-| repetition:1 | null | null | null | null |
-
-## baseline_vs_short_control
-
-| Stratum | Pairs complete/planned | IN ratio | OUT ratio | Total ratio | Cost ratio | Summed HTTP ratio | Accuracy ratio |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| overall | 1/112 | 1.0230 | 0.9589 | 0.9618 | 0.9598 | 1.1413 | null |
-| model:anthropic/claude-opus-5.5 | 0/16 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | 0/16 | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 1/16 | 1.0230 | 0.9589 | 0.9618 | 0.9598 | 1.1413 | null |
-| model:z-ai/glm-5.3-flash | 0/16 | null | null | null | null | null | null |
-| language:en | 0/56 | null | null | null | null | null | null |
-| language:pt | 1/56 | 1.0230 | 0.9589 | 0.9618 | 0.9598 | 1.1413 | null |
-| category:agentic_investigation | 0/28 | null | null | null | null | null | null |
-| category:agentic_structured | 0/28 | null | null | null | null | null | null |
-| category:grounded_explanation | 0/28 | null | null | null | null | null | null |
-| category:long_deliverable | 1/28 | 1.0230 | 0.9589 | 0.9618 | 0.9598 | 1.1413 | null |
-| repetition:0 | 1/56 | 1.0230 | 0.9589 | 0.9618 | 0.9598 | 1.1413 | null |
-| repetition:1 | 0/56 | null | null | null | null | null | null |
-
-CACHED: absolute paired totals and ratios; first/second arms follow the comparison title.
-
-| Stratum | Read first | Read second | Read ratio | Write first | Write second | Write ratio |
-|---|---:|---:|---:|---:|---:|---:|
-| overall | 0 | 0 | null | 0 | 0 | null |
-| model:anthropic/claude-opus-5.5 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 0 | 0 | null | 0 | 0 | null |
-| model:z-ai/glm-5.3-flash | null | null | null | null | null | null |
-| language:en | null | null | null | null | null | null |
-| language:pt | 0 | 0 | null | 0 | 0 | null |
-| category:agentic_investigation | null | null | null | null | null | null |
-| category:agentic_structured | null | null | null | null | null | null |
-| category:grounded_explanation | null | null | null | null | null | null |
-| category:long_deliverable | 0 | 0 | null | 0 | 0 | null |
-| repetition:0 | 0 | 0 | null | 0 | 0 | null |
-| repetition:1 | null | null | null | null | null | null |
-
-Absolute paired totals and HTTP/wall p50/p95 are preserved in summary.json.
-
-Latency percentiles use per-episode summed HTTP time or whole-episode wall time, not pooled individual calls.
-
-| Stratum | HTTP p50 ratio | HTTP p95 ratio | Wall p50 ratio | Wall p95 ratio |
-|---|---:|---:|---:|---:|
-| overall | 1.1413 | 1.1413 | 1.1412 | 1.1412 |
-| model:anthropic/claude-opus-5.5 | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null |
-| model:qwen/qwen3.8-flash | 1.1413 | 1.1413 | 1.1412 | 1.1412 |
-| model:z-ai/glm-5.3-flash | null | null | null | null |
-| language:en | null | null | null | null |
-| language:pt | 1.1413 | 1.1413 | 1.1412 | 1.1412 |
-| category:agentic_investigation | null | null | null | null |
-| category:agentic_structured | null | null | null | null |
-| category:grounded_explanation | null | null | null | null |
-| category:long_deliverable | 1.1413 | 1.1413 | 1.1412 | 1.1412 |
-| repetition:0 | 1.1413 | 1.1413 | 1.1412 | 1.1412 |
-| repetition:1 | null | null | null | null |
-
-## short_control_vs_skill
-
-| Stratum | Pairs complete/planned | IN ratio | OUT ratio | Total ratio | Cost ratio | Summed HTTP ratio | Accuracy ratio |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| overall | 1/112 | 1.6375 | 1.0429 | 1.0717 | 1.0524 | 0.8867 | 0.0000 |
-| model:anthropic/claude-opus-5.5 | 0/16 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | 0/16 | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | 0/16 | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 1/16 | 1.6375 | 1.0429 | 1.0717 | 1.0524 | 0.8867 | 0.0000 |
-| model:z-ai/glm-5.3-flash | 0/16 | null | null | null | null | null | null |
-| language:en | 0/56 | null | null | null | null | null | null |
-| language:pt | 1/56 | 1.6375 | 1.0429 | 1.0717 | 1.0524 | 0.8867 | 0.0000 |
-| category:agentic_investigation | 0/28 | null | null | null | null | null | null |
-| category:agentic_structured | 0/28 | null | null | null | null | null | null |
-| category:grounded_explanation | 0/28 | null | null | null | null | null | null |
-| category:long_deliverable | 1/28 | 1.6375 | 1.0429 | 1.0717 | 1.0524 | 0.8867 | 0.0000 |
-| repetition:0 | 1/56 | 1.6375 | 1.0429 | 1.0717 | 1.0524 | 0.8867 | 0.0000 |
-| repetition:1 | 0/56 | null | null | null | null | null | null |
-
-CACHED: absolute paired totals and ratios; first/second arms follow the comparison title.
-
-| Stratum | Read first | Read second | Read ratio | Write first | Write second | Write ratio |
-|---|---:|---:|---:|---:|---:|---:|
-| overall | 0 | 0 | null | 0 | 0 | null |
-| model:anthropic/claude-opus-5.5 | null | null | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null | null | null |
-| model:qwen/qwen3.8-flash | 0 | 0 | null | 0 | 0 | null |
-| model:z-ai/glm-5.3-flash | null | null | null | null | null | null |
-| language:en | null | null | null | null | null | null |
-| language:pt | 0 | 0 | null | 0 | 0 | null |
-| category:agentic_investigation | null | null | null | null | null | null |
-| category:agentic_structured | null | null | null | null | null | null |
-| category:grounded_explanation | null | null | null | null | null | null |
-| category:long_deliverable | 0 | 0 | null | 0 | 0 | null |
-| repetition:0 | 0 | 0 | null | 0 | 0 | null |
-| repetition:1 | null | null | null | null | null | null |
-
-Absolute paired totals and HTTP/wall p50/p95 are preserved in summary.json.
-
-Latency percentiles use per-episode summed HTTP time or whole-episode wall time, not pooled individual calls.
-
-| Stratum | HTTP p50 ratio | HTTP p95 ratio | Wall p50 ratio | Wall p95 ratio |
-|---|---:|---:|---:|---:|
-| overall | 0.8867 | 0.8867 | 0.8867 | 0.8867 |
-| model:anthropic/claude-opus-5.5 | null | null | null | null |
-| model:google/gemini-3.8-flash | null | null | null | null |
-| model:openai/gpt-6-astra | null | null | null | null |
-| model:openai/gpt-6-luna | null | null | null | null |
-| model:openai/gpt-6.1-sol | null | null | null | null |
-| model:qwen/qwen3.8-flash | 0.8867 | 0.8867 | 0.8867 | 0.8867 |
-| model:z-ai/glm-5.3-flash | null | null | null | null |
-| language:en | null | null | null | null |
-| language:pt | 0.8867 | 0.8867 | 0.8867 | 0.8867 |
-| category:agentic_investigation | null | null | null | null |
-| category:agentic_structured | null | null | null | null |
-| category:grounded_explanation | null | null | null | null |
-| category:long_deliverable | 0.8867 | 0.8867 | 0.8867 | 0.8867 |
-| repetition:0 | 0.8867 | 0.8867 | 0.8867 | 0.8867 |
-| repetition:1 | null | null | null | null |
-
-## Accounting
-
-Primary candidates, short control, judges and probes are separate. Known cost totals include all captured responses, even when an episode is excluded from paired quality ratios. Reconciliation refers to the exact post-stop dedicated-key reading, not recipient delivery or general account spend.
-
-```json
-{
-  "candidates": {
-    "in": 92765,
-    "known_in": 92765,
-    "out": 101580,
-    "known_out": 101580,
-    "cache_read": 16384,
-    "known_cache_read": 16384,
-    "cache_write": 0,
-    "known_cache_write": 0,
-    "reasoning": 80794,
-    "known_reasoning": 80794,
-    "cost": "1.199553970",
-    "known_cost": "1.199553970",
-    "http_seconds": 1256.1108244713396,
-    "reasoning_inconsistent": false
-  },
-  "short_control": {
-    "in": null,
-    "known_in": 37234,
-    "out": null,
-    "known_out": 45341,
-    "cache_read": null,
-    "known_cache_read": 5568,
-    "cache_write": null,
-    "known_cache_write": 0,
-    "reasoning": null,
-    "known_reasoning": 34166,
-    "cost": null,
-    "known_cost": "0.540033160",
-    "http_seconds": 569.6465242560953,
-    "reasoning_inconsistent": false
-  },
-  "judges": {
-    "in": 12995,
-    "known_in": 12995,
-    "out": 1599,
-    "known_out": 1599,
-    "cache_read": null,
-    "known_cache_read": 0,
-    "cache_write": null,
-    "known_cache_write": 1757,
-    "reasoning": null,
-    "known_reasoning": 843,
-    "cost": "0.103687516",
-    "known_cost": "0.103687516",
-    "http_seconds": 32.41886222735047,
-    "reasoning_inconsistent": false
-  },
-  "probes": {
-    "requests": 21,
-    "cost": "0.016958804",
-    "kind": "Availability/control probes, excluded from candidate ratios"
-  },
-  "billing_reconciliation": {
-    "status": "Reconciled exactly at preserved post-stop management read",
-    "dedicated_key_usage_usd": "1.86023345",
-    "response_cost_including_probes_usd": "1.860233450",
-    "unattributed_usd": "0",
-    "at": "2026-10-02T10:19:42.641855+00:00",
-    "disabled_verified": true
-  }
-}
-```
-
-## Failures
-
-13 recorded deterministic, operational, or judging failures. Complete details are in summary.json.
-
-## Evidence and limitations
-
-evidence.json contains exact prompts, complete public answers, progress, tool transcripts, deterministic checks, and all judge votes. events.jsonl retains full sanitized raw requests/responses; review privacy before publishing.
-Observed ratios are descriptive. No universal savings are established.
-- Small bilingual study: 8 prompts translated from 4 source scenarios, not universal behavior.
-- First-use/repeated labels do not guarantee cold/warm caches. No explicit cache controls.
-- Native output already includes reasoning; do not add reasoning again. Requested effort does not prove actual reasoning occurred.
-- Missing cache-read/write counters remain null; reported zero remains zero.
-- Ratios use only complete comparable pairs; coverage and all consumed calls are reported separately.
-- Invalid scores and ambiguous episodes are never retried automatically.
-- Judges are uncalibrated model judgments; human review remains advisable.
-- Astra and Opus also run as candidates; their judge roles introduce self-evaluation bias.
-- No universal savings claim. A shorter reply may lose required information or cost more overall.
-
-## Reproduction
-
-Run the package checks from the repository root:
+Offline runner and package checks, from the repository root (they test code, not model behavior):
 
 ```sh
 python3 -B -m unittest discover -s skills/telegraphist/tests/scripts -v
-python3 -B skills/telegraphist/tests/scripts/frontier_bench.py verify --artifacts skills/telegraphist/tests/results/frontier-2026-10-02
 ```
 
-The paid run commands are documented in the runner. Do not launch them against this stopped ledger: its safety checks block replay. Use a newly approved, explicitly frozen recovery protocol, not edits to the original evidence.
+Frontier telemetry table, from the evidence kept in history:
 
-## Historical evidence
+```sh
+git show a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626:skills/telegraphist/tests/results/frontier-2026-10-02/events.jsonl | python3 -I -c '
+import json, sys
+ep = {r["slot"]: r for r in map(json.loads, sys.stdin)
+      if r.get("event") == "episode_terminal" and r.get("phase") == "candidate" and r.get("valid_terminal") is True}
+pairs = [(ep[s], ep[s.replace("|baseline", "|skill")]) for s in ep
+         if s.endswith("|baseline") and s.replace("|baseline", "|skill") in ep]
+done = [p for p in pairs if all(r["finish_reason"] == "stop" and (r["final"] or "").strip() for r in p)]
+print("complete records", len(pairs), "normal non-empty answers in both arms", len(done))
+for k in ("in", "out", "cost"):
+    b, t = (sum(float(p[i]["totals"][k]) for p in done) for i in (0, 1))
+    print(k, round(b, 6), round(t, 6), f"{t / b - 1:+.1%}")
+'
+```
 
-The earlier pilot and reports remain historical, not measurements of the current supplied prompt:
+`frontier_bench.py` is the runner of the stopped study, kept for a new one; its `freeze` command snapshots the current `SKILL.md`.
 
-- [Original pilot ZIP](results/legacy-pilot-2026-09-29.zip), SHA-256 `7e3a0ad0c8c00ac5b6de6f501ae242a57b24cd825cddf10178863f864817ad01`.
-- [Original report](results/legacy-report-2026-09-29.md), SHA-256 `cad46b1fc81d946fca09cdba924c273e3da6d156f2182b9b0b620ed546d00c6b`.
-- [Restart status report, English translation](results/restart-report-2026-09-30.md). The [immutable Portuguese original](https://github.com/larguesa/my-skills/blob/777070e686d3b233d1e4d15ffc1917204849201e/skills/telegraphist/tests/results/restart-report-2026-09-30.md) retains SHA-256 `2378d1f93a130dae94d5ce28e55244d9a39e08328dcb2a7a07cf9ebb97afd5cd`.
+## History
 
-Current readable documentation is English. Portuguese remains in bilingual test prompts/answers, the supplied literal `PARE.`, and immutable historical evidence. The already-English original pilot report remains byte-identical.
+Evidence removed from the tree on 2026-10-20 stays at commit `a01d780`:
+
+- [Frontier evidence](https://github.com/larguesa/my-skills/tree/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/results/frontier-2026-10-02): protocol, every request and answer, votes, accounting (USD 1.860233450, reconciled with the dedicated key).
+- [Full previous report](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/REPORT.md), with per-stratum tables.
+- [Pilot report](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/results/legacy-report-2026-09-29.md) and [pilot evidence ZIP](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/results/legacy-pilot-2026-09-29.zip).
+- [Restart report](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/results/restart-report-2026-09-30.md), model preflight, spending policy and offline test logs in the same [results folder](https://github.com/larguesa/my-skills/tree/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/results).
+- The JSON minifier `legacy_pack.py`, unused by the current skill, is in the [scripts folder](https://github.com/larguesa/my-skills/tree/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/telegraphist/tests/scripts). `legacy_bench.py`, the pilot runner, stays in the tree because `frontier_bench.py` imports its helpers.

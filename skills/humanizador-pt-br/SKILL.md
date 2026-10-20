@@ -1,7 +1,7 @@
 ---
 name: humanizador-pt-br
-description: Redija, revise e diagnostique textos em PT-BR com ofício editorial, fidelidade e sem fórmulas de IA.
-version: 0.8.0
+description: "Faz texto em PT-BR soar escrito por um bom redator humano, ao redigir ou ao reescrever texto de IA: natural, no gênero certo, sem clichês de IA, com fatos e voz preservados."
+version: 0.8.1
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 platforms: [linux, macos, windows]
 metadata:

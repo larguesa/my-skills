@@ -1,134 +1,47 @@
-# Resultados do Humanizador PT-BR
+# Avaliação do Humanizador PT-BR
 
-Teste A/B de percepção: cada pedido de [PROMPTS.md](PROMPTS.md) é escrito duas vezes pelo mesmo gerador, sem e com a skill, e os juízes Jev, Astra e Opus avaliam os textos sem saber a origem. Meta, protocolo, critérios de decisão e convenção de arquivos: [AGENTS.md](../AGENTS.md).
+Pergunta: com o mesmo modelo e o mesmo pedido, o texto escrito com a skill parece mais humano aos juízes, sem perder qualidade nem fidelidade? Cada pedido de [PROMPTS.md](PROMPTS.md) é escrito sem e com a skill, e Jev, Astra e Opus avaliam os dois textos sem saber a origem. Regras de aceitação: [AGENTS.md](../AGENTS.md).
 
-## Avaliação mais recente
+## Situação
 
-Relatório legível da última rodada publicada, calculado por [tabela.py](tabela.py) a partir do `OBJETIVO.json` da rodada. Termos usados:
+Nenhuma versão foi aceita. Todas as tentativas abaixo pararam antes do plano de 456 pares ou usaram pedidos antigos, e por isso são inconclusivas. A versão atual, 0.8.1, só muda a descrição de ativação da 0.8.0 e nunca foi avaliada.
 
-- **Par**: o mesmo pedido escrito pelo mesmo modelo, sem e com a skill.
-- **Humanização percebida (H)**: 100 menos a impressão de IA que o juiz atribui ao texto, de 0 a 100; quanto maior, mais humano o texto pareceu. Mede a percepção dos modelos juízes, não a autoria.
-- **Preferência**: o texto que cada juiz considera melhor pela qualidade e pelo atendimento ao pedido, nunca pela menor impressão de IA.
-- **Falha factual crítica**: dado central, unidade, negação ou citação alterados; fonte ou medição inventadas; ressalva que muda a conclusão retirada.
+## Tentativas
 
-<!-- atual:inicio -->
-**Na amostra avaliada, os textos escritos com a skill pareceram mais humanos aos juízes e receberam mais votos de preferência.**
+H é a humanização percebida: 100 menos a impressão de IA que o juiz atribui ao texto, de 0 a 100. Δ H é a diferença entre os textos com e sem a skill, na média dos pares julgados pelos três juízes. Cada voto é a preferência de um juiz num par; por isso há três votos por par. Amostra, pedidos e geradores mudam de uma linha para outra, então os Δ H não se comparam entre linhas nem medem evolução entre versões.
 
-Amostra: 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5; juízes Jev, Astra e Opus. **Situação:** Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. A decisão exige os 456 pares planejados julgados pelos três juízes.
+| Versão e data | Pares julgados pelos 3 juízes | Pedidos e geradores julgados | Δ H | Votos com / sem skill / empate | Por que parou |
+|---|---|---|---:|---|---|
+| 0.2.0, contos | 38 de 38 | 2 contos com pedidos antigos; 19 configurações | +11,19 | 71 / 43 / 0 de 114 | Completa, mas fora dos 24 pedidos atuais |
+| 0.2.0, 02/10 | 308 de 456 | 24 pedidos com redação antiga; 19 configurações | +3,93 | 456 / 428 / 40 de 924 | Encerrada com 64 saídas inválidas e 102 pares sem juízes |
+| 0.5.1, 10 e 13/10 | 11 de 456 | pedido 01; 11 de 19 configurações | -1,52 | 14 / 17 / 2 de 33 | Qwen Flash recusou por limite do provedor ainda no pedido 01 |
+| 0.6.0, 19/10 | 9 de 456 | pedido 01; 9 de 19 configurações | +7,15 | 11 / 13 / 3 de 27 | Qwen Flash recusou por limite do provedor ainda no pedido 01 |
+| 0.7.0, 19/10 | 22 de 456 | 22 pedidos; só Opus 5.5 | +13,53 | 35 / 31 / 0 de 66 | Grok sem capacidade (HTTP 502) no pedido 11 |
+| 0.8.0, 20/10 | 2 de 456 | pedidos 01 e 02; só Opus 5.5 | +15,67 | 4 / 2 / 0 de 6 | Operador interrompeu após 15 minutos sem resposta do Opus no pedido 03 |
 
-| Indicador | Sem skill | Com a skill 0.8.0 | Variação |
-|---|---:|---:|---:|
-| Humanização percebida, 0 a 100 | 31,67 | 47,33 | +15,67 pontos |
-| Preferência dos juízes, votos | 2 de 6 | 4 de 6 | +2 |
-| Falhas factuais críticas, julgamentos | 1 de 6 | 0 de 6 | -1 |
-| Tokens por texto, média | 1766,00 | 10264,50 | +481,23% |
-| Segundos de geração por texto, média | 16,66 | 18,93 | +13,62% |
+Por que tão poucos pares: o plano exige 24 pedidos × 19 configurações de modelo, sem nova tentativa de chamada que falha. Uma falha de provedor ou chamada sem resposta para a rodada inteira, e um grupo de até quatro pares com um par incompleto não vai aos juízes. Na 0.5.1 e na 0.6.0 a ordem era pedido a pedido e a parada veio no primeiro; na 0.7.0 e na 0.8.0 a ordem começou pelo Opus em todos os pedidos, por isso só há pares do Opus julgados. A 0.8.0 enviou 6 das 912 gerações: dois pares completos, que dão os 6 votos (4 com skill, 2 sem), e o texto sem skill do pedido 03.
 
-Humanização percebida por juiz (sem a skill → com a skill): Jev 36,50 → 42,00 (+5,50); Astra 21,00 → 45,00 (+24,00); Opus 37,50 → 55,00 (+17,50).
+## O que os dados parciais mostram
 
-Recursos: 97,72% do acréscimo de tokens vem da entrada, onde vão as instruções da skill. O tempo de geração inclui eventual fila da API, sem juízes nem preparação local.
-
-Textos completos lado a lado, notas e justificativas: [01. Jornalístico: notícia sobre bibliotecas](runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md), [02. Jornalístico: reportagem sobre drenagem](runs/2026-10-20-0.8.0/experiments/02-reportagem-drenagem/REPORT.md).
-
-Evidência original: [relatório da rodada](runs/2026-10-20-0.8.0/README.md) · [dados objetivos](runs/2026-10-20-0.8.0/OBJETIVO.json) · [decisão](runs/2026-10-20-0.8.0/DECISION.json) · [SHA256SUMS](runs/2026-10-20-0.8.0/SHA256SUMS).
-<!-- atual:fim -->
-
-## Histórico das avaliações
-
-Todas as rodadas publicadas, em ordem. Δ H é a diferença de humanização percebida, em pontos, entre a versão e a referência.
-
-<!-- tabela:inicio -->
-| Versão | Referência | Amostra julgada | H referência | H versão | Δ H | Votos versão / referência / empate | Situação | Textos e votos |
-|---|---|---|---:|---:|---:|---|---|---|
-| 0.2.0, 2 contos | sem skill | 38 de 38 pares; 2 contos; 19 configurações | 30,00 | 41,19 | +11,19 | 71 / 43 / 0 de 114 | Completa. Pedidos antigos, fora dos 24 aprovados. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
-| 0.2.0, 02/10 | sem skill | 308 de 456 pares; 24 de 24 pedidos; 19 de 19 configurações | 31,08 | 35,00 | +3,93 | 456 / 428 / 40 de 924 | Encerrada com 64 saídas inválidas e 102 pares sem juízes. Pedidos com texto antigo. Sem decisão. Valores históricos fixos, conferidos em 20/10/2026. | [índice com textos e votos](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) |
-| 0.5.1, 10 e 13/10 | sem skill | 11 de 456 pares; pedido 01; 11 de 19 configurações | 40,03 | 38,52 | -1,52 | 14 / 17 / 2 de 33 | Parcial: parou no limite do Qwen Flash; 2 respostas com skill só trouxeram comandos. Sem decisão. | [textos e votos](runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](runs/2026-10-13/README.md), [início em 10/10](runs/2026-10-10/README.md) |
-| 0.6.0, 19/10 | sem skill | 9 de 456 pares; pedido 01; 9 de 19 configurações | 42,04 | 49,19 | +7,15 | 11 / 13 / 3 de 27 | Parcial: parou no limite do Qwen Flash. Sem decisão. | [textos e votos](runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md), [relatório](runs/2026-10-19/README.md) |
-| 0.7.0, 19/10 | sem skill | 22 de 456 pares; 22 de 24 pedidos; só claude-opus-5.5 | 26,74 | 40,27 | +13,53 | 35 / 31 / 0 de 66 | Parcial: parou sem capacidade do Grok. Sem decisão. | [textos e votos por pedido](README.md#textos-e-votos-por-pedido), [relatório](runs/2026-10-19-max/README.md) |
-| 0.8.0 | não se aplica | Sem A/B: 5 textos do MiMo 2.6 Pro, sem juízes | não medido | não medido | n/d | n/d | Teste funcional concluído, sem avaliação de percepção. | [teste funcional](reviews/0.8.0/SMOKE.md), [revisão](reviews/0.8.0/REVISAO.md) |
-| 0.8.0, 20/10 | sem skill | 2 de 456 pares; 2 de 24 pedidos; só claude-opus-5.5 | 31,67 | 47,33 | +15,67 | 4 / 2 / 0 de 6 | Parcial e inconclusiva: interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. | [textos e votos por pedido](README.md#textos-e-votos-por-pedido), [relatório](runs/2026-10-20-0.8.0/README.md) |
-<!-- tabela:fim -->
-
-Cada linha compara a versão com a referência indicada, dentro da mesma rodada; até aqui a referência foi sempre o texto sem skill. A 0.8.0 é o primeiro ciclo sob os critérios de [AGENTS.md](../AGENTS.md) e ficou inconclusiva por cobertura incompleta. As rodadas anteriores mantêm seu status histórico.
-
-<!-- detalhes:inicio -->
-### Por juiz
-
-Mesmos pares da tabela acima.
-
-| Versão | Juiz | H referência | H versão | Δ H | Votos versão / referência / empate | Falhas críticas referência / versão |
-|---|---|---:|---:|---:|---|---|
-| 0.5.1 | Jev | 37,36 | 30,91 | -6,45 | 2 / 9 / 0 de 11 | 2 / 2 de 11 |
-| 0.5.1 | Astra | 37,45 | 42,18 | +4,73 | 6 / 4 / 1 de 11 | 3 / 0 de 11 |
-| 0.5.1 | Opus | 45,27 | 42,45 | -2,82 | 6 / 4 / 1 de 11 | 4 / 2 de 11 |
-| 0.6.0 | Jev | 37,00 | 33,67 | -3,33 | 2 / 7 / 0 de 9 | 1 / 0 de 9 |
-| 0.6.0 | Astra | 40,78 | 58,33 | +17,56 | 6 / 2 / 1 de 9 | 2 / 0 de 9 |
-| 0.6.0 | Opus | 48,33 | 55,56 | +7,22 | 3 / 4 / 2 de 9 | 2 / 0 de 9 |
-| 0.7.0 | Jev | 32,77 | 40,91 | +8,14 | 0 / 22 / 0 de 22 | 0 / 0 de 22 |
-| 0.7.0 | Astra | 15,82 | 32,91 | +17,09 | 20 / 2 / 0 de 22 | 2 / 1 de 22 |
-| 0.7.0 | Opus | 31,64 | 47,00 | +15,36 | 15 / 7 / 0 de 22 | 0 / 0 de 22 |
-| 0.8.0 | Jev | 36,50 | 42,00 | +5,50 | 0 / 2 / 0 de 2 | 0 / 0 de 2 |
-| 0.8.0 | Astra | 21,00 | 45,00 | +24,00 | 2 / 0 / 0 de 2 | 1 / 0 de 2 |
-| 0.8.0 | Opus | 37,50 | 55,00 | +17,50 | 2 / 0 / 0 de 2 | 0 / 0 de 2 |
-
-### Cobertura
-
-Observado sobre planejado em cada rodada.
-
-| Versão | Gerações enviadas | Respostas completas | Pares completos | Chamadas de juízes | Pares com três juízes |
-|---|---:|---:|---:|---:|---:|
-| 0.5.1 | 31 de 912 | 30 de 912 | 15 de 456 | 12 de 432 | 11 de 456 |
-| 0.6.0 | 32 de 912 | 31 de 912 | 15 de 456 | 9 de 432 | 9 de 456 |
-| 0.7.0 | 117 de 912 | 107 de 912 | 49 de 456 | 66 de 432 | 22 de 456 |
-| 0.8.0 | 6 de 912 | 5 de 912 | 2 de 456 | 6 de 432 | 2 de 456 |
-
-### Textos e votos por pedido
-
-Cada link abre o pedido literal, os textos completos lado a lado, da referência e da versão, e as notas de Jev, Astra e Opus, com as justificativas de Astra e Opus. A 0.2.0 usou outra redação dos pedidos e está no [índice antigo](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md).
-
-| Pedido | 0.5.1 | 0.6.0 | 0.7.0 | 0.8.0 |
-|---|---|---|---|---|
-| 01. Jornalístico: notícia sobre bibliotecas | [11 pares](runs/2026-10-13/experiments/01-noticia-bibliotecas/REPORT.md) | [9 pares](runs/2026-10-19/experiments/01-noticia-bibliotecas/REPORT.md) | [1 par](runs/2026-10-19-max/experiments/01-noticia-bibliotecas/REPORT.md) | [1 par](runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md) |
-| 02. Jornalístico: reportagem sobre drenagem | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/02-reportagem-drenagem/REPORT.md) | [1 par](runs/2026-10-20-0.8.0/experiments/02-reportagem-drenagem/REPORT.md) |
-| 03. Desenvolvimento: documentação de API | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/03-documentacao-api/REPORT.md) | [textos sem juízes](runs/2026-10-20-0.8.0/experiments/03-documentacao-api/REPORT.md) |
-| 04. Desenvolvimento: análise de bug | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/04-analise-bug/REPORT.md) | não rodou |
-| 05. Física: movimento e energia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/05-energia-movimento/REPORT.md) | não rodou |
-| 06. Física: medidas de período | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/06-experimento-periodo/REPORT.md) | não rodou |
-| 07. Química: equilíbrio | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/07-equilibrio-quimico/REPORT.md) | não rodou |
-| 08. Química: titulação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/08-titulacao/REPORT.md) | não rodou |
-| 09. Biologia e meio ambiente: decomposição | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/09-decomposicao/REPORT.md) | não rodou |
-| 10. Biologia e meio ambiente: estudo ambiental | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/10-estudo-ambiental/REPORT.md) | não rodou |
-| 11. Acadêmico: resumo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/11-resumo-estudo/REPORT.md) | não rodou |
-| 12. Acadêmico: discussão | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/12-discussao-estudo/REPORT.md) | não rodou |
-| 13. Didático: cache | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/13-cache-iniciantes/REPORT.md) | não rodou |
-| 14. Didático: probabilidade condicional | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/14-probabilidade-condicional/REPORT.md) | não rodou |
-| 15. Negócios: proposta comercial | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/15-proposta-comercial/REPORT.md) | não rodou |
-| 16. Negócios: comparação de infraestrutura | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/16-nota-investimento/REPORT.md) | não rodou |
-| 17. Comunicação profissional: negociação de prazo | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/17-email-prazo/REPORT.md) | não rodou |
-| 18. Comunicação profissional: indisponibilidade | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/18-comunicado-indisponibilidade/REPORT.md) | não rodou |
-| 19. Opinião e ensaio: IA na educação | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/19-ia-educacao/REPORT.md) | não rodou |
-| 20. Opinião e ensaio: concentração e disponibilidade | não rodou | não rodou | [textos sem juízes](runs/2026-10-19-max/experiments/20-ensaio-produtividade/REPORT.md) | não rodou |
-| 21. Redes sociais: aprendizado com deploys | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/21-linkedin-aprendizado/REPORT.md) | não rodou |
-| 22. Redes sociais: roteiro sobre senhas | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/22-roteiro-hash/REPORT.md) | não rodou |
-| 23. Literário: conto na oficina | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/23-conto-oficina/REPORT.md) | não rodou |
-| 24. Literário: crônica na lavanderia | não rodou | não rodou | [1 par](runs/2026-10-19-max/experiments/24-cronica-lavanderia/REPORT.md) | não rodou |
-<!-- detalhes:fim -->
+- **Os dados não permitem estabelecer evolução da 0.7.0 para a 0.8.0.** Só dois pedidos, 01 e 02, têm pares das duas versões, com o mesmo gerador mas gerações diferentes. Descrição: Δ H de +5,33 e +24,00 na 0.7.0 e de +6,33 e +25,00 na 0.8.0; nos dois casos Jev votou no texto sem skill e Astra e Opus no texto com skill.
+- **Os juízes discordam.** Na 0.7.0, Astra votou no texto com skill em 20 dos 22 pares e Opus em 15; Jev votou no texto sem skill nos 22, embora tenha dado H maior ao texto com skill (+8,14). Não foi uma escolha fixa de A ou B: o texto com skill ficou em A em 12 pares, e Jev escolheu A em 10.
+- **Opus é gerador e juiz** nas duas tentativas mais recentes.
+- **Só a redação foi testada.** Os 24 pedidos pedem texto novo a partir de um briefing. Reescrever texto gerado por IA, o uso principal da skill, nunca foi avaliado.
+- **Custo.** Na 0.7.0, nos 49 pares completos de Opus, Astra e Grok, o texto com skill usou 5,1 vezes os tokens (entrada média de 216 para 5.666 tokens, pelas instruções da skill; saída 15% maior) e custou 2,05 vezes em USD. Na 0.8.0, a entrada média com skill subiu para cerca de 8.500 tokens, e o custo nos dois pares foi 2,17 vezes.
+- **Falha com o Grok.** Na 0.7.0, 7 das 10 respostas do Grok com skill passaram do limite de 4.096 tokens de saída e foram inválidas, com 4.135 a 19.995 tokens de saída; sem skill, nenhuma das 10.
 
 ## Pendências
 
-- A 0.8.0 iniciou o A/B de 20/10: dois pares avaliados pelos três juízes. A execução foi interrompida após mais de 15 minutos sem resposta completa do Opus no terceiro pedido. Falta concluir a matriz de 456 pares.
-- Nenhuma rodada desde a 0.5.1 completou a matriz planejada. A 0.7.0 julgou 22 pedidos com um gerador; a 0.8.0, dois pedidos com um gerador.
-- Avaliação humana de percepção não registrada nestes resultados.
-- O runner só usa o texto sem skill como referência. Depois da primeira versão aceita, ele precisa receber o pacote da referência.
+- Nova avaliação só depois de decidir um plano que consiga terminar. Com o runner atual, desde a 0.5.1, nenhuma tentativa passou de 117 das 912 gerações. Mudar o plano exige escrever a versão 2 do protocolo em [AGENTS.md](../AGENTS.md#protocolo-ab) e adaptar o runner.
+- Na árvore está só o runner (`scripts/`: preparar, gerar, julgar e renderizar relatórios por pedido). O resto do pipeline da 0.8.0, que agenda a ordem das chamadas, agrega `OBJETIVO.json` e publica a rodada com `DECISION.json`, saiu da árvore e precisa ser restaurado e adaptado ao novo plano, com testes, antes do `prepare`. Na raiz do repositório:
 
-## Revisões e testes funcionais
+  ```text
+  git restore --source=a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626 --worktree -- skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/analysis skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/controller
+  ```
 
-- **0.8.0**: [índice da revisão](reviews/0.8.0/README.md), [mudanças e pareceres](reviews/0.8.0/REVISAO.md), [teste funcional](reviews/0.8.0/SMOKE.md). Consolida três revisões independentes da 0.7.0. A situação da avaliação aparece na tabela acima.
-- Revisões anteriores: [histórico fora da árvore](#histórico-fora-da-árvore).
-
-## Atualização dos resultados
-
-As tabelas, o relatório da avaliação mais recente e os resumos são calculados por [tabela.py](tabela.py) a partir dos julgamentos publicados. O histórico fica nesta página; os READMEs de apresentação mostram apenas a última rodada, com link para a seção [Avaliação mais recente](#avaliação-mais-recente). A rodada [2026-10-20-0.8.0](runs/2026-10-20-0.8.0/README.md) contém os textos recebidos, os votos, o consumo e a relação completa do que ficou pendente.
+  Ao restaurar o `publish.py`, corrija o motivo genérico "software ou todos os pares": a 0.8.0 tinha software passando e falhou só por plano incompleto. Os testes publicados do controlador da 0.8.0 (`test_publication.py`) falhavam em 2 de 10 dentro do repositório, porque carregam arquivos da pasta privada de execução.
+- Incluir pedidos de reescrita de texto gerado por IA.
+- Avaliação humana de percepção não registrada.
 
 ## Testes de software
 
@@ -137,21 +50,19 @@ Na raiz do repositório:
 ```text
 python3 -B -W error skills/humanizador-pt-br/results/test_humanizar.py
 python3 -B -m unittest discover -s skills/humanizador-pt-br/results/scripts -p test_generation_eval.py
-python3 -B -m unittest discover -s skills/humanizador-pt-br/results/runs/2026-10-19-max/analysis -p test_objetivo.py
-python3 -B -m unittest discover -s skills/humanizador-pt-br/results/runs/2026-10-19-max/controller -p test_schedule_run.py
-python3 -B -W error skills/humanizador-pt-br/results/test_tabela.py
-python3 -B skills/humanizador-pt-br/results/tabela.py
 ```
 
-A última linha confere as tabelas destes READMEs contra os julgamentos gravados (as linhas da 0.2.0 são valores históricos fixos, sem recálculo), os links, os 24 pedidos e o `SHA256SUMS` de cada rodada. A opção `-B` evita gravar cache nas pastas seladas. Esses testes verificam software, não humanização.
+O primeiro testa o script e o catálogo da skill; o segundo, o runner do A/B, com a evidência bruta da tentativa de 13/10 como entrada real (`scripts/fixtures/evidence-2026-10-13`). Testam software, não humanização.
 
 ## Histórico fora da árvore
 
-Documentos antigos saíram da árvore e continuam no commit `da74a16`:
+As tentativas inconclusivas saíram da árvore em 20/10/2026 e continuam no commit `a01d780`, com textos completos, votos, justificativas, custos e `SHA256SUMS`:
 
-- [Project.MD](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/Project.MD): análise de 09/10/2026 sobre a 0.5.0, com propostas de melhoria.
-- Protocolos da [0.5.1](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/PROTOCOLO.md), da [0.6.0](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/PROTOCOLO-0.6.0.md) e da [0.7.0](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/PROTOCOLO-0.7.0.md).
-- Revisões da [0.6.0](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/REVISAO-2026-10-19.md) e da [0.7.0](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/REVISAO-0.7.0.md).
-- [Registro de validação](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/VALIDACAO.md) da 0.4.0 à 0.8.0 e registros da pesquisa de estilos da 0.5.0: [fontes](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/fontes-estilos.json) e [validação](https://github.com/larguesa/my-skills/blob/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br/results/validacao-estilos.json).
+- [0.5.1, início em 10/10](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-10/README.md) e [retomada em 13/10](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-13/README.md)
+- [0.6.0, 19/10](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-19/README.md)
+- [0.7.0, 19/10](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-19-max/README.md)
+- [0.8.0, 20/10](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/README.md)
+- [Revisão e teste funcional da 0.8.0](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/reviews/0.8.0/README.md): mudanças da 0.8.0, pareceres de três revisores e cinco textos do MiMo 2.6 Pro, sem juízes.
+- [Página de resultados anterior](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/README.md), com notas por juiz e links por pedido.
 
-Os quatro caminhos citados pelas rodadas seladas de 19/10 (`PROTOCOLO-0.6.0.md`, `PROTOCOLO-0.7.0.md`, `REVISAO-2026-10-19.md` e `REVISAO-0.7.0.md`) continuam nesta pasta como apontadores curtos para esses textos integrais. Os testes da 0.2.0 e o piloto de revisão de 29/09/2026, sem juízes, estão na pasta `tests/` do commit `d141746`: [índice com textos e votos por caso](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md).
+Documentos mais antigos: análise da 0.5.0, protocolos e revisões da 0.5.1 à 0.7.0 e registro de validação no commit [`da74a16`](https://github.com/larguesa/my-skills/tree/da74a16cfead72a787b217675ab09d03548addc4/skills/humanizador-pt-br); testes da 0.2.0 no [índice com textos e votos por caso](https://github.com/larguesa/my-skills/blob/d14174698015e66f2c3814d0fe0110770509a242/skills/humanizador-pt-br/tests/README.md) do commit `d141746`.

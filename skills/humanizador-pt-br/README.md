@@ -1,8 +1,14 @@
-# Humanizador PT-BR 0.8.0
+# Humanizador PT-BR 0.8.1
 
-Skill para agentes de IA que redige, revisa e diagnostica textos em português brasileiro. Ela orienta o agente a entregar o texto que um bom redator do gênero entregaria: claro, natural, sem as fórmulas que denunciam a IA, com os fatos do pedido e a voz do autor preservados.
+Para quando o agente vai escrever em português brasileiro, ou quando você tem um texto gerado por IA que soa como IA. A skill faz o agente entregar o texto que um bom redator do gênero entregaria: natural, no registro certo, sem os clichês que denunciam a IA ("é importante ressaltar que", "no mundo atual", "robusto", travessão), com os fatos e a voz do autor preservados.
 
-Na avaliação cega mais recente, ainda parcial, os textos escritos com a skill pareceram mais humanos aos modelos juízes do que os escritos sem ela. [Ver o resultado](#resultados).
+> Reescreva este texto gerado por IA para soar humano, sem mudar fatos nem números: [...]. Use humanizador-pt-br.
+>
+> Redija uma notícia curta com estes dados: [...]. Use humanizador-pt-br.
+>
+> Aponte os vícios de IA deste texto, sem reescrever: [...]. Use humanizador-pt-br.
+
+**Situação: finalidade clara, ganho ainda não validado.** Nenhuma versão passou na avaliação cega da [regra de aceitação](AGENTS.md#decisão-do-ciclo). Nas tentativas parciais, juízes de IA deram notas de humanização maiores aos textos com a skill, mas o juiz Jev preferiu o texto sem ela nos 24 pares das duas tentativas mais recentes, só a redação a partir de briefing foi testada (a reescrita, não) e cada texto custou cerca de duas vezes mais. [Avaliação, números e limites](results/README.md).
 
 ## O que a skill faz pelo seu texto
 
@@ -12,26 +18,20 @@ Na avaliação cega mais recente, ainda parcial, os textos escritos com a skill 
 - **Preserva fatos e voz.** Nomes, números, datas, citações e ressalvas vêm só do pedido ou do texto-base. Na revisão, a skill muda apenas o que melhora clareza, ritmo ou precisão e mantém as frases que já funcionam.
 - **Confere antes de entregar.** Um script local barra preâmbulo ("Aqui está a notícia:"), travessão e comando no lugar do texto, e aponta números e datas relativas que não estão no pedido.
 
-## Exemplo real
+## Exemplo
 
-Pedido 01 da avaliação de 20/10: uma notícia curta sobre 1.200 vagas em oficinas de leitura, anunciadas em 1º de outubro de 2026. O mesmo modelo, Claude Opus 5.5, escreveu as duas versões.
+Um par da tentativa de 20/10, ilustrativo, não estatístico: notícia curta sobre 1.200 vagas em oficinas de leitura anunciadas em 1º de outubro de 2026, escrita duas vezes pelo Claude Opus 5.5.
 
 - **Sem a skill**, o texto disse que a prefeitura anunciou "nesta quarta-feira (1º)", mas a data caiu numa quinta, e terminou com "O portal acompanhará o tema", promessa que o pedido não trazia.
-- **Com a skill**, o texto manteve "em 1º de outubro", registrou o que a prefeitura ainda não divulgou e não acrescentou compromisso. O juiz Opus o considerou "fiel a todos os dados".
+- **Com a skill**, o texto manteve "em 1º de outubro", registrou o que a prefeitura ainda não divulgou e não acrescentou compromisso.
 
-Astra e Opus preferiram a versão com a skill; Jev preferiu a outra. A regra que evita o erro está na skill: não calcular dia da semana sem conferência. [Os dois textos completos e os votos](results/runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md).
+Astra e Opus preferiram a versão com a skill; Jev preferiu a outra. [Os dois textos completos e os votos](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md).
 
 ## Instalação e uso
 
-Copie a pasta completa para o diretório de skills do agente e carregue [SKILL.md](SKILL.md). Para escrever do zero, forneça o briefing; para revisar, forneça o texto. O script requer Python 3 e usa apenas a biblioteca padrão, sem API ou serviço.
+Copie a pasta para o diretório de skills do agente e carregue [SKILL.md](SKILL.md). A subpasta `results/` é só da avaliação e pode ficar de fora. O script requer Python 3 e usa apenas a biblioteca padrão, sem API ou serviço.
 
-> Redija uma explicação de cache para iniciantes com humanizador-pt-br.
->
-> Revise este artigo preservando fatos e voz: [...]. Use humanizador-pt-br.
->
-> Diagnostique os vícios deste texto, sem reescrever: [...].
-
-São três modos. Redação: briefing sem texto-base, escrito do zero com os fatos fornecidos. Revisão: texto do usuário, alterado só no escopo pedido. Diagnóstico: trechos, motivos e prioridades, sem versão nova.
+São três modos. Redação: briefing sem texto-base, escrito do zero com os fatos fornecidos. Revisão: texto do usuário ou gerado por IA, reescrito só no escopo pedido, com fatos preservados. Diagnóstico: trechos, motivos e prioridades, sem versão nova.
 
 ## Recursos
 
@@ -39,9 +39,9 @@ São três modos. Redação: briefing sem texto-base, escrito do zero com os fat
 - [Catálogo](references/catalogo.json): 32 padrões pesquisáveis, com termos, sugestões e exceções. `positive_example` é o vício detectado; `negative_example` é a forma preferida, que só o retira.
 - [Estilos e estruturas](references/estilos.json): 12 perfis, 15 planos por gênero com ofício e pontos de atenção, regras de material.
 - [Script](scripts/humanizar.py): ferramentas locais e conservadoras.
-- [24 prompts aprovados](results/PROMPTS.md): pedidos preservados, sem H1/H2.
+- [24 pedidos da avaliação](results/PROMPTS.md): pedidos de redação usados no A/B.
 - [Regras de avaliação](AGENTS.md): meta, protocolo A/B e critérios para aceitar ou rejeitar cada versão.
-- [Resultados](results/README.md): avaliação mais recente, histórico por versão e por juiz, textos e votos de cada pedido e testes de software.
+- [Avaliação](results/README.md): situação, tentativas, limites, pendências e testes de software.
 
 ## Detalhes técnicos
 
@@ -134,25 +134,3 @@ Salve o JSON retornado com a ferramenta de arquivos do agente. Leia cada trecho 
 Travessão não tem substituição universal: escolha ponto, vírgula ou parênteses pela função da frase. Preserve o símbolo quando pertence a uma citação literal ou código original. `verify` verifica diferenças e inventários protegidos, não equivalência semântica nem veracidade.
 
 </details>
-
-## Resultados
-
-Avaliação A/B cega: o mesmo modelo escreve cada pedido de [PROMPTS.md](results/PROMPTS.md) sem e com a skill, e os juízes avaliam os textos sem saber a origem. A versão é aceita ou rejeitada pelas [regras de avaliação](AGENTS.md).
-
-<!-- resumo:inicio -->
-**Na amostra avaliada, os textos escritos com a skill pareceram mais humanos aos juízes e receberam mais votos de preferência.**
-
-Avaliação parcial de 20/10: 2 de 456 pares, gerados com Opus 5.5 e avaliados por Jev, Astra e Opus; ciclo ainda inconclusivo.
-
-| Indicador | Sem skill | Com a skill 0.8.0 | Variação |
-|---|---:|---:|---:|
-| Humanização percebida, 0 a 100 | 31,67 | 47,33 | +15,67 pontos |
-| Preferência dos juízes, votos | 2 de 6 | 4 de 6 | +2 |
-| Falhas factuais críticas, julgamentos | 1 de 6 | 0 de 6 | -1 |
-| Tokens por texto, média | 1766,00 | 10264,50 | +481,23% |
-| Segundos de geração por texto, média | 16,66 | 18,93 | +13,62% |
-
-Humanização percebida é a nota de 0 a 100 que três modelos juízes dão a cada texto, sem saber qual usou a skill; maior é mais humano. Nos votos, cada juiz escolhe o texto que atende melhor ao pedido.
-
-[Relatório legível](results/README.md#avaliação-mais-recente) · [Evidência original da rodada](results/runs/2026-10-20-0.8.0/README.md) · [Histórico](results/README.md#histórico-das-avaliações)
-<!-- resumo:fim -->

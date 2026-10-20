@@ -92,7 +92,7 @@ Use `--samples-only` for still-frame QA first. Existing outputs are protected un
 - A single shared runtime/renderer avoids 20 duplicate dependencies.
 - A reliable result includes real export, visual inspection, metadata checks and editable files.
 
-`ponytail:` local rendering remains native Canvas plus Playwright/FFmpeg. The renderer exports silent frames; audio is a separate, explicitly validated finishing step. Recompose for portrait/square rather than stretching legacy scenes. True 3D and generative providers remain external options, not dependencies. Clay/film/pencil/print appearances are procedural interpretations, not physical capture.
+Limits: local rendering remains native Canvas plus Playwright/FFmpeg. The renderer exports silent frames; audio is a separate, explicitly validated finishing step. Recompose for portrait/square rather than stretching legacy scenes. True 3D and generative providers remain external options, not dependencies. Clay/film/pencil/print appearances are procedural interpretations, not physical capture.
 
 ## Rights and attribution
 

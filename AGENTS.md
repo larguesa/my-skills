@@ -2,7 +2,7 @@
 
 ## Propósito
 
-Repositório de skills pessoais de Ricardo Pupo Larguesa, usadas em vários projetos. Cada skill fica em `skills/<nome>/`, com `SKILL.md`, `README.md` e recursos próprios; o catálogo é [skills/index.md](skills/index.md). Mudança numa skill não altera as outras.
+Repositório de skills pessoais de Ricardo Pupo Larguesa, usadas em vários projetos. Cada skill fica em `skills/<nome>/`, com `SKILL.md`, recursos próprios e, quando o uso pede explicação, `README.md`; o catálogo é [skills/index.md](skills/index.md). Mudança numa skill não altera as outras.
 
 Regras próprias de uma skill ficam em `skills/<nome>/AGENTS.md`. Leia antes de alterar ou testar a skill:
 

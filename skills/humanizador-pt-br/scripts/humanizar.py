@@ -27,7 +27,7 @@ def verify(original, revised, protected_terms=()):
     return {'input_sha256': sha256(original), 'output_sha256': sha256(revised), 'unchanged': original == revised, 'semantic_review_needed': original != revised, 'protected_content_preserved': inventories[0] == inventories[1], 'differences': differences, 'aviso': 'A comparação mecânica não garante fidelidade semântica. Toda alteração exige revisão humana de fatos, intenção e contexto.'}
 
 REFERENCES = Path(__file__).resolve().parents[1] / 'references'
-VERSION = '0.8.0'
+VERSION = '0.8.1'
 
 
 def load_profiles(path=None):

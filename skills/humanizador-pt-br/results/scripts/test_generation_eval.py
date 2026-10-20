@@ -10,7 +10,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 SKILL = HERE.parents[1]
 # v1-full-json is frozen to 0.5.1: use the preserved snapshot of 13/10, read-only.
-EVIDENCE_13 = HERE.parent / 'runs/2026-10-13/evidence'
+EVIDENCE_13 = HERE / 'fixtures/evidence-2026-10-13'
 LEGACY_SKILL = EVIDENCE_13 / 'frozen/skill'
 FIXTURES = HERE / 'fixtures'
 HISTORY = Path(os.environ.get('HUMANIZADOR_HISTORY', FIXTURES / 'history.json'))

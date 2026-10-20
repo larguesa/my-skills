@@ -38,7 +38,7 @@ Versão 1, de 20/10/2026, congelada antes do próximo teste. Para mudar, escreva
 1. **Pedidos**: os 24 de [results/PROMPTS.md](results/PROMPTS.md), literais, sem acréscimos.
 2. **Braços**: candidata contra referência. A referência é a última versão aceita. Enquanto nenhuma for aceita, a referência é o texto sem skill, gerado só com o pedido.
 3. **Pareamento**: em cada par, os dois braços usam o mesmo pedido, modelo, provedor, modo de raciocínio e limite de saída, em chamadas novas e independentes. Só muda o pacote da skill. Nenhum braço recebe texto, nota ou crítica do outro.
-4. **Plano**: o plano suportado hoje é a matriz do runner e do agregador: 24 pedidos × 19 configurações, 912 gerações, 456 pares e 432 chamadas de juízes. Plano menor ou diferente, assim como referência com skill, exige antes adaptar runner, agregador e denominadores, com testes; só depois o plano pode ser congelado. O plano fica definido antes da primeira chamada e não muda depois.
+4. **Plano**: o plano suportado hoje é a matriz do runner: 24 pedidos × 19 configurações, 912 gerações, 456 pares e 432 chamadas de juízes. Plano menor ou diferente, assim como referência com skill, exige antes adaptar runner, agregador e denominadores, com testes; só depois o plano pode ser congelado. O plano fica definido antes da primeira chamada e não muda depois.
 5. **Congelamento**: o `prepare` do [runner](results/scripts/RUNNER.md) grava o manifest com SHA-256 da skill, catálogo, estilos, script, pedidos, payloads, mapa anônimo e runner. Registre na pasta do ciclo o commit e o SHA-256 deste arquivo.
 6. **Cegueira**: os juízes recebem os textos com IDs anônimos, em grupos de até quatro pares congelados pelo runner, sem modelo nem braço.
 7. **Textos brutos**: julgue e publique cada resposta exatamente como veio. Não edite, não escolha a melhor de várias tentativas, não refaça resposta recebida.
@@ -71,23 +71,21 @@ Só a versão aceita vira referência. Rejeitada ou inconclusiva, a referência 
 
 Compare candidata e referência só dentro do mesmo ciclo. Médias de rodadas diferentes, com outros geradores, pedidos ou datas, não medem evolução da skill.
 
-Estas regras valem para os próximos ciclos. As rodadas anteriores mantêm a situação registrada na época e não são reclassificadas.
+Estas regras valem para os próximos ciclos. As tentativas anteriores continuam inconclusivas e não são reclassificadas.
 
 ## Ciclo de trabalho
 
 1. Registre hipótese e mudanças em `results/reviews/X.Y.Z/README.md`.
-2. Implemente e rode os [testes de software](results/README.md#testes-de-software).
+2. Implemente e rode os [testes de software](results/README.md#testes-de-software). O agregador e o controlador usados até a 0.8.0 estão fora da árvore, no commit `a01d780`; restaure com o comando de [Pendências](results/README.md#pendências) e adapte ao plano, com testes, antes do passo 3.
 3. Congele plano e pacote com `prepare`; registre commit e SHA-256 deste arquivo.
 4. Execute o A/B sem mudar nada até o fim.
-5. Agregue com o `analysis/agregar_objetivo.py` da rodada mais recente e publique em `results/runs/AAAA-MM-DD-X.Y.Z/`, com `OBJETIVO.json`, `experiments/<pedido>/REPORT.md`, `README.md` e `SHA256SUMS`.
-6. Decida pela tabela acima e escreva a situação no `README.md` da rodada.
-7. Acrescente a rodada em `ROWS` de [results/tabela.py](results/tabela.py), rode `python3 -B skills/humanizador-pt-br/results/tabela.py --write` e confira com `python3 -B skills/humanizador-pt-br/results/tabela.py`.
+5. Decida pela tabela acima.
+6. Ciclo aceito ou rejeitado: publique a rodada em `results/runs/AAAA-MM-DD-X.Y.Z/`, com `OBJETIVO.json`, `experiments/<pedido>/REPORT.md`, `README.md` e `SHA256SUMS`, e resuma o resultado em `results/README.md`. Ciclo inconclusivo: só uma linha na tabela de tentativas de `results/README.md`, com amostra, motivo da parada e local da evidência; nenhuma manchete de ganho.
 
-O runner atual só usa o texto sem skill como referência. Depois da primeira versão aceita, adapte runner e agregador, com testes e antes de congelar o plano, para o braço de referência receber o pacote dessa versão. Na linha da tabela, o campo `referencia` registra a versão de referência.
+O runner atual só usa o texto sem skill como referência. Depois da primeira versão aceita, adapte runner e agregador, com testes e antes de congelar o plano, para o braço de referência receber o pacote dessa versão.
 
 ## Arquivos
 
-- `results/runs/` e os registros de `results/reviews/0.8.0/` (pareceres, respostas, custos e testes) são evidência: não altere, não renomeie, não apague. Cada rodada tem `SHA256SUMS`, conferido por `tabela.py`.
-- Os nomes antigos, como `2026-10-19-max` e os relatórios em maiúsculas, são exceção histórica imutável. Os quatro documentos citados pelas rodadas seladas de 19/10 ficam como apontadores curtos para o texto integral no commit fixado; veja [Histórico fora da árvore](results/README.md#histórico-fora-da-árvore).
-- Arquivos novos: `results/runs/AAAA-MM-DD-X.Y.Z/` para cada ciclo A/B, com os nomes que o runner gera; `results/reviews/X.Y.Z/` para revisão e teste funcional da versão. Crie documento novo só quando o conteúdo não couber nos existentes.
-- Tabelas de resultados saem só de `tabela.py`; não edite à mão os blocos marcados nos READMEs.
+- Rodada publicada em `results/runs/` é evidência: não altere nem renomeie; o `SHA256SUMS` cobre cada arquivo.
+- `results/scripts/fixtures/evidence-2026-10-13/` é a evidência bruta da tentativa de 13/10, mantida sem alteração como entrada dos testes do runner.
+- Tentativas anteriores à 0.8.1 estão fora da árvore, no commit `a01d780`; veja [Histórico fora da árvore](results/README.md#histórico-fora-da-árvore).

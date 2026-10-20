@@ -1,6 +1,6 @@
 ---
 name: animation-video-maker
-description: Use when creating styled animation videos from a brief.
+description: Use to turn a brief into a short explainer, product or typographic animation. Delivers an editable Canvas scene and a locally exported, verified MP4 in one of 22 styles, without a video-generation API.
 version: 0.2.0
 author: Ricardo Pupo Larguesa (larguesa), Hermes Agent
 license: MIT
@@ -68,7 +68,7 @@ Use for explainers, service introductions, visual process narratives and typogra
 
 Install/copy this entire directory into the chosen agent's documented skill location. Nested `SKILL.md` files are local specialization documents; discovery behavior differs by agent. The root skill and relative file reads are the portable fallback. Do not register every specialization globally unnecessarily. Do not copy only a child directory: its shared runtime and references are in this package.
 
-`ponytail:` the shared renderer exports deterministic silent Canvas frames. Recompose for each supported canvas size; use a separately verified FFmpeg step for audio. Generative models, live data, physics and true 3D remain optional external routes, not bundled adapters. Clay, film and print treatments are procedural appearances, not claims of physical capture. External recipes inspire original work; the [source register](references/creative-sources.md) is not a redistribution license.
+Limits: the shared renderer exports deterministic silent Canvas frames. Recompose for each supported canvas size; use a separately verified FFmpeg step for audio. Generative models, live data, physics and true 3D remain optional external routes, not bundled adapters. Clay, film and print treatments are procedural appearances, not claims of physical capture. External recipes inspire original work; the [source register](references/creative-sources.md) is not a redistribution license.
 
 ## Verification checklist
 

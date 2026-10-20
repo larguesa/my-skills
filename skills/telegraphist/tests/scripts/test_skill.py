@@ -38,9 +38,9 @@ class SkillTests(unittest.TestCase):
     def test_skill_root_contains_only_skill_and_tests(self):
         self.assertEqual({p.name for p in ROOT.iterdir()}, {'SKILL.md', 'tests'})
 
-    def test_tests_root_contains_only_scripts_results_report(self):
+    def test_tests_root_contains_only_scripts_report(self):
         self.assertEqual({p.name for p in (ROOT / 'tests').iterdir()},
-                         {'scripts', 'results', 'REPORT.md'})
+                         {'scripts', 'REPORT.md'})
 
 
 if __name__ == '__main__':

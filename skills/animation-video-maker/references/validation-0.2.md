@@ -29,7 +29,7 @@ The original and updated runtimes were compared in the same browser at 0, 4, 5, 
 | Type match cut | 1280 x 720 | 10 s / 30 | None | Letter spacing and a shared line express space becoming connection |
 | Recursive portal | 720 x 1280 | 8 s / 30 | Original synthesized stereo AAC, 48 kHz | Portrait recursive geometry with a quiet sound bed |
 
-The portal is a recursive geometric study, not footage of a physically traversed world or proof of an infinite-zoom provider. Its visual recurrence and its audio fade are different properties. The silent source is retained separately from the audio-muxed final.
+The portal is a recursive geometric study, not footage of a physically traversed world or proof of an infinite-zoom provider. Its visual recurrence and its audio fade are different properties. The silent source is the final's H.264 stream, copied without recompression; see [demo reproduction](../demos/README.md) to extract it.
 
 The actual H.264/yuv420p files were decoded and checked with ffprobe. Player checks cover offline operation, readiness, transcripts, accessible canvas labels, reduced-motion behavior, playback controls and out-of-order deterministic seeks. The manifest is checked against the real streams, including dimensions, duration, fps and audio presence.
 
@@ -52,7 +52,7 @@ python demos/verify.py --browser /path/to/chrome --evidence ./demo-evidence
 
 Replace the illustrative browser path with the installed executable. `RENDER_BROWSER` selects the browser for the test suites. `scripts/render.py` itself takes `--browser`. The legacy checker validates the 20 T2S examples only. Read [demo reproduction](../demos/README.md) for output filenames, durations and the explicit audio-finishing step.
 
-Browser-dependent tests skip when Playwright is absent; a skipped suite is not evidence of a successful render. Rendering tests require FFmpeg/ffprobe. Keep private machine paths, raw QA logs and credentials outside the distributable.
+Browser-dependent tests in `tests/` skip when Playwright is absent; `scripts/test_render.py` fails instead. A skipped suite is not evidence of a successful render. Rendering tests require FFmpeg/ffprobe. Keep private machine paths, raw QA logs and credentials outside the distributable.
 
 ## Incremental workflow validation
 

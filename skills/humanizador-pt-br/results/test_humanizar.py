@@ -730,7 +730,7 @@ class LocalContractTests(unittest.TestCase):
 
 
 SKILL_DIR = SCRIPT.parent.parent
-RUN_13 = SKILL_DIR / 'results/runs/2026-10-13/evidence/requests'
+RUN_13 = SKILL_DIR / 'results/scripts/fixtures/evidence-2026-10-13/requests'
 PROMPT_01 = ('Redija uma notícia curta para um portal local. A Prefeitura de Vila Clara anunciou '
              'em 1º de outubro de 2026 a abertura de 1.200 vagas gratuitas em oficinas de leitura '
              'nas seis bibliotecas municipais. As inscrições vão de 5 a 16 de outubro, '
@@ -1007,6 +1007,12 @@ class Documentation20261019Tests(unittest.TestCase):
         self.assertIn('norma culta', skill)
         self.assertIn('nova revisão não trouxer melhoria concreta', skill)
 
+    def test_frontmatter_description_is_json_quoted(self):
+        # JSON entre aspas é YAML válido mesmo com ': ' no texto.
+        import re
+        line = re.search(r'^description: (.*)$', (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8'), re.M).group(1)
+        self.assertIsInstance(json.loads(line), str)
+
     def test_versions_and_documented_lookup_commands_are_consistent(self):
         import re
         skill = (SKILL_DIR / 'SKILL.md').read_text(encoding='utf-8')
@@ -1260,7 +1266,7 @@ class Skill070Tests(unittest.TestCase):
 
     def test_required_contract_survives_the_rewrite(self):
         skill = self.skill()
-        self.assertRegex(skill, r'(?m)^version: 0\.8\.0$')
+        self.assertRegex(skill, r'(?m)^version: 0\.8\.1$')
         self.assertIn('NÃO USE travessão U+2014 na prosa produzida', skill)
         self.assertIn('## Validação final\n\n' + self.FINAL_VALIDATION, skill)
         self.assertTrue(skill.rstrip().endswith(self.FINAL_VALIDATION))
@@ -1273,7 +1279,7 @@ class Skill070Tests(unittest.TestCase):
         # 0.8.0: o runner congelado exige tratamento abaixo de 40% do v1 de 13/10 (48.850 caracteres).
         # O teto geral evita inchaço nos pares fora do runner. Caracteres, não tokens.
         h = module()
-        legacy = SKILL_DIR / 'results/runs/2026-10-13/evidence/frozen/skill'
+        legacy = SKILL_DIR / 'results/scripts/fixtures/evidence-2026-10-13/frozen/skill'
         budget = 0.4 * sum(len((legacy / p).read_text(encoding='utf-8'))
                            for p in ('SKILL.md', 'references/catalogo.json', 'references/estilos.json'))
         runner = {('jornalistico', 'noticia'), ('jornalistico', 'reportagem'), ('tecnico-preciso', 'tecnico'),
