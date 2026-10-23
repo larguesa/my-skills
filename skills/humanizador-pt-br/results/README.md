@@ -1,12 +1,22 @@
 # Avaliação do Humanizador PT-BR
 
-Pergunta: com o mesmo modelo e o mesmo pedido, o texto escrito com a skill parece mais humano aos juízes, sem perder qualidade nem fidelidade? Cada pedido de [PROMPTS.md](PROMPTS.md) é escrito sem e com a skill, e Jev, Astra e Opus avaliam os dois textos sem saber a origem. Regras de aceitação: [AGENTS.md](../AGENTS.md).
+Pergunta: com o mesmo modelo e o mesmo pedido, o texto produzido ou revisado pela skill parece mais humano aos juízes, com fidelidade preservada? A humanização é o resultado principal. Tempo, tokens e custo são telemetria secundária.
 
-## Situação
+## Comparação amostral: 0.9.0 versus 0.8.1
 
-Nenhuma versão foi aceita. Todas as tentativas abaixo pararam antes do plano de 456 pares ou usaram pedidos antigos, e por isso são inconclusivas. A versão atual, 0.8.1, só muda a descrição de ativação da 0.8.0 e nunca foi avaliada.
+A amostra solicitada em 23/10/2026 sorteou 5 dos 24 pedidos de [PROMPTS.md](PROMPTS.md), equivalentes a 20,83% após arredondamento para cima. Foram mantidas as 19 configurações de geração e os três juízes, Jev, Astra e Opus. Os dois braços usam skill, um com a versão 0.8.1 e outro com a candidata 0.9.0. Não é uma comparação com texto sem skill.
 
-## Tentativas
+[Resultado da amostra, cobertura, textos completos e julgamentos](samples/2026-10-23/README.md).
+
+**Nos 76 pares julgados, a candidata melhorou a humanização percebida em 5,97 pontos:** H médio de 33,02 na 0.8.1 e 39,00 na 0.9.0, na escala de 0 a 100. Os três juízes registraram aumento: Jev +2,46, Astra +8,25 e Opus +7,21 pontos. A naturalidade passou de 80,69 para 84,59 e a correção/fidelidade, de 82,61 para 87,20. A preferência global por qualidade e atendimento ao pedido, medida separadamente, favoreceu a 0.8.1: 142 votos contra 77, com 9 empates.
+
+**Cobertura parcial: 76 de 95 pares e 228 de 285 julgamentos.** O provedor do Qwen3.8 Flash limitou as requisições e interrompeu a execução. Sete pares ficaram sem julgamento por saídas inválidas e outros 12 não foram concluídos após a interrupção. Os dados recebidos foram preservados, sem repetir chamadas.
+
+A versão distribuída permanece 0.8.1. O estudo amostral de redação não é a avaliação integral de aceitação de uma nova versão. A avaliação de reescrita e a leitura humana dos exemplos continuam pendentes.
+
+## Tentativas anteriores: com e sem skill
+
+As tentativas históricas abaixo pararam antes do plano de 456 pares ou usaram pedidos antigos. Elas comparavam texto sem skill com texto escrito com a versão indicada, e não duas versões da skill. Regras de aceitação: [AGENTS.md](../AGENTS.md).
 
 H é a humanização percebida: 100 menos a impressão de IA que o juiz atribui ao texto, de 0 a 100. Δ H é a diferença entre os textos com e sem a skill, na média dos pares julgados pelos três juízes. Cada voto é a preferência de um juiz num par; por isso há três votos por par. Amostra, pedidos e geradores mudam de uma linha para outra, então os Δ H não se comparam entre linhas nem medem evolução entre versões.
 
@@ -30,10 +40,10 @@ Por que tão poucos pares: o plano exige 24 pedidos × 19 configurações de mod
 - **Custo.** Na 0.7.0, nos 49 pares completos de Opus, Astra e Grok, o texto com skill usou 5,1 vezes os tokens (entrada média de 216 para 5.666 tokens, pelas instruções da skill; saída 15% maior) e custou 2,05 vezes em USD. Na 0.8.0, a entrada média com skill subiu para cerca de 8.500 tokens, e o custo nos dois pares foi 2,17 vezes.
 - **Falha com o Grok.** Na 0.7.0, 7 das 10 respostas do Grok com skill passaram do limite de 4.096 tokens de saída e foram inválidas, com 4.135 a 19.995 tokens de saída; sem skill, nenhuma das 10.
 
-## Pendências
+## Pendências do plano integral após as tentativas anteriores
 
-- Nova avaliação só depois de decidir um plano que consiga terminar. Com o runner atual, desde a 0.5.1, nenhuma tentativa passou de 117 das 912 gerações. Mudar o plano exige escrever a versão 2 do protocolo em [AGENTS.md](../AGENTS.md#protocolo-ab) e adaptar o runner.
-- Na árvore está só o runner (`scripts/`: preparar, gerar, julgar e renderizar relatórios por pedido). O resto do pipeline da 0.8.0, que agenda a ordem das chamadas, agrega `OBJETIVO.json` e publica a rodada com `DECISION.json`, saiu da árvore e precisa ser restaurado e adaptado ao novo plano, com testes, antes do `prepare`. Na raiz do repositório:
+- O plano integral precisa de um fluxo que consiga terminar. Nas tentativas históricas desde a 0.5.1, nenhuma passou de 117 das 912 gerações. A amostra de 23/10 usa um protocolo próprio, solicitado por Ricardo, que não substitui a avaliação integral de aceitação.
+- Na versão distribuída está só o runner anterior (`scripts/`: preparar, gerar, julgar e renderizar relatórios por pedido). O pipeline integral da 0.8.0, que agrega `OBJETIVO.json` e publica `DECISION.json`, saiu da árvore. A candidata local e o runner amostral não são distribuídos por esta publicação de resultados. Para recuperar a base histórica do pipeline integral, na raiz do repositório:
 
   ```text
   git restore --source=a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626 --worktree -- skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/analysis skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/controller

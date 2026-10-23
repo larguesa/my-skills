@@ -1,6 +1,14 @@
 # Humanizador PT-BR 0.8.1
 
-Para quando o agente vai escrever em português brasileiro, ou quando você tem um texto gerado por IA que soa como IA. A skill faz o agente entregar o texto que um bom redator do gênero entregaria: natural, no registro certo, sem os clichês que denunciam a IA ("é importante ressaltar que", "no mundo atual", "robusto", travessão), com os fatos e a voz do autor preservados.
+Humanizador PT-BR orienta agentes de IA a escrever e revisar textos em português brasileiro para que soem mais humanos: naturais, adequados ao gênero e fiéis aos fatos e à voz do autor.
+
+## Propósito e critério de sucesso
+
+**O propósito desta skill é humanizar textos. Seu sucesso é medido pela melhora no julgamento de humanização dos textos que ela produz ou revisa.**
+
+A comparação é cega: os juízes avaliam os textos sem saber qual versão da skill os produziu. O indicador principal é a humanização percebida, com preservação dos fatos e do sentido. Menos tempo, tokens ou custo não significa sucesso da skill; essas medidas servem apenas para acompanhar a execução e não compensam um texto menos humano.
+
+## Exemplos de uso
 
 > Reescreva este texto gerado por IA para soar humano, sem mudar fatos nem números: [...]. Use humanizador-pt-br.
 >
@@ -8,7 +16,7 @@ Para quando o agente vai escrever em português brasileiro, ou quando você tem 
 >
 > Aponte os vícios de IA deste texto, sem reescrever: [...]. Use humanizador-pt-br.
 
-**Situação: finalidade clara, ganho ainda não validado.** Nenhuma versão passou na avaliação cega da [regra de aceitação](AGENTS.md#decisão-do-ciclo). Nas tentativas parciais, juízes de IA deram notas de humanização maiores aos textos com a skill, mas o juiz Jev preferiu o texto sem ela nos 24 pares das duas tentativas mais recentes, só a redação a partir de briefing foi testada (a reescrita, não) e cada texto custou cerca de duas vezes mais. [Avaliação, números e limites](results/README.md).
+**Versão distribuída: 0.8.1.** A candidata 0.9.0 foi comparada diretamente com a 0.8.1 em 5 dos 24 pedidos de redação, sorteados antes das chamadas. A execução foi interrompida por limite do provedor, com 76 de 95 pares julgados. [Resultado de humanização, cobertura e textos completos](results/samples/2026-10-23/README.md). A reescrita ainda não foi avaliada.
 
 ## O que a skill faz pelo seu texto
 
@@ -18,14 +26,9 @@ Para quando o agente vai escrever em português brasileiro, ou quando você tem 
 - **Preserva fatos e voz.** Nomes, números, datas, citações e ressalvas vêm só do pedido ou do texto-base. Na revisão, a skill muda apenas o que melhora clareza, ritmo ou precisão e mantém as frases que já funcionam.
 - **Confere antes de entregar.** Um script local barra preâmbulo ("Aqui está a notícia:"), travessão e comando no lugar do texto, e aponta números e datas relativas que não estão no pedido.
 
-## Exemplo
+## Como conferir o resultado
 
-Um par da tentativa de 20/10, ilustrativo, não estatístico: notícia curta sobre 1.200 vagas em oficinas de leitura anunciadas em 1º de outubro de 2026, escrita duas vezes pelo Claude Opus 5.5.
-
-- **Sem a skill**, o texto disse que a prefeitura anunciou "nesta quarta-feira (1º)", mas a data caiu numa quinta, e terminou com "O portal acompanhará o tema", promessa que o pedido não trazia.
-- **Com a skill**, o texto manteve "em 1º de outubro", registrou o que a prefeitura ainda não divulgou e não acrescentou compromisso.
-
-Astra e Opus preferiram a versão com a skill; Jev preferiu a outra. [Os dois textos completos e os votos](https://github.com/larguesa/my-skills/blob/a01d78038bb48ff4afd6c92a3eeaf3d7f17cf626/skills/humanizador-pt-br/results/runs/2026-10-20-0.8.0/experiments/01-noticia-bibliotecas/REPORT.md).
+O [relatório da amostra 0.9.0 versus 0.8.1](results/samples/2026-10-23/README.md) reúne as notas de humanização, naturalidade e fidelidade, os votos e os textos completos lado a lado. O [histórico de avaliações](results/README.md) mantém as tentativas anteriores separadas desta comparação entre versões.
 
 ## Instalação e uso
 
