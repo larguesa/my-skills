@@ -132,6 +132,7 @@ class PackagingTests(unittest.TestCase):
             self.assertEqual(manifest['expected']['generations'], 912)
             old_config, config = g.load_frozen(legacy), g.load_frozen(compact)
             self.assertEqual(config['treatment_packaging'], 'v2-brief')
+            self.assertEqual(config['judge_rationale_version'], '2')
             self.assertEqual(config['skill_version'], current_version())
             self.assertNotEqual(config['blind_seed'], old_config['blind_seed'])
             self.assertEqual([c['prompt'] for c in config['cases']], [c['prompt'] for c in old_config['cases']])

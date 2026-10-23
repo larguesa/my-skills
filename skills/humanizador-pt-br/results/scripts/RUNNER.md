@@ -52,6 +52,14 @@ python3 skills/humanizador-pt-br/results/scripts/generation_eval.py render \
 
 Impressão de IA não prova autoria nem é probabilidade calibrada. Menor impressão não equivale a maior qualidade. Votos dos três juízes sobre o mesmo texto não são experimentos independentes. Alias retornado não comprova a versão; zero reasoning tokens não comprova ausência/presença da computação solicitada. Jev usa o payload histórico Decisions sem max_tokens artificial; chat candidates usam 4096 e chat judges 16384.
 
+## Justificativas prospectivas, versão 2
+
+Emenda de 23/10/2026 ao item de justificativas de [AGENTS.md](../../AGENTS.md), por solicitação de Ricardo. Mantém escalas, dimensões, preferência, critérios de aceitação e contrato JSON; substitui a instrução de justificativa breve por uma lista das características não-humanizadas de cada texto, com trecho literal e efeito contextual, separada da análise de qualidade e fidelidade. A ausência de características é uma resposta válida. Formalidade e formatação, isoladamente, não caracterizam defeito.
+
+Novos `prepare --packaging v2-brief` registram `judge_rationale_version: "2"`; Astra e Opus recebem a versão 2. Configurações históricas sem esse campo continuam na versão 1, assim como a reprodução `v1-full-json`. Não altere o campo de uma execução congelada. O runner amostral externo precisa incorporar a seleção da versão 2 antes de um novo congelamento; a amostra anterior permanece intacta. A mudança de prompt pode alterar notas, por isso os dois braços de uma comparação nova usam a mesma versão e não se comparam médias históricas com médias futuras para medir evolução.
+
+Jev Decisions mantém a rota, as perguntas e a ausência de justificativa textual. O campo `justificativa` permanece string; não há parser semântico novo nem garantia mecânica de literalidade das citações. Os testes conferem instrução enviada, versionamento e compatibilidade, não comportamento futuro dos modelos. Nenhuma nova rodada de percepção foi executada nesta atualização.
+
 ## Testes offline portáteis
 
 ```sh

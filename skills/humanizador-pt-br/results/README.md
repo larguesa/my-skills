@@ -14,6 +14,10 @@ A amostra solicitada em 23/10/2026 sorteou 5 dos 24 pedidos de [PROMPTS.md](PROM
 
 A versão distribuída permanece 0.8.1. O estudo amostral de redação não é a avaliação integral de aceitação de uma nova versão. A avaliação de reescrita e a leitura humana dos exemplos continuam pendentes.
 
+## Análise das justificativas e próximos testes
+
+[Plano do Claude Code Opus 5.5 com esforço máximo, crítica de Sofia e atualização do julgamento](reviews/2026-10-23-juizes/README.md). Foram analisadas 304 justificativas textuais de Astra e Opus; Jev não fornece texto. O prompt prospectivo passa a pedir lista de características não-humanizadas com evidência e contexto. A mudança não altera a skill, as notas históricas nem executa uma nova rodada.
+
 ## Tentativas anteriores: com e sem skill
 
 As tentativas históricas abaixo pararam antes do plano de 456 pares ou usaram pedidos antigos. Elas comparavam texto sem skill com texto escrito com a versão indicada, e não duas versões da skill. Regras de aceitação: [AGENTS.md](../AGENTS.md).

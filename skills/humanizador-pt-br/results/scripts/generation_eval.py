@@ -299,7 +299,9 @@ def prepare(root, skill, history, catalog, endpoints, probes=(), amendments=None
                       rubric_provenance=HISTORY_COMMIT)
         if packaging != 'v1-full-json':
             # Absent key keeps v1 configs, payloads and blind maps byte-identical.
+            from eval_judges import RATIONALE_VERSION
             config.update(treatment_packaging=packaging,
+                          judge_rationale_version=RATIONALE_VERSION,
                           blind_seed=f'humanizador-{skill_version}-independent-{packaging}')
         immutable(frozen / 'config.json', config)
         plan = [dict(slot=c['slot'], payload_sha256=digest(c['payload']))
@@ -407,7 +409,11 @@ def blind_case(config, case):
 
 
 def judge_calls(config, case, blind, index, records):
-    from eval_judges import JUDGE, decisions_payload
+    from eval_judges import JUDGE, JUDGE_V1, decisions_payload
+    rationale_version = config.get('judge_rationale_version', '1')
+    if rationale_version not in ('1', '2'):
+        raise ValueError('unsupported judge rationale version')
+    judge_prompt = JUDGE if rationale_version == '2' else JUDGE_V1
     group = blind['groups'][index]
     pairs = {pid: blind['pairs'][pid] for pid in group}
     tids = [tid for pair in pairs.values() for tid in pair.values()]
@@ -423,7 +429,7 @@ def judge_calls(config, case, blind, index, records):
                   mode=native['mode'], endpoint=native['endpoint'], judge_state=state,
                   payload=decisions_payload(state))]
     for judge in config['judges']:
-        payload = chat_payload(judge, [dict(role='system', content=JUDGE),
+        payload = chat_payload(judge, [dict(role='system', content=judge_prompt),
             dict(role='user', content=encoded(state).decode('utf-8'))], config['judge_max_tokens'])
         payload['response_format'] = {'type': 'json_object'}
         calls.append(dict(slot=f'j.{case["id"]}.c{index:02}.{judge["name"]}',
