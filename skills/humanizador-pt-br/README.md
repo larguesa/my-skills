@@ -16,7 +16,7 @@ A comparação é cega: os juízes avaliam os textos sem saber qual versão da s
 >
 > Aponte os vícios de IA deste texto, sem reescrever: [...]. Use humanizador-pt-br.
 
-**Versão distribuída: 0.8.1.** A candidata 0.9.0 foi comparada diretamente com a 0.8.1 em 5 dos 24 pedidos de redação, sorteados antes das chamadas. A execução foi interrompida por limite do provedor, com 76 de 95 pares julgados. [Resultado de humanização, cobertura e textos completos](results/samples/2026-10-23/README.md). A reescrita ainda não foi avaliada.
+**Versão distribuída: 0.8.1.** A candidata 0.9.1 foi comparada diretamente com a 0.8.1 nos mesmos cinco pedidos de redação sorteados. A execução foi interrompida por limite de concorrência do provedor, com 68 de 95 pares julgados. [Resultado de humanização, cobertura e textos completos](results/samples/2026-10-25/README.md). A reescrita ainda não foi avaliada.
 
 ## O que a skill faz pelo seu texto
 

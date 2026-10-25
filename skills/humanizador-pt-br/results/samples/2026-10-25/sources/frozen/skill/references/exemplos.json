@@ -1,0 +1,1532 @@
+{
+ "schema_version": 1,
+ "purpose": "Exemplos contrastivos por plano de gênero: um de redação (briefing, versão boa, versão fraca) e um de revisão (rascunho, revisão boa, revisão fraca), cada um com o motivo. Mostram ofício; nomes, datas e números são inventados e não são fatos reutilizáveis.",
+ "origens": {
+  "humano_documentado": "Texto humano com autor, fonte, licença aceita, URL e data.",
+  "editado": "Texto humano documentado com edição descrita.",
+  "sintetico": "Texto escrito por modelo, com modelo e data reais; não é texto humano nem par reverso."
+ },
+ "estados_do_rascunho": {
+  "bom": "Já cumpre o gênero; a revisão correta muda pouco ou nada.",
+  "com_vicios": "Bom conteúdo com vícios localizados; corrige-se só o trecho.",
+  "fraco": "Conteúdo sufocado por fórmulas; reescreve-se a partir dos fatos."
+ },
+ "leitura_humana": "Nenhum item foi lido por pessoa. Todos aguardam a leitura humana prevista antes do congelamento.",
+ "exemplos": [
+  {
+   "id": "noticia-redacao",
+   "estrutura": "noticia",
+   "modo": "redacao",
+   "defeito": "invencao",
+   "textos": {
+    "briefing": {
+     "texto": "Redija uma nota para o site da Câmara de Lagoa Funda. Em 14 de agosto de 2026, os vereadores aprovaram, por 11 votos a 2, o projeto que proíbe fogos com estampido em eventos públicos da cidade. A multa prevista é de R$ 2.500 por ocorrência. A lei passa a valer 90 dias depois de publicada; a data de publicação ainda não foi definida. O projeto segue para sanção do prefeito.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Câmara aprova proibição de fogos com estampido em eventos públicos\n\nPor 11 votos a 2, os vereadores de Lagoa Funda aprovaram em 14 de agosto de 2026 a proibição de fogos com estampido em eventos públicos. Cada ocorrência poderá render multa de R$ 2.500.\n\nO texto vai agora para a sanção do prefeito. A lei só valerá 90 dias depois de publicada, e ainda não há data para a publicação.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Câmara aprova lei histórica contra fogos com estampido\n\nEm 14 de agosto de 2026, os vereadores de Lagoa Funda aprovaram, por 11 votos a 2, o projeto que proíbe fogos com estampido em eventos públicos. A medida busca proteger animais domésticos e pessoas com autismo, segundo o autor da proposta. A multa será de R$ 2.500 por ocorrência.\n\nA lei entra em vigor em novembro, 90 dias após a publicação, e deve ser sancionada pelo prefeito nos próximos dias.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca inventa finalidade e fonte (\"busca proteger\", \"segundo o autor\"), calcula um mês de vigência que o pedido não dá e prevê a sanção. A boa usa só os fatos, abre pelo resultado da votação e diz uma vez o que ainda não foi definido.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "noticia-revisao",
+   "estrutura": "noticia",
+   "modo": "revisao",
+   "defeito": "prazo",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "nome",
+     "valor": "Escola Técnica Municipal de Santa Aurélia"
+    },
+    {
+     "tipo": "numero",
+     "valor": "160 vagas"
+    },
+    {
+     "tipo": "data",
+     "valor": "2 de novembro de 2026"
+    },
+    {
+     "tipo": "data",
+     "valor": "30 de novembro"
+    },
+    {
+     "tipo": "data",
+     "valor": "12 de janeiro de 2027"
+    },
+    {
+     "tipo": "numero",
+     "valor": "16 anos"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Escola técnica abre 160 vagas gratuitas em cursos de solda\n\nEm um cenário cada vez mais competitivo, a Escola Técnica Municipal de Santa Aurélia anunciou em 2 de novembro de 2026 que vai oferecer 160 vagas gratuitas em cursos de solda e caldeiraria. Vale destacar que as inscrições podem ser feitas até 30 de novembro, pelo site da escola. As aulas começam em 12 de janeiro de 2027 e são abertas a pessoas a partir de 16 anos. A iniciativa visa fortalecer a mão de obra local, reforçando o compromisso da escola com a comunidade.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Escola técnica abre 160 vagas gratuitas em cursos de solda\n\nA Escola Técnica Municipal de Santa Aurélia anunciou em 2 de novembro de 2026 que vai oferecer 160 vagas gratuitas em cursos de solda e caldeiraria. As inscrições podem ser feitas até 30 de novembro, pelo site da escola. As aulas começam em 12 de janeiro de 2027 e são abertas a pessoas a partir de 16 anos.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Escola técnica abre 160 vagas gratuitas em cursos de solda\n\nA Escola Técnica Municipal de Santa Aurélia anunciou em 2 de novembro de 2026 que vai oferecer 160 vagas gratuitas em cursos de solda e caldeiraria. As inscrições serão feitas em 30 de novembro, pelo site da escola. As aulas começam em 12 de janeiro de 2027 e são abertas a pessoas a partir de 16 anos.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho tinha abertura de clichê, ressalva vazia e finalidade sem fonte; a boa revisão corta só isso e mantém as frases informativas. A fraca troca \"até 30 de novembro\" por \"em 30 de novembro\": o prazo vira um único dia, e como a data continua no texto a conferência de campos não acusa.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "reportagem-redacao",
+   "estrutura": "reportagem",
+   "modo": "redacao",
+   "defeito": "cliche",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva uma reportagem explicativa curta sobre a nova faixa exclusiva de ônibus na Avenida das Palmeiras, em Santa Aurélia. A faixa tem 3,2 km e funciona das 6h às 20h nos dias úteis. A Secretaria de Mobilidade mediu o tempo de viagem da linha 410 antes e depois: o trajeto caiu de 38 para 29 minutos no pico da manhã, na média de duas semanas de cada período. A secretaria não mediu o efeito sobre os carros.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Linha 410 ganha nove minutos com faixa exclusiva na Avenida das Palmeiras\n\nO ônibus da linha 410 passou a fazer o trajeto da Avenida das Palmeiras, em Santa Aurélia, em 29 minutos no pico da manhã. Antes da faixa exclusiva, levava 38. A comparação é da Secretaria de Mobilidade e usa a média de duas semanas em cada período.\n\nA faixa tem 3,2 km e vale nos dias úteis, das 6h às 20h.\n\nA medição deixa uma pergunta sem resposta: a secretaria não mediu o trânsito nas outras faixas, então não se sabe se a avenida ficou mais lenta para os carros.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Uma nova era na Avenida das Palmeiras\n\nNo cenário atual das grandes cidades, a mobilidade urbana desempenha um papel crucial na qualidade de vida. Nesse contexto, Santa Aurélia ganhou uma faixa exclusiva de ônibus de 3,2 km na Avenida das Palmeiras, que funciona das 6h às 20h nos dias úteis. O tempo de viagem da linha 410 caiu de 38 para 29 minutos no pico da manhã. Falta medir o impacto sobre os carros, mas o futuro é promissor.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca abre por generalidade, fecha com fórmula e esconde o dado principal. A boa abre pelo efeito medido, diz de onde vem a comparação e trata a lacuna como notícia.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "reportagem-revisao",
+   "estrutura": "reportagem",
+   "modo": "revisao",
+   "defeito": "provisorio_confirmado",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "nome",
+     "valor": "Universidade Estadual do Vale"
+    },
+    {
+     "tipo": "numero",
+     "valor": "14%"
+    },
+    {
+     "tipo": "termo",
+     "valor": "2025"
+    },
+    {
+     "tipo": "nome",
+     "valor": "Rio Manso"
+    },
+    {
+     "tipo": "nome",
+     "valor": "Helena Duarte"
+    },
+    {
+     "tipo": "citacao",
+     "valor": "\"os números são animadores, mas é cedo para atribuir a queda só aos ônibus\""
+    },
+    {
+     "tipo": "data",
+     "valor": "março de 2027"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Estudo preliminar aponta queda nas internações por asma após troca de ônibus a diesel\n\nUm levantamento preliminar da Universidade Estadual do Vale indica que as internações de crianças por asma caíram 14% em 2025 nos bairros atendidos pela nova frota elétrica de Rio Manso. Vale ressaltar que o estudo ainda não foi revisado por outros pesquisadores. Segundo a coordenadora, Helena Duarte, \"os números são animadores, mas é cedo para atribuir a queda só aos ônibus\". O relatório final está previsto para março de 2027. Em suma, os dados sugerem um caminho promissor para a saúde pública.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Estudo preliminar aponta queda nas internações por asma após troca de ônibus a diesel\n\nUm levantamento preliminar da Universidade Estadual do Vale indica que as internações de crianças por asma caíram 14% em 2025 nos bairros atendidos pela nova frota elétrica de Rio Manso. O estudo ainda não foi revisado por outros pesquisadores. Segundo a coordenadora, Helena Duarte, \"os números são animadores, mas é cedo para atribuir a queda só aos ônibus\". O relatório final está previsto para março de 2027.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Estudo confirma queda nas internações por asma após troca de ônibus a diesel\n\nA Universidade Estadual do Vale comprovou que as internações de crianças por asma caíram 14% em 2025 nos bairros atendidos pela nova frota elétrica de Rio Manso. Segundo a coordenadora, Helena Duarte, \"os números são animadores, mas é cedo para atribuir a queda só aos ônibus\". O relatório final está previsto para março de 2027.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão tira só a ressalva vazia e o resumo final. A fraca transforma levantamento preliminar em estudo que \"comprova\" e apaga o aviso de que não houve revisão por outros pesquisadores; os campos continuam no texto, mas a conclusão mudou.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "procedimento-redacao",
+   "estrutura": "procedimento",
+   "modo": "redacao",
+   "defeito": "anuncio",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva a seção de documentação que explica como girar a chave de acesso da API de relatórios. O comando é `relatorios chave girar --conta <ID>`. A chave antiga continua válida por 15 minutos depois do comando. A nova chave aparece uma única vez na saída. Se a conta não existir, o comando termina com código 3. É preciso ter o papel administrador.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "## Girar a chave de acesso\n\nO comando abaixo troca a chave de acesso de uma conta. Ele exige o papel administrador.\n\n```sh\nrelatorios chave girar --conta <ID>\n```\n\nA saída mostra a nova chave uma só vez; copie-a antes de fechar o terminal. A chave anterior segue aceita por 15 minutos, prazo para atualizar os serviços que dependem dela.\n\nQuando a conta não existe, o comando retorna o código de saída 3.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Neste guia, vamos ver como girar a chave de acesso da API de relatórios. Primeiro, é importante entender o que o comando faz. Em seguida, veremos os requisitos e, por fim, os possíveis erros.\n\nO comando para girar a chave é relatorios chave girar --conta <ID>. Para usá-lo, você precisa do papel administrador. A chave antiga continua válida por 15 minutos e a nova chave aparece uma única vez na saída. Se a conta não existir, o comando termina com código 3.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca gasta o primeiro parágrafo anunciando o percurso e enterra o comando no meio da prosa. A boa diz o que o comando faz, mostra-o num bloco executável e organiza as consequências na ordem em que o leitor vai encontrá-las.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "procedimento-revisao",
+   "estrutura": "procedimento",
+   "modo": "revisao",
+   "defeito": "e_ou",
+   "estado_do_rascunho": "bom",
+   "campos": [
+    {
+     "tipo": "codigo",
+     "valor": "POST /v1/importacoes"
+    },
+    {
+     "tipo": "numero",
+     "valor": "20 MB"
+    },
+    {
+     "tipo": "codigo",
+     "valor": "Authorization"
+    },
+    {
+     "tipo": "codigo",
+     "valor": "X-Conta"
+    },
+    {
+     "tipo": "url",
+     "valor": "https://api.exemplo.test/v1/importacoes"
+    },
+    {
+     "tipo": "codigo",
+     "valor": "GET /v1/importacoes/{id}"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "## Enviar arquivos pelo endpoint de importação\n\nO endpoint `POST /v1/importacoes` recebe um arquivo CSV de até 20 MB. A requisição precisa do cabeçalho `Authorization` e do cabeçalho `X-Conta`; sem os dois, a API responde 401.\n\n```sh\ncurl -X POST https://api.exemplo.test/v1/importacoes \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"X-Conta: 4821\" \\\n  -F \"arquivo=@clientes.csv\"\n```\n\nA resposta 202 traz o campo `id` da importação. O processamento é assíncrono: consulte `GET /v1/importacoes/{id}` até o campo `status` mudar para `concluida` ou `falhou`. É fundamental verificar o status antes de enviar outro arquivo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "## Enviar arquivos pelo endpoint de importação\n\nO endpoint `POST /v1/importacoes` recebe um arquivo CSV de até 20 MB. A requisição precisa do cabeçalho `Authorization` e do cabeçalho `X-Conta`; sem os dois, a API responde 401.\n\n```sh\ncurl -X POST https://api.exemplo.test/v1/importacoes \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"X-Conta: 4821\" \\\n  -F \"arquivo=@clientes.csv\"\n```\n\nA resposta 202 traz o campo `id` da importação. O processamento é assíncrono: consulte `GET /v1/importacoes/{id}` até o campo `status` mudar para `concluida` ou `falhou`. Espere esse resultado antes de enviar outro arquivo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "## Enviar arquivos pelo endpoint de importação\n\nO endpoint `POST /v1/importacoes` recebe um arquivo CSV de até 20 MB. A requisição precisa do cabeçalho `Authorization` ou do cabeçalho `X-Conta`; sem eles, a API responde 401.\n\n```sh\ncurl -X POST https://api.exemplo.test/v1/importacoes \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"X-Conta: 4821\" \\\n  -F \"arquivo=@clientes.csv\"\n```\n\nA resposta 202 traz o campo `id` da importação. O processamento é assíncrono: consulte `GET /v1/importacoes/{id}` até o campo `status` mudar para `concluida` ou `falhou`. Espere esse resultado antes de enviar outro arquivo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho já cumpria o gênero: contrato, exemplo executável e verificação. A boa revisão troca só a frase com \"fundamental\" por uma instrução direta. A fraca troca \"e\" por \"ou\" entre os cabeçalhos obrigatórios, e a documentação passa a aceitar uma requisição que a API rejeita.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "mensagem-redacao",
+   "estrutura": "mensagem",
+   "modo": "redacao",
+   "defeito": "cliche",
+   "textos": {
+    "briefing": {
+     "texto": "Redija o e-mail de Rodrigo, gerente da gráfica Tinta Viva, para o cliente Sérgio Antunes. A impressão dos 2.000 catálogos atrasou porque o papel encomendado chegou com a gramatura errada. O novo lote de papel chega em 22 de maio. Rodrigo propõe entregar 500 catálogos em 24 de maio, com o papel que já está em estoque, e os 1.500 restantes em 29 de maio. Ele precisa da resposta do cliente até 21 de maio.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Assunto: Entrega dos catálogos em duas partes\n\nSérgio, bom dia.\n\nO papel que encomendamos para os seus 2.000 catálogos chegou com a gramatura errada, e a impressão atrasou. O lote correto chega em 22 de maio.\n\nPara adiantar parte do pedido, proponho dividir a entrega: 500 catálogos em 24 de maio, impressos com o papel que já temos aqui, e os outros 1.500 em 29 de maio.\n\nVocê me confirma até 21 de maio se essa divisão funciona?\n\nAbraço,\nRodrigo\nGerente, Tinta Viva",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Assunto: Atualização importante sobre o seu pedido\n\nPrezado Sérgio, espero que esta mensagem o encontre bem!\n\nGostaríamos de informar que, devido a um imprevisto com o papel, a impressão dos 2.000 catálogos sofreu um atraso. Pedimos sinceras desculpas e reforçamos nosso compromisso com a excelência.\n\nCom o intuito de minimizar o impacto, propomos entregar 500 catálogos em 24 de maio e os 1.500 restantes em 29 de maio. O novo papel chega em 22 de maio.\n\nFicamos à disposição. Aguardamos seu retorno até 21 de maio.\n\nAtenciosamente,\nRodrigo",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca empilha cortesias e esconde a proposta no terceiro parágrafo. A boa diz a causa em uma frase, apresenta a divisão com as datas e termina no que precisa do cliente.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "mensagem-revisao",
+   "estrutura": "mensagem",
+   "modo": "revisao",
+   "defeito": "reescrita_excessiva",
+   "estado_do_rascunho": "bom",
+   "campos": [
+    {
+     "tipo": "saudacao",
+     "valor": "Oi, Camila,"
+    },
+    {
+     "tipo": "data",
+     "valor": "11 de junho"
+    },
+    {
+     "tipo": "data",
+     "valor": "9h30"
+    },
+    {
+     "tipo": "termo",
+     "valor": "sala 4"
+    },
+    {
+     "tipo": "termo",
+     "valor": "sala 2"
+    },
+    {
+     "tipo": "assinatura",
+     "valor": "Tiago"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Assunto: Reunião de quinta mudou para 9h30\n\nOi, Camila,\n\nA sala 4 vai estar ocupada com a visita da auditoria, então passei nossa reunião de quinta, 11 de junho, para às 9h30 na sala 2. A pauta continua a mesma: fechar o cronograma do inventário.\n\nSe esse horário não der, me avise até quarta à tarde que eu procuro outro. Desculpe a mudança em cima da hora.\n\nValeu,\nTiago",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Assunto: Reunião de quinta mudou para 9h30\n\nOi, Camila,\n\nA sala 4 vai estar ocupada com a visita da auditoria, então passei nossa reunião de quinta, 11 de junho, para as 9h30 na sala 2. A pauta continua a mesma: fechar o cronograma do inventário.\n\nSe esse horário não der, me avise até quarta à tarde que eu procuro outro. Desculpe a mudança em cima da hora.\n\nValeu,\nTiago",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Assunto: Alteração de horário da reunião\n\nPrezada Camila,\n\nInformo que, em virtude da visita da auditoria à sala 4, a reunião prevista para quinta-feira, 11 de junho, foi transferida para as 9h30, na sala 2. A pauta permanece inalterada: finalização do cronograma do inventário.\n\nCaso o novo horário não seja conveniente, solicito que me comunique até quarta-feira à tarde, para que seja possível buscar uma alternativa. Peço desculpas pelo transtorno.\n\nAtenciosamente,\nTiago",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O e-mail já funcionava: motivo na primeira frase, alternativa e prazo para resposta. A boa revisão só corrige a crase de \"para as 9h30\". A fraca troca a voz do autor por linguagem de ofício, muda saudação e despedida e não melhora nenhuma informação.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "post-redacao",
+   "estrutura": "post",
+   "modo": "redacao",
+   "defeito": "uniformidade",
+   "textos": {
+    "briefing": {
+     "texto": "Redija uma publicação curta para o LinkedIn na voz de uma designer de produto. Ela passou a testar cada protótipo com cinco usuários antes da entrega. Em três projetos, esses testes revelaram 17 problemas de navegação que a equipe não tinha percebido. Cada rodada levou cerca de dois dias. Ela não comparou com projetos sem teste e não sabe se as reclamações de clientes caíram.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Parei de entregar protótipo sem antes ver cinco pessoas tentando usá-lo.\n\nForam três projetos desde que comecei. Nesses três, os testes mostraram 17 problemas de navegação que ninguém da equipe tinha notado. Eu incluída.\n\nCada rodada leva uns dois dias. É o preço.\n\nO que eu ainda não sei: não comparei com projetos feitos sem teste, então não posso afirmar que as reclamações de clientes caíram. Por enquanto, tenho um número: 17 problemas encontrados antes da entrega.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Testar protótipos com usuários mudou minha forma de trabalhar.\n\nPrimeiro, os testes trazem clareza. Em três projetos, encontramos 17 problemas de navegação que a equipe não tinha visto.\n\nSegundo, os testes exigem tempo. Cada rodada leva cerca de dois dias de trabalho.\n\nTerceiro, os testes trazem aprendizado. Ainda não comparei com projetos sem teste e não sei se as reclamações caíram.\n\nE você, já testa seus protótipos com usuários?",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca divide tudo em três parágrafos do mesmo tamanho, cada um aberto por um ordinal, e termina com pergunta para engajamento; nenhuma frase tem voz. A boa abre pela decisão, varia o ritmo e dá destaque à ressalva.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "post-revisao",
+   "estrutura": "post",
+   "modo": "revisao",
+   "defeito": "invencao",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "termo",
+     "valor": "oito meses"
+    },
+    {
+     "tipo": "termo",
+     "valor": "versão 2.0"
+    },
+    {
+     "tipo": "numero",
+     "valor": "46 componentes"
+    },
+    {
+     "tipo": "url",
+     "valor": "https://componentes.exemplo.test/migrar"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "🚀 Grande novidade! Depois de oito meses de trabalho, nossa biblioteca de componentes chegou à versão 2.0. Agora são 46 componentes, todos com testes de acessibilidade automatizados. A migração da versão 1 exige trocar o pacote e revisar as cores personalizadas; o guia está em https://componentes.exemplo.test/migrar. Esse é um verdadeiro divisor de águas para o nosso time! Obrigada a todo mundo que reportou problemas na versão beta.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Depois de oito meses de trabalho, nossa biblioteca de componentes chegou à versão 2.0. Agora são 46 componentes, todos com testes de acessibilidade automatizados.\n\nPara migrar da versão 1, é preciso trocar o pacote e revisar as cores personalizadas. O guia está em https://componentes.exemplo.test/migrar.\n\nObrigada a todo mundo que reportou problemas na versão beta.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Depois de oito meses de trabalho, nossa biblioteca de componentes chegou à versão 2.0. São 46 componentes, todos com testes de acessibilidade automatizados, e as telas ficaram 30% mais rápidas.\n\nA migração da versão 1 leva menos de uma hora: basta trocar o pacote e revisar as cores personalizadas. O guia está em https://componentes.exemplo.test/migrar.\n\nObrigada às mais de 200 pessoas que reportaram problemas na versão beta.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão tira o emoji, as exclamações e o clichê e separa a migração. A fraca acrescenta ganho de velocidade, tempo de migração e número de pessoas que o rascunho não traz.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "roteiro-redacao",
+   "estrutura": "roteiro",
+   "modo": "redacao",
+   "defeito": "genero",
+   "textos": {
+    "briefing": {
+     "texto": "Crie o roteiro de um vídeo de 40 segundos para a página de um museu de ciências. Ele convida o público para a oficina gratuita de montagem de telescópios no sábado, 6 de setembro, às 14h, no auditório do museu. São 30 vagas, com inscrição no balcão de entrada no próprio dia. Crianças a partir de 10 anos participam com um adulto.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "[0 a 8 s] Tela: mãos encaixam uma lente num tubo de papelão.\nFala: No sábado, 6 de setembro, o museu ensina a montar um telescópio.\n\n[8 a 22 s] Tela: mesas do auditório com as peças separadas.\nFala: A oficina é de graça. Começa às 14h, aqui no auditório.\n\n[22 a 34 s] Tela: balcão de entrada do museu.\nFala: São 30 vagas. A inscrição é feita no balcão de entrada, no próprio dia.\n\n[34 a 40 s] Tela: criança e adulto olham juntos por um telescópio.\nFala: Criança a partir de 10 anos participa com um adulto.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "O Museu de Ciências tem o prazer de convidar o público para participar da oficina gratuita de montagem de telescópios, que acontecerá no sábado, 6 de setembro, às 14h, no auditório do museu, com 30 vagas disponíveis e inscrições que devem ser feitas no balcão de entrada no próprio dia do evento, sendo que crianças a partir de 10 anos poderão participar desde que acompanhadas de um adulto responsável. Não perca essa oportunidade única de explorar o universo!",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca é um convite para ler, com uma frase de mais de 60 palavras e sem indicação de tela ou de tempo; ninguém consegue falar isso em 40 segundos. A boa divide a fala em frases curtas, marca o tempo de cada trecho e diz o que aparece na tela.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "roteiro-revisao",
+   "estrutura": "roteiro",
+   "modo": "revisao",
+   "defeito": "tempo_verbal",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "data",
+     "valor": "1º de março"
+    },
+    {
+     "tipo": "termo",
+     "valor": "das 8h às 12h"
+    },
+    {
+     "tipo": "nome",
+     "valor": "Centro Esportivo Norte"
+    },
+    {
+     "tipo": "termo",
+     "valor": "quatro raias"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "[0 a 10 s] Tela: piscina vazia de manhã cedo.\nFala: Você já se perguntou por que a piscina fecha justo no domingo? A partir de 1º de março, a piscina do Centro Esportivo Norte vai abrir também aos domingos, das 8h às 12h.\n\n[10 a 25 s] Tela: raias com nadadores.\nFala: São quatro raias livres, sem agendamento. É preciso apresentar a carteirinha do centro.\n\n[25 a 35 s] Tela: entrada do centro.\nFala: Em resumo, uma oportunidade incrível para quem só tem o fim de semana para nadar.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "[0 a 10 s] Tela: piscina vazia de manhã cedo.\nFala: A partir de 1º de março, a piscina do Centro Esportivo Norte vai abrir também aos domingos, das 8h às 12h.\n\n[10 a 25 s] Tela: raias com nadadores.\nFala: São quatro raias livres, sem agendamento. É preciso apresentar a carteirinha do centro.\n\n[25 a 35 s] Tela: entrada do centro.\nFala: Para quem só nada no fim de semana, o domingo de manhã passa a contar.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "[0 a 10 s] Tela: piscina vazia de manhã cedo.\nFala: A partir de 1º de março, a piscina do Centro Esportivo Norte abriu também aos domingos, das 8h às 12h.\n\n[10 a 25 s] Tela: raias com nadadores.\nFala: São quatro raias livres, sem agendamento. É preciso apresentar a carteirinha do centro.\n\n[25 a 35 s] Tela: entrada do centro.\nFala: Para quem só nada no fim de semana, o domingo de manhã passou a contar.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão corta a pergunta retórica e o resumo e mantém as falas que já funcionavam. A fraca põe no passado uma mudança que só começa em 1º de março: a data continua igual, mas o fato parece já em vigor.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "argumento-redacao",
+   "estrutura": "argumento",
+   "modo": "redacao",
+   "defeito": "ressalva",
+   "textos": {
+    "briefing": {
+     "texto": "Redija um texto de opinião curto defendendo que a prefeitura publique os dados de cada linha de ônibus (horários previstos, atrasos e lotação) em formato aberto. Argumento central: com os dados abertos, pesquisadores e jornalistas podem verificar se a frota cumpre o contrato. Contraponto a considerar: a empresa diz que dados de lotação podem expor falhas pontuais e gerar críticas injustas.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Dados de ônibus devem ser abertos\n\nA prefeitura deveria publicar, em formato aberto, os horários previstos, os atrasos e a lotação de cada linha de ônibus. Contrato só se cumpre quando alguém pode conferi-lo, e esses dados deixariam pesquisadores e jornalistas fazer a conferência por conta própria.\n\nA empresa argumenta que a lotação pode expor falhas pontuais e gerar críticas injustas. O risco existe. Mas falha pontual aparece como pontual numa série de meses, e crítica injusta se responde com mais dados, não com menos.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Um debate necessário\n\nA abertura dos dados das linhas de ônibus é um tema complexo, com argumentos válidos dos dois lados. Horários, atrasos e lotação em formato aberto talvez pudessem permitir que pesquisadores e jornalistas verificassem, em alguma medida, se a frota cumpre o contrato. Por outro lado, a empresa tem razão ao lembrar que dados de lotação podem expor falhas pontuais e gerar críticas injustas.\n\nTalvez o melhor caminho esteja no meio-termo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O pedido manda defender uma posição, e a versão fraca não defende nenhuma: empilha \"talvez\", dá razão aos dois lados. A boa diz a posição logo, sustenta com o argumento do pedido e responde ao contraponto.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "argumento-revisao",
+   "estrutura": "argumento",
+   "modo": "revisao",
+   "defeito": "voz_alisada",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "termo",
+     "valor": "quatro semanas"
+    },
+    {
+     "tipo": "numero",
+     "valor": "23 reuniões"
+    },
+    {
+     "tipo": "termo",
+     "valor": "9 não tinham pauta"
+    },
+    {
+     "tipo": "termo",
+     "valor": "em 6 delas"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Reunião sem pauta é reunião cancelada\n\nProponho uma regra simples para o nosso time: convite sem pauta escrita não entra na agenda. Não é apenas uma questão de organização, mas de respeito pelo tempo de quem vai participar. Nas últimas quatro semanas, contei 23 reuniões no meu calendário; 9 não tinham pauta, e em 6 delas saímos sem nenhuma decisão.\n\nSei que alguém vai dizer que conversa informal também resolve problema. Resolve. Para isso existe o corredor, não o convite de uma hora.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Reunião sem pauta é reunião cancelada\n\nProponho uma regra simples para o nosso time: convite sem pauta escrita não entra na agenda. Organização conta, mas o ponto principal é respeito pelo tempo de quem vai participar. Nas últimas quatro semanas, contei 23 reuniões no meu calendário; 9 não tinham pauta, e em 6 delas saímos sem nenhuma decisão.\n\nSei que alguém vai dizer que conversa informal também resolve problema. Resolve. Para isso existe o corredor, não o convite de uma hora.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Sugestão para as reuniões do time\n\nTalvez fosse interessante considerarmos, sempre que possível, incluir uma pauta escrita nos convites de reunião. Isso poderia ajudar na organização e no aproveitamento do tempo dos participantes. Nas últimas quatro semanas, houve 23 reuniões no calendário; 9 não tinham pauta, e em 6 delas não se chegou a nenhuma decisão.\n\nNaturalmente, conversas informais também têm seu valor e podem resolver problemas.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho tinha voz de autor e um único contraste encenado. A boa revisão desfaz o contraste e mantém o resto. A fraca transforma a regra em sugestão cheia de \"talvez\" e \"sempre que possível\" e apaga a resposta ao contraponto, que era a frase mais forte do texto.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "ensaio-redacao",
+   "estrutura": "ensaio",
+   "modo": "redacao",
+   "defeito": "fecho_resumo",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva um ensaio curto sobre a dúvida entre consertar um objeto antigo ou comprar um novo. A situação de partida: alguém tem uma cafeteira de 15 anos que parou de esquentar; o conserto custa quase o mesmo que uma cafeteira nova, e a assistência técnica leva três semanas.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Uma cafeteira de quinze anos para de esquentar. Consertar sai quase pelo preço de uma nova, e a conta parece resolvida: compra-se a nova.\n\nSó que a conta tem mais parcelas. A nova resolve o café em seguida; a velha volta em três semanas, e durante esse tempo o café sai de outro jeito ou não sai. Esse é o custo visível. Há outro, menos óbvio. Quem usa a mesma cafeteira há quinze anos sabe quanto pó ela aceita e em que ponto a jarra começa a pingar.\n\nConsertar, nesse caso, é pagar o mesmo preço para não ter de aprender um objeto de novo. Às vezes vale. Nem sempre.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Consertar ou comprar? Essa é uma dúvida comum nos dias de hoje. Quando uma cafeteira de 15 anos para de esquentar e o conserto custa quase o mesmo que uma nova, a decisão parece simples. No entanto, é preciso considerar vários fatores, como o tempo de espera de três semanas na assistência técnica, o valor afetivo do objeto e o impacto ambiental do descarte.\n\nEm suma, a escolha entre consertar e comprar depende de cada pessoa, de suas prioridades e de seus valores. O importante é refletir antes de decidir.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca abre com pergunta e generalidade, lista fatores em vez de examiná-los e fecha com resumo e lição. A boa parte da situação, segue o raciocínio até um custo que não estava na conta e termina numa ideia aberta.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "ensaio-revisao",
+   "estrutura": "ensaio",
+   "modo": "revisao",
+   "defeito": "uniformidade",
+   "estado_do_rascunho": "bom",
+   "campos": [
+    {
+     "tipo": "termo",
+     "valor": "três línguas"
+    },
+    {
+     "tipo": "termo",
+     "valor": "2012"
+    },
+    {
+     "tipo": "termo",
+     "valor": "noventa e nove"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Toda mudança de casa revela quantas coisas guardamos por precaução. Cabos de aparelhos que já não existem. Manuais em três línguas. Uma caixa de parafusos que sobraram de uma estante montada em 2012 e que, se alguém perguntasse, eu juraria que ainda vou usar.\n\nVale lembrar que guardar por precaução é apostar contra o futuro em pequenas quantias. Quase sempre a aposta perde. Mas a vez em que um parafuso daqueles salva um domingo é lembrada por anos, e é ela, não as outras noventa e nove, que decide o que entra na caixa da próxima mudança.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Toda mudança de casa revela quantas coisas guardamos por precaução. Cabos de aparelhos que já não existem. Manuais em três línguas. Uma caixa de parafusos que sobraram de uma estante montada em 2012 e que, se alguém perguntasse, eu juraria que ainda vou usar.\n\nGuardar por precaução é apostar contra o futuro em pequenas quantias. Quase sempre a aposta perde. Mas a vez em que um parafuso daqueles salva um domingo é lembrada por anos, e é ela, não as outras noventa e nove, que decide o que entra na caixa da próxima mudança.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Mudar de casa mostra quantos objetos guardamos por precaução, como cabos antigos, manuais e parafusos. Esses objetos ficam guardados porque imaginamos que poderão ser úteis em algum momento. Na maior parte das vezes, porém, eles nunca chegam a ser usados por ninguém. Mesmo assim, a lembrança de uma única vez em que foram úteis acaba pesando muito. Por isso, continuamos guardando os mesmos objetos a cada nova mudança.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho já tinha ritmo: frases nominais curtas, uma frase longa que fecha o raciocínio, detalhes precisos. A boa revisão tira só \"Vale lembrar que\". A fraca iguala todas as frases, troca os detalhes por categorias (\"cabos antigos, manuais\") e apaga a voz do autor.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "explicacao-redacao",
+   "estrutura": "explicacao",
+   "modo": "redacao",
+   "defeito": "abstracao",
+   "textos": {
+    "briefing": {
+     "texto": "Explique para adultos sem formação técnica por que o pão amanhecido fica duro, mesmo guardado num saco fechado. Ponto principal: o amido, que amoleceu no forno ao absorver água, volta a se organizar em estruturas mais rígidas à medida que esfria, processo chamado retrogradação. Esquentar o pão desfaz parte disso por algum tempo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "O pão amanhecido endurece mesmo dentro de um saco bem fechado, e isso parece estranho: se a umidade ficou no saco, por que o miolo perdeu a maciez? A resposta está menos na água e mais no amido.\n\nNo forno, o amido da farinha absorve água e amolece; é isso que deixa o miolo macio. Quando o pão esfria, esse amido volta aos poucos a se organizar em estruturas mais rígidas. O nome do processo é retrogradação.\n\nPor isso uma fatia de ontem melhora na torradeira: o calor desfaz parte dessa organização. O efeito dura pouco, e o pão volta a endurecer quando esfria de novo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "O endurecimento do pão é um fenômeno complexo que envolve diferentes transformações nos componentes do alimento ao longo do tempo. Esse processo, conhecido como retrogradação do amido, está relacionado a mudanças estruturais que ocorrem após o resfriamento. Essas mudanças afetam a textura e a qualidade do produto, independentemente das condições de armazenamento. O aquecimento pode reverter parcialmente esses efeitos, contribuindo para a recuperação de algumas características originais.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca nomeia o processo sem mostrar o que acontece, só com substantivos abstratos. A boa parte da dúvida do leitor, explica o mecanismo em dois passos e usa a torradeira como exemplo.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "explicacao-revisao",
+   "estrutura": "explicacao",
+   "modo": "revisao",
+   "defeito": "superficial",
+   "estado_do_rascunho": "fraco",
+   "campos": [
+    {
+     "tipo": "numero",
+     "valor": "R$ 1.000"
+    },
+    {
+     "tipo": "numero",
+     "valor": "1% ao mês"
+    },
+    {
+     "tipo": "numero",
+     "valor": "R$ 1.010"
+    },
+    {
+     "tipo": "numero",
+     "valor": "R$ 1.020,10"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Juros compostos: entenda de uma vez por todas\n\nNo mundo atual, entender juros compostos é fundamental. Os juros compostos são um conceito crucial que desempenha um papel essencial no crescimento do dinheiro. Basicamente, os juros são calculados sobre o valor inicial e também sobre os juros acumulados. Por exemplo, R$ 1.000 aplicados a 1% ao mês viram R$ 1.010 no primeiro mês e R$ 1.020,10 no segundo. Em suma, os juros compostos podem transformar sua vida financeira.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Juros compostos: os juros também rendem\n\nNos juros compostos, cada mês rende sobre o valor inicial e também sobre os juros que já se acumularam.\n\nPense em R$ 1.000 aplicados a 1% ao mês. No primeiro mês, o saldo vai a R$ 1.010. No segundo, o 1% incide sobre esses R$ 1.010, e não sobre os R$ 1.000 iniciais; por isso o saldo chega a R$ 1.020,10.\n\nOs centavos a mais do segundo mês são juros sobre juros. Mês a mês, a base do cálculo cresce, e o rendimento cresce com ela.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Juros compostos: entenda de uma vez por todas\n\nHoje em dia, entender juros compostos é importante. Os juros compostos são um conceito relevante que tem um papel grande no crescimento do dinheiro. Basicamente, os juros são calculados sobre o valor inicial e também sobre os juros acumulados. Por exemplo, R$ 1.000 aplicados a 1% ao mês viram R$ 1.010 no primeiro mês e R$ 1.020,10 no segundo. Resumindo, os juros compostos podem mudar sua vida financeira.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho era fraco por inteiro. A revisão fraca só troca as palavras vetadas por sinônimos e mantém o texto vazio. A boa reescreve a partir do exemplo numérico, a única parte com conteúdo.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "relatorio-redacao",
+   "estrutura": "relatorio",
+   "modo": "redacao",
+   "defeito": "invencao",
+   "textos": {
+    "briefing": {
+     "texto": "Redija uma análise curta do consumo de energia do prédio administrativo. Em julho de 2026, o consumo foi de 41.200 kWh; em julho de 2025, de 47.900 kWh. Em março de 2026, as lâmpadas foram trocadas por LED. No mesmo período, o número de servidores no prédio caiu de 310 para 265, e não há medição separada da iluminação.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Energia no prédio administrativo: julho de 2026 contra julho de 2025\n\nO prédio consumiu 41.200 kWh em julho de 2026, contra 47.900 kWh em julho de 2025: 6.700 kWh a menos, uma queda de cerca de 14%.\n\nDuas mudanças aconteceram entre os dois meses. As lâmpadas foram trocadas por LED em março de 2026, e o prédio passou de 310 para 265 servidores. Como a iluminação não tem medição separada, não é possível dizer quanto da queda vem de cada mudança.\n\nPara separar os efeitos, seria preciso medir a iluminação à parte ou comparar meses com o mesmo número de pessoas.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Consumo de energia do prédio administrativo em julho\n\nA troca das lâmpadas por LED, feita em março de 2026, reduziu o consumo do prédio em 14%: foram 41.200 kWh em julho de 2026, contra 47.900 kWh em julho de 2025. A economia mostra que a modernização da iluminação foi a principal responsável pelo resultado, com retorno do investimento estimado em dois anos. A redução de servidores, de 310 para 265, teve efeito secundário.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca atribui toda a queda às lâmpadas e inventa um prazo de retorno, embora o pedido diga que a iluminação não tem medição separada. A boa mostra a conta, apresenta as duas mudanças e diz o que a falta de medição impede concluir.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "relatorio-revisao",
+   "estrutura": "relatorio",
+   "modo": "revisao",
+   "defeito": "agente",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "data",
+     "valor": "3 de fevereiro de 2027"
+    },
+    {
+     "tipo": "data",
+     "valor": "9h05"
+    },
+    {
+     "tipo": "data",
+     "valor": "9h50"
+    },
+    {
+     "tipo": "data",
+     "valor": "9h47"
+    },
+    {
+     "tipo": "numero",
+     "valor": "40%"
+    },
+    {
+     "tipo": "nome",
+     "valor": "equipe de infraestrutura"
+    },
+    {
+     "tipo": "nome",
+     "valor": "equipe de dados"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Relatório de incidente: lentidão no portal de matrículas\n\nEm 3 de fevereiro de 2027, entre 9h05 e 9h50, o portal de matrículas ficou lento para cerca de 40% dos acessos. A equipe de infraestrutura identificou que um índice do banco de dados havia sido removido na atualização da véspera. É importante ressaltar que a equipe de dados recriou o índice às 9h47, e o tempo de resposta voltou ao normal em seguida. Nenhum dado de matrícula foi perdido. Dessa forma, o incidente foi resolvido de forma eficiente.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Relatório de incidente: lentidão no portal de matrículas\n\nEm 3 de fevereiro de 2027, entre 9h05 e 9h50, o portal de matrículas ficou lento para cerca de 40% dos acessos. A equipe de infraestrutura identificou que um índice do banco de dados havia sido removido na atualização da véspera. A equipe de dados recriou o índice às 9h47, e o tempo de resposta voltou ao normal em seguida. Nenhum dado de matrícula foi perdido.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Relatório de incidente: lentidão no portal de matrículas\n\nEm 3 de fevereiro de 2027, entre 9h05 e 9h50, o portal de matrículas ficou lento para cerca de 40% dos acessos. A equipe de dados identificou que um índice do banco de dados havia sido removido na atualização da véspera. A equipe de infraestrutura recriou o índice às 9h47, e o tempo de resposta voltou ao normal em seguida. Nenhum dado de matrícula foi perdido.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão corta a ressalva vazia e o fecho de autoelogio. A fraca troca quem identificou e quem corrigiu: os dois nomes de equipe continuam no texto, por isso só a leitura percebe que a responsabilidade mudou.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "proposta-redacao",
+   "estrutura": "proposta",
+   "modo": "redacao",
+   "defeito": "agente",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva uma proposta curta da Oficina Ponto Cego para a Escola Ramos: pintura das 14 salas de aula durante as férias de julho de 2027. Valor total de R$ 18.200, com 30% na assinatura e o restante na entrega. A tinta está incluída; reparos de reboco não estão. A escola precisa liberar o acesso aos fins de semana. Prazo: 12 dias corridos a partir da liberação das salas.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Proposta: pintura das salas de aula da Escola Ramos\n\nA Oficina Ponto Cego pinta as 14 salas de aula da Escola Ramos durante as férias de julho de 2027, em 12 dias corridos contados da liberação das salas.\n\nO valor total é de R$ 18.200: 30% na assinatura e o saldo na entrega. O preço inclui a tinta; reparos de reboco ficam fora desta proposta.\n\nO trabalho depende de a escola liberar o acesso nos fins de semana. Com a proposta assinada e as salas liberadas, começamos a pintura.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Proposta de serviços de pintura\n\nA Oficina Ponto Cego tem o prazer de apresentar sua proposta para a pintura das 14 salas de aula da Escola Ramos, nas férias de julho de 2027. O valor total é de R$ 18.200, com 30% na assinatura e o restante na entrega. A tinta está incluída, e os reparos de reboco não estão.\n\nA oficina vai liberar o acesso às salas aos fins de semana e concluirá o serviço em 12 dias corridos após a liberação.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca inverte quem libera o acesso, que é obrigação da escola, e com isso some a dependência que define o início do prazo. A boa abre pelo que será entregue, separa preço, inclusões e exclusões e termina no que cada parte precisa fazer.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "proposta-revisao",
+   "estrutura": "proposta",
+   "modo": "revisao",
+   "defeito": "prazo",
+   "estado_do_rascunho": "fraco",
+   "campos": [
+    {
+     "tipo": "termo",
+     "valor": "10 dias úteis"
+    },
+    {
+     "tipo": "numero",
+     "valor": "R$ 2.400"
+    },
+    {
+     "tipo": "numero",
+     "valor": "R$ 150"
+    },
+    {
+     "tipo": "termo",
+     "valor": "Fotografia dos pratos não está incluída"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Proposta Comercial: Cardápio Digital Completo\n\nApresentamos uma solução inovadora e perfeitamente integrada para o seu restaurante. Nossa plataforma robusta vai encantar seus clientes! O cardápio digital inclui QR Code nas mesas e atualização de preços pelo painel. O prazo de implantação é de 10 dias úteis a partir do envio das fotos dos pratos. O investimento é de R$ 2.400 na implantação e R$ 150 por mês. Fotografia dos pratos não está incluída. Vamos alavancar o seu negócio!",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Proposta: cardápio digital para o seu restaurante\n\nO cardápio fica disponível por QR Code nas mesas, e os preços são atualizados pelo painel.\n\nA implantação leva 10 dias úteis, contados a partir do envio das fotos dos pratos. Fotografia dos pratos não está incluída nesta proposta.\n\nO valor é de R$ 2.400 pela implantação e R$ 150 por mês.\n\nPara começar, basta aprovar a proposta e enviar as fotos.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Proposta: cardápio digital para o seu restaurante\n\nO cardápio fica disponível por QR Code nas mesas, e os preços são atualizados pelo painel.\n\nA implantação leva 10 dias úteis. Fotografia dos pratos não está incluída nesta proposta.\n\nO valor é de R$ 2.400 pela implantação e R$ 150 por mês.\n\nPara começar, basta aprovar a proposta.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho era quase todo promessa; a boa revisão reescreve só com os fatos. A fraca também limpa o texto, mas corta \"a partir do envio das fotos\", e o prazo deixa de depender do cliente.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "nota-executiva-redacao",
+   "estrutura": "nota-executiva",
+   "modo": "redacao",
+   "defeito": "genero",
+   "textos": {
+    "briefing": {
+     "texto": "Nota para a diretoria sobre a renovação do contrato de limpeza. O contrato atual vence em 31 de agosto de 2027 e custa R$ 46.000 por mês. A empresa pediu reajuste de 9%. Outra empresa ofereceu o mesmo escopo por R$ 47.500 por mês, mas ainda não apresentou as certidões exigidas. A área administrativa recomenda renovar com reajuste se as certidões não chegarem até 15 de julho.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Renovação do contrato de limpeza\n\nA área administrativa recomenda renovar o contrato atual com o reajuste pedido, caso a outra empresa não entregue as certidões exigidas até 15 de julho.\n\nO contrato atual, que vence em 31 de agosto de 2027, custa hoje R$ 46.000 por mês. Com o reajuste de 9%, passaria a R$ 50.140. A proposta concorrente, de R$ 47.500 para o mesmo escopo, sairia R$ 2.640 mais barata por mês, mas ainda não trouxe as certidões.\n\nA recomendação não diz o que fazer se as certidões chegarem no prazo.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Contrato de limpeza\n\nA empresa de limpeza, com contrato até 31 de agosto de 2027 e custo mensal de R$ 46.000, pediu reajuste de 9%. Outra empresa apresentou proposta de R$ 47.500 mensais, com o mesmo escopo, ainda sem as certidões exigidas. Diante desse quadro, e considerando os diversos aspectos envolvidos, a área administrativa entende que a renovação com reajuste pode ser a alternativa mais adequada, caso as certidões não sejam apresentadas até 15 de julho.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "Numa nota para decisão, a recomendação vem primeiro. A versão fraca conta a história e só no fim chega à recomendação, sem a conta. A boa abre pela recomendação, mostra o valor reajustado e a diferença e aponta o que fica em aberto.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "nota-executiva-revisao",
+   "estrutura": "nota-executiva",
+   "modo": "revisao",
+   "defeito": "tempo_verbal",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "data",
+     "valor": "2 de março"
+    },
+    {
+     "tipo": "termo",
+     "valor": "das 11h às 14h30"
+    },
+    {
+     "tipo": "termo",
+     "valor": "15h"
+    },
+    {
+     "tipo": "data",
+     "valor": "10 de fevereiro"
+    },
+    {
+     "tipo": "termo",
+     "valor": "3º andar"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Comunicado: mudança no horário do refeitório\n\nA partir de 2 de março, o refeitório da sede vai funcionar das 11h às 14h30, e não mais até as 15h. A mudança acompanha o novo contrato com a empresa de alimentação, assinado em 10 de fevereiro. Nesse sentido, vale ressaltar que o café da tarde continuará disponível na copa do 3º andar. Pedimos a compreensão de todos e reforçamos nosso compromisso com o bem-estar dos colaboradores.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Comunicado: mudança no horário do refeitório\n\nA partir de 2 de março, o refeitório da sede vai funcionar das 11h às 14h30, e não mais até as 15h. A mudança acompanha o novo contrato com a empresa de alimentação, assinado em 10 de fevereiro. O café da tarde continuará disponível na copa do 3º andar.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Comunicado: mudança no horário do refeitório\n\nA partir de 2 de março, o refeitório da sede passou a funcionar das 11h às 14h30, e não mais até as 15h. A mudança acompanha o novo contrato com a empresa de alimentação, que será assinado em 10 de fevereiro. O café da tarde continuará disponível na copa do 3º andar.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão corta o conector, a ressalva vazia e a frase de compromisso, que não informavam nada. A fraca muda os tempos: a mudança futura vira fato consumado, e o contrato já assinado passa a ser previsto. Datas e horários continuam no texto.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "academico-redacao",
+   "estrutura": "academico",
+   "modo": "redacao",
+   "defeito": "provisorio_confirmado",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva o resumo de um estudo observacional: 412 estudantes de três escolas públicas responderam a um questionário sobre horas de sono e notas em matemática no primeiro semestre de 2026. Quem dormia menos de seis horas por noite teve média 5,8; quem dormia oito horas ou mais, 7,1. O estudo não controlou renda familiar nem tempo de deslocamento até a escola.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Este estudo observacional examinou a relação entre sono e desempenho em matemática. Em questionário aplicado no primeiro semestre de 2026, 412 estudantes de três escolas públicas informaram horas de sono e notas. Os que relataram dormir menos de seis horas por noite tiveram média 5,8 em matemática; os que dormiam oito horas ou mais tiveram média 7,1. O desenho não permite inferir causalidade, e a análise não ajustou os resultados por renda familiar nem por tempo de deslocamento, fatores que podem estar ligados tanto ao sono quanto ao desempenho. A associação justifica estudos que controlem essas variáveis.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Este estudo demonstrou que dormir pouco prejudica o desempenho em matemática. Com questionários aplicados a 412 estudantes de três escolas públicas em 2026, verificou-se que quem dormia menos de seis horas teve média 5,8, e quem dormia oito horas ou mais, 7,1. Os achados comprovam a importância do sono para a aprendizagem e indicam que políticas de incentivo ao descanso podem elevar as notas dos alunos.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "Num estudo observacional sem controle de renda e deslocamento, \"demonstrou\" e \"comprovam\" afirmam causa que o desenho não sustenta. A boa descreve a associação e diz o que o desenho impede concluir.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "academico-revisao",
+   "estrutura": "academico",
+   "modo": "revisao",
+   "defeito": "e_ou",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "numero",
+     "valor": "64 adultos"
+    },
+    {
+     "tipo": "termo",
+     "valor": "entre 40 e 65 anos"
+    },
+    {
+     "tipo": "termo",
+     "valor": "betabloqueadores"
+    },
+    {
+     "tipo": "termo",
+     "valor": "diabetes tipo 1"
+    },
+    {
+     "tipo": "termo",
+     "valor": "três vezes"
+    },
+    {
+     "tipo": "termo",
+     "valor": "dois minutos"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Método\n\nParticiparam do estudo 64 adultos com diagnóstico de hipertensão e idade entre 40 e 65 anos. Foram excluídos os participantes que usavam betabloqueadores e os que tinham diabetes tipo 1. Cabe destacar que a pressão arterial foi medida três vezes em cada visita, com intervalo de dois minutos entre as medidas, e a média das duas últimas foi usada na análise. Dessa forma, buscou-se reduzir o efeito do avental branco de maneira significativa.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Método\n\nParticiparam do estudo 64 adultos com diagnóstico de hipertensão e idade entre 40 e 65 anos. Foram excluídos os participantes que usavam betabloqueadores e os que tinham diabetes tipo 1. A pressão arterial foi medida três vezes em cada visita, com intervalo de dois minutos entre as medidas, e a média das duas últimas foi usada na análise, para reduzir o efeito do avental branco.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Método\n\nParticiparam do estudo 64 adultos com diagnóstico de hipertensão e idade entre 40 e 65 anos. Foram excluídos os participantes que usavam betabloqueadores e tinham diabetes tipo 1. A pressão arterial foi medida três vezes em cada visita, com intervalo de dois minutos entre as medidas, e a média das duas últimas foi usada na análise, para reduzir o efeito do avental branco.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão tira a ressalva vazia e o \"de maneira significativa\", que não tinha medida. A fraca junta os dois critérios de exclusão numa só condição: passam a ser excluídos apenas os que usavam betabloqueadores e também tinham diabetes tipo 1. Todos os termos continuam no texto.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "cena-redacao",
+   "estrutura": "cena",
+   "modo": "redacao",
+   "defeito": "cliche",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva uma cena curta de conto, em terceira pessoa, com um porteiro noturno de um prédio antigo. Às três da manhã, o elevador desce sozinho até o térreo e abre a porta vazio. Ele já viu isso antes. A cena termina sem explicar o que aconteceu.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Às três da manhã, o painel do elevador acendeu o número 9 e começou a contar para baixo. Osvaldo tirou os pés da mesa.\n\nOito, sete. Ninguém tinha entrado depois da meia-noite; ele tinha o caderno aberto para provar. Seis, cinco. Pegou a lanterna, não porque precisasse de luz, mas para ter alguma coisa na mão.\n\nNo térreo, a porta abriu com o mesmo rangido de sempre. Dentro, só o espelho e o tapete de borracha.\n\nOsvaldo esperou a porta fechar. Depois anotou no caderno, na linha de baixo da última vez: 3h02, elevador, vazio.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Era uma noite fria e silenciosa. Osvaldo, o porteiro, estava sentado em sua cadeira quando, de repente, o elevador começou a descer sozinho. Um silêncio pesado tomou conta do saguão. Quando a porta se abriu no térreo, não havia ninguém lá dentro. Osvaldo sentiu um nó na garganta. O tempo pareceu parar. Ele já tinha visto aquilo antes, mas nunca conseguia se acostumar. Naquela noite, ele entendeu que algumas coisas simplesmente não têm explicação.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca diz o sentimento em vez de mostrá-lo, usa três clichês de emoção pronta e explica o mistério na última frase. A boa conta pelo painel, pelo gesto e pelo caderno, e o \"já viu isso antes\" aparece na anotação, sem ser dito.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "cena-revisao",
+   "estrutura": "cena",
+   "modo": "revisao",
+   "defeito": "citacao",
+   "estado_do_rascunho": "com_vicios",
+   "campos": [
+    {
+     "tipo": "citacao",
+     "valor": "\"A chave fica com você\""
+    },
+    {
+     "tipo": "nome",
+     "valor": "Dona Celeste"
+    },
+    {
+     "tipo": "nome",
+     "valor": "Lucas"
+    },
+    {
+     "tipo": "termo",
+     "valor": "barbante vermelho"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "A chuva batia na janela da cozinha. Dona Celeste empurrou a caixa de sapatos pela mesa, num gesto que parecia carregar o peso de uma vida inteira.\n\"A chave fica com você\", disse ela, sem tirar os olhos do neto.\nLucas abriu a caixa. Lá dentro havia uma chave pequena, enferrujada, presa a um barbante vermelho. Ele soltou o ar que nem sabia que prendia.\n\"De onde é?\"\nDona Celeste se levantou para pôr a água do café no fogo e não respondeu.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "A chuva batia na janela da cozinha. Dona Celeste empurrou a caixa de sapatos pela mesa.\n\"A chave fica com você\", disse ela, sem tirar os olhos do neto.\nLucas abriu a caixa. Lá dentro havia uma chave pequena, enferrujada, presa a um barbante vermelho. Ele enrolou o barbante no dedo.\n\"De onde é?\"\nDona Celeste se levantou para pôr a água do café no fogo e não respondeu.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "A chuva batia na janela da cozinha. Dona Celeste empurrou a caixa de sapatos pela mesa.\n\"Agora a chave é sua\", disse ela, sem tirar os olhos do neto.\nLucas abriu a caixa. Lá dentro havia uma chave pequena, enferrujada, presa a um barbante vermelho. Ele enrolou o barbante no dedo.\n\"De onde é?\"\nDona Celeste se levantou para pôr a água do café no fogo e não respondeu.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A boa revisão corta as duas emoções prontas (\"o peso de uma vida inteira\" e o ar que ele nem sabia que prendia) e troca a segunda por um gesto. A fraca faz o mesmo, mas reescreve a fala fixada no pedido: \"Agora a chave é sua\" diz quase o mesmo, e a frase literal se perdeu.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "cronica-redacao",
+   "estrutura": "cronica",
+   "modo": "redacao",
+   "defeito": "fecho_resumo",
+   "textos": {
+    "briefing": {
+     "texto": "Escreva uma crônica curta, em primeira pessoa, sobre a fila do caixa eletrônico num sábado de manhã. A senhora à frente do narrador pede ajuda para tirar o extrato e, enquanto ele ajuda, outras três pessoas da fila começam a dar palpites. Humor leve.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "A senhora da minha frente parou diante do caixa eletrônico como quem para diante de um cardápio em outra língua. Virou-se para mim.\n\n\"Moço, como é que tira o tal do extrato?\"\n\nExpliquei: cartão, senha, a tecla da direita. Foi aí que o senhor de boné, atrás de mim, discordou. Era a da esquerda. A moça de roupa de academia achou melhor pedir pelo aplicativo. Um rapaz no fim da fila, que eu nem tinha visto chegar, gritou que o caixa daquela agência vivia quebrado.\n\nO extrato saiu pela tecla da direita. A senhora agradeceu aos quatro, igualmente, e guardou o papel na bolsa sem ler.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Era um sábado de manhã e a fila do caixa eletrônico estava grande. Uma senhora pediu minha ajuda para tirar o extrato. Enquanto eu explicava, três pessoas da fila começaram a dar palpites, cada uma com uma opinião diferente. Foi uma situação engraçada. No fim, o extrato saiu e todos ficaram satisfeitos.\n\nNaquele dia, aprendi que, por trás de uma simples fila de banco, existe uma comunidade disposta a ajudar. Às vezes, os pequenos gestos são os que mais nos ensinam.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "A versão fraca resume a cena em vez de mostrá-la, anuncia que foi engraçada e fecha com lição. A boa dá a cada palpiteiro um gesto ou uma fala e deixa o humor no detalhe final, sem moral.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  },
+  {
+   "id": "cronica-revisao",
+   "estrutura": "cronica",
+   "modo": "revisao",
+   "defeito": "reescrita_excessiva",
+   "estado_do_rascunho": "bom",
+   "campos": [
+    {
+     "tipo": "termo",
+     "valor": "302"
+    },
+    {
+     "tipo": "termo",
+     "valor": "pijama listrado"
+    },
+    {
+     "tipo": "termo",
+     "valor": "samambaia"
+    },
+    {
+     "tipo": "termo",
+     "valor": "espada-de-são-jorge"
+    },
+    {
+     "tipo": "termo",
+     "valor": "jiboia"
+    }
+   ],
+   "textos": {
+    "rascunho": {
+     "texto": "Meu vizinho do 302 rega as plantas às seis da manhã, de pijama listrado, e conversa com cada vaso. Com a samambaia, fala de futebol. Com a espada-de-são-jorge, é mais formal. Ontem ouvi quando ele pediu desculpas à jiboia por ter esquecido dela na terça. A jiboia, até onde sei, aceitou.\n\nÉ importante notar que nunca falei com ele sobre isso. Seria como interromper uma reunião.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "bom": {
+     "texto": "Meu vizinho do 302 rega as plantas às seis da manhã, de pijama listrado, e conversa com cada vaso. Com a samambaia, fala de futebol. Com a espada-de-são-jorge, é mais formal. Ontem ouvi quando ele pediu desculpas à jiboia por ter esquecido dela na terça. A jiboia, até onde sei, aceitou.\n\nNunca falei com ele sobre isso. Seria como interromper uma reunião.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    },
+    "ruim": {
+     "texto": "Todas as manhãs, às seis horas, o morador do apartamento 302 rega suas plantas usando um pijama listrado. Curiosamente, ele tem o hábito de conversar com cada uma delas, adaptando o assunto a cada vaso: futebol com a samambaia e um tom mais formal com a espada-de-são-jorge. Recentemente, chegou a pedir desculpas à jiboia por tê-la esquecido. Esse comportamento peculiar revela uma relação afetuosa com a natureza, que prefiro observar à distância.",
+     "origem": "sintetico",
+     "modelo": "claude-opus-5-5",
+     "data": "2026-10-22",
+     "fonte": null,
+     "licenca": null,
+     "url": null
+    }
+   },
+   "motivo": "O rascunho já era crônica, com voz e humor; só a ressalva \"É importante notar que\" sobrava. A fraca reescreve tudo em tom de relatório, perde a piada da jiboia e explica o que a cena já mostrava.",
+   "leitura_humana": {
+    "status": "pendente"
+   }
+  }
+ ]
+}

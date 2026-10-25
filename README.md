@@ -4,7 +4,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 
 | Skill | Para que serve | O que foi medido |
 |---|---|---|
-| [Humanizador PT-BR](#humanizador-pt-br) | Texto em português, escrito ou reescrito pelo agente, que soa como de um bom redator humano | Comparação amostral 0.9.0 versus 0.8.1 interrompida, 76 de 95 pares de redação julgados |
+| [Humanizador PT-BR](#humanizador-pt-br) | Texto em português, escrito ou reescrito pelo agente, que soa como de um bom redator humano | Comparação amostral 0.9.1 versus 0.8.1 interrompida, 68 de 95 pares de redação julgados |
 | [Animation Video Maker](#animation-video-maker) | Vídeo curto explicativo a partir de um brief, com cena editável e MP4 gerado na sua máquina | 20 exemplos e 3 demonstrações renderizados e conferidos |
 | [Telegraphist](#telegraphist) | Conversa econômica com o agente, para gastar menos tokens | Amostra interrompida, sem juízes: respostas mais curtas, tokens totais maiores |
 
@@ -14,7 +14,7 @@ Para quando o agente vai escrever em português brasileiro, ou quando você tem 
 
 Peça, por exemplo: "Reescreva este texto gerado por IA para soar humano, sem mudar fatos nem números: [...]. Use humanizador-pt-br."
 
-O propósito é humanizar textos produzidos ou revisados por IA. A melhora no julgamento de humanização é o critério de sucesso; economia de tempo e tokens não é objetivo desta skill. A avaliação compara textos anonimizados, preservando a fidelidade aos fatos e ao pedido. [Resultados e cobertura dos testes](skills/humanizador-pt-br/results/README.md).
+O propósito é humanizar textos produzidos ou revisados por IA. A melhora no julgamento de humanização é o critério de sucesso; economia de tempo e tokens não é objetivo desta skill. A avaliação compara textos anonimizados, preservando a fidelidade aos fatos e ao pedido. [Última comparação, com cobertura e textos completos](skills/humanizador-pt-br/results/samples/2026-10-25/README.md).
 
 [Humanizador PT-BR 0.8.1: instalação e exemplos](skills/humanizador-pt-br/README.md) · [avaliação](skills/humanizador-pt-br/results/README.md)
 

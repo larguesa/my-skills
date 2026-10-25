@@ -2,7 +2,17 @@
 
 Pergunta: com o mesmo modelo e o mesmo pedido, o texto produzido ou revisado pela skill parece mais humano aos juízes, com fidelidade preservada? A humanização é o resultado principal. Tempo, tokens e custo são telemetria secundária.
 
-## Comparação amostral: 0.9.0 versus 0.8.1
+## Última comparação: 0.9.1 versus 0.8.1, 25/10/2026
+
+As correções foram concluídas com Claude Code, Opus 5.5 e esforço máximo. Os três diagnósticos condicionais foram incorporados, preservando sentido e gênero. A candidata passou em 130 testes de software, sem alterar a suíte original.
+
+A comparação reutilizou os cinco pedidos sorteados, sem importar respostas antigas. **Cobertura parcial: 68 de 95 pares, com 204 de 285 julgamentos.** A rota Alibaba do Qwen3.8 Flash recusou uma chamada por limite de concorrência. Sete pares ficaram sem comparação completa por respostas inválidas e outros vinte após a interrupção. A versão distribuída continua 0.8.1.
+
+Nos pares julgados, H passou de 53,25 para 58,57, diferença de **+5,32 pontos**. A correção/fidelidade passou de 84,43 para 87,66. A preferência global favoreceu a referência: 102 votos para 0.8.1, 86 para 0.9.1 e 16 empates. Cada um dos 68 pares recebeu três votos, totalizando 204. Essas notas não medem evolução em relação à rodada anterior, que teve outra cobertura e outro prompt de julgamento.
+
+[Relatório da retomada, textos completos, juízes, custos e fontes verificáveis](samples/2026-10-25/README.md).
+
+## Histórico: 0.9.0 versus 0.8.1, 23/10/2026
 
 A amostra solicitada em 23/10/2026 sorteou 5 dos 24 pedidos de [PROMPTS.md](PROMPTS.md), equivalentes a 20,83% após arredondamento para cima. Foram mantidas as 19 configurações de geração e os três juízes, Jev, Astra e Opus. Os dois braços usam skill, um com a versão 0.8.1 e outro com a candidata 0.9.0. Não é uma comparação com texto sem skill.
 
