@@ -12,7 +12,8 @@ A execução parou quando a rota Alibaba de `qwen/qwen3.8-flash`, sem raciocíni
 
 ## Evidências
 
-- [Relatório completo](report/REPORT.md): agregados, 150 textos preservados, notas e observações dos três juízes, falhas, custos e tempos por modelo.
+- [Resultado por modelo, pedido e juiz](RESULTADO.md): agregados, cobertura, falhas, custos e tempos.
+- [Relatório integral em Markdown](https://raw.githubusercontent.com/larguesa/my-skills/3b27ad06598e2cc5270745e0a121bb77a0cd52cb/skills/humanizador-pt-br/results/samples/2026-10-25/report/REPORT.md): todos os blocos em um arquivo. Os 150 textos e os pareceres também podem ser lidos nos relatórios por pedido abaixo.
 - [Alterações implementadas](report/IMPLEMENTACAO.md).
 - [Verificação de software](validation/README.md).
 - [Fontes congeladas e verificação local](sources/README.md): código e inputs experimentais preservados, manifesto público derivado e proveniência.

@@ -14,4 +14,4 @@ As leituras finais de 25/10/2026 às 22:26:55 e 22:29:18 UTC concordam. A difere
 
 O uso observado foi de US$ 10,51, arredondado aos centavos. Inclui geração e julgamento desta retomada, inclusive o piloto reaproveitado sem repetição e as respostas inválidas com cobrança. Não inclui a implementação por Claude Code nem consultas de disponibilidade de estudos anteriores.
 
-Os custos, tokens e tempos por modelo, fase e braço estão no [relatório completo](report/REPORT.md). Não foram substituídos valores ausentes por zero.
+Os custos, tokens e tempos por modelo, fase e braço estão no [resultado por modelo](RESULTADO.md). Não foram substituídos valores ausentes por zero.
