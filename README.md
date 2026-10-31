@@ -82,4 +82,5 @@ Peça, por exemplo: "Use codex-user e peça ao Codex para revisar as mudanças n
   - **README.md** (quando houver): uso, instalação e situação.
   - **AGENTS.md** (opcional): regras para alterar e testar a skill.
   - **references/**, **assets/**, **scripts/** (opcionais): material de consulta, mídias e scripts usados pela skill.
+  - **reference.md**, **docs/**, **hooks/** ou **rules/** (nas skills `*-user`): resumo de consulta, documentação oficial em markdown (atualizável com `docs/update.sh`) e proteções que bloqueiam push, deploy e acesso a segredos.
   - **results/** ou **tests/** (opcionais): avaliação e testes; não precisam ir para o diretório de skills do agente.
