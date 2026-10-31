@@ -7,6 +7,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 | [Humanizador PT-BR](#humanizador-pt-br) | Texto em português, escrito ou reescrito pelo agente, que soa como de um bom redator humano | Comparação amostral 0.9.1 versus 0.8.1 interrompida, 68 de 95 pares de redação julgados |
 | [Animation Video Maker](#animation-video-maker) | Vídeo curto explicativo a partir de um brief, com cena editável e MP4 gerado na sua máquina | 20 exemplos e 3 demonstrações renderizados e conferidos |
 | [Telegraphist](#telegraphist) | Conversa econômica com o agente, para gastar menos tokens | Amostra interrompida, sem juízes: respostas mais curtas, tokens totais maiores |
+| [Claude Code User](#claude-code-user) | Guia para o agente usar o Claude Code em modo headless (`claude -p`), com a documentação oficial em markdown | Testado no Claude Code 2.1.316: criar e retomar sessão, saída estruturada, modelo reserva e hook de proteção |
 
 ## Humanizador PT-BR
 
@@ -37,6 +38,14 @@ Peça, por exemplo: "Use telegraphist: qual a diferença entre TCP e UDP?"
 Medido até agora, sem juízes: respostas mais curtas, não economia total. A única execução com a instrução atual foi interrompida em 67 de 336 episódios. Em 18 pares com resposta completa nos dois braços (outros 3 pares terminaram vazios ou truncados nos dois braços e ficaram fora), a versão com skill teve 40,8% menos palavras e 27,3% menos tokens de saída, mas 49,8% mais tokens de entrada, porque a instrução vai em cada requisição; o total subiu 14,7% e o custo, 1,6%. Nenhum juiz verificou se as respostas curtas preservaram a informação necessária.
 
 [Telegraphist](skills/telegraphist/SKILL.md) · [relatório de testes](skills/telegraphist/tests/REPORT.md) (em inglês)
+
+## Claude Code User
+
+Ensina o agente a delegar trabalho de código ao Claude Code sem acompanhamento: quando vale delegar, a chamada padrão com `claude -p`, permissões, limites de turnos e de gasto, retomada de sessão, tarefas longas, um hook que bloqueia `git push` e comandos perigosos, e como conferir o resultado em vez de confiar no resumo. Traz um resumo de consulta rápida e cópias em markdown da documentação oficial (CLI, comandos, variáveis de ambiente, ferramentas, modo interativo, checkpoints, hooks, channels, glossário e headless), atualizáveis com `docs/update.sh`. Instrução em inglês.
+
+Peça, por exemplo: "Use claude-code-user e delegue ao Claude Code a refatoração deste módulo, com testes."
+
+[Claude Code User](skills/claude-code-user/SKILL.md) · [resumo de consulta](skills/claude-code-user/reference.md) · [documentação oficial](skills/claude-code-user/docs/README.md)
 
 ## Estrutura
 
