@@ -9,6 +9,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 | [Telegraphist](#telegraphist) | Conversa econômica com o agente, para gastar menos tokens | Amostra interrompida, sem juízes: respostas mais curtas, tokens totais maiores |
 | [Claude Code User](#claude-code-user) | Guia para o agente usar o Claude Code em modo headless (`claude -p`), com a documentação oficial em markdown | Testado no Claude Code 2.1.316: criar e retomar sessão, saída estruturada, modelo reserva e hook de proteção |
 | [Pi User](#pi-user) | Guia para o agente usar o pi (pi.dev) em modo headless (`pi -p --mode json`), com a documentação oficial em markdown | Testado no pi 1.4.0: saída JSON, retomada de sessão, extensão de proteção e servidor MCP |
+| [OpenCode User](#opencode-user) | Guia para o agente usar o OpenCode em modo headless (`opencode run --format json`), com a documentação oficial em markdown | Testado no OpenCode 1.19.5: saída JSON, retomada de sessão, regras de permissão de proteção e custo com e sem MCP |
 
 ## Humanizador PT-BR
 
@@ -55,6 +56,14 @@ Ensina o agente a delegar trabalho de código ao pi sem acompanhamento: quando v
 Peça, por exemplo: "Use pi-user e peça ao pi para criar um script com testes, usando o MiMo pela OpenRouter."
 
 [Pi User](skills/pi-user/SKILL.md) · [resumo de consulta](skills/pi-user/reference.md) · [documentação oficial](skills/pi-user/docs/README.md)
+
+## OpenCode User
+
+Ensina o agente a delegar trabalho de código ao OpenCode sem acompanhamento: quando vale usar o OpenCode em vez do pi ou do Claude Code, a chamada padrão com `opencode run --format json`, como ler os eventos JSON e o custo, retomada e bifurcação de sessão, servidor persistente (`opencode serve` e `--attach`), agentes build e plan, modelos via OpenRouter, MCP, regras de permissão que bloqueiam `git push`, acesso a segredos e comandos perigosos, e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown dos 33 arquivos da documentação oficial (convertidos de MDX), atualizáveis com `docs/update.sh`. Instrução em inglês.
+
+Peça, por exemplo: "Use opencode-user e peça ao OpenCode para corrigir este bug e rodar os testes."
+
+[OpenCode User](skills/opencode-user/SKILL.md) · [resumo de consulta](skills/opencode-user/reference.md) · [documentação oficial](skills/opencode-user/docs/README.md)
 
 ## Estrutura
 

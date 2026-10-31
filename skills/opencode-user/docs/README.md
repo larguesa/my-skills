@@ -1,0 +1,39 @@
+# OpenCode official docs (markdown copies)
+Downloaded 2026-10-31 from the docs source in https://github.com/anomalyco/opencode/tree/dev/packages/web/src/content/docs (English `.mdx`, converted to `.md` by `mdx2md.py`: frontmatter → title + description, imports dropped, Starlight components → markdown). Published at https://opencode.ai/docs/<page>. Refresh: `./update.sh`.
+Note: there is no separate `share` page any more (https://opencode.ai/docs/share returns 404); the current docs no longer document public session sharing; use `opencode export <sessionID>` (JSON) and `opencode import` (cli.md).
+
+| File | Source | Summary / when to consult |
+|---|---|---|
+| acp.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/acp.mdx | Agent Client Protocol server (`opencode acp`) for editors like Zed. Only for editor integration. |
+| agents.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/agents.mdx | Primary agents (build, plan) and subagents (general, explore), custom agents in JSON/markdown, per-agent model/prompt/steps/permissions. Consult to pick --agent or cap steps. |
+| cli.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/cli.mdx | Every command (run, serve, web, attach, session, export/import, models, stats, mcp, agent, providers) + run flags + all OPENCODE_* env vars. Consult before any flag. |
+| commands.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/commands.mdx | Custom slash commands (markdown/JSON, $ARGUMENTS, shell output injection), usable via `run --command`. Consult for reusable prompts. |
+| config.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/config.mdx | opencode.json schema, locations and merge precedence (remote, global, OPENCODE_CONFIG, project, .opencode, OPENCODE_CONFIG_CONTENT), {env:}/{file:} substitution. Consult before editing config. |
+| custom-tools.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/custom-tools.mdx | Writing custom TS/JS tools in .opencode/tools. Consult to add a tool. |
+| ecosystem.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/ecosystem.mdx | Community projects/plugins. Discovery only. |
+| enterprise.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/enterprise.mdx | Enterprise/self-hosted controls and data handling. Rarely needed. |
+| formatters.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/formatters.mdx | Auto-formatters run after edits; configuration. Consult when edits get reformatted unexpectedly. |
+| github.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/github.mdx | GitHub Actions agent (`opencode github install`). Consult before wiring CI; it can push/comment. |
+| gitlab.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/gitlab.mdx | GitLab CI integration. Consult for GitLab. |
+| ide.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/ide.mdx | VS Code/Cursor extension. Only for IDE use. |
+| index.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/index.mdx | Install, connect a provider, /init, first steps. Overview. |
+| keybinds.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/keybinds.mdx | Keybind config. TUI only. |
+| lsp.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/lsp.mdx | LSP integration (diagnostics fed to the model), auto downloads. Consult for diagnostics issues. |
+| mcp-servers.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/mcp-servers.mdx | Local/remote MCP config under `mcp`, OAuth, per-agent enablement, context-cost warning. Consult when adding/disabling MCP servers. |
+| models.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/models.mdx | Choosing provider/model, variants (reasoning effort), defaults. Consult when switching models. |
+| network.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/network.mdx | Proxies and custom certificates. Consult behind a proxy. |
+| permissions.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/permissions.mdx | `permission` rules (allow/ask/deny, wildcards, last match wins), external_directory, doom_loop, defaults, --auto. Basis of ../hooks/guard-permissions.json. |
+| plugins.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/plugins.mdx | JS/TS plugins with event hooks (e.g. tool.execute.before) for custom guards/automation. Consult for logic beyond permission rules. |
+| policies.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/policies.mdx | Policies that restrict which configured resources (providers, MCP, plugins…) may be used. Consult for org-level lockdown. |
+| providers.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/providers.mdx | Provider setup incl. OpenRouter, auth.json, custom baseURL/options. Consult for auth/provider problems. |
+| references.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/references.mdx | Adding local dirs / git repos as project references. Consult for multi-repo context. |
+| rules.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/rules.mdx | AGENTS.md (project/global), CLAUDE.md fallback, `instructions` globs/URLs. Consult for project instructions. |
+| sdk.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/sdk.mdx | @opencode-ai/sdk JS client for the server (sessions, prompts, events). Consult when building an app around OpenCode. |
+| server.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/server.mdx | `opencode serve` HTTP/OpenAPI server: auth, sessions/messages/events endpoints. Consult for a persistent driver or `run --attach`. |
+| skills.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/skills.mdx | SKILL.md discovery (.opencode/skills, ~/.config/opencode/skills, .claude/skills, .agents/skills) and the skill tool/permission. Consult when adding skills. |
+| themes.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/themes.mdx | Themes. Cosmetic. |
+| tools.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/tools.mdx | Built-in tools (bash, edit, write, read, grep, glob, list, patch, todowrite, webfetch, websearch, question, skill…) and how to disable them. Consult when restricting tools. |
+| troubleshooting.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/troubleshooting.mdx | Logs (~/.local/share/opencode/log), storage paths, common errors. Consult when a run fails. |
+| tui.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/tui.mdx | Terminal UI usage, slash commands (/share, /undo, /redo, /init, /compact…), file refs. TUI only. |
+| web.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/web.mdx | `opencode web` browser UI. Consult to give a human a browser view. |
+| windows-wsl.md | https://raw.githubusercontent.com/anomalyco/opencode/dev/packages/web/src/content/docs/windows-wsl.mdx | Windows/WSL notes. Only on Windows. |
