@@ -1,0 +1,48 @@
+# pi official docs (markdown copies)
+Downloaded 2026-10-31 from https://github.com/earendil-works/pi/tree/main/packages/coding-agent/docs (raw files; `images/` skipped). Same content as https://pi.dev/docs/latest. Refresh: `./update.sh`.
+
+| File | Source | Summary / when to consult |
+|---|---|---|
+| cli-integration.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/cli-integration.md | Choosing between print, JSON, RPC and SDK integration; stdin/stdout behaviour. Consult when scripting pi. |
+| cli.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/cli.md | Every command and flag (print/json/rpc modes, sessions, tools, mcp, auth). Consult before using any flag; `--help` is authoritative for the installed version. |
+| codemode.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/codemode.md | `codemode` tool: model writes JS that calls other tools (default path for MCP tools). Consult when MCP tools seem missing or for tool restriction. |
+| compaction.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/compaction.md | Auto-compaction thresholds, branch summaries, hooks. Consult for long sessions. |
+| configuration.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/configuration.md | User (~/.pi/agent) vs project (.pi) config files and precedence. Consult before editing config. |
+| containerization.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/containerization.md | Running pi in containers/VMs/sandboxes and the limits of each. Consult for stronger isolation. |
+| custom-provider.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/custom-provider.md | Writing a provider extension for non-standard APIs. Rarely needed. |
+| docs.json | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/docs.json | Site navigation (same structure as https://pi.dev/docs/latest). Use to see how pages are grouped. |
+| environment-variables.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/environment-variables.md | Provider keys and PI_* variables (agent dir, session dir, offline, telemetry). Consult when tuning via env. |
+| extensions.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/extensions.md | TypeScript extensions: events (tool_call can block), custom tools, commands, UI. Consult when changing ../hooks/guard.ts. |
+| how-pi-works.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/how-pi-works.md | Agent loop, context assembly (system prompt, AGENTS.md, skills, tools), session storage. Consult to understand what the model sees. |
+| index.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/index.md | What pi is and the docs map. Start here if unfamiliar. |
+| json.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/json.md | JSONL event stream of `--mode json` (session header, agent/turn/message/tool events, agent_settled). Primary reference for parsing our headless runs. |
+| keybindings.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/keybindings.md | Keybinding actions and config. TUI only. |
+| llama-cpp.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/llama-cpp.md | Local models via llama.cpp router. Only for local inference. |
+| mcp.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/mcp.md | Native MCP client (since 1.x): `pi mcp add/list/login`, ~/.pi/agent/mcp.json, exposure modes (codemode/deferred/direct/hidden), OAuth. Consult when adding MCP servers. |
+| message-types.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/message-types.md | AgentMessage/content block shapes shared by JSON, RPC, SDK and session files. Consult when parsing messages or usage/cost. |
+| models-configuration.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/models-configuration.md | models.json schema for custom models/endpoints (generated reference). Consult for unlisted OpenRouter models or overrides. |
+| models.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/models.md | Choosing models, thinking levels, cache lifetimes. Consult when picking/switching models. |
+| nvidia-rtx-llama-cpp.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/nvidia-rtx-llama-cpp.md | NVIDIA RTX tuned llama.cpp recipes. Only for local GPU inference. |
+| packages.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/packages.md | Installing/sharing extensions, skills, prompts, themes as npm/git packages (`pi install`). Consult before installing third-party packages. |
+| prompt-templates.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/prompt-templates.md | Markdown prompt templates as `/` commands. Consult for reusable prompts. |
+| providers.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/providers.md | Built-in providers and auth (API key vs subscription OAuth), incl. OpenRouter. Consult for auth problems. |
+| quickstart.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/quickstart.md | Install, log in/choose a provider, first run. Consult when reinstalling. |
+| rpc-commands.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/rpc-commands.md | All RPC commands (prompt, steer, abort, get_state, set_model, compact…). Consult with rpc.md. |
+| rpc-extension-ui.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/rpc-extension-ui.md | How extension UI requests (confirm/select/input) travel over RPC. Consult when an RPC client must answer prompts. |
+| rpc.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/rpc.md | Long-lived `--mode rpc` protocol over stdin/stdout: framing, lifecycle, errors, shutdown. Consult for a persistent driver/gateway. |
+| sdk.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/sdk.md | Embedding pi in Node/Bun via @earendil-works/pi-coding-agent. Consult when building an app around pi. |
+| security.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/security.md | Threat model: no per-call approval, project trust, isolation advice. Read before unattended runs. |
+| session-format.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/session-format.md | JSONL session file schema (tree of entries). Consult when reading session files directly. |
+| sessions.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/sessions.md | Continue/resume/fork, tree branching, compaction, session storage, export/share. Consult for follow-up runs. |
+| settings.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/settings.md | Every settings.json key (model, thinking, tools, compaction, retries, shell, resources/extensions). Consult when changing defaults. |
+| shell-aliases.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/shell-aliases.md | Making bash tool load aliases/profile. Consult when commands behave differently than in a login shell. |
+| skills.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/skills.md | Skill discovery locations (~/.pi/agent/skills, .pi/skills, .agents/skills), format, `--skill`. Consult when adding skills. |
+| slash-commands.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/slash-commands.md | Built-in interactive slash commands (/model, /session, /tree, /compact, /mcp…). TUI only. |
+| terminal-setup.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/terminal-setup.md | Terminal quirks (keys, images, IME). TUI only. |
+| termux.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/termux.md | Running pi on Android/Termux. Only for phone installs. |
+| themes.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/themes.md | Themes for TUI and HTML export. Cosmetic. |
+| tmux.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/tmux.md | Running pi inside tmux (extended keys). TUI only. |
+| tui.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/tui.md | pi-tui component system for extension UIs. Only for extension UI work. |
+| usage.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/usage.md | Interactive terminal use: prompts, steering, model switching, `!` shell, export/share. Only when driving the TUI. |
+| virtual-models.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/virtual-models.md | Router models that pick a physical model per request (cost/task routing). Consult to set up cheap/strong routing. |
+| windows.md | https://raw.githubusercontent.com/earendil-works/pi/main/packages/coding-agent/docs/windows.md | Native Windows / WSL notes. Only on Windows. |

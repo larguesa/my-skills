@@ -8,6 +8,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 | [Animation Video Maker](#animation-video-maker) | Vídeo curto explicativo a partir de um brief, com cena editável e MP4 gerado na sua máquina | 20 exemplos e 3 demonstrações renderizados e conferidos |
 | [Telegraphist](#telegraphist) | Conversa econômica com o agente, para gastar menos tokens | Amostra interrompida, sem juízes: respostas mais curtas, tokens totais maiores |
 | [Claude Code User](#claude-code-user) | Guia para o agente usar o Claude Code em modo headless (`claude -p`), com a documentação oficial em markdown | Testado no Claude Code 2.1.316: criar e retomar sessão, saída estruturada, modelo reserva e hook de proteção |
+| [Pi User](#pi-user) | Guia para o agente usar o pi (pi.dev) em modo headless (`pi -p --mode json`), com a documentação oficial em markdown | Testado no pi 1.4.0: saída JSON, retomada de sessão, extensão de proteção e servidor MCP |
 
 ## Humanizador PT-BR
 
@@ -46,6 +47,14 @@ Ensina o agente a delegar trabalho de código ao Claude Code sem acompanhamento:
 Peça, por exemplo: "Use claude-code-user e delegue ao Claude Code a refatoração deste módulo, com testes."
 
 [Claude Code User](skills/claude-code-user/SKILL.md) · [resumo de consulta](skills/claude-code-user/reference.md) · [documentação oficial](skills/claude-code-user/docs/README.md)
+
+## Pi User
+
+Ensina o agente a delegar trabalho de código ao pi sem acompanhamento: quando vale usar o pi em vez do Claude Code, a chamada padrão com `pi -p --mode json`, como ler os eventos JSON e o custo, retomada e bifurcação de sessão, modo RPC para agentes de longa duração, modelos via OpenRouter, MCP nativo (desde a versão 1.x), uma extensão que bloqueia `git push`, acesso a segredos e comandos perigosos, e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown dos 43 arquivos da documentação oficial, atualizáveis com `docs/update.sh`. Instrução em inglês.
+
+Peça, por exemplo: "Use pi-user e peça ao pi para criar um script com testes, usando o MiMo pela OpenRouter."
+
+[Pi User](skills/pi-user/SKILL.md) · [resumo de consulta](skills/pi-user/reference.md) · [documentação oficial](skills/pi-user/docs/README.md)
 
 ## Estrutura
 
