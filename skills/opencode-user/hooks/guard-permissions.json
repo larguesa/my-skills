@@ -1,0 +1,19 @@
+{
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git push": "deny",
+      "git push *": "deny",
+      "curl * -X POST*": "deny",
+      "curl * -X PUT*": "deny",
+      "curl * -X DELETE*": "deny",
+      "curl * -X PATCH*": "deny",
+      "*.secrets*": "deny",
+      "rm -rf /": "deny",
+      "rm -rf / *": "deny",
+      "rm -rf /*": "deny"
+    },
+    "read": { "*": "allow", "*.env": "deny", "*.env.*": "deny", "*.env.example": "allow", "*/.secrets/*": "deny", "*auth.json": "deny" },
+    "edit": { "*": "allow", "*.env": "deny", "*/.secrets/*": "deny", "*auth.json": "deny" }
+  }
+}
