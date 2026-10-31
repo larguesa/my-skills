@@ -1,0 +1,21 @@
+# Codex execpolicy guard (Starlark). Install: ln -s <this file> ~/.codex/rules/guard.rules
+# Edit the secrets path below to yours.
+# Most restrictive match wins (forbidden > prompt > allow). Rules govern commands Codex
+# asks to run; the workspace-write sandbox (no network) is the primary guard.
+prefix_rule(pattern = ["git", "push"], decision = "forbidden",
+    justification = "No push without the user's OK. Commit locally; the operator pushes.",
+    match = ["git push", "git push origin main"], not_match = ["git status"])
+prefix_rule(pattern = ["git", ["remote", "config"]], decision = "forbidden",
+    justification = "Do not change remotes or git config.")
+prefix_rule(pattern = ["gh", ["pr", "release", "repo", "secret", "api"]], decision = "forbidden",
+    justification = "No GitHub writes; report what you would do instead.")
+prefix_rule(pattern = [["npm", "pnpm", "yarn"], "publish"], decision = "forbidden",
+    justification = "No publishing.")
+prefix_rule(pattern = [["vercel", "netlify", "wrangler", "flyctl", "kubectl", "terraform"]], decision = "forbidden",
+    justification = "No deploys or infra changes without the user's OK.")
+prefix_rule(pattern = ["rm", ["-rf", "-fr"], "/"], decision = "forbidden",
+    justification = "Never delete the filesystem root.")
+prefix_rule(pattern = [["cat", "less", "head", "tail", "cp", "base64"], "/home/USER/.secrets"], decision = "forbidden",
+    justification = "Secrets are off limits.")
+prefix_rule(pattern = ["sudo"], decision = "forbidden",
+    justification = "No root; ask the operator.")
