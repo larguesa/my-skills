@@ -10,6 +10,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 | [Claude Code User](#claude-code-user) | Guia para o agente usar o Claude Code em modo headless (`claude -p`), com a documentação oficial em markdown | Testado no Claude Code 2.1.316: criar e retomar sessão, saída estruturada, modelo reserva e hook de proteção |
 | [Pi User](#pi-user) | Guia para o agente usar o pi (pi.dev) em modo headless (`pi -p --mode json`), com a documentação oficial em markdown | Testado no pi 1.4.0: saída JSON, retomada de sessão, extensão de proteção e servidor MCP |
 | [OpenCode User](#opencode-user) | Guia para o agente usar o OpenCode em modo headless (`opencode run --format json`), com a documentação oficial em markdown | Testado no OpenCode 1.19.5: saída JSON, retomada de sessão, regras de permissão de proteção e custo com e sem MCP |
+| [Codex User](#codex-user) | Guia para o agente usar o OpenAI Codex CLI em modo headless (`codex exec --json`), com a documentação oficial em markdown | Conferido no codex-cli 0.166.0: opções pelo `--help`, sandbox e regras de proteção testados; execuções com modelo não testadas (cota esgotada) |
 
 ## Humanizador PT-BR
 
@@ -64,6 +65,14 @@ Ensina o agente a delegar trabalho de código ao OpenCode sem acompanhamento: qu
 Peça, por exemplo: "Use opencode-user e peça ao OpenCode para corrigir este bug e rodar os testes."
 
 [OpenCode User](skills/opencode-user/SKILL.md) · [resumo de consulta](skills/opencode-user/reference.md) · [documentação oficial](skills/opencode-user/docs/README.md)
+
+## Codex User
+
+Ensina o agente a delegar trabalho de código ao OpenAI Codex CLI sem acompanhamento: quando vale usar o Codex em vez do Claude Code, do pi ou do OpenCode, a chamada padrão com `codex exec --json`, resposta final em arquivo (`-o`) ou em formato fixo (`--output-schema`), modos de sandbox e aprovação, regras de execução (`.rules`) que bloqueiam `git push`, publicação, deploy, `sudo` e acesso a segredos, retomada e bifurcação de sessão, revisão de código (`codex exec review`), AGENTS.md, skills, MCP, limites de uso do plano do ChatGPT e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown de 20 páginas da documentação oficial, atualizáveis com `docs/update.sh`. As execuções com modelo ainda não foram testadas, porque a cota da conta estava esgotada. Instrução em inglês.
+
+Peça, por exemplo: "Use codex-user e peça ao Codex para revisar as mudanças não commitadas deste repositório."
+
+[Codex User](skills/codex-user/SKILL.md) · [resumo de consulta](skills/codex-user/reference.md) · [documentação oficial](skills/codex-user/docs/README.md)
 
 ## Estrutura
 
