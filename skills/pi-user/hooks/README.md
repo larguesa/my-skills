@@ -1,0 +1,2 @@
+# Guard extension
+`guard.ts` is a pi extension: its `tool_call` handler blocks bash `git push`, mutating `curl -X POST/PUT/DELETE/PATCH`, `.secrets`/`.env` access and `rm -rf /`, plus read/write/edit of `.secrets`, `.env` or `auth.json` paths; the model gets the reason as a tool error. Load it per run with `pi -p ... -e "$SKILL_DIR/hooks/guard.ts"`, or add its absolute path to `extensions` in `~/.pi/agent/settings.json` to make it permanent. It is a tripwire, not a sandbox; for untrusted code run pi in a container (docs/containerization.md).
