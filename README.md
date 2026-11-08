@@ -1,95 +1,112 @@
 # my-skills
 
-Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vários projetos. Cada skill funciona sozinha: copie a pasta da skill para o diretório de skills do agente e carregue o `SKILL.md`; as subpastas `results/` e `tests/` são da avaliação e podem ficar de fora. Catálogo: [skills/index.md](skills/index.md).
+Ricardo Pupo Larguesa's personal skills for AI agents, reused across several projects. Each skill stands alone: copy its folder into the agent's skills directory and load the `SKILL.md`; the `results/` and `tests/` subfolders belong to the evaluation and can be left out. Catalog: [skills/index.md](skills/index.md).
 
-| Skill | Para que serve | O que foi medido |
+| Skill | What it is for | What was measured |
 |---|---|---|
-| [Humanizador PT-BR](#humanizador-pt-br) | Texto em português, escrito ou reescrito pelo agente, que soa como de um bom redator humano | Comparação amostral 0.9.1 versus 0.8.1 interrompida, 68 de 95 pares de redação julgados |
-| [Animation Video Maker](#animation-video-maker) | Vídeo curto explicativo a partir de um brief, com cena editável e MP4 gerado na sua máquina | 20 exemplos e 3 demonstrações renderizados e conferidos |
-| [Telegraphist](#telegraphist) | Conversa econômica com o agente, para gastar menos tokens | Amostra interrompida, sem juízes: respostas mais curtas, tokens totais maiores |
-| [Claude Code User](#claude-code-user) | Guia para o agente usar o Claude Code em modo headless (`claude -p`), com a documentação oficial em markdown | Testado no Claude Code 2.1.316: criar e retomar sessão, saída estruturada, modelo reserva e hook de proteção |
-| [Pi User](#pi-user) | Guia para o agente usar o pi (pi.dev) em modo headless (`pi -p --mode json`), com a documentação oficial em markdown | Testado no pi 1.4.0: saída JSON, retomada de sessão, extensão de proteção e servidor MCP |
-| [OpenCode User](#opencode-user) | Guia para o agente usar o OpenCode em modo headless (`opencode run --format json`), com a documentação oficial em markdown | Testado no OpenCode 1.19.5: saída JSON, retomada de sessão, regras de permissão de proteção e custo com e sem MCP |
-| [Codex User](#codex-user) | Guia para o agente usar o OpenAI Codex CLI em modo headless (`codex exec --json`), com a documentação oficial em markdown | Conferido no codex-cli 0.166.0: opções pelo `--help`, sandbox e regras de proteção testados; execuções com modelo não testadas (cota esgotada) |
-| [Antigravity User](#antigravity-user) | Guia para o agente usar o Google Antigravity CLI em modo headless (`agy -p`), com a documentação oficial em markdown | Testado no agy 1.4.2 (Windows): saída JSON e em fluxo, retomada, saída estruturada, negação silenciosa de comandos e regras de proteção; modo auto e sandbox não testados |
+| [Humanizador PT-BR](#humanizador-pt-br) | Portuguese text, written or rewritten by the agent, that reads like a good human writer's | Sample comparison 0.9.1 vs 0.8.1, interrupted, 68 of 95 writing pairs judged |
+| [Animation Video Maker](#animation-video-maker) | Short explainer video from a brief, with an editable scene and an MP4 rendered on your machine | 20 examples and 3 demos rendered and checked |
+| [Telegraphist](#telegraphist) | Economical conversation with the agent, to spend fewer tokens | Interrupted sample, no judges: shorter answers, higher total tokens |
+| [Claude Code User](#claude-code-user) | Guide for the agent to use Claude Code headless (`claude -p`), with the official docs in markdown | Tested on Claude Code 2.1.316: create and resume a session, structured output, fallback model and guard hook |
+| [Pi User](#pi-user) | Guide for the agent to use pi (pi.dev) headless (`pi -p --mode json`), with the official docs in markdown | Tested on pi 1.4.0: JSON output, session resume, guard extension and MCP server |
+| [OpenCode User](#opencode-user) | Guide for the agent to use OpenCode headless (`opencode run --format json`), with the official docs in markdown | Tested on OpenCode 1.19.5: JSON output, session resume, guard permission rules and cost with and without MCP |
+| [Codex User](#codex-user) | Guide for the agent to use the OpenAI Codex CLI headless (`codex exec --json`), with the official docs in markdown | Checked on codex-cli 0.166.0: options via `--help`, sandbox and guard rules tested; model runs not tested (quota exhausted) |
+| [Antigravity User](#antigravity-user) | Guide for the agent to use the Google Antigravity CLI headless (`agy -p`), with the official docs in markdown | Tested on agy 1.4.2 (Windows): JSON and streaming output, resume, structured output, silent command denial and guard rules; auto mode and sandbox not tested |
+| [Agentic Orchestrator](#agentic-orchestrator) | Orchestration of several agents through natural language only, with flow, state and events in YAML, JSON or Markdown, no frameworks or scripts | Examples checked for format (valid YAML and JSON, no broken references); no evaluation with and without the skill |
 
 ## Humanizador PT-BR
 
-Para quando o agente vai escrever em português brasileiro, ou quando você tem um texto gerado por IA que soa como IA. O agente entrega o texto que um bom redator do gênero entregaria: natural, no registro certo, sem os clichês que denunciam a IA, com fatos e voz do autor preservados. Serve para notícia, e-mail, documentação, relatório, proposta, ensaio, post, conto ou crônica.
+For when the agent is going to write in Brazilian Portuguese, or when you have AI-generated text that sounds like AI. The agent delivers what a good writer of the genre would: natural, in the right register, free of the clichés that give AI away, with the author's facts and voice preserved. Works for news, email, documentation, reports, proposals, essays, posts, short stories and chronicles. The skill itself is in Portuguese, since Portuguese text is its purpose.
 
-Peça, por exemplo: "Reescreva este texto gerado por IA para soar humano, sem mudar fatos nem números: [...]. Use humanizador-pt-br."
+Ask, for example: "Reescreva este texto gerado por IA para soar humano, sem mudar fatos nem números: [...]. Use humanizador-pt-br."
 
-O propósito é humanizar textos produzidos ou revisados por IA. A melhora no julgamento de humanização é o critério de sucesso; economia de tempo e tokens não é objetivo desta skill. A avaliação compara textos anonimizados, preservando a fidelidade aos fatos e ao pedido. [Última comparação, com cobertura e textos completos](skills/humanizador-pt-br/results/samples/2026-10-25/README.md).
+The goal is to humanize text produced or revised by AI. Improvement in judged humanization is the success criterion; saving time or tokens is not a goal of this skill. The evaluation compares anonymized texts while keeping them faithful to the facts and the request. [Latest comparison, with coverage and full texts](skills/humanizador-pt-br/results/samples/2026-10-25/README.md).
 
-[Humanizador PT-BR 0.8.1: instalação e exemplos](skills/humanizador-pt-br/README.md) · [avaliação](skills/humanizador-pt-br/results/README.md)
+[Humanizador PT-BR 0.8.1: installation and examples](skills/humanizador-pt-br/README.md) · [evaluation](skills/humanizador-pt-br/results/README.md)
 
 ## Animation Video Maker
 
-Transforma um brief em vídeo curto explicativo, de produto ou tipográfico. O agente escreve a cena em código, com texto e logos exatos, e a exporta para MP4 na sua máquina, sem API de geração de vídeo; a cena-fonte continua editável. Exportar exige Python, Playwright com Chromium e FFmpeg. Para imagens orgânicas, o pacote orienta rotas generativa e híbrida com um provedor configurado à parte, sem adaptador pronto.
+Turns a brief into a short explainer, product or typographic video. The agent writes the scene in code, with exact text and logos, and exports it to MP4 on your machine, with no video-generation API; the source scene stays editable. Exporting requires Python, Playwright with Chromium, and FFmpeg. For organic imagery, the package describes generative and hybrid routes with a separately configured provider, without a ready-made adapter.
 
-Inclui 22 estilos visuais, receitas criativas originais e técnicas de movimento, para vídeos explicativos, demonstrações de produto, tipografia animada e narrativa com dados. Peça, por exemplo: "Crie uma animação de 20 segundos explicando nossa abordagem de migração para gestores não técnicos. Use o fluxo do Animation Video Maker, sugira um estilo e entregue a cena editável e um MP4 validado."
+Includes 22 visual styles, original creative recipes and motion techniques, for explainers, product demos, kinetic typography and data storytelling. Ask, for example: "Create a 20-second animation explaining our migration approach to non-technical managers. Use the Animation Video Maker workflow, suggest a style, and deliver the editable scene and a validated MP4."
 
-Para ver antes de usar: 20 exemplos originais, cada um com MP4, cena-fonte editável e guia do estilo, conferidos no [relatório de validação](skills/animation-video-maker/references/validation.md), e três demonstrações sem marca na [validação da 0.2.0](skills/animation-video-maker/references/validation-0.2.md). Os 20 exemplos usam a marca T2S Tech, excluída da licença MIT; troque marca e conteúdo ao reaproveitar.
+To look before using: 20 original examples, each with MP4, editable source scene and style guide, checked in the [validation report](skills/animation-video-maker/references/validation.md), and three unbranded demos in the [0.2.0 validation](skills/animation-video-maker/references/validation-0.2.md). The 20 examples use the T2S Tech brand, which is excluded from the MIT license; replace brand and content when reusing them.
 
-[Animation Video Maker](skills/animation-video-maker/README.md) (em inglês) · [skill do agente](skills/animation-video-maker/SKILL.md) · [galeria](skills/animation-video-maker/gallery.html), que roda localmente depois de baixar o pacote · [licença e avisos](skills/animation-video-maker/NOTICE.md)
+[Animation Video Maker](skills/animation-video-maker/README.md) · [agent skill](skills/animation-video-maker/SKILL.md) · [gallery](skills/animation-video-maker/gallery.html), which runs locally after downloading the package · [license and notices](skills/animation-video-maker/NOTICE.md)
 
 ## Telegraphist
 
-Serve para economizar tokens na conversa com o agente: ele responde como um telegrafista, em frases curtas, com abreviações e símbolos como `->`, `=` e `+`, sem repetir a pergunta e entregando só o dado ou o próximo passo pedido. Você também lê menos. A instrução é em inglês.
+Saves tokens in the conversation with the agent: it answers like a telegraphist, in short sentences with abbreviations and symbols such as `->`, `=` and `+`, without restating the question, delivering only the requested fact or next step. You read less, too.
 
-Peça, por exemplo: "Use telegraphist: qual a diferença entre TCP e UDP?"
+Ask, for example: "Use telegraphist: what is the difference between TCP and UDP?"
 
-Medido até agora, sem juízes: respostas mais curtas, não economia total. A única execução com a instrução atual foi interrompida em 67 de 336 episódios. Em 18 pares com resposta completa nos dois braços (outros 3 pares terminaram vazios ou truncados nos dois braços e ficaram fora), a versão com skill teve 40,8% menos palavras e 27,3% menos tokens de saída, mas 49,8% mais tokens de entrada, porque a instrução vai em cada requisição; o total subiu 14,7% e o custo, 1,6%. Nenhum juiz verificou se as respostas curtas preservaram a informação necessária.
+Measured so far, without judges: shorter answers, not overall savings. The only run with the current instruction was interrupted at 67 of 336 episodes. In 18 pairs with a complete answer in both arms (3 other pairs ended empty or truncated in both arms and were excluded), the skill version used 40.8% fewer words and 27.3% fewer output tokens, but 49.8% more input tokens, because the instruction goes with every request; the total rose 14.7% and the cost 1.6%. No judge checked whether the short answers kept the necessary information.
 
-[Telegraphist](skills/telegraphist/SKILL.md) · [relatório de testes](skills/telegraphist/tests/REPORT.md) (em inglês)
+[Telegraphist](skills/telegraphist/SKILL.md) · [test report](skills/telegraphist/tests/REPORT.md)
 
 ## Claude Code User
 
-Ensina o agente a delegar trabalho de código ao Claude Code sem acompanhamento: quando vale delegar, a chamada padrão com `claude -p`, permissões, limites de turnos e de gasto, retomada de sessão, tarefas longas, um hook que bloqueia `git push` e comandos perigosos, e como conferir o resultado em vez de confiar no resumo. Traz um resumo de consulta rápida e cópias em markdown da documentação oficial (CLI, comandos, variáveis de ambiente, ferramentas, modo interativo, checkpoints, hooks, channels, glossário e headless), atualizáveis com `docs/update.sh`. Instrução em inglês.
+Teaches the agent to delegate coding work to Claude Code unattended: when delegating pays off, the standard `claude -p` call, permissions, turn and spend limits, session resume, long jobs, a hook that blocks `git push` and dangerous commands, and how to check the result instead of trusting the summary. Includes a quick-reference cheat-sheet and markdown copies of the official docs (CLI, commands, environment variables, tools, interactive mode, checkpoints, hooks, channels, glossary and headless), refreshable with `docs/update.sh`.
 
-Peça, por exemplo: "Use claude-code-user e delegue ao Claude Code a refatoração deste módulo, com testes."
+Ask, for example: "Use claude-code-user and delegate the refactoring of this module to Claude Code, with tests."
 
-[Claude Code User](skills/claude-code-user/SKILL.md) · [resumo de consulta](skills/claude-code-user/reference.md) · [documentação oficial](skills/claude-code-user/docs/README.md)
+[Claude Code User](skills/claude-code-user/SKILL.md) · [cheat-sheet](skills/claude-code-user/reference.md) · [official docs](skills/claude-code-user/docs/README.md)
 
 ## Pi User
 
-Ensina o agente a delegar trabalho de código ao pi sem acompanhamento: quando vale usar o pi em vez do Claude Code, a chamada padrão com `pi -p --mode json`, como ler os eventos JSON e o custo, retomada e bifurcação de sessão, modo RPC para agentes de longa duração, modelos via OpenRouter, MCP nativo (desde a versão 1.x), uma extensão que bloqueia `git push`, acesso a segredos e comandos perigosos, e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown dos 43 arquivos da documentação oficial, atualizáveis com `docs/update.sh`. Instrução em inglês.
+Teaches the agent to delegate coding work to pi unattended: when to use pi instead of Claude Code, the standard `pi -p --mode json` call, how to read the JSON events and the cost, session resume and fork, RPC mode for long-running agents, models via OpenRouter, native MCP (since 1.x), an extension that blocks `git push`, secret access and dangerous commands, and how to check the result. Includes a quick-reference cheat-sheet and markdown copies of the 43 files of the official docs, refreshable with `docs/update.sh`.
 
-Peça, por exemplo: "Use pi-user e peça ao pi para criar um script com testes, usando o MiMo pela OpenRouter."
+Ask, for example: "Use pi-user and have pi write a script with tests, using MiMo through OpenRouter."
 
-[Pi User](skills/pi-user/SKILL.md) · [resumo de consulta](skills/pi-user/reference.md) · [documentação oficial](skills/pi-user/docs/README.md)
+[Pi User](skills/pi-user/SKILL.md) · [cheat-sheet](skills/pi-user/reference.md) · [official docs](skills/pi-user/docs/README.md)
 
 ## OpenCode User
 
-Ensina o agente a delegar trabalho de código ao OpenCode sem acompanhamento: quando vale usar o OpenCode em vez do pi ou do Claude Code, a chamada padrão com `opencode run --format json`, como ler os eventos JSON e o custo, retomada e bifurcação de sessão, servidor persistente (`opencode serve` e `--attach`), agentes build e plan, modelos via OpenRouter, MCP, regras de permissão que bloqueiam `git push`, acesso a segredos e comandos perigosos, e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown dos 33 arquivos da documentação oficial (convertidos de MDX), atualizáveis com `docs/update.sh`. Instrução em inglês.
+Teaches the agent to delegate coding work to OpenCode unattended: when to use OpenCode instead of pi or Claude Code, the standard `opencode run --format json` call, how to read the JSON events and the cost, session resume and fork, a persistent server (`opencode serve` and `--attach`), the build and plan agents, models via OpenRouter, MCP, permission rules that block `git push`, secret access and dangerous commands, and how to check the result. Includes a quick-reference cheat-sheet and markdown copies of the 33 files of the official docs (converted from MDX), refreshable with `docs/update.sh`.
 
-Peça, por exemplo: "Use opencode-user e peça ao OpenCode para corrigir este bug e rodar os testes."
+Ask, for example: "Use opencode-user and have OpenCode fix this bug and run the tests."
 
-[OpenCode User](skills/opencode-user/SKILL.md) · [resumo de consulta](skills/opencode-user/reference.md) · [documentação oficial](skills/opencode-user/docs/README.md)
+[OpenCode User](skills/opencode-user/SKILL.md) · [cheat-sheet](skills/opencode-user/reference.md) · [official docs](skills/opencode-user/docs/README.md)
 
 ## Codex User
 
-Ensina o agente a delegar trabalho de código ao OpenAI Codex CLI sem acompanhamento: quando vale usar o Codex em vez do Claude Code, do pi ou do OpenCode, a chamada padrão com `codex exec --json`, resposta final em arquivo (`-o`) ou em formato fixo (`--output-schema`), modos de sandbox e aprovação, regras de execução (`.rules`) que bloqueiam `git push`, publicação, deploy, `sudo` e acesso a segredos, retomada e bifurcação de sessão, revisão de código (`codex exec review`), AGENTS.md, skills, MCP, limites de uso do plano do ChatGPT e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown de 20 páginas da documentação oficial, atualizáveis com `docs/update.sh`. As execuções com modelo ainda não foram testadas, porque a cota da conta estava esgotada. Instrução em inglês.
+Teaches the agent to delegate coding work to the OpenAI Codex CLI unattended: when to use Codex instead of Claude Code, pi or OpenCode, the standard `codex exec --json` call, the final answer in a file (`-o`) or in a fixed format (`--output-schema`), sandbox and approval modes, execution rules (`.rules`) that block `git push`, publishing, deploys, `sudo` and secret access, session resume and fork, code review (`codex exec review`), AGENTS.md, skills, MCP, ChatGPT plan usage limits, and how to check the result. Includes a quick-reference cheat-sheet and markdown copies of 20 pages of the official docs, refreshable with `docs/update.sh`. Model runs have not been tested yet, because the account's quota was exhausted.
 
-Peça, por exemplo: "Use codex-user e peça ao Codex para revisar as mudanças não commitadas deste repositório."
+Ask, for example: "Use codex-user and have Codex review the uncommitted changes in this repository."
 
-[Codex User](skills/codex-user/SKILL.md) · [resumo de consulta](skills/codex-user/reference.md) · [documentação oficial](skills/codex-user/docs/README.md)
+[Codex User](skills/codex-user/SKILL.md) · [cheat-sheet](skills/codex-user/reference.md) · [official docs](skills/codex-user/docs/README.md)
 
 ## Antigravity User
 
-Ensina o agente a delegar trabalho de código ao Antigravity CLI (`agy`), do Google, sem acompanhamento. Cobre quando vale usar o Antigravity em vez dos outros agentes, a chamada padrão com `agy -p --output-format stream-json` e como ler os eventos e o uso de tokens. Mostra também como perceber as negações silenciosas: no modo headless, um comando sem permissão é recusado e a execução termina como sucesso, com o aviso só no stderr. O resto: regras de permissão que bloqueiam `git push`, publicação, deploy, `sudo` e acesso a segredos; modos de execução e sandbox; retomada de conversa; saída em formato fixo (`--json-schema`); o risco dos hooks do próprio repositório, que rodam sem perguntar; AGENTS.md, skills, MCP, cotas do plano Google e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown de 42 páginas da documentação oficial, atualizáveis com `docs/update.sh`. Instrução em inglês.
+Teaches the agent to delegate coding work to Google's Antigravity CLI (`agy`) unattended. Covers when to use Antigravity instead of the other agents, the standard `agy -p --output-format stream-json` call, and how to read the events and token usage. It also shows how to catch silent denials: in headless mode, a command without permission is refused and the run still ends as a success, with the notice only on stderr. The rest: permission rules that block `git push`, publishing, deploys, `sudo` and secret access; execution modes and sandbox; conversation resume; fixed-format output (`--json-schema`); the risk of the repository's own hooks, which run without asking; AGENTS.md, skills, MCP, Google plan quotas, and how to check the result. Includes a quick-reference cheat-sheet and markdown copies of 42 pages of the official docs, refreshable with `docs/update.sh`.
 
-Peça, por exemplo: "Use antigravity-user e peça ao Antigravity para corrigir este bug e rodar os testes."
+Ask, for example: "Use antigravity-user and have Antigravity fix this bug and run the tests."
 
-[Antigravity User](skills/antigravity-user/SKILL.md) · [resumo de consulta](skills/antigravity-user/reference.md) · [documentação oficial](skills/antigravity-user/docs/README.md) · [regras de proteção](skills/antigravity-user/rules/README.md)
+[Antigravity User](skills/antigravity-user/SKILL.md) · [cheat-sheet](skills/antigravity-user/reference.md) · [official docs](skills/antigravity-user/docs/README.md) · [guard rules](skills/antigravity-user/rules/README.md)
 
-## Estrutura
+## Agentic Orchestrator
 
-- **AGENTS.md**: propósito do repositório e regras para agentes.
-- **skills/**: uma pasta por skill e o catálogo `index.md`.
-  - **SKILL.md**: instruções que o agente carrega.
-  - **README.md** (quando houver): uso, instalação e situação.
-  - **AGENTS.md** (opcional): regras para alterar e testar a skill.
-  - **references/**, **assets/**, **scripts/** (opcionais): material de consulta, mídias e scripts usados pela skill.
-  - **reference.md**, **docs/**, **hooks/** ou **rules/** (nas skills `*-user`): resumo de consulta, documentação oficial em markdown (atualizável com `docs/update.sh`) e proteções que bloqueiam push, deploy e acesso a segredos.
-  - **results/** ou **tests/** (opcionais): avaliação e testes; não precisam ir para o diretório de skills do agente.
+Teaches any agent to orchestrate other agents through natural language only, with no framework and no orchestration script. The agent itself is the engine: it reads a flow file in YAML or JSON, delegates work to subagents or to other command-line agents (with this repository's `*-user` skills), checks the results, records state and events in files, and decides the next step. That is why another session can audit or resume the work.
+
+The content is conceptual and prescriptive:
+- **Flow patterns:** 19, including sequential, parallel fan-out/fan-in, hierarchical, router, producer-verifier, adaptive, competing hypotheses, consensus, judge panel, debate and council.
+- **Communication patterns:** direct, tool-mediated, manager hub, broadcast, blackboard, handoff and mailbox.
+- **Loop and graph engineering:** exit criteria, budgets, file ownership and resume.
+- **File format:** one format for flow and state, with four complete examples.
+
+Synthesized from four skill repositories (wshobson/agents, affaan-m/ECC, cobusgreyling/loop-engineering and qodex-ai/ai-agent-skills) and a compilation on harness, loop and graph engineering.
+
+Ask, for example: "Use agentic-orchestrator: implement this feature with Claude Code, get an independent review from Codex, and only show me the result once the tests pass."
+
+[Agentic Orchestrator](skills/agentic-orchestrator/SKILL.md) · [flow patterns](skills/agentic-orchestrator/references/flow-patterns.md) · [file format](skills/agentic-orchestrator/references/flow-spec.md)
+
+## Structure
+
+- **AGENTS.md**: repository purpose and rules for agents.
+- **skills/**: one folder per skill, plus the `index.md` catalog.
+  - **SKILL.md**: the instructions the agent loads.
+  - **README.md** (when present): usage, installation and status.
+  - **AGENTS.md** (optional): rules for changing and testing the skill.
+  - **references/**, **assets/**, **scripts/** (optional): reference material, media and scripts used by the skill.
+  - **reference.md**, **docs/**, **hooks/** or **rules/** (in the `*-user` skills): cheat-sheet, official docs in markdown (refreshable with `docs/update.sh`) and guards that block push, deploys and secret access.
+  - **results/** or **tests/** (optional): evaluation and tests; they need not go into the agent's skills directory.

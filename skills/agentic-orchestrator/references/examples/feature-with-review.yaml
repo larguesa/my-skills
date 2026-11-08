@@ -1,0 +1,68 @@
+# Pattern: sequential + producer-verifier loop + human gate.
+# A coding agent implements, a deterministic check and a different model review it,
+# the user approves before anything is committed.
+flow: add-csv-export
+version: 1
+objective:
+  goal: Add CSV export to the report page, matching the existing PDF export options.
+  done_when:
+    - "`npm test` passes, including new tests for the CSV exporter."
+    - The reviewer reports no blocking finding against the spec in out/plan/spec.md.
+    - The user approved the diff.
+  out_of_scope: [changing the PDF exporter, new dependencies]
+  constraints: [do not commit or push, no network]
+limits:
+  max_parallel: 1
+  max_agent_runs: 12
+  max_iterations: 3
+  stagnation: the same blocking finding survives two consecutive fixes
+  delegation_depth: 1
+gates:
+  - before: commit, push or any change outside the repository
+  - before: changing objective, done_when or limits
+agents:
+  planner:  { runs_on: self }
+  coder:    { runs_on: "cli: claude -p (skill claude-code-user)", can: [read, write: src/ and test/, run: npm test], cannot: [git commit, git push, network] }
+  reviewer: { runs_on: "cli: codex exec review (skill codex-user)", can: [read], context: fresh, note: different model family from coder }
+steps:
+  - id: spec
+    agent: planner
+    task: Read the PDF exporter and the report page; write the spec (options, column order, encoding, edge cases) and the test list.
+    output: out/plan/spec.md
+    accept: [every PDF export option is mapped or explicitly excluded]
+  - id: implement
+    agent: coder
+    needs: [spec]
+    inputs: [out/plan/spec.md]
+    task: Implement the CSV exporter and its tests following the spec. Report changed files and the test output.
+    owns: [src/export/csv*, test/export/csv*]
+    output: out/implement/report-{attempt}.md
+    verify: { by: check, run: npm test }
+    loop:
+      until: tests pass and the review step has no blocking finding
+      max: 3
+      feedback: failing test names with output, and the reviewer's blocking findings with file and line
+      on_stagnation: escalate to human with the findings and the diff
+  - id: review
+    agent: reviewer
+    needs: [implement]
+    inputs: [out/plan/spec.md, the uncommitted diff]
+    task: Review the diff against the spec. Mark each finding blocking or minor; cite file and line.
+    output: out/review/V-{attempt}.md
+    accept: [no blocking finding]          # the verdict that lets the flow advance
+    on_fail: { goto: implement }           # back edge; bounded by implement.loop.max
+  - id: approve
+    human: Show the diff summary, test result and last review; ask to approve, request changes, or stop.
+    needs: [review]
+    route:                                 # the recorded decision is this step's acceptance
+      - { when: user requests changes, goto: implement }
+      - { when: user says stop, end: cancelled }
+      - { default: finish }
+  - id: finish
+    agent: planner
+    needs: [approve]
+    task: Write the final report (what changed, evidence, open minor findings, agent runs used). Do not commit.
+    output: out/REPORT.md
+    accept: [every changed file is listed with the final test output attached]
+state: state.yaml
+log: events.jsonl

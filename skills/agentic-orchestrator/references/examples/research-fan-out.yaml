@@ -1,0 +1,69 @@
+# Pattern: parallel fan-out/fan-in + contestation + reconciliation by evidence.
+# Independent researchers cover distinct sub-questions; a separate agent tries to refute
+# the consolidated claims; disagreements are settled by sources, not by votes.
+flow: vector-db-choice
+version: 1
+objective:
+  goal: Recommend a vector database for a 50M-embedding, single-region service, or state that the evidence is insufficient.
+  done_when:
+    - Each sub-question has an answer with cited sources, or an explicit "not found" with the coverage searched.
+    - Every claim used in the recommendation survived the contestation step or is marked uncertain.
+  out_of_scope: [benchmarks run by us, pricing negotiation]
+  constraints: [public sources only, record access date for each source]
+limits:
+  max_parallel: 4
+  max_agent_runs: 16
+  max_iterations: 2
+  stagnation: a re-run of a sub-question adds no new source
+  delegation_depth: 1
+gates:
+  - before: changing the sub-questions after fan-out started
+agents:
+  lead:       { runs_on: self }
+  researcher: { runs_on: subagent, can: [read, web_search], context: fresh }
+  contester:  { runs_on: subagent, can: [read, web_search], context: fresh, note: "never sees the researchers' reasoning, only claims and sources" }
+steps:
+  - id: scope
+    agent: lead
+    task: Split the question into 4-6 independent sub-questions (scale limits, filtering, ops burden, cost model, ecosystem). Write them with what counts as an answer.
+    output: out/scope/questions.yaml
+    accept: [sub-questions do not overlap, each has a stated answer format]
+  - id: research
+    agent: researcher
+    needs: [scope]
+    for_each: items in out/scope/questions.yaml
+    max_parallel: 4
+    task: Answer one sub-question. Separate observed facts (with source and date), inferences, and gaps.
+    output: out/research/{item}.md
+    accept: ["each fact has a source and access date, or the gap states the coverage searched"]
+    join: { policy: all, on_missing: mark the synthesis incomplete and name the missing sub-question }
+  - id: consolidate
+    agent: lead
+    needs: [research]
+    task: Merge the findings into a claims table (claim, sources, supporting, contradicting). Do not merge claims just because they sound alike. Keep contradictions.
+    output: out/consolidate/claims.md
+    accept: [every claim links to at least one research file and source]
+  - id: contest
+    agent: contester
+    needs: [consolidate]
+    inputs: [out/consolidate/claims.md]
+    task: Try to refute each claim that the recommendation would rely on. For each, report refuted, weakened, or survived, with sources.
+    output: out/contest/V-{attempt}.md
+    accept: [every claim the recommendation relies on has a verdict with sources]
+  - id: reconcile
+    agent: lead
+    needs: [contest]
+    task: Settle each disputed claim by the sources. If sources conflict and none is decisive, keep the claim as uncertain. Agreement between agents is not evidence.
+    output: out/reconcile/claims-final.md
+    accept: [no claim is marked settled without a decisive source]
+    route:
+      - { when: a decisive sub-question is still unanswered and iterations remain, goto: research }   # re-runs only that sub-question
+      - { default: synthesize }
+  - id: synthesize
+    agent: lead
+    needs: [reconcile]
+    task: Write the recommendation, or "insufficient evidence" with what is missing. Link every claim to its source.
+    output: out/REPORT.md
+    accept: [every claim in the recommendation links to claims-final.md]
+state: state.yaml
+log: events.jsonl

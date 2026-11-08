@@ -1,0 +1,72 @@
+# Pattern: adaptive (dynamic replanning) + competing hypotheses in parallel + fix loop.
+# The plan may grow when evidence refutes every hypothesis; the objective may not.
+flow: flaky-checkout-test
+version: 1
+objective:
+  goal: Find the root cause of the intermittent failure of test_checkout_total and fix it, or report what was ruled out.
+  done_when:
+    - "The root cause is supported by a reproduction: the test fails before the fix, and after it passes N consecutive runs with N >= 3/p, p being the failure rate measured in triage (p = 5% means 60 runs)."
+    - Or every hypothesis is refuted with evidence and the report lists what remains untested.
+  out_of_scope: [refactoring the checkout module, disabling or retrying the test]
+  constraints: [do not commit, no network]
+limits:
+  max_parallel: 3
+  max_agent_runs: 18
+  max_iterations: 2            # default loop.max for every step
+  stagnation: a round of investigation produces no new evidence
+  delegation_depth: 1
+gates:
+  - before: changing code outside src/checkout/ and tests/checkout/
+agents:
+  lead:         { runs_on: self }
+  investigator: { runs_on: subagent, can: [read, run: tests and git log], cannot: [edit], context: fresh }
+  fixer:        { runs_on: subagent, can: [read, write: src/checkout/ and tests/checkout/, run: tests] }
+steps:
+  - id: triage
+    agent: lead
+    task: Collect failure logs, recent changes to checkout, and how often it fails (run the test 30 times).
+    output: out/triage/facts.md
+    accept: ["failure rate measured, not estimated"]
+  - id: hypothesize
+    agent: lead
+    needs: [triage]
+    task: Write 2-4 competing, falsifiable hypotheses (e.g. time zone, ordering, shared fixture, float rounding). For each, the observation that would refute it.
+    output: out/hypotheses/round-{attempt}.yaml
+    loop: { max: 3 }             # the first round plus two replans
+    accept: ["2-4 hypotheses, each with the observation that would refute it", none repeats a hypothesis refuted in an earlier round]
+  - id: investigate
+    agent: investigator
+    needs: [hypothesize]
+    for_each: items in the latest out/hypotheses/round-*.yaml
+    max_parallel: 3
+    task: Test one hypothesis only. Try to refute it first. Report supported, refuted or inconclusive, with the commands run and their output.
+    output: out/investigate/{item}.md
+    accept: [the verdict is backed by the commands run and their output]
+    join: { policy: all, on_missing: "treat as inconclusive, never as refuted" }
+  - id: arbitrate
+    agent: lead
+    needs: [investigate]
+    task: Rank hypotheses by evidence, not by how convincing the report sounds. Decide the next move.
+    output: out/arbitrate/decision-{attempt}.md
+    accept: [the decision cites the investigation files it relies on]
+    route:
+      - { when: one hypothesis is supported by a reproduction, goto: fix }
+      - { when: all refuted or inconclusive and replans remain, goto: hypothesize }   # back edge: adaptive new round
+      # otherwise no target is chosen: fix is skipped and report runs
+  - id: fix
+    agent: fixer
+    needs: [arbitrate]
+    task: Fix the supported cause with the smallest change. Show the test failing before, and passing N = 3/p consecutive runs after (p from triage).
+    owns: [src/checkout/, tests/checkout/]
+    output: out/fix/report-{attempt}.md
+    verify: { by: check, run: run test_checkout_total N = 3/p times in a row }
+    loop: { until: N of N passes, max: 2, feedback: failing run output, on_stagnation: stop }
+    on_fail: { goto: hypothesize }   # the fix did not hold: the supported hypothesis may be wrong
+  - id: report
+    agent: lead
+    needs: [arbitrate, fix]       # fix may be skipped; the report then says no fix was attempted
+    task: Write the outcome (fixed, or ruled out with what remains), evidence links, hypotheses tested, agent runs used.
+    output: out/REPORT.md
+    accept: [the outcome matches the evidence, untested hypotheses are listed]
+state: state.yaml
+log: events.jsonl

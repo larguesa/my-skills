@@ -1,0 +1,61 @@
+{
+  "_comment": "Pattern: multi-agent judging (blind A/B). JSON variant of a flow file. Three judges from different model families score anonymized pairs with the same rubric; the orchestrator aggregates by majority and reports agreement.",
+  "flow": "ab-judging-summary-styles",
+  "version": 1,
+  "objective": {
+    "goal": "Decide whether style B summaries are preferred over style A on the 12 sample documents.",
+    "done_when": [
+      "Every pair has three valid judgments or is listed as missing with the reason.",
+      "The report gives the win/tie/loss/split count, agreement between judges, pairs where judges split, and whether the difference passes a sign test."
+    ],
+    "out_of_scope": ["rewriting the summaries", "changing the rubric after seeing results"],
+    "constraints": ["judges never see which style is which", "the rubric is frozen before judging", "preconditions: rubric.md and 2 calibration pairs with known answers exist before the run; this flow does not write them"]
+  },
+  "limits": { "max_parallel": 3, "max_agent_runs": 48, "max_iterations": 2, "stagnation": "the same judge fails twice on the same pair" },
+  "gates": [ { "before": "changing the rubric, the sample or the judges" } ],
+  "agents": {
+    "lead": { "runs_on": "self" },
+    "judge_1": { "runs_on": "cli: claude -p (skill claude-code-user)", "can": ["read"], "context": "fresh" },
+    "judge_2": { "runs_on": "cli: codex exec (skill codex-user)", "can": ["read"], "context": "fresh" },
+    "judge_3": { "runs_on": "cli: agy -p (skill antigravity-user)", "can": ["read"], "context": "fresh" }
+  },
+  "steps": [
+    {
+      "id": "blind",
+      "agent": "lead",
+      "task": "For each document, put summary A and B in random order as X and Y; save the key separately where judges cannot read it.",
+      "output": "out/blind/pairs/ and out/blind/KEY.yaml",
+      "accept": ["12 pairs", "order randomized per pair", "no style label inside the pair files"]
+    },
+    {
+      "id": "calibrate",
+      "agent": "lead",
+      "needs": ["blind"],
+      "task": "Run each judge on 2 calibration pairs with a known answer (one clearly better, one equal). A judge that fails both stops the flow at the gate: ask the user to replace it or accept a two-judge panel.",
+      "output": "out/calibrate/results.md",
+      "accept": ["each judge's verdict on both calibration pairs is recorded"]
+    },
+    {
+      "id": "judge",
+      "needs": ["calibrate"],
+      "agents": ["judge_1", "judge_2", "judge_3"],
+      "for_each": "pairs in out/blind/pairs/",
+      "max_parallel": 3,
+      "task": "Using rubric.md only, pick X, Y or tie for each criterion and overall; quote the passage that decided it.",
+      "inputs": ["rubric.md", "the pair file"],
+      "output": "out/judge/{agent}/{item}.json",
+      "accept": ["valid JSON with X, Y or tie per criterion and overall, each with a quoted passage"],
+      "join": { "policy": "all", "on_missing": "list the missing judgment; do not impute it" }
+    },
+    {
+      "id": "aggregate",
+      "agent": "lead",
+      "needs": ["judge"],
+      "task": "Unblind with KEY.yaml. Per pair: majority of the three overall votes; no majority (e.g. X, Y and tie) counts as split. Report wins/ties/losses/splits, judge agreement and per-judge position bias (how often X won). Run a two-sided sign test on the pairs with a winner: report a preference only if it passes at 5% (with 12 such pairs, 10-2 or better); otherwise report no detectable difference.",
+      "output": "out/REPORT.md",
+      "accept": ["counts add up to 12", "split pairs listed with each judge's reason", "the sign test result is reported"]
+    }
+  ],
+  "state": "state.yaml",
+  "log": "events.jsonl"
+}
