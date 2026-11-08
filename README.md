@@ -11,6 +11,7 @@ Skills pessoais de Ricardo Pupo Larguesa para agentes de IA, reutilizadas em vá
 | [Pi User](#pi-user) | Guia para o agente usar o pi (pi.dev) em modo headless (`pi -p --mode json`), com a documentação oficial em markdown | Testado no pi 1.4.0: saída JSON, retomada de sessão, extensão de proteção e servidor MCP |
 | [OpenCode User](#opencode-user) | Guia para o agente usar o OpenCode em modo headless (`opencode run --format json`), com a documentação oficial em markdown | Testado no OpenCode 1.19.5: saída JSON, retomada de sessão, regras de permissão de proteção e custo com e sem MCP |
 | [Codex User](#codex-user) | Guia para o agente usar o OpenAI Codex CLI em modo headless (`codex exec --json`), com a documentação oficial em markdown | Conferido no codex-cli 0.166.0: opções pelo `--help`, sandbox e regras de proteção testados; execuções com modelo não testadas (cota esgotada) |
+| [Antigravity User](#antigravity-user) | Guia para o agente usar o Google Antigravity CLI em modo headless (`agy -p`), com a documentação oficial em markdown | Testado no agy 1.4.2 (Windows): saída JSON e em fluxo, retomada, saída estruturada, negação silenciosa de comandos e regras de proteção; modo auto e sandbox não testados |
 
 ## Humanizador PT-BR
 
@@ -73,6 +74,14 @@ Ensina o agente a delegar trabalho de código ao OpenAI Codex CLI sem acompanham
 Peça, por exemplo: "Use codex-user e peça ao Codex para revisar as mudanças não commitadas deste repositório."
 
 [Codex User](skills/codex-user/SKILL.md) · [resumo de consulta](skills/codex-user/reference.md) · [documentação oficial](skills/codex-user/docs/README.md)
+
+## Antigravity User
+
+Ensina o agente a delegar trabalho de código ao Antigravity CLI (`agy`), do Google, sem acompanhamento. Cobre quando vale usar o Antigravity em vez dos outros agentes, a chamada padrão com `agy -p --output-format stream-json` e como ler os eventos e o uso de tokens. Mostra também como perceber as negações silenciosas: no modo headless, um comando sem permissão é recusado e a execução termina como sucesso, com o aviso só no stderr. O resto: regras de permissão que bloqueiam `git push`, publicação, deploy, `sudo` e acesso a segredos; modos de execução e sandbox; retomada de conversa; saída em formato fixo (`--json-schema`); o risco dos hooks do próprio repositório, que rodam sem perguntar; AGENTS.md, skills, MCP, cotas do plano Google e como conferir o resultado. Traz um resumo de consulta rápida e cópias em markdown de 42 páginas da documentação oficial, atualizáveis com `docs/update.sh`. Instrução em inglês.
+
+Peça, por exemplo: "Use antigravity-user e peça ao Antigravity para corrigir este bug e rodar os testes."
+
+[Antigravity User](skills/antigravity-user/SKILL.md) · [resumo de consulta](skills/antigravity-user/reference.md) · [documentação oficial](skills/antigravity-user/docs/README.md) · [regras de proteção](skills/antigravity-user/rules/README.md)
 
 ## Estrutura
 

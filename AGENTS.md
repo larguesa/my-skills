@@ -13,6 +13,7 @@ Skills:
 - [pi-user](skills/pi-user/SKILL.md): agente opera pi headless (`pi -p --mode json`) + docs oficiais.
 - [opencode-user](skills/opencode-user/SKILL.md): agente opera OpenCode headless (`opencode run --format json`) + docs oficiais.
 - [codex-user](skills/codex-user/SKILL.md): agente opera OpenAI Codex CLI headless (`codex exec --json`) + docs oficiais.
+- [antigravity-user](skills/antigravity-user/SKILL.md): agente opera Google Antigravity CLI headless (`agy -p --output-format stream-json`) + docs oficiais.
 
 Skills `*-user`: docs oficiais em `docs/`, atualizar via `docs/update.sh`. Proteção (`hooks/`, `rules/`) bloqueia push, deploy, segredos; não afrouxar sem OK do Ricardo.
 
