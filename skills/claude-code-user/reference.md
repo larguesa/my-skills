@@ -1,5 +1,9 @@
 # Claude Code cheat-sheet (v2.1.316, checked against docs/cli-reference.md + `claude --help`, 2026-10-31)
-Note: `--help` doesn't list every flag (docs say so). Full docs: docs/README.md.
+Note: `--help` doesn't list every flag (docs say so). Full docs: docs/README.md. Current execution contract: SKILL.md. Historical test records below do not establish the host version or current quota.
+
+## Current unattended contract
+Use the guarded SKILL.md recipe for both initial and resumed phases. Export CLAUDE_CODE_USER_GUARD from the actual $SKILL_DIR; load hooks/settings-guard.json and exercise blocked/clean controls at that path. Preserve model, effort, auth route, cwd and full --resume ID. No default fallback. Reconcile effort environment overrides.
+Capture child exit, final result, is_error, subtype, terminal_reason (when present), structured output and required denials together. stream-json requires --verbose. Use the host's supervised process consumer, separate stderr, a finite phase deadline and attempt-specific logs outside the checkout. Worktree is recovery organization, not OS isolation. Preserve global counters and closing capacity; technical completion is not publication or delivery.
 
 ## Print-mode flags
 -p/--print · --output-format text|json|stream-json (stream-json needs --verbose) · --input-format text|stream-json
@@ -18,12 +22,12 @@ Note: `--help` doesn't list every flag (docs say so). Full docs: docs/README.md.
 ## Permissions & tools
 --permission-mode default(=manual)|acceptEdits|plan|auto|dontAsk|bypassPermissions (-p defaults to Manual since v2.1.302)
 --allowedTools "Read" "Bash(git diff *)" (pre-approve) · --disallowedTools "Bash(rm *)" "mcp__*" (deny/remove) · --tools "Bash,Edit,Read" | "" | "default" (restrict set)
---dangerously-skip-permissions = bypassPermissions (sandbox only) · --restricted (no command tools, managed + --settings only)
+--dangerously-skip-permissions = bypassPermissions (sandbox only) · --restricted (command tools require explicit --tools names; managed + --settings only)
 
 ## Context & config
 --append-system-prompt[-file] (keep defaults) · --system-prompt[-file] (replace all) · --system-prompt-snapshot off
 --add-dir <dirs> · --settings <file|json> · --setting-sources user,project,local · --mcp-config <files> · --strict-mcp-config
---agents '<json>'|file · --agent <name> · --plugin-dir · --disable-slash-commands · --safe-mode (no customizations, keeps auth) · --bare (NOT with our OAuth login)
+--agents '<json>'|file · --agent <name> · --plugin-dir · --disable-slash-commands · --safe-mode (no customizations/hooks, keeps auth; not a guarded implementation recipe) · --bare (NOT with our OAuth login)
 --debug='mcp,startup' · --debug-file <path>
 
 ## Subcommands
@@ -49,5 +53,5 @@ Slash commands usable in a -p prompt: "/skill-name …" (docs/commands.md for th
 ## Setup notes
 Optional: put other skills in ~/.claude/skills (or .claude/skills) so Claude Code can load them. Without system pytest use `uvx pytest`.
 
-## Live tests
+## Historical live tests
 2026-10-31 base: create+resume run, 29 tests passed, opus. Flags test: --json-schema + --append-system-prompt + --tools Read + --max-budget-usd + --no-session-persistence → structured_output {"functions":["add","sub"]}, haiku, $0.11 est (num_turns 4 with --max-turns 3: schema adds a turn). --fallback-model haiku with bogus --model → answered on claude-haiku-5-5 (warning unrecognized_model on stderr). --settings guard hook → `git push` blocked, Claude reported it and didn't retry, $0.11 est.

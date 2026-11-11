@@ -1,14 +1,14 @@
 {
   "permissions": {
     "deny": [
-      "command(regex:.*\\bgit\\s+push\\b.*)",
-      "command(regex:.*\\bgit\\s+(remote|config)\\b.*)",
+      "command(regex:.*\\bgit\\s+(?:-(?:C|c)\\s+(?:\"[^\"]*\"|\\x27[^\\x27]*\\x27|\\S+)\\s+|--(?:git-dir|work-tree)(?:=|\\s+)\\S+\\s+|--no-pager\\s+)*push\\b.*)",
+      "command(regex:.*\\bgit\\s+(?:-(?:C|c)\\s+(?:\"[^\"]*\"|\\x27[^\\x27]*\\x27|\\S+)\\s+|--(?:git-dir|work-tree)(?:=|\\s+)\\S+\\s+|--no-pager\\s+)*(remote|config)\\b.*)",
       "command(regex:.*\\bgh\\s+(pr|release|repo|secret|api)\\b.*)",
-      "command(regex:.*\\b(npm|pnpm|yarn)\\s+publish\\b.*)",
-      "command(regex:.*\\b(vercel|netlify|wrangler|flyctl|kubectl|terraform)\\b.*)",
-      "command(regex:.*\\bcurl\\b.*-X\\s*(POST|PUT|DELETE|PATCH)\\b.*)",
-      "command(regex:.*\\bsudo\\b.*)",
-      "command(regex:.*\\brm\\s+-(rf|fr)\\s+/(\\s.*)?$)",
+      "command(regex:.*\\b(npm|pnpm|yarn|cargo|uv)\\s+publish\\b.*)",
+      "command(regex:.*\\b(vercel|netlify|wrangler|flyctl|kubectl|terraform|sudo)\\b.*)",
+      "command(regex:.*\\bcurl\\b.*(?:-X\\s*|--request[=\\s]*)(POST|PUT|DELETE|PATCH)\\b.*)",
+      "command(regex:.*\\bcurl\\b.*(?:--data|--json|--form|--upload-file|\\s-[dFT](?:\\s|[^\\s])).*)",
+      "command(regex:.*\\brm\\s+-(rf|fr)\\s+(/\\*?|~(?:/\\*)?|\\$HOME(?:/\\*)?|/home/USER)(\\s.*)?$)",
       "command(regex:.*\\.secrets\\b.*)",
       "read_file(.env)",
       "read_file(/home/USER/.secrets)"

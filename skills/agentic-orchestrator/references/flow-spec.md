@@ -42,7 +42,8 @@ limits:
   stagnation: same failure twice in a row, or no new evidence in an iteration
   delegation_depth: 1          # workers may not spawn further agents
   wall_clock: 2h
-gates:                         # human approvals; the flow waits at each one
+  closing_reserve: { agent_runs: 1, wall_clock: 10m } # allocate from the actual flow budget
+gates:                         # consult current authorization; wait only if not already covered
   - before: any external effect (push, publish, message, deploy)
   - before: changing objective, done_when or limits
 agents:                        # roles, not personalities
@@ -86,7 +87,8 @@ Top-level fields:
 | `flow`, `version` | Identity. A changed flow is a new version, never a silent edit. |
 | `objective` | `goal`, `done_when` (verifiable), `out_of_scope`, `constraints`; or `objective_file: OBJECTIVE.md`. The orchestrator cannot change it; the user can. |
 | `limits` | Global budget. Local limits (a loop's `max`) must fit inside it. Exhausting a limit ends in `stopped`, never in `done`. |
-| `gates` | Points where the flow waits for a human decision. |
+| `gates` | Checkpoints against recorded authorization; only an uncovered decision waits for the user. |
+| `authorization` | Optional `{id, covers, fixed, excludes}`: reference to the current request, allowed actions/destinations, fixed model/effort/auth choices and exclusions. Do not copy private request text into public examples. |
 | `agents` | Roles: who runs them (`runs_on`), what they may read, write, run and reach (`can`, `cannot`), how much context they get (`context`), model choice. |
 | `steps` | The graph (next section). |
 | `trigger` | Optional: `manual` (default), `schedule: <interval or cron>` or `event: <what starts a run>`. Each trigger starts a new run with its own state (cadence loop pattern). |
@@ -111,12 +113,13 @@ A `flow:` step (sub-flow) is run by the orchestrator itself as a nested flow wit
 | `accept` | Verifiable criteria. If none can be stated, say so: `accept: unchecked, reason: ...`. |
 | `verify` | Who or what checks: `{ by: reviewer }`, `{ by: check, run: "npm test" }`, `{ by: panel, judges: [...], rule: majority }`. |
 | `loop` | `{ until, max, feedback, on_stagnation }`: re-run this step with feedback while attempts remain. `until` documents the loop's exit; the step itself is accepted by its own `accept` / `verify`, and a later verifier closes the loop with `on_fail: { goto: <this step> }`. |
+| `budget` | Finite phase turns, wall time and continuations inside global bounds. Every launch/resume consumes `max_agent_runs`; reserve closing capacity. |
 | `for_each` | Fan-out: a list, or `items in <file>`; with `max_parallel`. Each item becomes `<id>[<item>]`. |
 | `join` | Fan-in policy: `all`, `quorum` (with `min: N`), `any`, `first_valid`; `on_missing: mark incomplete` or `stop`. |
 | `route` | Conditional edges: `[{ when: <condition>, goto: <id> }, { when: <condition>, end: done or stopped or cancelled }, { default: <id> }]`. `end` finishes the run with that outcome. |
 | `on_fail` | `retry` (with new information only), `goto: <id>`, `escalate: <role>` or a list such as `[strong_worker, human]` (re-run this step with that role, attempt counters kept; `human` means wait for the user's decision), `stop`. |
 | `gate` | `before` or `after`: a human must approve. |
-| `effects` | `none` (read-only), `local` (reversible writes inside the workspace) or `external` (anything outside the workspace or hard to undo: push, publish, send, deploy, pay, delete, rewrite history, migrate data). `external` requires a gate and a written way to undo it (`undo`). If omitted: `none` for read-only roles, `local` otherwise. |
+| `effects` | `none`, `local` (scoped reversible writes) or `external` (push, publish, send, deploy or other external/irreversible effects). External steps cite a covered authorization or an unsatisfied decision gate, and record target/reconciliation plus `undo`; explicitly authorized irreversible effects may use `undo: none`. Workers do not inherit controller authority. |
 | `channel` | How the step's agents exchange information (communication.md): `direct` (default, through the orchestrator), `broadcast` (identical brief to all `agents`), `blackboard: <path>`, `mailbox: <dir>`, `handoff`, `peer: { with: <role>, budget: <messages> }`. |
 | `flow` | A sub-flow file: this step is a whole nested orchestration (hierarchical pattern). |
 
@@ -126,20 +129,20 @@ Paths built from data (`{item}`, `{agent}`, names taken from inputs) must stay i
 
 The orchestrator applies these the same way every time, so a run can be resumed or audited by someone else:
 
-1. **Ready.** A step is ready when every step in its `needs` is finished (`accepted`, or `skipped` by a route) and it is not a forward route target still waiting to be chosen. A skipped need gives no output; the step's task must cope with that (e.g. the report says "fix not attempted"). A `failed`, `blocked` or `cancelled` need never counts as finished: the step waits or is cancelled, it never runs on a failed input. Steps without `needs` are ready at start.
+1. **Ready.** A step is ready when every step in its `needs` is finished (`accepted`, or `skipped` by a route) and it is not a forward route target still waiting to be chosen. A skipped need gives no output and releases a dependent only when its task explicitly handles that absence (e.g. the report says "fix not attempted"). Otherwise the dependent remains blocked; no stale output substitutes for a skipped input. A `failed`, `blocked` or `cancelled` need never counts as finished: the step waits or is cancelled, it never runs on a failed input. Steps without `needs` are ready at start.
 2. **Accepted.** Only after its output is checked against `accept` / `verify`. For a verifier step (review, judge, test), `accept` states the verdict that lets the flow advance; a negative verdict is a failure of that step. A `human` step is accepted by the recorded decision; route every option it offers.
-3. **Failed, partial, blocked.** Verification fails, or the worker returns `partial`: verify what exists, and the failures and gaps become the feedback. If the step's `loop` has attempts left, re-run it with that feedback; otherwise apply `on_fail` (default: stop and report). A worker that returns `blocked` is not retried: the step is `blocked` until the missing input, permission or decision arrives; ask the user.
-4. **Route.** After acceptance, the first `when` that holds picks the target (or `end` finishes the run), else `default`, else none. A target that already ran is a back edge: re-open it (attempt + 1) and set every step downstream of it back to `pending`. A target downstream is a forward edge: the forward targets of this route that were not chosen become `skipped`.
-5. **Bounds.** `loop.max` (default `limits.max_iterations`) counts every attempt of the step, including re-entries through `goto` or a back edge. Past it the step is `failed`; apply `loop.on_stagnation` or `on_fail`. Check `limits.stagnation` after every failed attempt.
+3. **Failed, partial, blocked.** Verification fails, or the worker returns `partial`: verify what exists, and the failures and gaps become the feedback. If the step's `loop` has attempts left, re-run it with that feedback; otherwise apply `on_fail` (default: stop and report). A worker that returns `blocked` is not blindly retried. The controller may resolve a concrete operational mismatch within existing authority and log the changed condition; a missing user decision remains blocked until answered. A local phase limit may continue the exact session within remaining global limits (execution-contract.md).
+4. **Route.** After acceptance, the first `when` that holds picks the target (or `end` finishes the run), else `default`, else none. A target that already ran is a back edge: re-open it (attempt + 1), preserve its previous output, and mark affected dependents `stale`. Reconcile or stop affected active writers first. Reuse accepted results only when their recorded `built_on` inputs remain valid; otherwise re-verify before advancing. A target downstream is a forward edge: the forward targets of this route that were not chosen become `skipped`.
+5. **Bounds.** `loop.max` (default `limits.max_iterations`) applies to every step, even without an explicit loop, and counts attempts including re-entries through `goto` or a back edge. A continuation also debits the flow's agent-run and time budgets; it cannot reset the step ledger. Past it the step is `failed`; apply `loop.on_stagnation` or `on_fail`. Check `limits.stagnation` after every failed attempt.
 6. **Fan-out.** With `for_each` and/or `agents`, each (agent, item) pair is its own run, with its own status and attempts. The step is accepted when its `join` is met; missing or failed pairs are recorded as `on_missing` says, never counted as successes. A back edge into a fan-out step re-runs only the pairs named in the feedback; accepted pairs keep their outputs.
 7. **Deadlock.** If no step is ready, none is running, and some are unfinished, the run is `stopped` as blocked; report which steps wait on what.
-8. **Finish.** The run is `done` only when every `done_when` item has evidence, whatever the last step was; otherwise it ends `stopped` or `cancelled`. When the run ends for any reason, the orchestrator still writes the final report.
+8. **Finish.** The run is `done` only when every `done_when` item has evidence, whatever the last step was; otherwise it ends `stopped` or `cancelled`. When the run ends for any reason, the controller uses its closing reserve to persist state and deliver the truthful final/partial report through the requested channel. Technical acceptance, publication, installation and delivery are separate required outcomes when named by the user.
 
 Cycles exist only through back edges (`route`, `on_fail: goto`), and each is bounded by its target's `loop.max` (or `limits.max_iterations`) and by `limits.max_agent_runs`.
 
 ## 4. state.yaml
 
-Written only by the orchestrator, after each event. It is a view of the log: if they disagree, the log wins and the state is rebuilt from it.
+Written only by the controller after appending each event. `last_event` records the applied sequence. Rebuild the view from an intact log, then reconcile with actual artifacts and external targets. A sequence gap or truncated line is an inconsistency to preserve and resolve, not permission to invent missing events or repeat unknown effects.
 
 ```yaml
 flow: release-notes
@@ -147,6 +150,7 @@ flow_version: 1
 run: R-001
 status: running            # running | waiting_human | blocked | done | stopped | cancelled
 updated: 2026-11-08T15:40-03:00
+last_event: 3
 steps:
   collect: { status: accepted, attempt: 1, output: out/collect/prs.md, evidence: [out/collect/check.txt] }
   draft:   { status: needs_fix, attempt: 2, last_feedback: out/review/V-2.md }
@@ -157,18 +161,22 @@ open_questions: []
 next: Re-run draft with V-2 findings (PR 812 missing, PR 799 misdescribed).
 ```
 
+Running attempts also record full `session`, supervisor `handle`, `deadline` and `built_on` (producer step/attempt or an external revision/hash). A result must name its current run/step/attempt and those inputs. Preserve stale/late results as evidence, never integrate them over the current attempt. Repeated message IDs are acknowledged without replaying effects.
+
 Step statuses: `pending` → `ready` → `running` → `verifying` → `accepted`. Side states: `needs_fix` (back to ready with feedback), `blocked` (missing input, permission or capability), `waiting_human`, `failed` (limit reached), `skipped` (route not taken), `stale` (an input changed after acceptance; re-verify before reuse), `cancelled`.
 Run outcomes, kept distinct: `done` (done_when met, with evidence) · `stopped` (limit, stagnation or block; say which and what is missing) · `cancelled` (by the user). In research, "done" can mean the hypothesis was not supported; that is a valid result, not a failure.
 
 ## 5. events.jsonl
 
-Append only; never edit a line. A correction is a new event that refers to the old one.
+Controller-only and append-only, with increasing `seq`; append the event before updating state. Contributors send separate result/event files. Never edit a canonical line; a correction is a new event that refers to it.
 
 ```json
-{"ts":"2026-11-08T15:02-03:00","run":"R-001","step":"collect","event":"dispatched","to":"collector","brief":"briefs/collect.md"}
-{"ts":"2026-11-08T15:09-03:00","run":"R-001","step":"collect","event":"verified_pass","evidence":"out/collect/check.txt"}
-{"ts":"2026-11-08T15:31-03:00","run":"R-001","step":"draft","event":"verified_fail","attempt":2,"why":"PR 812 missing","ref":"out/review/V-2.md"}
+{"seq":1,"flow_version":1,"ts":"2026-11-08T15:02-03:00","run":"R-001","step":"collect","event":"dispatched","to":"collector","brief":"briefs/collect.md"}
+{"seq":2,"flow_version":1,"ts":"2026-11-08T15:09-03:00","run":"R-001","step":"collect","event":"verified_pass","evidence":"out/collect/check.txt"}
+{"seq":3,"flow_version":1,"ts":"2026-11-08T15:31-03:00","run":"R-001","step":"draft","event":"verified_fail","attempt":2,"why":"PR 812 missing","ref":"out/review/V-2.md"}
 ```
+
+An external effect appends `effect` with `status: started`, a stable key (action, target, content/revision) and authorization reference before acting; after reading the exact target back, append `status: confirmed` and its receipt. A started effect without confirmation is unknown and must be reconciled before retry. Delivery is its own effect/receipt, not inferred from worker completion.
 
 Useful event types: `run_started`, `dispatched`, `result_received`, `verified_pass`, `verified_fail`, `retry`, `routed`, `reopened`, `skipped`, `failed`, `stagnation`, `blocked`, `gate_requested`, `gate_decided`, `flow_changed`, `stale`, `cancelled`, `run_finished`. Log every status change, so the state can be rebuilt from the log alone. Record observations and short reasons, not chains of thought. Never log secrets.
 
@@ -192,6 +200,8 @@ Result (what the agent returns; the orchestrator treats it as a claim until veri
 
 ```markdown
 Status: partial
+Ref: release-notes/R-001/review#2
+Built on: draft#3, collect#1, flow version 1
 Outputs: out/review/V-2.md
 Evidence: compared 41 of 43 lines; PR 799 and 812 checked against GitHub descriptions
 Not done: 2 lines refer to PRs absent from prs.md
@@ -235,17 +245,19 @@ Same keys, same meaning. Use JSON when the host validates files against a schema
 - Every step has `accept` or `verify`, or says `unchecked` with a reason; a `human` step routes every option it offers (its recorded decision is the acceptance).
 - No two steps that can run at the same time write the same path (`owns`, `output`).
 - Every `for_each` or `agents` step has `max_parallel`, a `join`, and outputs that include `{item}` or `{agent}`.
-- Every `cli:` executor is installed and authenticated, or has a fallback; permissions the host cannot enforce are shown to the user as advisory.
+- Every `cli:` executor is discovered and authenticated on the intended route. A fallback exists only when explicitly authorized; fixed model/effort/auth choices survive recovery. Record the real completion consumer, session, child handle and finite phase budget.
 - Paths built from data cannot escape the flow folder.
 - If real personal or confidential data is involved, the user approved which executors and services see it, where files are kept and for how long. Folders and prompts are not access control.
 - Local limits fit the global ones; depth of delegation is bounded.
-- Every step with `effects: external` sits behind a gate and says how to undo it; roles have only the permissions their steps need.
+- Every external effect is covered by a recorded authorization or waits at an unsatisfied decision gate; target/read-back and compensation or explicitly authorized irreversibility are stated. Roles keep only their own authority.
 - The objective has verifiable `done_when` items and allows an honest negative result.
 
-Show the user a short summary before running: steps and edges in one line each, gates, limits, executors, estimated agent runs.
+Record the short execution summary: steps, dependencies, authorization, limits, executors and expected runs. Present unresolved material decisions to the user; do not block an already-authorized unattended sequence just to ask the same permission again.
 
-**Rehearsal.** Before a flow is reused or touches real data, run it with fictitious data through these cases: the normal path, a missing input, an unavailable source, a document with a planted instruction (it must be treated as data), a rejection that persists (the loop must stop), and an interruption followed by a resume (nothing accepted is redone, no effect is repeated). Check that every loop ends, no path leaves the flow folder and no external effect happens. Report which level was reached: static check (this list), rehearsal (simulated transitions or fictitious data), or real run; do not call a flow tested when it was only written.
+**Rehearsal.** For new or materially changed control logic, or before increasing recurring autonomy, exercise the relevant fictitious cases. Reuse valid evidence for an unchanged pattern; do not block a fully specified authorized task on an unnecessary new ceremony. Cases: the normal path, a missing input, an unavailable source, a document with a planted instruction (it must be treated as data), a rejection that persists (the loop must stop), and an interruption followed by a resume (nothing accepted is redone, no effect is repeated). Check that every loop ends, no path leaves the flow folder and no external effect happens. Report which level was reached: static check (this list), rehearsal (simulated transitions or fictitious data), or real run; do not call a flow tested when it was only written.
+
+Also rehearse launch without completion, a stale/late result, an external effect with unknown outcome and an action outside authorization. Confirm a local phase limit can resume with the exact session inside global bounds, while global exhaustion preserves work and closes delivery. Distinguish these rehearsals from execution of real CLIs or external effects.
 
 ## 9. Changing a flow
 
-Approvals are separate: approving the design does not authorize running it, and running it does not authorize sending data to new places or switching on a `trigger` schedule; ask for each. An approval covers what was shown: the objective, `done_when`, limits, gates and every step with external effects. The plan may change; the objective may not change silently. Step edits inside those bounds (add, split, reorder, replan) are allowed when the evidence calls for it: bump `version`, log `flow_changed` with the reason, mark affected accepted steps `stale` if their inputs changed, and mention the change in the next summary to the user. Edits to the objective, `done_when`, limits, gates or external effects need a new approval, recorded in the log. New items for a `for_each` are data, not a flow change. Workers never edit the flow, the state or the acceptance criteria; they propose, the orchestrator decides.
+Authorization covers what the actual request names. A design-only approval does not authorize execution, but an explicit request to execute a named sequence already covers that sequence. Consult the recorded authorization rather than asking again. New destinations, services, schedules, destructive effects or fixed model/effort/auth changes require a new decision. A gate covered by existing authority is recorded as decided with that authorization reference. The plan may change; the objective may not change silently. Step edits inside those bounds (add, split, reorder, replan) are allowed when the evidence calls for it: bump `version`, log `flow_changed` with the reason, mark affected accepted steps `stale` if their inputs changed, and mention the change in the next summary to the user. Edits to the objective, `done_when`, limits, gates or external effects need a new approval, recorded in the log. New items for a `for_each` are data, not a flow change. Workers never edit the flow, the state or the acceptance criteria; they propose, the orchestrator decides.

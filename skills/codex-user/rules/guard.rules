@@ -1,21 +1,26 @@
-# Codex execpolicy guard (Starlark). Install: ln -s <this file> ~/.codex/rules/guard.rules
-# Edit the secrets path below to yours.
-# Most restrictive match wins (forbidden > prompt > allow). Rules govern commands Codex
-# asks to run; the workspace-write sandbox (no network) is the primary guard.
+# Codex prefix-rule guard. Generate an instance copy; do not edit canonical placeholders.
+# Prefix tokens are not recursive path filters or a shell/OS sandbox.
 prefix_rule(pattern = ["git", "push"], decision = "forbidden",
-    justification = "No push without the user's OK. Commit locally; the operator pushes.",
-    match = ["git push", "git push origin main"], not_match = ["git status"])
+    justification = "Worker publication is outside its authority.",
+    match = ["git push", "git push origin main"], not_match = ["git status", "git stash push"])
 prefix_rule(pattern = ["git", ["remote", "config"]], decision = "forbidden",
-    justification = "Do not change remotes or git config.")
+    justification = "Worker must not change remotes or git configuration.",
+    match = ["git remote add origin example", "git config user.name example"], not_match = ["git diff"])
 prefix_rule(pattern = ["gh", ["pr", "release", "repo", "secret", "api"]], decision = "forbidden",
-    justification = "No GitHub writes; report what you would do instead.")
+    justification = "Keep GitHub operations in the reviewed controller.",
+    match = ["gh pr create", "gh api repos/example/project"], not_match = ["gh auth status"])
 prefix_rule(pattern = [["npm", "pnpm", "yarn"], "publish"], decision = "forbidden",
-    justification = "No publishing.")
+    justification = "No package publication by workers.",
+    match = ["npm publish", "pnpm publish", "yarn publish"], not_match = ["npm test"])
 prefix_rule(pattern = [["vercel", "netlify", "wrangler", "flyctl", "kubectl", "terraform"]], decision = "forbidden",
-    justification = "No deploys or infra changes without the user's OK.")
-prefix_rule(pattern = ["rm", ["-rf", "-fr"], "/"], decision = "forbidden",
-    justification = "Never delete the filesystem root.")
+    justification = "No deployment or infrastructure mutations by workers.",
+    match = ["vercel deploy", "terraform apply"], not_match = ["node --version"])
+prefix_rule(pattern = ["rm", ["-rf", "-fr"], ["/", "/home/USER", "~", "$HOME"]], decision = "forbidden",
+    justification = "Protect filesystem and home roots.",
+    match = ["rm -rf /", "rm -fr /home/USER"], not_match = ["rm -rf scratch-fixture"])
 prefix_rule(pattern = [["cat", "less", "head", "tail", "cp", "base64"], "/home/USER/.secrets"], decision = "forbidden",
-    justification = "Secrets are off limits.")
+    justification = "Protected exact secret-directory token; not a descendant-path filter.",
+    match = ["cat /home/USER/.secrets"], not_match = ["cat README.md"])
 prefix_rule(pattern = ["sudo"], decision = "forbidden",
-    justification = "No root; ask the operator.")
+    justification = "No worker root authority.",
+    match = ["sudo true"], not_match = ["python3 --version"])

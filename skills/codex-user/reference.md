@@ -1,13 +1,17 @@
 # Codex CLI cheat-sheet (codex-cli 0.166.0, checked against `--help` + docs/cli-reference.md, 2026-10-31)
 Full docs: docs/README.md. `--help` of the installed version is authoritative.
 
+## Current unattended contract
+Follow SKILL.md for explicit model/effort, sandbox, stdin protocol and attempt-specific stdout/stderr. Exec needs no PTY. Capture child exit plus the last terminal turn, final answer/schema output and independent artifacts. A handle or earlier turn.completed is not completion of the current attempt.
+Recover with the full exec resume ID from the same cwd and CODEX_HOME, repeating fixed model/effort/provider/sandbox. Never use --last for recovery. Guard generation and prefix-rule limits: rules/README.md. An isolated CODEX_HOME needs its own reviewed guard installation. OAuth and an authorized API provider are distinct billing routes, neither may silently replace the other. Preserve global counters and closing capacity; worktrees are not OS isolation.
+
 ## codex exec [OPTIONS] [PROMPT|-]   (alias `codex e`)
 --json (JSONL events) · -o/--output-last-message FILE · --output-schema FILE · --color always|never|auto
 -C/--cd DIR · --add-dir DIR (extra writable) · --worktree · --skip-git-repo-check · --ephemeral (no session files)
 -m/--model M · -c key=TOML (repeatable) · -p/--profile NAME ($CODEX_HOME/NAME.config.toml) · --enable/--disable FEATURE
 -s/--sandbox read-only|workspace-write|danger-full-access · --approve-for-me (auto-review approvals) · --dangerously-bypass-approvals-and-sandbox (NO)
 --ignore-user-config · --ignore-rules (NO) · --strict-config · -i/--image FILE · --oss/--local-provider lmstudio|ollama
-Prompt: arg, or `-`/omitted = stdin; arg + piped stdin = stdin appended as <stdin> block. Always `</dev/null`.
+Prompt: arg plus `</dev/null`, or `-` with a deliberate prompt file on stdin; arg + piped stdin appends a <stdin> block. Do not close stdin when it is the selected input protocol.
 Gone: --full-auto, approval_policy "untrusted". `-a/--ask-for-approval on-request|never` and `--search` are top-level (TUI) flags.
 
 ## Subcommands of exec
@@ -33,5 +37,5 @@ Env: CODEX_HOME (~/.codex) · CODEX_SQLITE_HOME · CODEX_API_KEY (API-key runs; 
 ~/.codex/: config.toml · auth.json (secret) · sessions/YYYY/MM/DD/rollout-*.jsonl · rules/*.rules · AGENTS.md · skills/.system (bundled) · log/
 User skills: ~/.agents/skills · Repo: AGENTS.md, .agents/skills, .codex/ (trusted projects only)
 
-## Tested setup
+## Historical tested setup
 npm global codex-cli 0.166.0, ChatGPT login. config.toml: sandbox_mode=workspace-write, network off. Rules: ~/.codex/rules/guard.rules → $SKILL_DIR/rules/guard.rules. User skills symlinked into ~/.agents/skills. No MCP servers.

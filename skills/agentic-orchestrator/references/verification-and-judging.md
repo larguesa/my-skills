@@ -6,7 +6,7 @@ Contents: 1 Layers · 2 Independent verifier · 3 Judge panels · 4 Consensus ·
 
 ## 1. Layers
 
-Check in this order and stop at the first failure; cheap checks first.
+First establish the real terminal result for this attempt; a launch receipt is not completion (execution-contract.md). Then check in this order and stop at the first unresolved failure; cheap checks first.
 
 1. **Integrity**: required fields, links, versions and coverage are complete; the output is where the contract says.
 2. **Deterministic checks**: tests, builds, linters, schema validation, counts, diffs. Strong for what they define, silent about everything else: a valid format does not prove facts, a passing test does not prove safety.

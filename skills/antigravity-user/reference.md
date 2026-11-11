@@ -1,6 +1,10 @@
 # Antigravity CLI cheat-sheet (agy 1.4.2, checked against `agy --help` + docs/reference.md, docs/headless.md, 2026-11-08)
 Full docs: docs/README.md. `agy --help` of the installed version is authoritative.
 
+## Current unattended contract
+Follow SKILL.md for exact model/effort, finite phase deadline, attempt-specific stdout/stderr, guard and full --conversation ID on resume. Require real process exit, current final result, response or schema-valid structured_output, independently checked artifacts and no unresolved necessary operation. Inspect tool ERROR events and stderr auto-denied notices even with SUCCESS/exit zero.
+Use the host's supervised completion consumer; keep the same auth/settings context and global counters across continuations. Do not activate paid-credit fallback to evade quota. Validate generated secret paths and effective rules following rules/README.md. Worktrees are not OS isolation. Historical Windows checks below do not establish native enforcement on another host; technical completion is not external delivery.
+
 ## agy [flags]
 -p/--print/--prompt PROMPT (headless) · -i/--prompt-interactive PROMPT · --output-format text|json|stream-json · --input-format text|stream-json (needs stream-json out; prompts on stdin)
 --json-schema STR|FILE|type → .structured_output · --print-timeout DUR (0s = none; e.g. 30m) · --disable-slash-commands

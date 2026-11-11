@@ -12,7 +12,7 @@ Ricardo Pupo Larguesa's personal skills for AI agents, reused across several pro
 | [OpenCode User](#opencode-user) | Guide for the agent to use OpenCode headless (`opencode run --format json`), with the official docs in markdown | Tested on OpenCode 1.19.5: JSON output, session resume, guard permission rules and cost with and without MCP |
 | [Codex User](#codex-user) | Guide for the agent to use the OpenAI Codex CLI headless (`codex exec --json`), with the official docs in markdown | Checked on codex-cli 0.166.0: options via `--help`, sandbox and guard rules tested; model runs not tested (quota exhausted) |
 | [Antigravity User](#antigravity-user) | Guide for the agent to use the Google Antigravity CLI headless (`agy -p`), with the official docs in markdown | Tested on agy 1.4.2 (Windows): JSON and streaming output, resume, structured output, silent command denial and guard rules; auto mode and sandbox not tested |
-| [Agentic Orchestrator](#agentic-orchestrator) | Orchestration of several agents through natural language only, with flow, state and events in YAML, JSON or Markdown, no frameworks or scripts | Examples checked for format (valid YAML and JSON, no broken references); no evaluation with and without the skill |
+| [Agentic Orchestrator](#agentic-orchestrator) | Orchestration of several agents through natural language only, with flow, state and events in YAML, JSON or Markdown, no frameworks or scripts | Five flow examples plus development contract/guard checks; execution and recovery contract documented |
 
 ## Humanizador PT-BR
 
@@ -92,13 +92,30 @@ The content is conceptual and prescriptive:
 - **Flow patterns:** 19, including sequential, parallel fan-out/fan-in, hierarchical, router, producer-verifier, adaptive, competing hypotheses, consensus, judge panel, debate and council.
 - **Communication patterns:** direct, tool-mediated, manager hub, broadcast, blackboard, handoff and mailbox.
 - **Loop and graph engineering:** exit criteria, budgets, file ownership and resume.
-- **File format:** one format for flow and state, with four complete examples.
+- **File format:** one format for flow and state, with five complete examples.
+- **Execution contract:** reusable authorization, distinct launch/terminal/acceptance/delivery evidence, finite phase budgets, exact-session recovery, stale-result handling and external-effect reconciliation.
 
 Synthesized from four skill repositories (wshobson/agents, affaan-m/ECC, cobusgreyling/loop-engineering and qodex-ai/ai-agent-skills) and a compilation on harness, loop and graph engineering.
 
 Ask, for example: "Use agentic-orchestrator: implement this feature with Claude Code, get an independent review from Codex, and only show me the result once the tests pass."
 
 [Agentic Orchestrator](skills/agentic-orchestrator/SKILL.md) · [flow patterns](skills/agentic-orchestrator/references/flow-patterns.md) · [file format](skills/agentic-orchestrator/references/flow-spec.md)
+
+## Orchestration package validation and installation
+
+The six orchestration packages are `agentic-orchestrator`, `claude-code-user`, `codex-user`, `pi-user`, `opencode-user` and `antigravity-user`. They remain standalone. The orchestrator owns the cross-agent flow; each CLI skill owns its invocation and terminal-result checks. Existing authorization covers the actions actually named by the user, while workers keep narrower permissions.
+
+Run the development checks from the repository root with the existing Python, PyYAML, Bash, jq, Node and Codex tools:
+
+```bash
+python3 -m unittest discover -s tests/orchestration -v
+```
+
+The suite exercises shipped guard handlers, permission-overlay merges, native Codex rule checks, JSONL protocol screens, malformed/error controls, shell syntax and the five example graphs. OpenCode's preserved snapshots do not enumerate final `part.reason` values: its documented jq screen is deliberately not full acceptance; require installed-version native final-turn evidence and independent artifacts. Pi/OpenCode/Antigravity protocol fixtures and regex checks do not substitute for their actual CLIs.
+
+Install from a reviewed revision by copying each complete selected folder into the active agent's skills directory, preserving any prior copy first. Keep `docs/`, `hooks/`, `rules/` and references with the skill, not only SKILL.md. Compare installed bytes to that revision and check actual loader discovery. Guard configuration is not installed globally by copying a skill; follow each guard README, load it on each CLI phase and exercise blocked/clean controls at the installed path. Never run package updaters or change authentication as an incidental part of installation.
+
+Keep private diagnostics, model plans, run logs, destination backups and delivery receipts outside this public repository. Publication, installation and final response require their own target read-back; a successful technical phase does not establish them.
 
 ## Structure
 

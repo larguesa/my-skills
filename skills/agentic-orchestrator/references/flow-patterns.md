@@ -193,7 +193,7 @@ Use when quality varies a lot between attempts and a reliable judge exists: name
 Variant, race: first candidate that passes the check wins; stop the others (`join: first_valid`). Cost is N+1 agents. Watch out: a judge biased toward length or position; N too large to review. Exit: a winner, or none passes.
 
 ## 14. Escalation ladder (model tiering)
-Use when most items are easy and a few are hard: try a cheap agent first, escalate on failure to a stronger model, then to a human. Also: a strong model plans, a cheaper one executes, a strong one reviews.
+Use only when model selection/substitution is authorized. A user-fixed model and effort must not change through this ladder. When selection is open and most items are easy, try a cheap agent first, escalate on failure to a stronger model, then to a human. Also: a strong model plans, a cheaper one executes, a strong one reviews.
 ```yaml
   - id: solve
     agent: fast_worker
@@ -214,15 +214,16 @@ steps:
     route:                                   # route every option the question offers
       - { when: user requests changes, goto: implement }
       - { when: user says stop, end: cancelled }
+      - { when: user explicitly approves, end: done }
 ```
-Plan approval is a gate too: show the flow before running it. Ask one question at a time, with the options and a recommendation, answerable without reading the logs. Watch out: notification floods; gates that approve by timeout. Exit: the human's recorded decision.
+Consult current authorization first: a design-only approval is not execution permission, but a request explicitly naming execution already covers it. A covered gate is recorded as decided; ask only about uncovered choices. Ask one question at a time, with the options and a recommendation, answerable without reading the logs. Watch out: notification floods; gates that approve by timeout. Exit: the human's recorded decision.
 
 ## 16. Blackboard
 Use for open investigation where each finding can unlock another and the order cannot be planned: incident analysis, literature review, security audit.
 ```yaml
   - id: investigate
     agents: [logs_analyst, db_analyst, network_analyst]
-    channel: { blackboard: out/board/findings.md }   # append-only; each entry: author, time, finding, evidence
+    channel: { blackboard: out/board/ }   # one attributed file per contributor; controller owns the canonical board/log
     task: Read the board first; add new findings with evidence and build on others' without repeating them.
     loop: { until: a round adds no new finding, max: 4 }
     join: { policy: all, on_missing: note the silent analyst }
@@ -279,7 +280,7 @@ Use when a flow makes several external changes that must succeed together (creat
     gate: before
     undo: restore the configuration saved in out/config-before.json
 ```
-Every step with an external effect writes its undo before acting; on failure, run the `undo` of each completed step in reverse order; every effect is idempotent and behind a gate. Watch out: effects with no undo (ask before them); retries that duplicate effects. Exit: all effects done, or all compensated and reported.
+Every external effect records target, current authorization, reconciliation and compensation before acting; explicitly authorized irreversible effects may use `undo: none`. On failure, apply only already-authorized compensations in reverse order. Record started/confirmed receipts and reconcile unknown outcomes before retrying; do not promise exactly-once transport. Watch out: effects with no undo (ask before them); retries that duplicate effects. Exit: all effects done, or all compensated and reported.
 
 ## 20. Choosing
 

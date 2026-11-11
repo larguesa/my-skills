@@ -1,5 +1,15 @@
-#!/bin/bash
-# PreToolUse guard for Claude Code's Bash tool. Exit 2 = block (stderr is shown to Claude).
-cmd=$(jq -r '.tool_input.command // ""')
-if echo "$cmd" | grep -Eq 'git push|curl .*-X *(POST|PUT|DELETE)|\.secrets|rm -rf /'; then echo "Blocked by guard: needs the user's explicit OK" >&2; exit 2; fi
-exit 0
+#!/usr/bin/env bash
+# PreToolUse: every launch/parser/helper failure maps to blocking exit 2.
+if ! command -v python3 >/dev/null 2>&1; then
+  printf '%s\n' 'Blocked by guard: Python parser unavailable' >&2
+  exit 2
+fi
+guard_dir="${BASH_SOURCE[0]%/*}"
+if [[ ! -r "$guard_dir/guard.py" ]]; then
+  printf '%s\n' 'Blocked by guard: policy helper unavailable' >&2
+  exit 2
+fi
+python3 "$guard_dir/guard.py"
+status=$?
+if [[ "$status" -eq 0 ]]; then exit 0; fi
+exit 2

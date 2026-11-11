@@ -40,7 +40,7 @@ steps:
     for_each: items in the latest out/hypotheses/round-*.yaml
     max_parallel: 3
     task: Test one hypothesis only. Try to refute it first. Report supported, refuted or inconclusive, with the commands run and their output.
-    output: out/investigate/{item}.md
+    output: out/investigate/round-{attempt}/{item}.md
     accept: [the verdict is backed by the commands run and their output]
     join: { policy: all, on_missing: "treat as inconclusive, never as refuted" }
   - id: arbitrate

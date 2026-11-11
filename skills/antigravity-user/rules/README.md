@@ -1,13 +1,15 @@
-# Guard permission rules
-`guard-permissions.json` holds Antigravity CLI `permissions.deny` rules: shell commands with `git push`, `git remote|config`, `gh pr|release|repo|secret|api`, `npm|pnpm|yarn publish`, deploy CLIs (vercel, netlify, wrangler, flyctl, kubectl, terraform), mutating `curl -X`, `sudo`, `rm -rf /`, anything mentioning `.secrets`; file reads (and so writes) of the workspace-root `.env` and a secrets folder. Deny beats ask and allow, and the docs say deny rules apply in every mode, including `--dangerously-skip-permissions` (docs/permissions.md, docs/reference.md `toolPermission`).
+# Deny overlay and explicit secret paths
 
-Install: back up `~/.gemini/antigravity-cli/settings.json`, then append the list to `permissions.deny` (keeps rules already there):
+`guard-permissions.json` retains worker publication/configuration, GitHub, package, deployment/elevation, mutating HTTP, protected removal and secret-path denials. Git command patterns cover common global options. Native deny rules take precedence over ask/allow in the documented version.
+
+After an authorized settings change, generate a separate candidate using the shipped Python 3 helper:
+
 ```bash
-f=~/.gemini/antigravity-cli/settings.json
-jq -s '.[0].permissions.deny = ((.[0].permissions.deny // []) + .[1].permissions.deny | unique) | .[0]' "$f" guard-permissions.json > new.json
+python3 "$SKILL_DIR/rules/merge-permissions.py" existing.json "$SKILL_DIR/rules/guard-permissions.json" "$SECRETS_DIR" candidate.json
 ```
-Review `new.json`, replace the file, then edit the secrets path. `~` is not expanded. Use an absolute path: `/home/<you>/.secrets` on Linux, `/Users/<you>/.secrets` on macOS. On Windows use the drive letter with forward slashes, `C:/Users/<you>/.secrets`. The docs say drive letters are stripped, but with 1.4.2 only the `C:/...` form matched.
 
-Tested on agy 1.4.2 (Windows, headless, rules in a temporary HOME): `git push`, `echo hi && git push origin main` and `type ...\.secrets\token.txt` were blocked even with `command(git)`, `command(echo)` and `command(type)` allowed; `read_file` of `.env` and of `C:/Users/.../.secrets` was blocked. The blocked tool step ends with `state: "ERROR"` and `"... Matches user-configured deny rule."`; the model sees the error. Not tested: the rules under `--dangerously-skip-permissions`.
+The helper preserves existing denials, replaces the canonical `/home/USER/.secrets` placeholder with the supplied absolute path, validates shapes and regex syntax, rejects duplicate JSON keys and writes only a new restrictive-permission candidate. Review it, ensure no placeholder remains and confirm the actual effective settings before replacement. Settings are global in the historically tested client; copying the skill does not configure them.
 
-Limits: regex rules match the whole command string, so they also catch chained commands, but a determined model can still obfuscate (variables, scripts). `read_file(.env)` covers only the workspace root; nested `.env` files need their own rules (the terminal sandbox also blocks `.env` and `~/.ssh` for commands). The CLI silently ignores rules it can't parse: after editing, run a quick test like the one above. A tripwire, not a sandbox.
+The development suite fullmatches synthetic commands against the actual JSON regexes; it does not run agy or prove native enforcement. The historical Windows 1.4.2 checks remain in reference.md. On an available CLI, exercise `git push --help` (blocked) and `git status --short` (clean), never an actual publication. Malformed rules can be ignored by the client, so valid JSON alone is insufficient.
+
+The file rules shown protect the workspace-root `.env` and configured secrets path. Nested environment files and other sensitive paths need separately reviewed native rules/containment; the direct regex layer is not an OS sandbox or a general shell interpreter. Variables, aliases, indirect scripts, tool/MCP alternatives and path/symlink resolution are outside these synthetic matching checks. Preserve model/effort and billing route when a required operation is denied.

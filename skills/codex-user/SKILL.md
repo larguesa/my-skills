@@ -1,79 +1,58 @@
 ---
 name: codex-user
-description: Drive the OpenAI Codex CLI headless as a user or agent - when to delegate (vs Claude Code, pi, OpenCode), standard `codex exec --json` invocation, -o/--output-schema, sandbox and approval modes, execpolicy rules guard, resume/fork, review mode, AGENTS.md, skills, MCP, ChatGPT-plan usage limits, verification, plus a cheat-sheet and the official Codex docs in markdown. Use when delegating coding work to Codex or looking up its commands, config, sandbox, rules, MCP or skills.
+description: Use when delegating to Codex. Verify and resume work.
 ---
 
+# Codex user
 
-`$SKILL_DIR` = this skill's folder (e.g. `~/.agents/skills/codex-user`). Cheat-sheet: `reference.md`. Official docs (markdown, 2026-10-31) in `docs/` — see `docs/README.md`; refresh with `docs/update.sh`. Flags below were checked against `codex exec --help` of the installed version; items marked *(not tested live)* could not be run because the ChatGPT quota was exhausted when this was written.
+Drive `codex exec` without a PTY for unattended phases. `$SKILL_DIR` is this installed folder; `reference.md` and `docs/README.md` retain the command reference and official snapshots. Historical checks used 0.166.0; inspect the actual binary and `exec`/`resume` help before reuse.
 
-## Recommended setup
-Install: `npm i -g @openai/codex`, then `codex login` (ChatGPT account; on a headless machine use `codex login --device-auth` or log in through a desktop browser). Back up `~/.codex/config.toml`, then add:
-```toml
-sandbox_mode = "workspace-write"
-[sandbox_workspace_write]
-network_access = false
-```
-`mkdir -p ~/.codex/rules && ln -s "$SKILL_DIR/rules/guard.rules" ~/.codex/rules/guard.rules`. Check: `codex doctor --summary`, `codex sandbox -P :workspace -- bash -c 'touch x; curl -m5 https://example.com'`.
+## Prepare
 
-## When to delegate (and to whom)
-- **Codex**: second opinion / independent implementation, `codex exec review` of a diff, tasks where an OpenAI model is wanted, well-scoped fixes with a test command. Runs on the user's ChatGPT plan.
-- **Claude Code** (skill `claude-code-user`): biggest multi-file features, long fix-test loops; Anthropic subscription.
-- **OpenCode / pi** (skills `opencode-user`, `pi-user`): pay-per-token on any provider (e.g. OpenRouter); cheap bulk work and parallel runs that must not touch subscription quota.
-- **Yourself**: one-line edits, reading files, shell admin, anything needing the user's connectors or externally visible.
-- Quota: ChatGPT plan limits (5-hour + weekly windows) are shared with the user's own Codex/ChatGPT use. Check https://chatgpt.com/settings/usage (URL from the CLI's own limit message) (the user checks it while signed in). A spent quota shows as `{"type":"error","message":"You've hit your usage limit... try again at <date>"}` then `turn.failed`. One well-specified run beats many small ones; use a smaller model (`-m`) for small jobs.
+- Record the task, owned files, baseline, required tests, requested model/effort and intended authentication/billing route. Do not infer standalone CLI login from Hermes login or a missing environment key.
+- Prefer a Git checkout for edits. Authorized non-repository work can use `--skip-git-repo-check`; do not initialize an unrelated repository. Exec needs no PTY.
+- Select sandbox and approval policy separately. Worktrees organize recovery, not OS containment. If sandbox startup fails, diagnose that environment; do not silently select full access.
+- Keep guard rules in the actual `${CODEX_HOME:-$HOME/.codex}`. Follow `rules/README.md`; a private CODEX_HOME must not silently drop them. Do not edit global configuration as part of ordinary delegation.
+- Allocate finite phase time inside global limits, including every continuation and a closing reserve. Save the supervisor handle and exact thread ID separately.
 
 ## Standard invocation
+
+Set absolute `$PROJECT` and attempt-specific `$RUN` outside the checkout. Choose `$MODEL`, `$EFFORT` and `$SANDBOX` for the authorized phase. Run from the recorded cwd; retain structured stdout and stderr separately.
+
 ```bash
-cd /workspace/<project> && git status --short          # baseline; Codex wants a git repo
-codex exec --json \
-  -C /workspace/<project> \
-  -s workspace-write \
-  -o /tmp/cx_<task>.last.md \
-  "$PROMPT" </dev/null > /tmp/cx_<task>.jsonl 2>/tmp/cx_<task>.err
-jq -c 'select(.type=="thread.started" or .type=="turn.completed" or .type=="turn.failed" or .type=="error")' /tmp/cx_<task>.jsonl
-cat /tmp/cx_<task>.last.md
+codex exec --json -C "$PROJECT" --model "$MODEL"   -c "model_reasoning_effort=\"$EFFORT\"" --sandbox "$SANDBOX"   --output-last-message "$RUN/last.md" -   < "$RUN/prompt.txt" > "$RUN/events.jsonl" 2> "$RUN/stderr.txt"
 ```
-- Always `</dev/null`: with a prompt argument and piped stdin it appends stdin as a `<stdin>` block (prints "Reading additional input from stdin...").
-- `--json` → JSONL on stdout: `thread.started{thread_id}`, `turn.started`, `item.started|updated|completed` (agent_message, reasoning, command_execution, file_change, mcp_tool_call, web_search, todo_list), `turn.completed{usage}`, `turn.failed`, `error` (docs/non-interactive-mode.md). Progress goes to stderr.
-- `-o/--output-last-message FILE` writes the final message; `--output-schema schema.json` forces a JSON answer (docs/non-interactive-mode.md "Create structured outputs"). *(not tested live)*
-- Outside git: `--skip-git-repo-check`. Other writable dirs: `--add-dir ../lib`. Isolation: `--worktree`.
-- Model/config per run: `-m <model>`, `-c key=value` (TOML), `-c model_reasoning_effort="high"`, `-p <profile>` (layers `~/.codex/<name>.config.toml`). `--ephemeral` = no session files. `--search` enables live web search.
 
-## Sandbox and approvals (the real guard)
-- `codex exec` defaults to read-only; the recommended config (below) sets `sandbox_mode = "workspace-write"` with network off. Verified on codex-cli 0.166.0 (Linux) with `codex sandbox -P :workspace`: writes cwd only, `$HOME` and `/etc` read-only, no network, and `.git/` is read-only (Codex cannot commit; the operator commits).
-- `-s read-only` for analysis/review; `-s workspace-write` for edits; `danger-full-access` / `--dangerously-bypass-approvals-and-sandbox` only in a throwaway container or VM.
-- Network for installs/tests: `-c sandbox_workspace_write.network_access=true` for that run only.
-- exec is non-interactive: anything needing approval fails back to the model. `--approve-for-me` routes approvals to automatic review (docs). `--full-auto` and `approval_policy="untrusted"` are gone.
-- Execpolicy rules: `$SKILL_DIR/rules/guard.rules` (symlink it into `~/.codex/rules/`) forbids git push/remote, gh writes, publish, deploy CLIs, `sudo`, `rm -rf /`, reading a secrets folder (edit the path to yours). Check: `codex execpolicy check --rules rules/guard.rules git push` → forbidden (verified). Rules govern commands Codex asks to run outside the sandbox; never pass `--ignore-rules`.
-- Repo `.codex/` config, rules and hooks load only for trusted projects; never use `--dangerously-bypass-hook-trust`.
+Capture the real child exit status. Protocol screening uses the last terminal turn, not any earlier success:
 
-## Follow-ups
-`codex exec resume <thread_id> "next step" --json -o ... </dev/null` (id from `thread.started`; a thread name also works). `--last` = newest session in cwd (add `--all` to ignore cwd); avoid with parallel runs. Note: `resume` has no `-s`/`-C` flags; run it from the same dir and pass sandbox via `-c sandbox_mode="workspace-write"`. Fork: `codex exec fork <id> "prompt"`. *(not tested live)*
-Sessions: `~/.codex/sessions/YYYY/MM/DD/rollout-<ts>-<id>.jsonl`; manage with `codex archive|delete|unarchive <id>`.
-
-## Long jobs
 ```bash
-nohup codex exec --json -s workspace-write -C /workspace/<p> -o /workspace/<p>/.cx.last "$PROMPT" </dev/null > /workspace/<p>/.cx.jsonl 2>&1 &
+# protocol-check
+jq -e -s 'map(select(.type=="turn.completed" or .type=="turn.failed")) | last | .type=="turn.completed"' "$RUN/events.jsonl"
 ```
-Background the Shell call and await; done when a `turn.completed` or `turn.failed` line appears.
 
-## Review mode
-`codex exec review --uncommitted` | `--base main` | `--commit <sha>` ["focus on X"] — non-interactive review, read-only is enough (`-c sandbox_mode="read-only"`); good second reviewer of Claude Code / OpenCode output. *(not tested live)*
+Accept only with exit zero, expected current thread/model/effort, final answer or schema-valid structured output, required artifacts checked independently and no unresolved necessary operation. Inspect failed `command_execution` and tool items; a recovered warning is not the same as missing work. Empty/truncated JSONL, `turn.failed`, launch-only output and a handle are not success.
 
-## AGENTS.md, skills, MCP
-- AGENTS.md: global `~/.codex/AGENTS.md`, then repo root → cwd `AGENTS.md` (`AGENTS.override.md` wins) (docs/agents-md.md). Put stable project facts there.
-- Skills: user skills in `~/.agents/skills` (symlinks allowed), repo `.agents/skills`, bundled `.system` (docs/build-skills.md). Mention `$skill-name` in the prompt to force one.
-- MCP: `[mcp_servers.<name>]` in `~/.codex/config.toml` or `codex mcp add <name> -- <cmd>`; `required = true` makes exec fail if it won't start (docs/mcp.md). Disable a heavy server for one run with `-c mcp_servers.<name>.enabled=false`.
+## Continue and supervise
 
-## Writing the prompt
-Goal (one sentence) · Context (files, stack, how to run) · Constraints (no new deps; do not commit or push) · Tests (exact command, e.g. `uvx pytest -q`) · Done criteria · Output (summary of changed files + anything unverified).
+Use the host's supervised background primitive and completion consumer, with a finite deadline. Do not detach again inside it. After timeout or interruption, confirm the old child exited and reconcile outputs before another writer starts.
 
-## Verify, don't trust
-1. Last event is `turn.completed` (not `turn.failed`/`error`); read usage.
-2. `git status --short && git diff --stat`, then read the diff.
-3. Run the tests yourself (`uvx pytest`, `npm test`); its summary is a claim.
-4. Look for `command_execution` items with non-zero `exit_code` and sandbox denials.
+From the same cwd and CODEX_HOME, resume the full saved ID, preserving provider configuration and sandbox:
 
-## Safety
-- Never let it push, deploy, publish, send messages or touch secrets without the user's explicit OK; keep network off by default and the guard rules on.
-- Never put keys in prompts. ChatGPT auth lives in `~/.codex/auth.json` (secret; don't print). Don't set `CODEX_API_KEY`/`OPENAI_API_KEY` in runs that execute repo code.
+```bash
+codex exec resume "$THREAD_ID" --json --model "$MODEL"   -c "model_reasoning_effort=\"$EFFORT\""   -c "sandbox_mode=\"$SANDBOX\""   --output-last-message "$NEXT_RUN/last.md" -   < "$NEXT_RUN/prompt.txt" > "$NEXT_RUN/events.jsonl" 2> "$NEXT_RUN/stderr.txt"
+```
+
+Resume does not take the first invocation's `-C`/`-s` in the checked interface. Confirm live help. Include remaining scope, accepted evidence, failed approaches and remaining global limits. Do not recover with `--last`. Every continuation debits the original budget; stop at exhaustion and report the real partial state.
+
+## Authentication, tools and review
+
+- ChatGPT OAuth and a selected API provider are different routes. Preserve the chosen route; an API route must be authorized, use a narrowly scoped inference key in the environment and never receive a management credential. Retain isolated CODEX_HOME on resume when used.
+- For an authorized custom Responses provider, set `model_provider`, its `base_url`, `env_key` and `wire_api` explicitly. Verify the exact model and supported effort first. Provider selection is not permission to switch model or billing on failure.
+- `--full-auto` is removed in the checked versions. Never use it as a recovery recipe. `danger-full-access` and approval bypass require an explicitly authorized external containment boundary.
+- `execpolicy` prefix rules are not a general filesystem sandbox. Read their limits and test the actual generated rules with the native checker. Existing read restrictions and network policy remain separate.
+- A read-only review can use `codex exec review --uncommitted` or a named base, according to live help. Reviewers report findings; they do not push, deploy, publish or send.
+- Use an output schema when required and validate the resulting artifact. Project instructions, skills and MCP have version-specific discovery and trust rules; inspect before executing an unfamiliar checkout.
+
+## Finish
+
+Read the diff and run the real tests independently. Preserve exit status, terminal events, thread ID, model/effort, usage and evidence; do not invent API costs from token counts. A technical result does not prove push, install or message delivery. The controller performs already authorized effects, reads their exact targets back, and closes through the requested channel without repeating ambiguous effects.

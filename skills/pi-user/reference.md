@@ -1,12 +1,16 @@
 # pi cheat-sheet (v1.4.0, checked against docs/cli.md + `pi --help`, 2026-10-31)
 Full docs: docs/README.md. `--help` of the installed version is authoritative.
 
+## Current unattended contract
+Follow SKILL.md for model/effort, guard, selected tools/MCP and separate attempt-specific logs. Capture child exit, the full session ID, final assistant stopReason and agent_settled.aborted; agent_end alone is insufficient. JSON-mode errors can coexist with exit zero. Recover only with --session and the full saved ID, same cwd/provider/model/effort; verify the returned header and do not recreate a missing session.
+Guard coverage and Node fixture checks: hooks/README.md. Restrictions on command/file tools do not automatically cover codemode/MCP. Use the host's real completion consumer, finite phase/global budgets and closing reserve. A worktree is not OS isolation; technical acceptance is not external delivery.
+
 ## Modes
 -p/--print (one-shot, final text to stdout) · --mode text|json|rpc · piped stdin is prepended to the first prompt · `pi -p -- "- prompt starting with dash"` · @file args attach files/images
 --export <session.jsonl> [out.html] · --list-models [search] · --offline (PI_OFFLINE=1) · --verbose
 
 ## Session
---continue/-c · --resume/-r (picker; TUI) · --session <path|partial-uuid> · --session-id <id> (exact, create if missing) · --fork <path|id> · --session-dir <dir> · --no-session · --name/-n <name>
+--continue/-c · --resume/-r (picker; TUI) · --session <path|full-id> (recovery: full ID, verify returned header) · --session-id <id> (may create if missing; not recovery) · --fork <path|id> · --session-dir <dir> · --no-session · --name/-n <name>
 Store: ~/.pi/agent/sessions/<cwd-slug>/*.jsonl (docs/session-format.md). TUI: /session /tree /fork /clone /compact /name /share.
 
 ## Model
@@ -38,7 +42,7 @@ TS module `export default function (pi: ExtensionAPI) { pi.on("tool_call", async
 ## Setup notes
 Install the `@earendil-works/pi-coding-agent` package (1.x). Optional: register MCP servers with `pi mcp add`, put skills in ~/.pi/agent/skills. Without system pytest use `uvx pytest`.
 
-## Live tests (2026-10-31, OpenRouter xiaomi/mimo-v2.6-pro)
+## Historical live tests (2026-10-31, OpenRouter xiaomi/mimo-v2.6-pro)
 1. `-p --mode json -e guard.ts --thinking low "Reply with exactly: PONG"` → PONG, session header id, $0.0028 (6.5k input tokens).
 2. `--session 01a19327 "What did you reply last time?"` → PONG, same session id (resume OK).
 3. Guard: asked to run `git push origin main` → tool_execution_end isError "Blocked by guard…", model reported it and stopped, $0.0002.

@@ -36,6 +36,7 @@ steps:
     inputs: [out/plan/spec.md]
     task: Implement the CSV exporter and its tests following the spec. Report changed files and the test output.
     owns: [src/export/csv*, test/export/csv*]
+    budget: { turns: 40, wall_clock: 20m, continuations: 1 }
     output: out/implement/report-{attempt}.md
     verify: { by: check, run: npm test }
     loop:
@@ -57,7 +58,7 @@ steps:
     route:                                 # the recorded decision is this step's acceptance
       - { when: user requests changes, goto: implement }
       - { when: user says stop, end: cancelled }
-      - { default: finish }
+      - { when: user explicitly approves the reviewed diff, goto: finish }
   - id: finish
     agent: planner
     needs: [approve]

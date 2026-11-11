@@ -1,0 +1,103 @@
+# Fictitious example. Authorization is data from an actual request, never self-issued.
+# No effect here is executed by reading this file. Workers cannot publish.
+flow: authorized-release
+version: 1
+objective:
+  goal: Implement a scoped fix, publish the reviewed revision, install it and reply.
+  done_when:
+    - The requested behavior and existing checks pass with independent evidence.
+    - The remote main reference equals the reviewed local commit.
+    - Installed package bytes equal that published revision.
+    - The requested response is confirmed in the authorized conversation.
+  out_of_scope: [force-push, new destinations, new providers, new schedules]
+authorization:
+  id: A-001
+  covers:
+    - { action: commit, target: reviewed local fix }
+    - { action: push, target: example repository main }
+    - { action: install, target: active profile selected packages }
+    - { action: reply, target: originating authorized conversation }
+  fixed:
+    builder: { model: claude-fable-5-2, effort: max, auth: existing subscription }
+    reviewer: { model: openai/gpt-6-astra, effort: max, auth: authorized API route }
+  excludes: [worker publication, credentials in prompts, unrelated files]
+limits:
+  max_parallel: 1
+  max_agent_runs: 6
+  max_iterations: 2
+  wall_clock: 90m
+  closing_reserve: { agent_runs: 1, wall_clock: 10m }
+  stagnation: two consecutive continuations without new usable evidence
+  delegation_depth: 1
+gates:
+  - before: any effect not covered by A-001
+agents:
+  builder:
+    runs_on: "cli: claude -p (skill claude-code-user)"
+    model: claude-fable-5-2
+    effort: max
+    can: [read, write assigned source and tests, run existing checks]
+    cannot: [push, publish, install globally, send messages, read secrets]
+  reviewer:
+    runs_on: "cli: codex exec (skill codex-user)"
+    model: openai/gpt-6-astra
+    effort: max
+    can: [read]
+    context: fresh
+  controller: { runs_on: self }
+steps:
+  - id: implement
+    agent: builder
+    task: Implement only the requested behavior and tests; preserve prior changes.
+    owns: [src/fix/, tests/fix/]
+    output: out/implement/attempt-{attempt}/report.md
+    budget: { turns: 40, wall_clock: 25m, continuations: 1 }
+    verify: { by: check, run: the existing project check command }
+    loop: { max: 2, feedback: exact failing criteria and evidence }
+  - id: review
+    agent: reviewer
+    needs: [implement]
+    task: Check the actual current diff and test evidence against the requested scope.
+    output: out/review/attempt-{attempt}/findings.md
+    budget: { turns: 10, wall_clock: 10m, continuations: 0 }
+    accept: [no blocking finding against the fixed scope]
+    on_fail: { goto: implement }
+  - id: commit
+    agent: controller
+    needs: [review]
+    task: Commit only the reviewed allowlisted paths after final checks.
+    effects: local
+    output: out/commit/revision.md
+    accept: [the committed tree equals the reviewed candidate]
+  - id: publish
+    agent: controller
+    needs: [commit]
+    effects: external
+    authorization: A-001
+    gate: before
+    undo: none
+    task: Record effect started, push the reviewed revision normally, read the remote ref back and record confirmed.
+    output: out/publish/receipt.md
+    accept: [remote main equals the exact reviewed commit]
+  - id: install
+    agent: controller
+    needs: [publish]
+    effects: external
+    authorization: A-001
+    gate: before
+    undo: restore the preserved previous selected packages within the authorized installation scope
+    task: Stage the published selected packages, preserve prior copies, install and compare every file hash.
+    output: out/install/receipt.md
+    accept: [every selected installed package matches the published source]
+  - id: deliver
+    agent: controller
+    needs: [install]
+    effects: external
+    authorization: A-001
+    gate: before
+    undo: none
+    task: Send the truthful result in the authorized conversation once; reconcile the exact stored response before confirming delivery.
+    output: out/delivery/receipt.md
+    accept: [the exact final response is confirmed and ambiguous sends were not repeated]
+state: state.yaml
+log: events.jsonl

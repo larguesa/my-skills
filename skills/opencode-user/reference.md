@@ -1,6 +1,10 @@
 # OpenCode cheat-sheet (v1.19.5, checked against docs/cli.md + `opencode --help` / `run --help`, 2026-10-31)
 Full docs: docs/README.md.
 
+## Current unattended contract
+Follow SKILL.md for exact session/model/variant, finite steps/deadline, attempt-specific logs and supervised completion. step_finish is intermediate too. The preserved snapshot names part.reason without enumerating terminal values: establish the installed-version final-turn shape from native export/API before acceptance; protocol screening alone is not proof. Require child exit, no unresolved necessary denial and independently checked artifacts.
+Recover with the full --session ID, same cwd/provider/permissions/model/variant, never the most recent selector. hooks/README.md specifies the deny-only, order-preserving guard merge; never replace a user's deny/ask with wildcard allow. MCP names and costs below are historical examples, not defaults. Worktrees organize recovery, not OS isolation. Preserve global counters and close the requested delivery separately.
+
 ## run (non-interactive)
 opencode run [message..] · --format default|json · -m/--model provider/model · --variant high|max|minimal · --agent build|plan|<custom> · -f/--file <files> · --title [t]
 -c/--continue · -s/--session <id> · --fork (with -c/-s) · --command <name> (message = args) · --dir <path> · --port <n> · --attach <url> [-u user -p password] · --thinking (show) · --auto (approve non-denied asks; dangerous) · -i/--interactive (split-footer)
@@ -39,7 +43,7 @@ Config ~/.config/opencode/ (opencode.json, skills/, agents/, commands/, AGENTS.m
 ## Setup notes
 Install `opencode-ai` (npm). Merge hooks/guard-permissions.json into your global opencode.json `permission`. Without system pytest use `uvx pytest`.
 
-## Live tests (2026-10-31, OpenRouter xiaomi/mimo-v2.6-pro)
+## Historical live tests (2026-10-31, OpenRouter xiaomi/mimo-v2.6-pro)
 1. `run --format json "Reply with exactly: PONG"` → PONG, sessionID ses_e6cd…, $0.0149 (34k input tokens, Open Design MCP + skills loaded).
 2. `run -s ses_e6cd… "What did you reply last time?"` → PONG in the same session, $0.0002 (cache).
 3. Guard: "git push origin main + cat a secrets file" → model refused on its own ($0.031). Explicit `git push --help` → tool_use status error "The user has specified a rule which prevents you…", $0.0152.

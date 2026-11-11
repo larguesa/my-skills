@@ -1,59 +1,55 @@
 ---
 name: opencode-user
-description: Drive OpenCode (the `opencode` CLI) headless as a user or agent - when to delegate, standard `opencode run --format json` invocation, JSON events and cost, sessions and resume, serve/attach, agents, models, MCP, permission-rule guard, verification, plus a cheat-sheet and the official OpenCode docs in markdown. Use when delegating coding work to OpenCode or looking up its commands, config, permissions, agents, tools, MCP, skills or server API.
+description: Use when delegating to OpenCode. Verify final work.
 ---
 
-# OpenCode user: driving OpenCode headless (tested on v1.19.5, opencode-ai)
+# OpenCode user
 
-`$SKILL_DIR` = this skill's folder (e.g. `~/.config/opencode/skills/opencode-user` or wherever you copied it). Cheat-sheet: `reference.md`. Official docs (markdown, 2026-10-31) in `docs/` — see `docs/README.md`; refresh with `docs/update.sh`.
-Install: `npm i -g opencode-ai`. Give it a provider key via env (e.g. `OPENROUTER_API_KEY`, referenced in opencode.json as `{env:OPENROUTER_API_KEY}`) or `opencode providers login`; a small wrapper that loads the key from a chmod-600 file keeps it out of your shell profile. Config: `~/.config/opencode/opencode.json` (back it up before edits).
+Use `opencode run` for bounded unattended work. `$SKILL_DIR` is this installed folder; `reference.md` and `docs/README.md` preserve the command reference and official snapshots. Historical tests used 1.19.5, not a promise about the current host. Discover the executable, help, provider and effective permissions first.
 
-## When to use OpenCode (vs pi vs Claude Code vs doing it yourself)
-- OpenCode: model-agnostic coding on OpenRouter (any provider, e.g. `openrouter/xiaomi/mimo-v2.6-pro`, paid per token) with real permission rules, built-in plan/build agents, subagents, LSP diagnostics, MCP servers, and an HTTP server (`serve`) for persistent/remote driving.
-- pi: lighter/cheaper prompt (~6.5k tokens vs ~13k–36k here), RPC mode; no permission engine.
-- Claude Code: hardest multi-file work (subscription quota). Yourself: trivial edits, connectors, anything externally visible.
+## Prepare
 
-## Standard invocation
+Record task, owned files, baseline, exact test command, requested model/variant, authentication route and expected artifacts. Inspect repository configuration/plugins before trusting them. Apply `hooks/README.md` without replacing an existing deny/ask policy with a broad allow. A worktree is recovery organization, not OS containment.
+
+Allocate a finite phase deadline and step count inside unchanged global bounds, including all continuations and closing work. Create an attempt-specific absolute `$RUN` outside the checkout. Disable only unused MCP servers deliberately, not a server name copied from another host.
+
+## Invocation and observation
+
+With reviewed permissions already in place and the actual phase step cap configured:
+
 ```bash
-cd <project> && git status --short          # baseline; git repo preferred
-OPENCODE_CONFIG_CONTENT='{"mcp":{"open-design":{"enabled":false}}}' \
-opencode run --format json --title "<task>" "$PROMPT" </dev/null > /tmp/oc_<task>.jsonl 2>/tmp/oc_<task>.err
-S=$(head -1 /tmp/oc_<task>.jsonl | jq -r .sessionID)
-jq -r 'select(.type=="text").part.text' /tmp/oc_<task>.jsonl                       # answer
-jq -s '[.[]|select(.type=="step_finish").part.cost]|add' /tmp/oc_<task>.jsonl      # USD
-jq -c 'select(.type=="tool_use")|{tool:.part.tool,status:.part.state.status}' /tmp/oc_<task>.jsonl
+opencode run --format json --title "$TASK_NAME"   --model "$MODEL" --variant "$EFFORT"   "$PROMPT" </dev/null > "$RUN/events.jsonl" 2> "$RUN/stderr.txt"
 ```
-- Always `</dev/null`. `--format json` = JSONL events: `step_start`, `text`, `tool_use` (part.state.status completed|error), `step_finish` (part.cost, part.tokens), each with `sessionID`.
-- The `OPENCODE_CONFIG_CONTENT` line disables an MCP server you don't need for this run (example: an `open-design` server). In tests, Open Design MCP + its skills cost ~23k extra input tokens per step ($0.015 vs $0.006 for a tiny prompt).
-- Agents: default `build` (full tools). `--agent plan` = analysis only (edits denied except plan files). Subagents `general`/`explore` are used via the task tool.
-- "ask" rules are auto-rejected in `run` (stderr: "permission requested: external_directory (/etc/*); auto-rejecting"; the tool_use gets status error). Paths outside the cwd hit `external_directory` (ask) — start in the project dir or add allow rules. `--auto` approves all non-denied asks (explicit `deny` still wins): only for wide unattended runs inside a throwaway project dir.
-- Keep stderr separate (`2>file`): warnings are not JSON. If mixed, parse with `jq -R 'fromjson?'`.
-- Cap agentic loops with an agent `steps` value (docs/agents.md "Max steps"), e.g. `OPENCODE_CONFIG_CONTENT='{"agent":{"build":{"steps":25}}}'`.
 
-## Follow-ups
-`opencode run --format json -s "$S" "next step" </dev/null` (same session, history kept). `--fork` with `-s`/`-c` branches first. `-c` = last session (avoid with parallel runs). `--command <name>` runs a custom command with the message as args. List: `opencode session list`; export JSON: `opencode export $S`.
+Capture the real child exit status and full `sessionID`. Keep stderr separate. A launch receipt is not completion. Use the host's supervised background primitive and completion consumer, without a second detached shell. A persistent server is a separate owned process; it must not outlive the task accidentally or be exposed without authorization/authentication.
 
-## Persistent / remote
-`opencode serve --port 4096` (localhost; set `OPENCODE_SERVER_PASSWORD` before exposing) then `opencode run --attach http://localhost:4096 ...` to skip MCP cold start each run, or drive it over HTTP (docs/server.md: POST /session, /session/:id/message, /event SSE, /session/:id/permissions/:id) or the JS SDK (docs/sdk.md). `opencode web` gives a browser UI. Background the Shell call; stop with SIGINT.
+`step_finish` occurs at intermediate model/tool steps. The historical snapshot records `part.reason` but does not enumerate terminal values. Before treating a particular value as final, verify it against the installed version's session export or native API. Until then this is only protocol screening, not a complete acceptance predicate:
 
-## Models (OpenRouter)
-`-m openrouter/<vendor>/<id>`; `--variant high|max|minimal` for reasoning effort. List: `opencode models openrouter`. Usage history: `opencode stats`. Check current models before changing the default.
+```bash
+# protocol-check
+jq -e -s 'length>0 and ([.[]|select(.type=="step_finish")]|length)>0 and ([.[]|select(.type=="text" and (.part.text|type)=="string" and (.part.text|length)>0)]|length)>0 and ([.[]|select(.type=="error")]|length)==0' "$RUN/events.jsonl"
+```
 
-## MCP & skills
-MCP servers live under `mcp` in opencode.json (e.g. `"open-design": {"type":"local","command":["open-design-mcp"],"enabled":true}`). `opencode mcp list` shows status. Skills load from `~/.config/opencode/skills`, and also `~/.claude/skills`, `~/.agents/skills`, project `.opencode/skills`, `.claude/skills` (docs/skills.md). Disable `.claude` loading: `OPENCODE_DISABLE_CLAUDE_CODE_SKILLS=1`.
+Acceptance additionally requires process exit zero, the observed native final-turn shape, correct current session/model, independently verified artifacts and no unresolved required operation. A lone `step_finish`, partial text or incomplete export remains unverified. Inspect `tool_use.part.state.status`, denied permissions and stderr even when the process returned zero. If the final protocol cannot be established, preserve evidence and report that missing verification instead of assuming success.
 
-## Guard (global, always on)
-`$SKILL_DIR/hooks/guard-permissions.json` is meant to be merged into opencode.json `permission`: bash `git push*`, `curl * -X POST/PUT/DELETE/PATCH*`, `*.secrets*`, `rm -rf /…` → deny; read/edit of `*.env`, `*/.secrets/*`, `*auth.json` → deny. Rules are wildcard, last match wins, bash matches each parsed command (docs/permissions.md). The model gets "The user has specified a rule which prevents you…" as a tool error. Re-apply after config edits: `jq -s '.[0] * .[1]' opencode.json "$SKILL_DIR/hooks/guard-permissions.json" > new.json` (review, then replace). A per-run variant: `OPENCODE_PERMISSION='<json>'`. Untrusted repo: its `opencode.json`/`.opencode/` are loaded automatically — inspect first, or run with `--pure` (no external plugins).
+## Continuation and recovery
 
-## Writing the prompt
-Goal · Context · Constraints (no new deps, no commit/push) · Tests (exact command; `uvx pytest`/`uv run`, system pip is PEP-668 locked) · Done criteria · Output (changed files + anything unverified). Stable facts in AGENTS.md (`/init` creates it; CLAUDE.md is a fallback).
+After a phase limit or timeout, confirm the exact child exited and reconcile its files before another writer starts. Continue from the full saved ID with the same cwd, provider, permissions and requested model/variant:
 
-## Verify, don't trust
-1. Last `step_finish` exists and no unexpected `tool_use` with status `error` (denials show up there).
-2. `git diff --stat` and read the diff (OpenCode snapshots allow `/undo` in the TUI, but headless rely on git).
-3. Run the tests yourself. Logs: `~/.local/share/opencode/log/`.
+```bash
+opencode run --format json --session "$SESSION_ID"   --model "$MODEL" --variant "$EFFORT"   "$REMAINING_PROMPT" </dev/null > "$NEXT_RUN/events.jsonl" 2> "$NEXT_RUN/stderr.txt"
+```
 
-## Safety & cost
-- Never let it push, deploy, publish, send messages or touch secrets without the user's explicit OK; never remove the guard rules.
-- Never put keys in prompts or print them; keep them in env vars or chmod-600 files outside the repo (`opencode providers` / auth.json hold secrets).
-- Report cost (sum of `step_finish.part.cost`, USD) and model. Tiny prompt: $0.006 without Open Design MCP, $0.015 with it.
+Do not use the most recent session selector in recovery. Supply remaining scope, accepted evidence, failed approaches and global budget left; a new invocation debits the same budget. Fix only operational mismatches within existing authorization. Missing permission or a quota/reset outside the remaining deadline is a blocker, not permission to switch billing/model or relax checks.
+
+## Permissions and references
+
+- `run` auto-rejects interactive asks in the documented versions. Distinguish missing pre-approval from lack of tool availability. Permit the actual tests and input-generation operations inside the worker's scope, not broad publication or credential access.
+- Use the guard overlay and its lossless merge procedure in `hooks/README.md`. Guard patterns and configuration are not OS isolation. Inspect effective project/per-agent overrides.
+- Use `--agent plan` for read-oriented planning only after checking its actual write exceptions. Build mode, MCP, external directories and plugins have independent authority implications.
+- Provider keys remain in the environment/protected configuration, never prompts or logs. Preserve a fixed model and variant on every invocation; no silent fallback.
+- `reference.md` covers serve/attach, models, MCP, skills and export. Do not install agents, expose servers, alter global configuration or refresh documentation automatically.
+
+## Finish
+
+Inspect the actual diff and rerun required tests. Report observed model, usage and unverified items, not host-specific historical price examples as forecasts. Technical acceptance is distinct from push, installation and message delivery; the controller reconciles each already authorized effect and replies through the requested channel without blind repetition.

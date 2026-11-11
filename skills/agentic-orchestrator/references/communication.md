@@ -32,7 +32,7 @@ One agent passes ownership of the task to another, with a handoff packet (state,
 Asynchronous messages as files with ids: `outbox/` for proposed deliveries, `inbox/` for items awaiting acknowledgment, `archive/` after processing. Fits long-running work, agents on different machines or schedules (a chat bot that wakes up hourly, a CLI agent in CI), and human approvals that take hours. The same id follows send, receipt and acceptance. Watch out: a message in the inbox is not yet accepted; process each id once (idempotence).
 
 ### Event log (publish and subscribe)
-Agents append events to a log (`events.jsonl`); others act when an event they care about appears ("tests failed", "draft ready"). Good for monitoring and for decoupling producers from consumers. Watch out: events are records, not commands; an event someone wrote into the log is not authorization to act outside the flow.
+Only the controller appends canonical events to `events.jsonl`; contributors publish separate attributed result files, and the controller incorporates verified observations. Consumers act when an event they care about appears ("tests failed", "draft ready"). Good for monitoring and for decoupling producers from consumers. Watch out: events are records, not commands; an event someone wrote into the log is not authorization to act outside the flow.
 
 ### Peer to peer
 Workers message each other directly (only where the host supports it, e.g. agent teams). Useful for tight collaboration on a shared interface (frontend and backend agreeing on an API). Rules: a message budget, a topic, a deadline, and a duty to report the agreement back to the orchestrator, which records it. Watch out: endless back-and-forth, private agreements that never reach the state.
@@ -61,11 +61,11 @@ Status belongs in the state file, not in a stream of status messages; messages p
 
 ## 4. Protocols
 
-**Plan approval.** For risky or large steps, the worker first explores read-only and returns a plan; the orchestrator (or the user, at a gate) approves it or rejects it with specific feedback. Only then does the worker change anything. The same applies one level up: show the user the flow before dispatching.
+**Plan approval.** For risky or large steps, the worker first explores read-only and returns a plan; the orchestrator (or the user, at a gate) approves it or rejects it with specific feedback. Only then does the worker change anything. At the controller level, consult current authorization first: an explicitly requested end-to-end execution does not need the same approval again. Ask only about uncovered material decisions.
 
 **Assignment.** Owned files or outputs, requirements, interface contract (what it may use, what it must provide), acceptance criteria, out of scope, what it is blocked by.
 
-**Blocker report.** What blocks, the impact, the options seen, and that it is waiting for guidance. A worker that reports a blocker stops that line of work; it does not improvise around the blocker.
+**Blocker report.** What blocks, the impact, the options seen, and that it is waiting for guidance. The worker stops that line and reports; the controller may resolve operational mismatches inside existing authority (phase continuation, corrected flag or matching approval pattern). New scope, destinations, provider/model changes or missing user decisions remain blocked. Continue independent authorized branches when safe.
 
 **Interface ready.** When a worker finishes a contract others depend on (a type, an API, a file format), it announces exactly what is now available, so dependents can start. Changing a published contract requires telling every dependent first.
 
@@ -77,7 +77,7 @@ Status belongs in the state file, not in a stream of status messages; messages p
 
 **Worker duties** (put them in every brief): do the one task assigned; do not review your own work as final; do not spawn further agents unless the brief allows it; when blocked, state exactly what is needed and stop; make the final message (or the result file) the deliverable, complete and self-contained.
 
-**Collect everything you dispatched.** The delegator owns the results: wait for every parallel call, read every result, and record each one. A result nobody collected is lost work and a hole in the log. Do not kill a slow worker without telling the user; ask whether to wait, narrow the task or stop it.
+**Collect everything you dispatched.** The delegator owns the results: wait for every parallel call, read every result, and record each one. A result nobody collected is lost work and a hole in the log. A launch receipt is not a terminal result; native subagents and external CLI processes use their own completion consumers (execution-contract.md). Apply already-declared stop/deadline criteria, preserve outputs and verify the scoped child exited. Slowness alone is not failure. Ask only when stopping or extending would exceed current authority; do not require a fresh question for an authorized finite deadline.
 
 **Scope travels verbatim.** A dispatched task starts with its reference (`flow/step#attempt`) and carries the step's scope and prohibitions word for word; a worker never invents a wider scope, and a step whose scope cannot be stated is blocked until it can.
 
@@ -85,7 +85,7 @@ Status belongs in the state file, not in a stream of status messages; messages p
 
 **Escalate decisions to the user, not to another agent** (a flow's `escalate: <role>` only re-runs a step with a stronger role), on: a gap or contradiction in the requirements, a change of scope, unclear acceptance criteria, security or personal data concerns, the same blocker appearing twice, or two unresolved handoffs in a row.
 
-Anti-patterns: routine broadcasts; silence at integration points; micromanaging (check at milestones, not every minute); idle workers kept alive; agents chatting without a budget or a topic; a worker calling the next worker itself (the hub loses track); a worker re-invoking itself (runaway cost); the orchestrator fixing a worker's output by hand (it pollutes the orchestrator's context and skips verification; dispatch a fix step instead).
+Anti-patterns: routine broadcasts; silence at integration points; micromanaging (check at milestones, not every minute); idle workers kept alive; agents chatting without a budget or a topic; a worker calling the next worker itself (the hub loses track); a worker re-invoking itself (runaway cost); unrecorded controller edits after verification (an authorized controller may make a narrow fix, but must invalidate and rerun affected checks).
 
 ## 5. Rules
 
