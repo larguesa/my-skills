@@ -13,6 +13,7 @@ Ricardo Pupo Larguesa's personal skills for AI agents, reused across several pro
 | [Codex User](#codex-user) | Guide for the agent to use the OpenAI Codex CLI headless (`codex exec --json`), with the official docs in markdown | Checked on codex-cli 0.166.0: options via `--help`, sandbox and guard rules tested; model runs not tested (quota exhausted) |
 | [Antigravity User](#antigravity-user) | Guide for the agent to use the Google Antigravity CLI headless (`agy -p`), with the official docs in markdown | Tested on agy 1.4.2 (Windows): JSON and streaming output, resume, structured output, silent command denial and guard rules; auto mode and sandbox not tested |
 | [Agentic Orchestrator](#agentic-orchestrator) | Orchestration of several agents through natural language only, with flow, state and events in YAML, JSON or Markdown, no frameworks or scripts | Five flow examples plus development contract/guard checks; execution and recovery contract documented |
+| [Skill Engineering](#skill-engineering) | Create or improve skills with clear activation, executable decisions and verifiable outputs | 22 helper tests, YAML and local-reference validation |
 
 ## Humanizador PT-BR
 
@@ -116,6 +117,16 @@ The suite exercises shipped guard handlers, permission-overlay merges, native Co
 Install from a reviewed revision by copying each complete selected folder into the active agent's skills directory, preserving any prior copy first. Keep `docs/`, `hooks/`, `rules/` and references with the skill, not only SKILL.md. Compare installed bytes to that revision and check actual loader discovery. Guard configuration is not installed globally by copying a skill; follow each guard README, load it on each CLI phase and exercise blocked/clean controls at the installed path. Never run package updaters or change authentication as an incidental part of installation.
 
 Keep private diagnostics, model plans, run logs, destination backups and delivery receipts outside this public repository. Publication, installation and final response require their own target read-back; a successful technical phase does not establish them.
+
+## Skill Engineering
+
+Turns a recurring workflow into a skill the agent can select, execute and verify. Use it to create a new skill, improve an existing one or fix unclear activation, missing references and weak completion checks. It defines acceptance before drafting, keeps detailed references behind explicit reading conditions, and separates discovery tests from output-quality comparisons.
+
+Ask, for example: "Use a skill-engineering para criar uma skill de conferência de propostas a partir deste fluxo, com divergências localizadas nos documentos originais."
+
+The instructions are in Brazilian Portuguese. Includes a skill template, evaluation plan, five attributed source-guide syntheses and Python helpers for structure validation and paired-result aggregation. The helpers run locally without model or network calls. Shipped metadata targets Hermes; adapt metadata and tool names for another agent. Publication checks passed 22 helper tests plus YAML and local-reference validation.
+
+[Skill Engineering: installation and examples](skills/skill-engineering/README.md) · [agent skill](skills/skill-engineering/SKILL.md) · [test report](skills/skill-engineering/tests/REPORT.md)
 
 ## Structure
 

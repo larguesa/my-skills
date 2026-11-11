@@ -2,6 +2,8 @@
 
 Index of personal skills.
 
+- [skill-engineering](skill-engineering/README.md): creates or improves skills with clear activation, executable decisions, conditional references and verifiable outputs. Portuguese instructions, templates, local structure validation and paired-result aggregation. 22 helper tests passed; [test report](skill-engineering/tests/REPORT.md).
+
 - [humanizador-pt-br](humanizador-pt-br/README.md): makes Brazilian Portuguese text, written from scratch or rewritten from AI-generated text, read like a good human writer's, with facts and voice preserved. Version 0.8.1, no validated gain. [Evaluation](humanizador-pt-br/results/README.md) and [evaluation rules](humanizador-pt-br/AGENTS.md). In Portuguese, by purpose.
 - [animation-video-maker](animation-video-maker/README.md): turns a brief into a short explainer, product or typographic video: an editable scene in code and an MP4 exported and checked on your machine, with no video-generation API. 22 styles, 20 examples with the T2S Tech brand and 3 unbranded demos.
 - [telegraphist](telegraphist/SKILL.md): economical conversation with the agent, in telegraphic answers, to spend fewer tokens. Measured on an interrupted sample without judges: shorter answers and higher total tokens; preservation of information not verified. [Test report](telegraphist/tests/REPORT.md).

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "purpose": "Modelo de plano, preencher antes de executar; não contém medições.",
+  "skill_name": "nome-da-skill",
+  "authorization": {"install": false, "publish": false, "paid_evaluation": false},
+  "baseline": "without_skill",
+  "max_iterations": 2,
+  "conditions": ["with_skill", "baseline"],
+  "fixed": {"model": null, "provider": null, "tools": [], "input_revision": null, "max_turns": null},
+  "quality_cases": [
+    {"id": "comum", "split": "development", "prompt": "Pedido real com entradas completas.", "assertions": ["Produto correto e utilizável."]},
+    {"id": "ausencia", "split": "validation", "prompt": "Pedido semelhante com informação ausente.", "assertions": ["Ausência tratada conforme o contrato, sem invenção."]},
+    {"id": "reservado", "split": "test", "prompt": "Caso novo, não usar para escolher versões.", "assertions": ["Mantém os requisitos críticos em nova entrada."]}
+  ],
+  "trigger_cases": [
+    {"id": "positivo", "query": "Pedido que precisa da capacidade específica.", "should_trigger": true},
+    {"id": "negativo-proximo", "query": "Pedido com termos semelhantes, mas de outra capacidade.", "should_trigger": false},
+    {"id": "composto", "query": "Pedido que exige esta capacidade e outra em sequência.", "should_trigger": true}
+  ],
+  "metrics": ["task_success", "critical_failures", "duration_ms", "input_tokens", "output_tokens", "cost_usd"],
+  "stop_when": ["Aceitação cumprida", "Orçamento atingido", "Sem progresso com novo feedback"]
+}
